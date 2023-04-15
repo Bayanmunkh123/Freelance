@@ -1,7 +1,7 @@
-import { split } from "@apollo/client/core"
-import { getMainDefinition } from "@apollo/client/utilities"
-import { createHttpLinkFunction } from "./httpLink"
-import { createWsLink } from "./wsLink"
+import { split } from '@apollo/client/core'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { createHttpLinkFunction } from './httpLink'
+import { createWsLink } from './wsLink'
 
 export function splitLink() {
   const httpLink = createHttpLinkFunction()
@@ -11,14 +11,13 @@ export function splitLink() {
     ? split(
         ({ query }) => {
           const definition = getMainDefinition(query)
-          return (
-            definition.kind === "OperationDefinition" &&
-            definition.operation === "subscription"
-          )
+
+          return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
         },
         wsLink,
-        httpLink,
+        httpLink
       )
     : httpLink
+
   return link
 }
