@@ -16,10 +16,10 @@ import { LayoutProps } from 'src/@core/layouts/types'
 
 // ** Components
 import Customizer from 'src/@core/components/customizer'
-import Footer from './components/shared-components/footer'
-import Navigation from './components/horizontal/navigation'
+import Footer from '../shared-components/footer'
+import Navigation from './navigation'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
-import AppBarContent from './components/horizontal/app-bar-content'
+import AppBarContent from './app-bar-content'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'

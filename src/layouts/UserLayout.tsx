@@ -23,6 +23,8 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { useAuth } from 'src/hooks/useAuth'
+import { UserRoleEnum } from 'src/generated'
 
 interface Props {
   children: ReactNode
@@ -32,6 +34,8 @@ interface Props {
 const UserLayout = ({ children, contentHeightFixed }: Props) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
+
+  const { user } = useAuth()
 
   // ** Vars for server side navigation
   // const { menuItems: verticalMenuItems } = ServerSideVerticalNavItems()
@@ -47,10 +51,15 @@ const UserLayout = ({ children, contentHeightFixed }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
+  if (user?.role && [UserRoleEnum.ADMINISTRATOR, UserRoleEnum.ADMIN].includes(user?.role)) {
+    settings.layout = 'vertical'
+  } else {
+    settings.layout = 'horizontal'
+  }
+
   if (hidden && settings.layout === 'horizontal') {
     settings.layout = 'vertical'
   }
-
   return (
     <Layout
       hidden={hidden}
@@ -84,13 +93,12 @@ const UserLayout = ({ children, contentHeightFixed }: Props) => {
             // navItems: horizontalMenuItems
           },
           appBar: {
-            content: () => <HorizontalAppBarContent settings={settings} saveSettings={saveSettings} />
+            content: () => <HorizontalAppBarContent hidden={hidden} settings={settings} saveSettings={saveSettings} />
           }
         }
       })}
     >
       {children}
-      
     </Layout>
   )
 }

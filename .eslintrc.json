@@ -1,8 +1,10 @@
 {
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "next/core-web-vitals",
+    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "react/display-name": "off",
@@ -59,6 +61,12 @@
         "alwaysTryTypes": true,
         "project": [
           "./tsconfig.json"
+        ]
+      },
+      "node": {
+        "moduleDirectory": [
+          "node_modules",
+          "src/"
         ]
       }
     }

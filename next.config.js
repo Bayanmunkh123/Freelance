@@ -13,11 +13,12 @@ module.exports = {
     domains: ["storage.googleapis.com"],
   },
   webpack: config => {
+    config.plugins.push(new Dotenv({}))
     config.resolve.alias = {
       ...config.resolve.alias,
       apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
-    },
-    config.plugins.push(new Dotenv({})),
+    }
+    // Url loader
     config.module.rules.push({
       test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
       use: {
@@ -27,7 +28,7 @@ module.exports = {
         },
       },
     })
-    
+
     return config
   }
 }

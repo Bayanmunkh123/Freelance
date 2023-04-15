@@ -1,3 +1,5 @@
+import { AuthUserType, UserRoleEnum } from 'src/generated'
+
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
 export type LoginParams = {
@@ -6,21 +8,22 @@ export type LoginParams = {
   rememberMe?: boolean
 }
 
-export type UserDataType = {
-  id: number
-  role: string
-  email: string
-  fullName: string
-  username: string
-  password: string
-  avatar?: string | null
+export interface RoleType {
+  isAdministrator?: boolean
+  isAdmin?: boolean
+  isUser?: boolean
+  isHost?: boolean
 }
 
 export type AuthValuesType = {
   loading: boolean
-  logout: () => void
-  user: UserDataType | null
   setLoading: (value: boolean) => void
-  setUser: (value: UserDataType | null) => void
+
+  user?: AuthUserType | null
+  setUser: (value: AuthUserType | null) => void
+  roles?: RoleType | null
+  permissions?: string[]
+
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
+  logout: () => void
 }

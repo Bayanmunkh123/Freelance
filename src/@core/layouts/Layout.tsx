@@ -5,8 +5,9 @@ import { useEffect, useRef } from 'react'
 import { LayoutProps } from 'src/@core/layouts/types'
 
 // ** Layout Components
-import VerticalLayout from './VerticalLayout'
-import HorizontalLayout from './HorizontalLayout'
+import VerticalLayout from './components/vertical/VerticalLayout'
+import HorizontalLayout from './components/horizontal/HorizontalLayout'
+import BlankLayout from './BlankLayout'
 
 const Layout = (props: LayoutProps) => {
   // ** Props
@@ -35,11 +36,11 @@ const Layout = (props: LayoutProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hidden])
 
-  if (settings.layout === 'horizontal') {
+  if (settings.layout === 'horizontal' && props.horizontalLayoutProps) {
     return <HorizontalLayout {...props}>{children}</HorizontalLayout>
   }
-
-  return <VerticalLayout {...props}>{children}</VerticalLayout>
+  if (props?.verticalLayoutProps) return <VerticalLayout {...props}>{children}</VerticalLayout>
+  return <BlankLayout>{children}</BlankLayout>
 }
 
 export default Layout

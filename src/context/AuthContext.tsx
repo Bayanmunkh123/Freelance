@@ -1,5 +1,5 @@
 // ** React Imports
-import { createContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useEffect, useState, ReactNode, Dispatch, SetStateAction } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -11,14 +11,21 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
+import { AuthValuesType, LoginParams, ErrCallbackType } from './types'
+
+import { LOGOUT } from 'src/hooks/utils/queries'
+import { useApolloClient } from '@apollo/client'
+import { AuthUserType, useLoginMutation } from 'src/generated'
+import { setCookieToken } from 'src/lib/cookies'
+import { toast } from 'react-hot-toast'
+// import { useApolloClient } from '@apollo/react-hooks'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
-  user: null,
-  loading: true,
-  setUser: () => null,
+  loading: false,
   setLoading: () => Boolean,
+  user: null,
+  setUser: () => null,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve()
 }
@@ -27,85 +34,144 @@ const AuthContext = createContext(defaultProvider)
 
 type Props = {
   children: ReactNode
+  data: AuthUserType | null
 }
 
-const AuthProvider = ({ children }: Props) => {
+const AuthProvider = ({ children, data }: Props) => {
+  console.log('AuthContext === data', data)
+  const apolloClient = useApolloClient()
   // ** States
-  const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
+  const [user, setUser] = useState<AuthUserType | null>(data || null)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
   // ** Hooks
   const router = useRouter()
 
-  useEffect(() => {
-    const initAuth = async (): Promise<void> => {
-      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
-      if (storedToken) {
-        setLoading(true)
-        await axios
-          .get(authConfig.meEndpoint, {
-            headers: {
-              Authorization: storedToken
-            }
+  // useEffect(() => {
+  //   const initAuth = async (): Promise<void> => {
+  //     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+  //     // if (storedToken) {
+  //     //   setLoading(true)
+  //     //   await axios
+  //     //     .get(authConfig.meEndpoint, {
+  //     //       headers: {
+  //     //         Authorization: storedToken
+  //     //       }
+  //     //     })
+  //     //     .then(async response => {
+  //     //       setLoading(false)
+  //     //       setUser({ ...response.data.userData })
+  //     //     })
+  //     //     .catch(() => {
+  //     //       localStorage.removeItem('userData')
+  //     //       localStorage.removeItem('refreshToken')
+  //     //       localStorage.removeItem('accessToken')
+  //     //       setUser(null)
+  //     //       setLoading(false)
+  //     //       if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
+  //     //         router.replace('/login')
+  //     //       }
+  //     //     })
+  //     // } else {
+  //     //   setLoading(false)
+  //     // }
+  //     setLoading(false)
+  //   }
+
+  //   initAuth()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
+  // const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
+  //   axios
+  //     .post(authConfig.loginEndpoint, params)
+  //     .then(async response => {
+  //       params.rememberMe
+  //         ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
+  //         : null
+  //       const returnUrl = router.query.returnUrl
+
+  //       setUser({ ...response.data.userData })
+  //       params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+
+  //       const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
+  //       router.replace(redirectURL as string)
+  //     })
+
+  //     .catch(err => {
+  //       if (errorCallback) errorCallback(err)
+  //     })
+  // }
+
+  const [handleLogin, { loading: loadingEmail }] = useLoginMutation({
+    fetchPolicy: 'no-cache',
+    onCompleted: async ({ login }) => {
+      login?.accessToken ? window.localStorage.setItem(authConfig.storageTokenKeyName, login?.accessToken) : null
+      // setUser({ ...response.data.userData })
+      // params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+      if (login?.accessToken) {
+        setCookieToken(login)
+        if (login?.accessToken) {
+          toast.success('Амжилттай.', {
+            duration: 2000
           })
-          .then(async response => {
-            setLoading(false)
-            setUser({ ...response.data.userData })
-          })
-          .catch(() => {
-            localStorage.removeItem('userData')
-            localStorage.removeItem('refreshToken')
-            localStorage.removeItem('accessToken')
-            setUser(null)
-            setLoading(false)
-            if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-              router.replace('/login')
-            }
-          })
-      } else {
-        setLoading(false)
+          await apolloClient.cache.reset()
+          // window.location.reload()
+
+          // setVisibleAuthModal(undefined)
+        }
+      } else if (login && !login?.isEmailConfirmed) {
+        // Modal.confirm({
+        //   title: 'Анхаарууллага',
+        //   content: `Таны ${_values.email} Имейл хаяг баталгаажаагүй байна.`,
+        //   okText: 'Баталгаажуулах',
+        //   onOk: () => {
+        //     onResendCode({ email: _values.email })
+        //     onOkSendCode()
+        //     setVisibleAuthModal(AuthModalType.ConfirmCode)
+        //   },
+        //   cancelText: 'Буцах'
+        // })
       }
+
+      const returnUrl = router.query.returnUrl
+      console.log('AuthContext === returnUrl', returnUrl)
+      const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+      router.replace(redirectURL as string)
+    },
+    onError: (error: unknown) => {
+      console.log('error', error)
+      // showError(error)
     }
+  })
 
-    initAuth()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-    axios
-      .post(authConfig.loginEndpoint, params)
-      .then(async response => {
-        params.rememberMe
-          ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
-          : null
-        const returnUrl = router.query.returnUrl
-
-        setUser({ ...response.data.userData })
-        params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
-
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
-
-        router.replace(redirectURL as string)
-      })
-
-      .catch(err => {
-        if (errorCallback) errorCallback(err)
-      })
-  }
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUser(null)
-    window.localStorage.removeItem('userData')
-    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+    await apolloClient.query({ query: LOGOUT })
+    await apolloClient.cache.reset()
     router.push('/login')
   }
 
+  // const handleLogout = () => {
+  //   setUser(null)
+  //   window.localStorage.removeItem('userData')
+  //   window.localStorage.removeItem(authConfig.storageTokenKeyName)
+  //   router.push('/login')
+  // }
+
   const values = {
-    user,
     loading,
-    setUser,
     setLoading,
-    login: handleLogin,
+    user,
+    setUser,
+    login: async (params: LoginParams, errorCallback?: ErrCallbackType) => {
+      const { data, errors } = await handleLogin({
+        variables: {
+          input: { email: params.email, password: params.password }
+        }
+      })
+    },
     logout: handleLogout
   }
 

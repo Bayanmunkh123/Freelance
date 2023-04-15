@@ -16,10 +16,10 @@ import themeConfig from 'src/configs/themeConfig'
 import { LayoutProps } from 'src/@core/layouts/types'
 
 // ** Components
-import AppBar from './components/vertical/appBar'
+import AppBar from './appBar'
 import Customizer from 'src/@core/components/customizer'
-import Navigation from './components/vertical/navigation'
-import Footer from './components/shared-components/footer'
+import Navigation from './navigation'
+import Footer from '../shared-components/footer'
 import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 const VerticalLayoutWrapper = styled('div')({
@@ -68,35 +68,41 @@ const VerticalLayout = (props: LayoutProps) => {
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* Navigation Menu */}
         {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
-          <Navigation
-            navWidth={navWidth}
-            navVisible={navVisible}
-            setNavVisible={setNavVisible}
-            collapsedNavWidth={collapsedNavWidth}
-            toggleNavVisibility={toggleNavVisibility}
-            navigationBorderWidth={navigationBorderWidth}
-            navMenuContent={verticalLayoutProps.navMenu.content}
-            navMenuBranding={verticalLayoutProps.navMenu.branding}
-            menuLockedIcon={verticalLayoutProps.navMenu.lockedIcon}
-            verticalNavItems={verticalLayoutProps.navMenu.navItems}
-            navMenuProps={verticalLayoutProps.navMenu.componentProps}
-            menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
-            afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
-            beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
-            {...props}
-          />
+          <>
+            {verticalLayoutProps?.navMenu && (
+              <Navigation
+                navWidth={navWidth}
+                navVisible={navVisible}
+                setNavVisible={setNavVisible}
+                collapsedNavWidth={collapsedNavWidth}
+                toggleNavVisibility={toggleNavVisibility}
+                navigationBorderWidth={navigationBorderWidth}
+                navMenuContent={verticalLayoutProps.navMenu.content}
+                navMenuBranding={verticalLayoutProps.navMenu.branding}
+                menuLockedIcon={verticalLayoutProps.navMenu.lockedIcon}
+                verticalNavItems={verticalLayoutProps.navMenu.navItems}
+                navMenuProps={verticalLayoutProps.navMenu.componentProps}
+                menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
+                afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
+                beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
+                {...props}
+              />
+            )}
+          </>
         )}
         <MainContentWrapper
           className='layout-content-wrapper'
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
           {/* AppBar Component */}
-          <AppBar
-            toggleNavVisibility={toggleNavVisibility}
-            appBarContent={verticalLayoutProps.appBar?.content}
-            appBarProps={verticalLayoutProps.appBar?.componentProps}
-            {...props}
-          />
+          {verticalLayoutProps?.appBar && (
+            <AppBar
+              toggleNavVisibility={toggleNavVisibility}
+              appBarContent={verticalLayoutProps.appBar?.content}
+              appBarProps={verticalLayoutProps.appBar?.componentProps}
+              {...props}
+            />
+          )}
 
           {/* Content */}
           <ContentWrapper

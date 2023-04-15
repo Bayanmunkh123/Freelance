@@ -1,15 +1,11 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-
-
-
-
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -30,7 +26,9 @@ import 'src/@fake-db'
 import { Toaster } from 'react-hot-toast'
 
 // ** Component Imports
+import GuestLayout from 'src/layouts/GuestLayout'
 import UserLayout from 'src/layouts/UserLayout'
+
 import AclGuard from 'src/@core/components/auth/AclGuard'
 import ThemeComponent from 'src/@core/theme/ThemeComponent'
 import AuthGuard from 'src/@core/components/auth/AuthGuard'
@@ -62,11 +60,25 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { ApolloClient, ApolloLink, ApolloProvider } from '@apollo/client'
+import { Context } from 'react-apollo'
+import withApollo from 'next-with-apollo'
+
+import { createApolloClient } from 'src/lib/apolloClient'
+import { splitLink } from 'src/lib/apollo/splitLink'
+import { createAuthLink } from 'src/lib/apollo/authLink'
+import { localCache } from 'src/lib/apollo/localCache'
+import { errorLink } from 'src/lib/apollo/errorLink'
+
+import { ME_AUTH } from 'src/hooks/utils/queries'
+import { AuthUserType, MeQueryResult, UserRoleEnum } from 'src/generated'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
   emotionCache: EmotionCache
+  title: string | null
+  user: AuthUserType | null
 }
 
 type GuardProps = {
@@ -91,6 +103,7 @@ if (themeConfig.routingLoader) {
 }
 
 const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
+  console.log('Guard', authGuard, guestGuard)
   if (guestGuard) {
     return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
   } else if (!guestGuard && !authGuard) {
@@ -102,35 +115,49 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
+  const { Component, emotionCache = clientSideEmotionCache, pageProps, title, user } = props
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
-  const getLayout =
-    Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
+  let getLayout =
+    Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
 
   const setConfig = Component.setConfig ?? undefined
 
-  const authGuard = Component.authGuard ?? true
-
-  const guestGuard = Component.guestGuard ?? false
+  console.log('Component.authGuard', Component.authGuard)
+  console.log('Component.guestGuard', Component.guestGuard)
+  let authGuard = Component.authGuard ?? true
+  let guestGuard = Component.guestGuard ?? false
+  if (user) {
+    authGuard = true
+    guestGuard = false
+    getLayout = Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
+  } else {
+    authGuard = false
+    guestGuard = false
+    getLayout =
+      Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
+  }
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
+  const apolloClient = createApolloClient(undefined)
+  console.log('authGuard', authGuard)
+  console.log('guestGuard', guestGuard)
   return (
-    
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
-          <meta
-            name='description'
-            content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
-          />
-          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
-        </Head>
-
-        <AuthProvider>
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+        <meta
+          name='description'
+          content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+        />
+        <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+        <meta name='viewport' content='initial-scale=1, width=device-width' />
+        <title>{title || 'OnedayJOB'}</title>
+      </Head>
+      <ApolloProvider client={apolloClient}>
+        <AuthProvider data={user}>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
@@ -150,9 +177,54 @@ const App = (props: ExtendedAppProps) => {
             </SettingsConsumer>
           </SettingsProvider>
         </AuthProvider>
-      </CacheProvider>
-   
+      </ApolloProvider>
+    </CacheProvider>
   )
 }
 
-export default App
+App.getInitialProps = async (context: Context) => {
+  const { Component, ctx } = context
+  let pageProps = {}
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx)
+  }
+
+  const { res, pathname, apolloClient } = ctx
+  const title = 'BAIHGUI' // ROUTES.getTitle(pathname) || ''
+
+  // To be removed
+  if (!process.browser) {
+    res.setHeader('X-XSS-Protection', '1; mode=block')
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN')
+    res.setHeader('strict-transport-security', 'max-age=31536000')
+  }
+
+  const meQuery: MeQueryResult = await apolloClient.query({
+    fetchPolicy: 'no-cache',
+    query: ME_AUTH
+  })
+  if (meQuery.data?.me) {
+    const user = meQuery.data?.me
+    const isAdministrator = user.role === UserRoleEnum.ADMINISTRATOR
+    const isAdmin = user.role === UserRoleEnum.ADMIN
+    const isUser = user.role === UserRoleEnum.USER
+    const isHost = !!user?.userHost
+    const _roles = { isAdministrator, isAdmin, isUser, isHost }
+    const _user = { ...user, roles: _roles, permissions: ['Web'] }
+    return { title, pageProps, pathname, apolloClient, user: _user }
+  }
+
+  return { title, pageProps, pathname, apolloClient, autData: undefined }
+}
+
+export default withApollo(({ initialState, headers }) => {
+  const link = splitLink()
+  const authLink = createAuthLink(headers)
+
+  const apolloClient: any = new ApolloClient({
+    ssrMode: typeof window === 'undefined',
+    link: ApolloLink.from([errorLink, authLink, link]),
+    cache: localCache.restore(initialState || {})
+  })
+  return apolloClient
+})(App)

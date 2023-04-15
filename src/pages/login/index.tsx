@@ -100,8 +100,8 @@ const schema = yup.object().shape({
 })
 
 const defaultValues = {
-  password: 'admin',
-  email: 'admin@materialize.com'
+  password: 'A123456',
+  email: 'admin@onedayjob.mn'
 }
 
 interface FormData {

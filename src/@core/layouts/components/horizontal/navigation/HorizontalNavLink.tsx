@@ -127,9 +127,12 @@ const HorizontalNavLink = (props: Props) => {
                 ...(menuTextTruncate && { overflow: 'hidden' })
               }}
             >
-              <ListItemIcon sx={{ mr: hasParent ? 3 : 2.5, color: 'text.primary' }}>
-                <UserIcon icon={icon} fontSize={icon === navSubItemIcon ? '0.5rem' : '1.5rem'} />
-              </ListItemIcon>
+              {item && item.icon && (
+                <ListItemIcon sx={{ mr: hasParent ? 3 : 2.5, color: 'text.primary' }}>
+                  <UserIcon icon={icon} fontSize={icon === navSubItemIcon ? '0.5rem' : '1.5rem'} />
+                </ListItemIcon>
+              )}
+
               <Typography {...(menuTextTruncate && { noWrap: true })}>
                 <Translations text={item.title} />
               </Typography>
