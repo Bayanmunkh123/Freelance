@@ -33,7 +33,7 @@ interface Props {
   hidden: boolean
   settings: Settings
   saveSettings: (values: Settings) => void
-  toggleNavVisibility: () => void
+  toggleNavVisibility?: () => void
   navMenu?: {
     sx?: SxProps<Theme>
     navItems?: HorizontalNavItemsType
@@ -44,6 +44,7 @@ const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility, navMenu } = props
   const { skin, contentWidth } = settings
+
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>

@@ -1,23 +1,21 @@
 // ** React Imports
-import { createContext, useEffect, useState, ReactNode, Dispatch, SetStateAction } from 'react'
+import { createContext, useState, ReactNode } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
-
-// ** Axios
-import axios from 'axios'
 
 // ** Config
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, LoginParams, ErrCallbackType } from './types'
+import { AuthValuesType, LoginParams } from './types'
 
 import { LOGOUT } from 'src/hooks/utils/queries'
 import { useApolloClient } from '@apollo/client'
 import { AuthUserType, useLoginMutation } from 'src/generated'
 import { setCookieToken } from 'src/lib/cookies'
 import { toast } from 'react-hot-toast'
+
 // import { useApolloClient } from '@apollo/react-hooks'
 
 // ** Defaults
@@ -40,6 +38,7 @@ type Props = {
 const AuthProvider = ({ children, data }: Props) => {
   console.log('AuthContext === data', data)
   const apolloClient = useApolloClient()
+
   // ** States
   const [user, setUser] = useState<AuthUserType | null>(data || null)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
@@ -104,10 +103,11 @@ const AuthProvider = ({ children, data }: Props) => {
   //     })
   // }
 
-  const [handleLogin, { loading: loadingEmail }] = useLoginMutation({
+  const [handleLogin] = useLoginMutation({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ login }) => {
       login?.accessToken ? window.localStorage.setItem(authConfig.storageTokenKeyName, login?.accessToken) : null
+
       // setUser({ ...response.data.userData })
       // params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
       if (login?.accessToken) {
@@ -117,6 +117,7 @@ const AuthProvider = ({ children, data }: Props) => {
             duration: 2000
           })
           await apolloClient.cache.reset()
+
           // window.location.reload()
 
           // setVisibleAuthModal(undefined)
@@ -142,6 +143,7 @@ const AuthProvider = ({ children, data }: Props) => {
     },
     onError: (error: unknown) => {
       console.log('error', error)
+
       // showError(error)
     }
   })
@@ -165,8 +167,8 @@ const AuthProvider = ({ children, data }: Props) => {
     setLoading,
     user,
     setUser,
-    login: async (params: LoginParams, errorCallback?: ErrCallbackType) => {
-      const { data, errors } = await handleLogin({
+    login: async (params: LoginParams) => {
+      await handleLogin({
         variables: {
           input: { email: params.email, password: params.password }
         }

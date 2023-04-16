@@ -14,6 +14,7 @@ export const images = {
     xacbank: '/images/bank/xacbank.png'
   },
   nodata: '/images/no-data.png',
+
   // Logo
   logo: {
     dark: '/images/logo/logo-dark.png',

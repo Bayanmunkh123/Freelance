@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
@@ -18,9 +18,6 @@ import type { EmotionCache } from '@emotion/cache'
 
 import { defaultACLObj } from 'src/configs/acl'
 import themeConfig from 'src/configs/themeConfig'
-
-// ** Fake-DB Import
-import 'src/@fake-db'
 
 // ** Third Party Import
 import { Toaster } from 'react-hot-toast'
@@ -55,8 +52,6 @@ import 'prismjs/components/prism-tsx'
 
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
-
-import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
@@ -144,6 +139,7 @@ const App = (props: ExtendedAppProps) => {
   const apolloClient = createApolloClient(undefined)
   console.log('authGuard', authGuard)
   console.log('guestGuard', guestGuard)
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -189,15 +185,8 @@ App.getInitialProps = async (context: Context) => {
     pageProps = await Component.getInitialProps(ctx)
   }
 
-  const { res, pathname, apolloClient } = ctx
+  const { pathname, apolloClient } = ctx
   const title = 'BAIHGUI' // ROUTES.getTitle(pathname) || ''
-
-  // To be removed
-  if (!process.browser) {
-    res.setHeader('X-XSS-Protection', '1; mode=block')
-    res.setHeader('X-Frame-Options', 'SAMEORIGIN')
-    res.setHeader('strict-transport-security', 'max-age=31536000')
-  }
 
   const meQuery: MeQueryResult = await apolloClient.query({
     fetchPolicy: 'no-cache',
@@ -211,6 +200,7 @@ App.getInitialProps = async (context: Context) => {
     const isHost = !!user?.userHost
     const _roles = { isAdministrator, isAdmin, isUser, isHost }
     const _user = { ...user, roles: _roles, permissions: ['Web'] }
+
     return { title, pageProps, pathname, apolloClient, user: _user }
   }
 
@@ -226,5 +216,6 @@ export default withApollo(({ initialState, headers }) => {
     link: ApolloLink.from([errorLink, authLink, link]),
     cache: localCache.restore(initialState || {})
   })
+
   return apolloClient
 })(App)

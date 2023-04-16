@@ -1,4 +1,4 @@
-import { AuthUserType, UserRoleEnum } from 'src/generated'
+import { AuthUserType } from 'src/generated'
 
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 

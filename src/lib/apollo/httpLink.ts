@@ -6,5 +6,6 @@ export function createHttpLinkFunction() {
     uri: config.BACKEND_URL,
     credentials: 'include'
   })
+
   return httpLink
 }

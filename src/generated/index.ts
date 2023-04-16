@@ -1,11 +1,13 @@
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
+
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
 const defaultOptions = {} as const
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -2189,6 +2191,7 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options)
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>
@@ -2222,6 +2225,7 @@ export function useRegisterMutation(
   baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options)
 }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>
@@ -2258,6 +2262,7 @@ export function useAuthWebMutation(
   baseOptions?: Apollo.MutationHookOptions<AuthWebMutation, AuthWebMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<AuthWebMutation, AuthWebMutationVariables>(AuthWebDocument, options)
 }
 export type AuthWebMutationHookResult = ReturnType<typeof useAuthWebMutation>
@@ -2294,6 +2299,7 @@ export function useAuthVerifyTokenSenderMutation(
   baseOptions?: Apollo.MutationHookOptions<AuthVerifyTokenSenderMutation, AuthVerifyTokenSenderMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<AuthVerifyTokenSenderMutation, AuthVerifyTokenSenderMutationVariables>(
     AuthVerifyTokenSenderDocument,
     options
@@ -2336,6 +2342,7 @@ export function useAuthForgetPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<AuthForgetPasswordMutation, AuthForgetPasswordMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<AuthForgetPasswordMutation, AuthForgetPasswordMutationVariables>(
     AuthForgetPasswordDocument,
     options
@@ -2381,6 +2388,7 @@ export function useAuthVerifyTokenMutation(
   baseOptions?: Apollo.MutationHookOptions<AuthVerifyTokenMutation, AuthVerifyTokenMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<AuthVerifyTokenMutation, AuthVerifyTokenMutationVariables>(AuthVerifyTokenDocument, options)
 }
 export type AuthVerifyTokenMutationHookResult = ReturnType<typeof useAuthVerifyTokenMutation>
@@ -2423,6 +2431,7 @@ export function useAuthResetPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<AuthResetPasswordMutation, AuthResetPasswordMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useMutation<AuthResetPasswordMutation, AuthResetPasswordMutationVariables>(
     AuthResetPasswordDocument,
     options
@@ -2468,10 +2477,12 @@ export const MeDocument = gql`
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options)
 }
 export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options)
 }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>
@@ -2500,10 +2511,12 @@ export const LogoutDocument = gql`
  */
 export function useLogoutQuery(baseOptions?: Apollo.QueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options)
 }
 export function useLogoutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
+
   return Apollo.useLazyQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options)
 }
 export type LogoutQueryHookResult = ReturnType<typeof useLogoutQuery>

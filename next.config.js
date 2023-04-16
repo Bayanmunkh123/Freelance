@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
-const Dotenv = require("dotenv-webpack")
+const Dotenv = require('dotenv-webpack')
 
 /** @type {import('next').NextConfig} */
 
@@ -10,7 +10,7 @@ module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
   images: {
-    domains: ["storage.googleapis.com"],
+    domains: ['storage.googleapis.com']
   },
   webpack: config => {
     config.plugins.push(new Dotenv({}))
@@ -18,15 +18,16 @@ module.exports = {
       ...config.resolve.alias,
       apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
     }
+
     // Url loader
     config.module.rules.push({
       test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
       use: {
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
-          limit: 100000,
-        },
-      },
+          limit: 100000
+        }
+      }
     })
 
     return config

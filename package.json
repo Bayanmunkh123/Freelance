@@ -7,9 +7,9 @@
     "build": "next build && rimraf build && tsc --project tsconfig.json",
     "start": "next start -p 3007",
     "export": "next export",
-    "lint": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "tsc --noEmit && eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx --quiet",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "build:icons": "tsc -b src/iconify-bundle && node src/iconify-bundle/bundle-icons-react.js",
     "codegen": "graphql-codegen --config codegen.yml",
     "enum:gen": "ts-node src/utils/localization/enum.ts",
     "prepare": "husky install"

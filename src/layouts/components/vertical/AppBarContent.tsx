@@ -16,7 +16,8 @@ import ModeToggler from 'src/@core/layouts/components/shared-components/ModeTogg
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import { HorizontalNavItemsType, LayoutProps } from 'src/@core/layouts/types'
 import Navigation from 'src/@core/layouts/components/horizontal/navigation'
-import { useAuth } from 'src/hooks/useAuth'
+
+// import { useAuth } from 'src/hooks/useAuth'
 
 const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
   width: '100%',
@@ -45,8 +46,10 @@ interface Props {
 const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility, navMenu } = props
-  const { user } = useAuth()
+
+  // const { user } = useAuth()
   const { skin, contentWidth } = settings
+
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>

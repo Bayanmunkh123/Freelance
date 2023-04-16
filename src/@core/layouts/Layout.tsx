@@ -40,6 +40,7 @@ const Layout = (props: LayoutProps) => {
     return <HorizontalLayout {...props}>{children}</HorizontalLayout>
   }
   if (props?.verticalLayoutProps) return <VerticalLayout {...props}>{children}</VerticalLayout>
+
   return <BlankLayout>{children}</BlankLayout>
 }
 
