@@ -36,9 +36,4 @@
     "codegen",
     "Customizer"
   ],
-  "search-node-modules.path": "node_modules",
-  "markdown.extension.toc.updateOnSave": false,
-  "yaml.schemas": {
-    "https://www.graphql-code-generator.com/config.schema.json": "file:///Users/darkhanatarbold/Documents/gitlab/onedayjob/theme/onedayjob_web_v2_mui/codegen.yml"
-  }
 }

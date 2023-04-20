@@ -81,29 +81,29 @@ const AuthProvider = ({ children, data }: Props) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [])
 
-  // const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-  //   axios
-  //     .post(authConfig.loginEndpoint, params)
-  //     .then(async response => {
-  //       params.rememberMe
-  //         ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
-  //         : null
-  //       const returnUrl = router.query.returnUrl
+  const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {
+    await apolloClient.query({ query: LOGOUT })
 
-  //       setUser({ ...response.data.userData })
-  //       params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+    params.rememberMe ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken) : null
+    const returnUrl = router.query.returnUrl
 
-  //       const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+    setUser({ ...response.data.userData })
+    params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
 
-  //       router.replace(redirectURL as string)
-  //     })
+    const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
-  //     .catch(err => {
-  //       if (errorCallback) errorCallback(err)
-  //     })
-  // }
+    router.replace(redirectURL as string)
 
-  const [handleLogin] = useLoginMutation({
+    // axios
+    //   .post(authConfig.loginEndpoint, params)
+    //   .then(async response => {
+    //   })
+    //   .catch(err => {
+    //     if (errorCallback) errorCallback(err)
+    //   })
+  }
+
+  const [handleLogine] = useLoginMutation({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ login }) => {
       login?.accessToken ? window.localStorage.setItem(authConfig.storageTokenKeyName, login?.accessToken) : null
@@ -112,16 +112,16 @@ const AuthProvider = ({ children, data }: Props) => {
       // params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
       if (login?.accessToken) {
         setCookieToken(login)
-        if (login?.accessToken) {
-          toast.success('Амжилттай.', {
-            duration: 2000
-          })
-          await apolloClient.cache.reset()
+        toast.success('Амжилттай.', {
+          duration: 2000
+        })
 
-          // window.location.reload()
+        // params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+        // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        // router.replace(redirectURL as string)
 
-          // setVisibleAuthModal(undefined)
-        }
+        await apolloClient.cache.reset()
+        window.location.reload()
       } else if (login && !login?.isEmailConfirmed) {
         // Modal.confirm({
         //   title: 'Анхаарууллага',
