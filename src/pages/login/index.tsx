@@ -136,12 +136,13 @@ const LoginPage = () => {
 
   const onSubmit = (data: FormData) => {
     const { email, password } = data
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
-        type: 'manual',
-        message: 'Email or Password is invalid'
-      })
-    })
+
+    // auth.login({ email, password, rememberMe }, () => {
+    //   setError('email', {
+    //     type: 'manual',
+    //     message: 'Email or Password is invalid'
+    //   })
+    // })
   }
 
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'

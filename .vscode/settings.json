@@ -34,6 +34,8 @@
   // Extension: cSpell
   "cSpell.words": [
     "codegen",
-    "Customizer"
+    "Customizer",
+    "formik",
+    "iconify"
   ],
 }

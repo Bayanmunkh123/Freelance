@@ -2198,7 +2198,7 @@ export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>
 export const RegisterDocument = gql`
-  mutation register($input: RegisterUserInput!) {
+  mutation Register($input: RegisterUserInput!) {
     register(input: $input)
   }
 `
@@ -2232,7 +2232,7 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>
 export const AuthWebDocument = gql`
-  mutation authWeb($input: ExternalWebAuthInput!) {
+  mutation AuthWeb($input: ExternalWebAuthInput!) {
     authWeb(input: $input) {
       accessToken
       refreshToken
@@ -2269,7 +2269,7 @@ export type AuthWebMutationHookResult = ReturnType<typeof useAuthWebMutation>
 export type AuthWebMutationResult = Apollo.MutationResult<AuthWebMutation>
 export type AuthWebMutationOptions = Apollo.BaseMutationOptions<AuthWebMutation, AuthWebMutationVariables>
 export const AuthVerifyTokenSenderDocument = gql`
-  mutation authVerifyTokenSender($input: AuthVerifyTokenSenderInput!) {
+  mutation AuthVerifyTokenSender($input: AuthVerifyTokenSenderInput!) {
     authVerifyTokenSender(input: $input)
   }
 `
@@ -2312,7 +2312,7 @@ export type AuthVerifyTokenSenderMutationOptions = Apollo.BaseMutationOptions<
   AuthVerifyTokenSenderMutationVariables
 >
 export const AuthForgetPasswordDocument = gql`
-  mutation authForgetPassword($input: AuthVerifyTokenSenderInput!) {
+  mutation AuthForgetPassword($input: AuthVerifyTokenSenderInput!) {
     authForgetPassword(input: $input)
   }
 `
@@ -2355,7 +2355,7 @@ export type AuthForgetPasswordMutationOptions = Apollo.BaseMutationOptions<
   AuthForgetPasswordMutationVariables
 >
 export const AuthVerifyTokenDocument = gql`
-  mutation authVerifyToken($input: AuthVerifyTokenInput!) {
+  mutation AuthVerifyToken($input: AuthVerifyTokenInput!) {
     authVerifyToken(input: $input) {
       accessToken
       refreshToken
@@ -2398,7 +2398,7 @@ export type AuthVerifyTokenMutationOptions = Apollo.BaseMutationOptions<
   AuthVerifyTokenMutationVariables
 >
 export const AuthResetPasswordDocument = gql`
-  mutation authResetPassword($input: AuthResetPasswordInput!) {
+  mutation AuthResetPassword($input: AuthResetPasswordInput!) {
     authResetPassword(input: $input) {
       accessToken
       refreshToken
@@ -2489,7 +2489,7 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>
 export const LogoutDocument = gql`
-  query LOGOUT {
+  query logout {
     logout
   }
 `

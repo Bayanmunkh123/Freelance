@@ -12,13 +12,13 @@ export const LOGIN = gql`
 `
 
 export const REGISTER = gql`
-  mutation register($input: RegisterUserInput!) {
+  mutation Register($input: RegisterUserInput!) {
     register(input: $input)
   }
 `
 
 export const AUTH_WEB = gql`
-  mutation authWeb($input: ExternalWebAuthInput!) {
+  mutation AuthWeb($input: ExternalWebAuthInput!) {
     authWeb(input: $input) {
       accessToken
       refreshToken
@@ -28,19 +28,19 @@ export const AUTH_WEB = gql`
 
 // OLD
 export const AUTH_VERIFY_TOKEN_SENDER = gql`
-  mutation authVerifyTokenSender($input: AuthVerifyTokenSenderInput!) {
+  mutation AuthVerifyTokenSender($input: AuthVerifyTokenSenderInput!) {
     authVerifyTokenSender(input: $input)
   }
 `
 
 export const AUTH_FORGET_PASSWORD = gql`
-  mutation authForgetPassword($input: AuthVerifyTokenSenderInput!) {
+  mutation AuthForgetPassword($input: AuthVerifyTokenSenderInput!) {
     authForgetPassword(input: $input)
   }
 `
 
 export const AUTH_VERIFY_TOKEN = gql`
-  mutation authVerifyToken($input: AuthVerifyTokenInput!) {
+  mutation AuthVerifyToken($input: AuthVerifyTokenInput!) {
     authVerifyToken(input: $input) {
       accessToken
       refreshToken
@@ -49,7 +49,7 @@ export const AUTH_VERIFY_TOKEN = gql`
 `
 
 export const AUTH_RESET_PASSWORD = gql`
-  mutation authResetPassword($input: AuthResetPasswordInput!) {
+  mutation AuthResetPassword($input: AuthResetPasswordInput!) {
     authResetPassword(input: $input) {
       accessToken
       refreshToken

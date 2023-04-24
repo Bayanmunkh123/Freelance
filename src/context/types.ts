@@ -24,6 +24,5 @@ export type AuthValuesType = {
   roles?: RoleType | null
   permissions?: string[]
 
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   logout: () => void
 }

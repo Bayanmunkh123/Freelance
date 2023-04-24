@@ -18,7 +18,7 @@ export const ME_AUTH = gql`
 `
 
 export const LOGOUT = gql`
-  query LOGOUT {
+  query logout {
     logout
   }
 `

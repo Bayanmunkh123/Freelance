@@ -23,7 +23,7 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
-import Link from 'next/link'
+import { LoginDialog } from '../../../../scene/login/LoginDialog'
 
 interface Props {
   hidden: boolean
@@ -45,6 +45,7 @@ const UserDropdown = (props: Props) => {
 
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false)
 
   // ** Hooks
   const router = useRouter()
@@ -186,15 +187,19 @@ const UserDropdown = (props: Props) => {
       ) : (
         <>
           {!hidden && (
-            <Button
-              href='/login'
-              component={Link}
-              variant='contained'
-              startIcon={<Icon icon='mdi:login-variant' />}
-              sx={{ ml: 2, cursor: 'pointer' }}
-            >
-              Нэвтрэх
-            </Button>
+            <>
+              <Button
+                variant='contained'
+                startIcon={<Icon icon='mdi:login-variant' />}
+                sx={{ ml: 2, cursor: 'pointer' }}
+                onClick={() => {
+                  if (!openLoginDialog) setOpenLoginDialog(true)
+                }}
+              >
+                Нэвтрэх
+              </Button>
+              <LoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+            </>
           )}
         </>
       )}

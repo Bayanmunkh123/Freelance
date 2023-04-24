@@ -10,12 +10,7 @@ import type { AppProps } from 'next/app'
 // ** Loader Import
 import NProgress from 'nprogress'
 
-// ** Emotion Imports
-import { CacheProvider } from '@emotion/react'
-import type { EmotionCache } from '@emotion/cache'
-
 // ** Config Imports
-
 import { defaultACLObj } from 'src/configs/acl'
 import themeConfig from 'src/configs/themeConfig'
 
@@ -41,15 +36,6 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 // ** Styled Components
 import ReactHotToast from 'src/@core/styles/libs/react-hot-toast'
 
-// ** Utils Imports
-import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
-
-// ** Prismjs Styles
-import 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
-import 'prismjs/components/prism-jsx'
-import 'prismjs/components/prism-tsx'
-
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
@@ -71,18 +57,14 @@ import { AuthUserType, MeQueryResult, UserRoleEnum } from 'src/generated'
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
-  emotionCache: EmotionCache
   title: string | null
   user: AuthUserType | null
 }
-
 type GuardProps = {
   authGuard: boolean
   guestGuard: boolean
   children: ReactNode
 }
-
-const clientSideEmotionCache = createEmotionCache()
 
 // ** Pace Loader
 if (themeConfig.routingLoader) {
@@ -110,7 +92,7 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps, title, user } = props
+  const { Component, pageProps, title, user } = props
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
@@ -141,7 +123,7 @@ const App = (props: ExtendedAppProps) => {
   console.log('guestGuard', guestGuard)
 
   return (
-    <CacheProvider value={emotionCache}>
+    <>
       <Head>
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
         <meta
@@ -174,7 +156,7 @@ const App = (props: ExtendedAppProps) => {
           </SettingsProvider>
         </AuthProvider>
       </ApolloProvider>
-    </CacheProvider>
+    </>
   )
 }
 
