@@ -23,7 +23,7 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
-import { LoginDialog } from '../../../../scene/login/LoginDialog'
+import { AuthDialog } from 'src/scene/auth/AuthDialog'
 
 interface Props {
   hidden: boolean
@@ -198,7 +198,7 @@ const UserDropdown = (props: Props) => {
               >
                 Нэвтрэх
               </Button>
-              <LoginDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+              <AuthDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
             </>
           )}
         </>

@@ -930,6 +930,17 @@ export enum JobWorkExperienceEnum {
   THREE = 'THREE'
 }
 
+export type LoginEmailInput = {
+  email: Scalars['String']
+  password: Scalars['String']
+}
+
+export type LoginPhoneInput = {
+  countryCode?: InputMaybe<Scalars['String']>
+  password: Scalars['String']
+  phoneNumber: Scalars['String']
+}
+
 export type LoginUserInput = {
   countryCode?: InputMaybe<Scalars['String']>
   email?: InputMaybe<Scalars['String']>
@@ -970,6 +981,8 @@ export type Mutation = {
   jobShiftStatusUpdate?: Maybe<JobShift>
   jobStatusUpdate?: Maybe<Job>
   login?: Maybe<AuthVerifyTokenType>
+  loginEmail?: Maybe<AuthVerifyTokenType>
+  loginPhone?: Maybe<AuthVerifyTokenType>
   register?: Maybe<Scalars['Boolean']>
   resumeAccomplishmentUpsertAdmin?: Maybe<ResumeAccomplishment>
   resumeAccomplishmentUpsertGuest?: Maybe<ResumeAccomplishment>
@@ -1116,6 +1129,14 @@ export type MutationJobStatusUpdateArgs = {
 
 export type MutationLoginArgs = {
   input: LoginUserInput
+}
+
+export type MutationLoginEmailArgs = {
+  input: LoginEmailInput
+}
+
+export type MutationLoginPhoneArgs = {
+  input: LoginPhoneInput
 }
 
 export type MutationRegisterArgs = {

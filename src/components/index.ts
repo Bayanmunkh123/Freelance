@@ -1,4 +1,3 @@
-import { FormTextField } from 'src/components/form/FormTextField'
-import { FormAutocompleteCountry } from 'src/components/form/FormAutocompleteCountry'
+import { FormTextField } from 'src/components/form/index'
 
-export const Form = { FormTextField, FormAutocompleteCountry }
+export const CustomForm = { FormTextField }

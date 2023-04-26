@@ -10,17 +10,30 @@ import Dialog from '@mui/material/Dialog'
 
 import Slide, { SlideProps } from '@mui/material/Slide'
 
-import { Box, Card, CardContent, DialogContent, Divider, IconButton, Stack, Tab, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardContent,
+  Checkbox,
+  DialogContent,
+  Divider,
+  FormControlLabel,
+  IconButton,
+  Stack,
+  Tab,
+  Typography
+} from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 
-import { Formik, Form, FormikProps, FormikHelpers } from 'formik'
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-mui'
 
 import * as yup from 'yup'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { Form } from 'src/components'
-import { LoginUserInput } from '../../generated'
+
+import { LoginEmailInput, LoginPhoneInput } from '../../generated'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -29,20 +42,24 @@ const Transition = forwardRef(function Transition(
   return <Slide direction='down' ref={ref} {...props} />
 })
 
-export type LoginDialogProps = {
+export type AuthDialogProps = {
   open: boolean
   setOpen: (value: boolean) => void
 }
 
 // the Formik component supports yup validation out-of-the-box via the `validationSchema` prop
-const validationSchema = yup.object().shape({
-  email: yup.string().required('Required'),
-  password: yup.string().required('Required')
+const validationEmailSchema = yup.object().shape({
+  email: yup.string().email().required('Required'),
+  password: yup.string().min(8).required('Required')
 })
 
-export const LoginDialog = (props: LoginDialogProps) => {
-  const { FormTextField, FormAutocompleteCountry } = Form
+const validationPhoneSchema = yup.object().shape({
+  phoneNumber: yup.string().required('Required'),
+  countryCode: yup.string().required('Required'),
+  password: yup.string().min(8).required('Required')
+})
 
+export const AuthDialog = (props: AuthDialogProps) => {
   const { open, setOpen } = props
   const handleClose = () => setOpen(false)
 
@@ -59,23 +76,22 @@ export const LoginDialog = (props: LoginDialogProps) => {
               </Typography>
 
               <Formik
-                initialValues={{
-                  email: '',
-                  password: '',
-                  code: ''
-                }}
-                validationSchema={validationSchema}
-                onSubmit={(values: LoginUserInput, formikHelpers: FormikHelpers<LoginUserInput>) => {
+                initialValues={
+                  type === 'email' ? { email: '', password: '' } : { phoneNumber: '', countryCode: '', password: '' }
+                }
+                validationSchema={type === 'email' ? validationEmailSchema : validationPhoneSchema}
+                onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
+                  console.log('onSubmit === values', values)
                   alert(JSON.stringify(values, null, 2))
                   formikHelpers.setSubmitting(false)
                 }}
               >
-                {(formikProps: FormikProps<LoginUserInput>) => (
+                {formikProps => (
                   <Form noValidate autoComplete='off'>
                     <TabContext value={type}>
                       <Box sx={{ mb: '24px' }}>
                         <TabList
-                          onChange={(event, _type) => {
+                          onChange={(_event, _type) => {
                             setType(_type)
                           }}
                           aria-label='lab API tabs example'
@@ -86,29 +102,40 @@ export const LoginDialog = (props: LoginDialogProps) => {
                       </Box>
                       <TabPanel value='email'>
                         <Stack spacing={6}>
-                          <FormTextField name='email' label='И-Майл хаяг' size='small' />
-
-                          <FormTextField name='password' label='Нууц үг' size='small' type='password' />
+                          <Field component={TextField} name='email' type='email' label='И-Майл хаяг' size='small' />
+                          <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
                         </Stack>
                       </TabPanel>
                       <TabPanel value='phone'>
                         <Stack spacing={6}>
-                          <FormTextField
-                            name='phoneNumber'
-                            type='number'
-                            label='Phone Number'
-                            size='small'
-                            InputProps={{
-                              startAdornment: (
-                                <FormAutocompleteCountry name='countryCode' type={{ code: 'MN', phone: '976' }} />
-                              )
-                            }}
-                          />
-
-                          <FormTextField name='password' label='Нууц үг' size='small' type='password' />
+                          <Field component={TextField} name='email' type='email' label='И-Майл хаяг' size='small' />
+                          <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
                         </Stack>
                       </TabPanel>
                     </TabContext>
+                    <Box
+                      sx={{
+                        mb: 4,
+                        display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <FormControlLabel
+                        label='Remember Me'
+                        control={<Checkbox />}
+                        sx={{ '& .MuiFormControlLabel-label': { color: 'text.primary' } }}
+                      />
+                      <Typography
+                        variant='body2'
+                        component={Link}
+                        href='/pages/auth/forgot-password-v2'
+                        sx={{ color: 'primary.main', textDecoration: 'none' }}
+                      >
+                        Forgot Password?
+                      </Typography>
+                    </Box>
                     <Box p='12px'>
                       <Button
                         type='submit'
