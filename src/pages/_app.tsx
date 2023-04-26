@@ -101,8 +101,6 @@ const App = (props: ExtendedAppProps) => {
 
   const setConfig = Component.setConfig ?? undefined
 
-  console.log('Component.authGuard', Component.authGuard)
-  console.log('Component.guestGuard', Component.guestGuard)
   let authGuard = Component.authGuard ?? true
   let guestGuard = Component.guestGuard ?? false
   if (user) {
