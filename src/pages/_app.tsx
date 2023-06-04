@@ -41,15 +41,10 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import { ApolloClient, ApolloLink, ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client'
 import { Context } from 'react-apollo'
-import withApollo from 'next-with-apollo'
 
-import { createApolloClient } from 'src/lib/apolloClient'
-import { splitLink } from 'src/lib/apollo/splitLink'
-import { createAuthLink } from 'src/lib/apollo/authLink'
-import { localCache } from 'src/lib/apollo/localCache'
-import { errorLink } from 'src/lib/apollo/errorLink'
+import { useApollo } from 'src/lib/apollo/client'
 
 import { ME_AUTH } from 'src/hooks/utils/queries'
 import { AuthUserType, MeQueryResult, UserRoleEnum } from 'src/generated'
@@ -116,7 +111,7 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  const apolloClient = createApolloClient(undefined)
+  const apolloClient = useApollo(pageProps.initialApollo)
   console.log('authGuard', authGuard)
   console.log('guestGuard', guestGuard)
 
@@ -168,11 +163,12 @@ App.getInitialProps = async (context: Context) => {
   const { pathname, apolloClient } = ctx
   const title = 'BAIHGUI' // ROUTES.getTitle(pathname) || ''
 
-  const meQuery: MeQueryResult = await apolloClient.query({
+  const meQuery: MeQueryResult = await apolloClient?.query({
     fetchPolicy: 'no-cache',
     query: ME_AUTH
   })
-  if (meQuery.data?.me) {
+
+  if (meQuery?.data?.me) {
     const user = meQuery.data?.me
     const isAdministrator = user.role === UserRoleEnum.ADMINISTRATOR
     const isAdmin = user.role === UserRoleEnum.ADMIN
@@ -186,16 +182,17 @@ App.getInitialProps = async (context: Context) => {
 
   return { title, pageProps, pathname, apolloClient, autData: undefined }
 }
+export default App
 
-export default withApollo(({ initialState, headers }) => {
-  const link = splitLink()
-  const authLink = createAuthLink(headers)
+// export default withApollo(({ initialState, headers }) => {
+//   const link = splitLink()
+//   const authLink = createAuthLink(headers)
 
-  const apolloClient: any = new ApolloClient({
-    ssrMode: typeof window === 'undefined',
-    link: ApolloLink.from([errorLink, authLink, link]),
-    cache: localCache.restore(initialState || {})
-  })
+//   const apolloClient: any = new ApolloClient({
+//     ssrMode: typeof window === 'undefined',
+//     link: ApolloLink.from([errorLink, authLink, link]),
+//     cache: localCache.restore(initialState || {})
+//   })
 
-  return apolloClient
-})(App)
+//   return apolloClient
+// })(App)

@@ -33,7 +33,7 @@ import * as yup from 'yup'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-import { LoginEmailInput, LoginPhoneInput } from '../../generated'
+import { LoginEmailInput, LoginPhoneInput, useLoginMutation } from '../../generated'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -50,7 +50,7 @@ export type AuthDialogProps = {
 // the Formik component supports yup validation out-of-the-box via the `validationSchema` prop
 const validationEmailSchema = yup.object().shape({
   email: yup.string().email().required('Required'),
-  password: yup.string().min(8).required('Required')
+  password: yup.string().min(6).required('Required')
 })
 
 const validationPhoneSchema = yup.object().shape({
@@ -64,6 +64,19 @@ export const AuthDialog = (props: AuthDialogProps) => {
   const handleClose = () => setOpen(false)
 
   const [type, setType] = useState('email')
+
+  const [onLoginEmail, { loading: loadingEmail }] = useLoginMutation({
+    fetchPolicy: 'no-cache',
+    onCompleted: data => {
+      console.log(data)
+
+      // localStorage.setItem('cookie', data)
+      // Router.push('http://localhost:3011/admin')
+    },
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
 
   return (
     <Fragment>
@@ -82,6 +95,15 @@ export const AuthDialog = (props: AuthDialogProps) => {
                 validationSchema={type === 'email' ? validationEmailSchema : validationPhoneSchema}
                 onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
                   console.log('onSubmit === values', values)
+                  if (values?.email)
+                    onLoginEmail({
+                      variables: {
+                        input: {
+                          email: values?.email,
+                          password: values.password
+                        }
+                      }
+                    })
                   alert(JSON.stringify(values, null, 2))
                   formikHelpers.setSubmitting(false)
                 }}
