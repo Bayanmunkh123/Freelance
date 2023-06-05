@@ -1,39 +1,16 @@
 // ** React Imports
-import React, { forwardRef, Fragment, MouseEvent, ReactElement, Ref, useState } from 'react'
-
-// ** Next Imports
-import Link from 'next/link'
-
-// ** MUI Imports
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-
+import React, { forwardRef, Fragment, ReactElement, Ref, useState, useEffect } from 'react'
 import Slide, { SlideProps } from '@mui/material/Slide'
-
 import {
-  Box,
-  Card,
-  CardContent,
-  Checkbox,
+  Dialog,
   DialogContent,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  Stack,
-  Tab,
-  Typography
 } from '@mui/material'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-
-import { Formik, Form, Field } from 'formik'
-import { TextField } from 'formik-mui'
-
-import * as yup from 'yup'
-
-// ** Icon Imports
-import Icon from 'src/@core/components/icon'
-
-import { LoginEmailInput, LoginPhoneInput } from '../../generated'
+import { AuthModalType } from 'src/utils/constants'
+import { AuthLogin } from './authLogin'
+import { AuthRegister } from './authRegister'
+import { AuthForget } from './authForgetPassword'
+import { AuthConfirmCode } from './authConfirmCode'
+import { AuthConfirmPassword } from './authConfirmPassword'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -47,29 +24,18 @@ export type AuthDialogProps = {
   setOpen: (value: boolean) => void
 }
 
-// the Formik component supports yup validation out-of-the-box via the `validationSchema` prop
-const validationEmailSchema = yup.object().shape({
-  email: yup.string().email().required('Required'),
-  password: yup.string().min(8).required('Required')
-})
-
-const validationPhoneSchema = yup.object().shape({
-  phoneNumber: yup.string().required('Required'),
-  countryCode: yup.string().required('Required'),
-  password: yup.string().min(8).required('Required')
-})
-
 export const AuthDialog = (props: AuthDialogProps) => {
   const { open, setOpen } = props
   const handleClose = () => setOpen(false)
-
-  const [type, setType] = useState('email')
-
+  const [visibleAuthDialog, setVisibleAuthDialog] = useState<AuthModalType>(AuthModalType.Login)
+  useEffect(()=>{
+    if(!open) setVisibleAuthDialog(AuthModalType.Login)
+  }, [open])
   return (
     <Fragment>
       <Dialog open={open} keepMounted onClose={handleClose} TransitionComponent={Transition}>
         <DialogContent sx={{ padding: 0 }}>
-          <Card sx={{ zIndex: 1, width: '460px' }}>
+          {/* <Card sx={{ zIndex: 1, width: '460px' }}>
             <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
               <Typography variant='h6' sx={{ ml: 2, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
                 Нэвтрэх
@@ -198,7 +164,12 @@ export const AuthDialog = (props: AuthDialogProps) => {
                 </IconButton>
               </Box>
             </CardContent>
-          </Card>
+          </Card> */}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && <AuthLogin visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Register && <AuthRegister visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Forget && <AuthForget visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmCode && <AuthConfirmCode  visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
+           {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmPassword && <AuthConfirmPassword  visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
         </DialogContent>
       </Dialog>
     </Fragment>

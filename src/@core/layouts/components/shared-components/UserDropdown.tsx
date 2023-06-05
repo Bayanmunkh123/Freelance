@@ -24,6 +24,7 @@ import { useAuth } from 'src/hooks/useAuth'
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
 import { AuthDialog } from 'src/scene/auth/AuthDialog'
+import { AuthModalType } from 'src/utils/constants'
 
 interface Props {
   hidden: boolean
@@ -46,7 +47,6 @@ const UserDropdown = (props: Props) => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const [openLoginDialog, setOpenLoginDialog] = useState<boolean>(false)
-
   // ** Hooks
   const router = useRouter()
   const { user, logout } = useAuth()
