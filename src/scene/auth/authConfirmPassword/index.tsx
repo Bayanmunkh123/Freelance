@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
+import { LoginEmailInput, LoginPhoneInput, useAuthEmailResetPasswordMutation } from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
 import { validationConfirmPasswordSchema } from 'src/validators/auth/auth.validator'
 
@@ -14,6 +14,22 @@ export type AuthConfirmPasswordProps = {
 
 export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
   const { visibleAuthDialog, setVisibleAuthDialog } = props
+  const [onAuthEmailResetPassword] = useAuthEmailResetPasswordMutation({
+    onCompleted: data => {
+      console.log(data)
+    }
+  })
+  const handleSubmit = (values: LoginEmailInput | LoginPhoneInput) => {
+    onAuthEmailResetPassword({
+      variables: {
+        input: {
+          email: values.email,
+          password: values.password
+        }
+      }
+    })
+  }
+
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
       <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
@@ -25,7 +41,7 @@ export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
           validationSchema={validationConfirmPasswordSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
             console.log('onSubmit === values', values)
-            alert(JSON.stringify(values, null, 2))
+            handleSubmit(values)
             formikHelpers.setSubmitting(false)
           }}
         >

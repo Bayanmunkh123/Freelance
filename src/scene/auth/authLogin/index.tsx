@@ -17,9 +17,10 @@ import { TextField } from 'formik-mui'
 import Icon from 'src/@core/components/icon'
 
 import { AuthModalType } from 'src/utils/constants'
-import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
+import { LoginEmailInput, LoginPhoneInput, useLoginEmailMutation, useLoginPhoneMutation } from 'src/generated'
 import { AuthSocial } from '../components/AuthSocial'
 import { validationLoginEmailSchema, validationLoginPhoneSchema } from 'src/validators/auth/auth.validator'
+import { useRouter } from 'next/router'
 
 export type AuthLoginProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -29,6 +30,54 @@ export type AuthLoginProps = {
 export const AuthLogin = (props: AuthLoginProps) => {
   const [type, setType] = useState('email')
   const { visibleAuthDialog, setVisibleAuthDialog } = props
+
+  const Router = useRouter()
+  const [onLoginEmail, { loading: loadingEmail }] = useLoginEmailMutation({
+    fetchPolicy: 'no-cache',
+    onCompleted: data => {
+      console.log(data)
+      setVisibleAuthDialog(false)
+      Router.push('/')
+    },
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
+  const [onLoginPhone, { loading: loadingPhone }] = useLoginPhoneMutation({
+    fetchPolicy: 'no-cache',
+    onCompleted: data => {
+      console.log(data)
+
+      // localStorage.setItem('cookie', data)
+      // Router.push('http://localhost:3011/admin')
+    },
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
+  const submitHandler = (values: LoginEmailInput | LoginPhoneInput) => {
+    console.log('onSubmit === values', values)
+    if (type === 'email') {
+      onLoginEmail({
+        variables: {
+          input: {
+            email: values?.email,
+            password: values.password
+          }
+        }
+      })
+    } else if (type === 'phone') {
+      onLoginPhone({
+        variables: {
+          input: {
+            phone: values?.phone,
+            password: values.password
+          }
+        }
+      })
+    }
+  }
+
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
       <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
@@ -36,13 +85,10 @@ export const AuthLogin = (props: AuthLoginProps) => {
           Нэвтрэх
         </Typography>
         <Formik
-          initialValues={
-            type === 'email' ? { email: '', password: '' } : { phoneNumber: '', countryCode: '', password: '' }
-          }
+          initialValues={type === 'email' ? { email: '', password: '' } : { phone: '', countryCode: '', password: '' }}
           validationSchema={type === 'email' ? validationLoginEmailSchema : validationLoginPhoneSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
-            console.log('onSubmit === values', values)
-            alert(JSON.stringify(values, null, 2))
+            submitHandler(values)
             formikHelpers.setSubmitting(false)
           }}
         >
@@ -56,8 +102,18 @@ export const AuthLogin = (props: AuthLoginProps) => {
                     }}
                     aria-label='lab API tabs example'
                   >
-                    <Tab label='И-мэйл' value='email' iconPosition='start' icon={<Icon icon='ic:outline-email' style={{marginRight:"4px"}}/>} />
-                    <Tab label='Утас' value='phone' iconPosition='start' icon={<Icon icon='carbon:phone' style={{marginRight:"4px"}}/>}  />
+                    <Tab
+                      label='И-мэйл'
+                      value='email'
+                      iconPosition='start'
+                      icon={<Icon icon='ic:outline-email' style={{ marginRight: '4px' }} />}
+                    />
+                    <Tab
+                      label='Утас'
+                      value='phone'
+                      iconPosition='start'
+                      icon={<Icon icon='carbon:phone' style={{ marginRight: '4px' }} />}
+                    />
                   </TabList>
                 </Box>
                 <TabPanel value='email'>

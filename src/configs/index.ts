@@ -11,8 +11,8 @@ const tokenKeys = {
 export const config = {
   ...tokenKeys,
   NODE_ENV: process.env.ENV || process.env.NODE_ENV,
-  BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:4011/graphql',
-  BACKEND_WS_URL: process.env.BACKEND_WS_URL || 'ws://localhost:4011/subscriptions'
+  BACKEND_URL: process.env.BACKEND_URL || 'http://192.168.0.108:4011/graphql',
+  BACKEND_WS_URL: process.env.BACKEND_WS_URL || 'ws://192.168.0.108:4011/subscriptions'
 }
 
 export const MEDIA_TYPES = {

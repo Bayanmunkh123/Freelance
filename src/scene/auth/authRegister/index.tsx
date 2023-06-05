@@ -1,21 +1,11 @@
 // ** React Imports
 import React, { useState } from 'react'
-import {
-  Button,
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-  Tab,
-  Stack,
-  Divider
-} from '@mui/material'
+import { Button, Box, Card, CardContent, IconButton, Typography, Tab, Stack, Divider } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
 import { AuthModalType } from 'src/utils/constants'
-import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
+import { LoginEmailInput, LoginPhoneInput, useRegisterEmailMutation, useRegisterPhoneMutation } from 'src/generated'
 import { AuthSocial } from '../components/AuthSocial'
 import { validationRegisterEmailSchema, validationRegisterPhoneSchema } from 'src/validators/auth/auth.validator'
 
@@ -25,8 +15,40 @@ export type AuthRegisterProps = {
 }
 
 export const AuthRegister = (props: AuthRegisterProps) => {
-   const {visibleAuthDialog, setVisibleAuthDialog} = props
+  const { visibleAuthDialog, setVisibleAuthDialog } = props
   const [type, setType] = useState('email')
+  const [onRegisterEmail] = useRegisterEmailMutation({
+    onCompleted: data => {
+      console.log(data)
+    }
+  })
+  const [onRegisterPhone] = useRegisterPhoneMutation({
+    onCompleted: data => {
+      console.log(data)
+    }
+  })
+  const submitHandler = (values: LoginEmailInput | LoginPhoneInput) => {
+    console.log('onSubmit === values', values)
+    if (type === 'email') {
+      onRegisterEmail({
+        variables: {
+          input: {
+            email: values.email,
+            password: values.password
+          }
+        }
+      })
+    } else if (type === 'phone') {
+      onRegisterPhone({
+        variables: {
+          input: {
+            phone: values.phone,
+            password: values.password
+          }
+        }
+      })
+    }
+  }
 
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
@@ -35,13 +57,10 @@ export const AuthRegister = (props: AuthRegisterProps) => {
           Бүртгүүлэх
         </Typography>
         <Formik
-          initialValues={
-            type === 'email' ? { email: '', password: '' } : { phoneNumber: '', countryCode: '', password: '' }
-          }
+          initialValues={type === 'email' ? { email: '', password: '' } : { phone: '', countryCode: '', password: '' }}
           validationSchema={type === 'email' ? validationRegisterEmailSchema : validationRegisterPhoneSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
-            console.log('onSubmit === values', values)
-            alert(JSON.stringify(values, null, 2))
+            submitHandler(values)
             formikHelpers.setSubmitting(false)
           }}
         >
@@ -62,14 +81,26 @@ export const AuthRegister = (props: AuthRegisterProps) => {
                   <Stack spacing={6}>
                     <Field component={TextField} name='email' type='email' label='И-мэйл хаяг' size='small' />
                     <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
-                    <Field component={TextField} name='confirmPassword' type='password' label='Нууц үг давтах' size='small' />
+                    <Field
+                      component={TextField}
+                      name='confirmPassword'
+                      type='password'
+                      label='Нууц үг давтах'
+                      size='small'
+                    />
                   </Stack>
                 </TabPanel>
                 <TabPanel value='phone'>
                   <Stack spacing={6}>
                     <Field component={TextField} name='phoneNumber' type='number' label='Утасны дугаар' size='small' />
                     <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
-                    <Field component={TextField} name='confirmPassword' type='password' label='Нууц үг давтах' size='small' />
+                    <Field
+                      component={TextField}
+                      name='confirmPassword'
+                      type='password'
+                      label='Нууц үг давтах'
+                      size='small'
+                    />
                   </Stack>
                 </TabPanel>
               </TabContext>
@@ -98,7 +129,8 @@ export const AuthRegister = (props: AuthRegisterProps) => {
           Эсвэл
         </Divider>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: '20px' }}>
-          <Typography>Бүртгэлтэй хэрэглэгч үү?</Typography> <Button onClick={()=>setVisibleAuthDialog(AuthModalType.Login)}>Нэвтрэх</Button>
+          <Typography>Бүртгэлтэй хэрэглэгч үү?</Typography>{' '}
+          <Button onClick={() => setVisibleAuthDialog(AuthModalType.Login)}>Нэвтрэх</Button>
         </Box>
         <AuthSocial />
       </CardContent>

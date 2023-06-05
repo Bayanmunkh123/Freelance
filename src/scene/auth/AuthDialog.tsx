@@ -1,10 +1,7 @@
 // ** React Imports
 import React, { forwardRef, Fragment, ReactElement, Ref, useState, useEffect } from 'react'
 import Slide, { SlideProps } from '@mui/material/Slide'
-import {
-  Dialog,
-  DialogContent,
-} from '@mui/material'
+import { Dialog, DialogContent } from '@mui/material'
 import { AuthModalType } from 'src/utils/constants'
 import { AuthLogin } from './authLogin'
 import { AuthRegister } from './authRegister'
@@ -28,9 +25,10 @@ export const AuthDialog = (props: AuthDialogProps) => {
   const { open, setOpen } = props
   const handleClose = () => setOpen(false)
   const [visibleAuthDialog, setVisibleAuthDialog] = useState<AuthModalType>(AuthModalType.Login)
-  useEffect(()=>{
-    if(!open) setVisibleAuthDialog(AuthModalType.Login)
+  useEffect(() => {
+    if (!open) setVisibleAuthDialog(AuthModalType.Login)
   }, [open])
+
   return (
     <Fragment>
       <Dialog open={open} keepMounted onClose={handleClose} TransitionComponent={Transition}>
@@ -165,11 +163,21 @@ export const AuthDialog = (props: AuthDialogProps) => {
               </Box>
             </CardContent>
           </Card> */}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && <AuthLogin visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Register && <AuthRegister visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Forget && <AuthForget visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmCode && <AuthConfirmCode  visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
-           {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmPassword && <AuthConfirmPassword  visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog}/>}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && (
+            <AuthLogin visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+          )}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Register && (
+            <AuthRegister visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+          )}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Forget && (
+            <AuthForget visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+          )}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmCode && (
+            <AuthConfirmCode visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+          )}
+          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmPassword && (
+            <AuthConfirmPassword visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+          )}
         </DialogContent>
       </Dialog>
     </Fragment>

@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Card,
-  CardContent,
-  Stack,
-  Tab,
-  Typography,
-  Button
-} from '@mui/material'
+import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { validationEmailSchema, validationPhoneSchema } from 'src/validators/auth/auth.validator'
-import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
+import { validationForgetEmailSchema, validationForgetPhoneSchema } from 'src/validators/auth/auth.validator'
+import {
+  LoginEmailInput,
+  LoginPhoneInput,
+  useAuthEmailForgetPasswordMutation,
+  useAuthEmailVerifyTokenSenderMutation
+} from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
 
 export type AuthForgetProps = {
@@ -20,9 +17,60 @@ export type AuthForgetProps = {
   setVisibleAuthDialog: (type: AuthModalType) => void
 }
 
-export const AuthForget = (props:AuthForgetProps) => {
-  const {visibleAuthDialog, setVisibleAuthDialog} = props
+export const AuthForget = (props: AuthForgetProps) => {
+  const { visibleAuthDialog, setVisibleAuthDialog } = props
   const [type, setType] = useState('email')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState()
+
+  const [onForgetPassword] = useAuthEmailForgetPasswordMutation({
+    onCompleted: data => {
+      console.log(data)
+      if (data.authEmailForgetPassword) {
+        onAuthEmailVerifyTokenSender({
+          variables: {
+            input: {
+              email: email
+            }
+          }
+        })
+      }
+    }
+  })
+
+  const [onAuthEmailVerifyTokenSender] = useAuthEmailVerifyTokenSenderMutation({
+    onCompleted: data => {
+      console.log(data)
+      if (data.authEmailVerifyTokenSender) {
+        setVisibleAuthDialog(AuthModalType.ConfirmCode)
+      }
+    }
+  })
+  const submitHandler = (values: LoginEmailInput | LoginPhoneInput) => {
+    console.log('onSubmit === values', values)
+    if (type === 'email') {
+      setEmail(values.email)
+      onForgetPassword({
+        variables: {
+          input: {
+            email: values.email
+          }
+        }
+      })
+    }
+
+    // else if (type === 'phone') {
+    //   setPhone(values.phone)
+    //   onForgetPassword({
+    //     variables: {
+    //       input: {
+    //         phone: values.email
+    //       }
+    //     }
+    //   })
+    // }
+  }
+
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
       <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
@@ -30,13 +78,10 @@ export const AuthForget = (props:AuthForgetProps) => {
           Нууц үг сэргээх
         </Typography>
         <Formik
-          initialValues={
-            type === 'email' ? { email: '', password: '' } : { phoneNumber: '', countryCode: '', password: '' }
-          }
-          validationSchema={type === 'email' ? validationEmailSchema : validationPhoneSchema}
+          initialValues={type === 'email' ? { email: '', password: '' } : { phone: '', countryCode: '', password: '' }}
+          validationSchema={type === 'email' ? validationForgetEmailSchema : validationForgetPhoneSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
-            console.log('onSubmit === values', values)
-            alert(JSON.stringify(values, null, 2))
+            submitHandler(values)
             formikHelpers.setSubmitting(false)
           }}
         >
@@ -53,7 +98,6 @@ export const AuthForget = (props:AuthForgetProps) => {
                     <Tab label='И-мэйл' value='email' />
                     <Tab label='Утас' value='phone' />
                   </TabList>
-                  
                 </Box>
                 <TabPanel value='email'>
                   <Stack spacing={6}>
@@ -73,8 +117,7 @@ export const AuthForget = (props:AuthForgetProps) => {
                   size='large'
                   color='primary'
                   fullWidth
-                  // disabled={formikProps.isSubmitting}
-                  onClick={()=>setVisibleAuthDialog(AuthModalType.ConfirmCode)}
+                  disabled={formikProps.isSubmitting}
                 >
                   Илгээх
                 </Button>

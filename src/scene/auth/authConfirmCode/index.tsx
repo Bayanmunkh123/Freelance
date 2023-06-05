@@ -14,6 +14,7 @@ export type AuthConfirmCodeProps = {
 
 export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
   const { visibleAuthDialog, setVisibleAuthDialog } = props
+
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
       <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>

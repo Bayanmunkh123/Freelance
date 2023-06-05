@@ -5,13 +5,13 @@ yup.setLocale(descriptive)
 
 export const validationLoginEmailSchema = yup.object().shape({
   email: yup.string().email().required().label('И-мэйл'),
-  password: yup.string().min(8).required().label('Нууц үг')
+  password: yup.string().min(6).required().label('Нууц үг')
 })
 
 export const validationLoginPhoneSchema = yup.object().shape({
   phoneNumber: yup.string().required().label('Утасны дугаар'),
   countryCode: yup.string().required(),
-  password: yup.string().min(8).required().label('Нууц үг')
+  password: yup.string().min(6).required().label('Нууц үг')
 })
 
 export const validationRegisterEmailSchema = yup.object().shape({
@@ -39,4 +39,12 @@ export const validationConfirmPasswordSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('password')], 'Нууц үг таарах ёстой.')
     .required('Нууц үгийг давтаж оруулах ёстой.')
+})
+
+// Forget password
+export const validationForgetEmailSchema = yup.object().shape({
+  email: yup.string().email().required().label('И-мэйл')
+})
+export const validationForgetPhoneSchema = yup.object().shape({
+  email: yup.string().email().required().label('Утасны дугаар')
 })

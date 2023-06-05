@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material'
-import React, { MouseEvent } from 'react'
+import React from 'react'
 import Icon from 'src/@core/components/icon'
 import Link from 'next/link'
 import { initializeApp } from 'firebase/app'
@@ -7,13 +7,14 @@ import { getAuth, GoogleAuthProvider, User, signInWithPopup } from 'firebase/aut
 import { firebaseConfig } from 'src/utils/firebase/config'
 import { useApolloClient } from '@apollo/client'
 import { useAuthGoogleMutation } from 'src/generated'
+
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
 const LoginGoogle = () => {
   const apolloClient = useApolloClient()
 
-  const [onAuthWeb] = useAuthGoogleMutation({
+  const [onAuthGoogle] = useAuthGoogleMutation({
     fetchPolicy: 'no-cache',
     onCompleted: async ({ authGoogle }) => {
       if (authGoogle?.accessToken) {
@@ -23,6 +24,7 @@ const LoginGoogle = () => {
         window.location.reload()
       } else {
         alert('ERROR')
+
         // showError('Дахин оролдоно уу?')
       }
     },
@@ -32,8 +34,9 @@ const LoginGoogle = () => {
     }
   })
   const onSuccess = async (res: User, token: string) => {
-    const provider = res?.providerData?.[0]
-    onAuthWeb({
+    // const provider = res?.providerData?.[0]
+    // console.log(provider)
+    onAuthGoogle({
       variables: {
         input: {
           accessToken: token as string

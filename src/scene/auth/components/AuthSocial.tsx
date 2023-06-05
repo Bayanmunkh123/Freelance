@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Box, IconButton } from '@mui/material'
 
 import Icon from 'src/@core/components/icon'
+import LoginGoogle from './LoginGoogle'
 
 export const AuthSocial = () => {
   return (
@@ -38,7 +39,8 @@ export const AuthSocial = () => {
         sx={{ color: '#db4437' }}
         onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
-        <Icon icon='mdi:google' />
+        <LoginGoogle />
+        {/* <Icon icon='mdi:google' /> */}
       </IconButton>
     </Box>
   )
