@@ -53,6 +53,7 @@ export const AuthForget = (props:AuthForgetProps) => {
                     <Tab label='И-мэйл' value='email' />
                     <Tab label='Утас' value='phone' />
                   </TabList>
+                  
                 </Box>
                 <TabPanel value='email'>
                   <Stack spacing={6}>

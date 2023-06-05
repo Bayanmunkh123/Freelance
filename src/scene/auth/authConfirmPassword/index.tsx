@@ -3,9 +3,9 @@ import React from 'react'
 import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { validationEmailSchema, validationPhoneSchema } from 'src/validators/auth/auth.validator'
 import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
+import { validationConfirmPasswordSchema } from 'src/validators/auth/auth.validator'
 
 export type AuthConfirmPasswordProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -21,8 +21,8 @@ export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
           Нууц үг солих
         </Typography>
         <Formik
-          initialValues={{ email: '', password: '' }}
-          // validationSchema={type === 'email' ? validationEmailSchema : validationPhoneSchema}
+          initialValues={{ email: '', password: '' }} //password
+          validationSchema={validationConfirmPasswordSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
             console.log('onSubmit === values', values)
             alert(JSON.stringify(values, null, 2))
@@ -32,8 +32,14 @@ export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
           {formikProps => (
             <Form noValidate autoComplete='off'>
               <Stack spacing={6}>
-                <Field component={TextField} name='confirmCode' type='number' label='Шинэ нууц үг' size='small' />
-                <Field component={TextField} name='confirmCode' type='number' label='Шинэ нууц үг баталгаажуулах' size='small' />
+                <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
+                <Field
+                  component={TextField}
+                  name='confirmPassword'
+                  type='password'
+                  label='Нууц үг давтах'
+                  size='small'
+                />
               </Stack>
               <Box p='12px'>
                 <Button
@@ -42,10 +48,11 @@ export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
                   size='large'
                   color='primary'
                   fullWidth
-                  // disabled={formikProps.isSubmitting}
+                  disabled={formikProps.isSubmitting}
                   onClick={() => setVisibleAuthDialog(AuthModalType.ConfirmPassword)}
                 >
                   Илгээх
+                  {/*  solih? */}
                 </Button>
               </Box>
             </Form>

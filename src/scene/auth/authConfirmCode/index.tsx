@@ -3,9 +3,9 @@ import React from 'react'
 import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { validationEmailSchema, validationPhoneSchema } from 'src/validators/auth/auth.validator'
 import { LoginEmailInput, LoginPhoneInput } from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
+import { validationConfirmCodeSchema } from 'src/validators/auth/auth.validator'
 
 export type AuthConfirmCodeProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -21,8 +21,8 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
           Баталгаажуулах код оруулах
         </Typography>
         <Formik
-          initialValues={{ email: '', password: '' }}
-          // validationSchema={type === 'email' ? validationEmailSchema : validationPhoneSchema}
+          initialValues={{ email: '', password: '' }} //confirmCode
+          validationSchema={validationConfirmCodeSchema}
           onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
             console.log('onSubmit === values', values)
             alert(JSON.stringify(values, null, 2))
@@ -41,7 +41,7 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
                   size='large'
                   color='primary'
                   fullWidth
-                  // disabled={formikProps.isSubmitting}
+                  disabled={formikProps.isSubmitting}
                   onClick={() => setVisibleAuthDialog(AuthModalType.ConfirmPassword)}
                 >
                   Илгээх

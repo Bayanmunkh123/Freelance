@@ -29,3 +29,14 @@ export const validationRegisterPhoneSchema = yup.object().shape({
   password: yup.string().min(8).required().label('Нууц үг')
 })
 
+export const validationConfirmCodeSchema = yup.object().shape({
+  confirmCode: yup.string().min(6).required().label('Баталгаажуулах код')
+})
+
+export const validationConfirmPasswordSchema = yup.object().shape({
+  password: yup.string().min(8).required().label('Нууц үг'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Нууц үг таарах ёстой.')
+    .required('Нууц үгийг давтаж оруулах ёстой.')
+})
