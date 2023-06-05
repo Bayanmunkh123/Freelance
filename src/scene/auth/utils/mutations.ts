@@ -8,10 +8,20 @@ export const AUTH_GOOGLE = gql`
   }
 `
 
+export const AUTH_WEB = gql`
+  mutation authWeb($input: ExternalWebAuthInput!) {
+    authWeb(input: $input) {
+      accessToken
+      refreshToken
+    }
+  }
+`
+
 export const LOGIN_EMAIL = gql`
   mutation loginEmail($input: LoginEmailInput!) {
     loginEmail(input: $input) {
       accessToken
+      deviceId
     }
   }
 `
@@ -25,7 +35,9 @@ export const LOGIN_PHONE = gql`
 
 export const REGISTER_EMAIL = gql`
   mutation registerEmail($input: RegisterEmailInput!) {
-    registerEmail(input: $input)
+    registerEmail(input: $input) {
+      deviceId
+    }
   }
 `
 export const REGISTER_PHONE = gql`

@@ -5,6 +5,7 @@ import { Box, IconButton } from '@mui/material'
 
 import Icon from 'src/@core/components/icon'
 import LoginGoogle from './LoginGoogle'
+import LoginFacebook from './LoginFacebook'
 
 export const AuthSocial = () => {
   return (
@@ -15,7 +16,7 @@ export const AuthSocial = () => {
         sx={{ color: '#497ce2' }}
         onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
-        <Icon icon='mdi:facebook' />
+        <LoginFacebook />
       </IconButton>
       <IconButton
         href='/'
@@ -37,7 +38,8 @@ export const AuthSocial = () => {
         href='/'
         component={Link}
         sx={{ color: '#db4437' }}
-        onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+
+        // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
         <LoginGoogle />
         {/* <Icon icon='mdi:google' /> */}

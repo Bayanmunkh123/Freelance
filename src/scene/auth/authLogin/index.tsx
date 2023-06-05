@@ -36,6 +36,8 @@ export const AuthLogin = (props: AuthLoginProps) => {
     fetchPolicy: 'no-cache',
     onCompleted: data => {
       console.log(data)
+      if (data.loginEmail?.deviceId) localStorage.setItem('deviceId', data.loginEmail?.deviceId)
+
       setVisibleAuthDialog(false)
       Router.push('/')
     },
@@ -58,11 +60,13 @@ export const AuthLogin = (props: AuthLoginProps) => {
   const submitHandler = (values: LoginEmailInput | LoginPhoneInput) => {
     console.log('onSubmit === values', values)
     if (type === 'email') {
+      const deviceId = localStorage.getItem('deviceId')
       onLoginEmail({
         variables: {
           input: {
             email: values?.email,
-            password: values.password
+            password: values.password,
+            deviceId: deviceId
           }
         }
       })
@@ -77,6 +81,8 @@ export const AuthLogin = (props: AuthLoginProps) => {
       })
     }
   }
+  const uuid = window.crypto.randomUUID()
+  console.log(uuid)
 
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>

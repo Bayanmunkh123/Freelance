@@ -1,7 +1,7 @@
 // ** React Imports
 import React, { useState } from 'react'
 import { Button, Box, Card, CardContent, IconButton, Typography, Tab, Stack, Divider } from '@mui/material'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { LocalizationProvider, TabContext, TabList, TabPanel } from '@mui/lab'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
 import { AuthModalType } from 'src/utils/constants'
@@ -20,6 +20,7 @@ export const AuthRegister = (props: AuthRegisterProps) => {
   const [onRegisterEmail] = useRegisterEmailMutation({
     onCompleted: data => {
       console.log(data)
+      if (data.registerEmail.deviceId) localStorage.setItem('deviceId', data.registerEmail.deviceId)
     }
   })
   const [onRegisterPhone] = useRegisterPhoneMutation({

@@ -79,6 +79,7 @@ export type AuthUserType = {
 export type AuthVerifyTokenType = {
   __typename?: 'AuthVerifyTokenType'
   accessToken?: Maybe<Scalars['String']>
+  deviceId?: Maybe<Scalars['String']>
   isEmailConfirmed?: Maybe<Scalars['Boolean']>
   isPhoneConfirmed?: Maybe<Scalars['Boolean']>
   refreshToken?: Maybe<Scalars['String']>
@@ -92,6 +93,19 @@ export type ExternalAuthAppleInput = {
 
 export type ExternalAuthInput = {
   accessToken: Scalars['String']
+}
+
+export type ExternalWebAuthInput = {
+  accessToken: Scalars['String']
+  email?: InputMaybe<Scalars['String']>
+  firstName?: InputMaybe<Scalars['String']>
+  image?: InputMaybe<Scalars['String']>
+  lastName?: InputMaybe<Scalars['String']>
+  phone?: InputMaybe<Scalars['String']>
+  providerId?: InputMaybe<Scalars['String']>
+  providerName?: InputMaybe<Scalars['String']>
+  userName?: InputMaybe<Scalars['String']>
+  userUid?: InputMaybe<Scalars['String']>
 }
 
 export enum FileSizeEnum {
@@ -112,6 +126,7 @@ export type Job = {
 }
 
 export type LoginEmailInput = {
+  deviceId?: InputMaybe<Scalars['String']>
   email: Scalars['String']
   password: Scalars['String']
 }
@@ -124,6 +139,7 @@ export type LoginPhoneInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
+  accountEliminate?: Maybe<Scalars['Boolean']>
   authApple?: Maybe<AuthVerifyTokenType>
   authEmailForgetPassword?: Maybe<Scalars['Boolean']>
   authEmailResetPassword?: Maybe<AuthVerifyTokenType>
@@ -135,12 +151,17 @@ export type Mutation = {
   authPhoneResetPassword?: Maybe<AuthVerifyTokenType>
   authPhoneVerifyToken?: Maybe<AuthVerifyTokenType>
   authPhoneVerifyTokenSender?: Maybe<Scalars['Boolean']>
+  authWeb?: Maybe<AuthVerifyTokenType>
   createUser?: Maybe<User>
   loginEmail?: Maybe<AuthVerifyTokenType>
   loginPhone?: Maybe<AuthVerifyTokenType>
   logout?: Maybe<Scalars['Boolean']>
-  registerEmail?: Maybe<Scalars['Boolean']>
+  registerEmail: RegisterVerifyTokenType
   registerPhone?: Maybe<Scalars['Boolean']>
+}
+
+export type MutationAccountEliminateArgs = {
+  deviceId: Scalars['String']
 }
 
 export type MutationAuthAppleArgs = {
@@ -185,6 +206,10 @@ export type MutationAuthPhoneVerifyTokenArgs = {
 
 export type MutationAuthPhoneVerifyTokenSenderArgs = {
   input: AuthPhoneVerifyTokenSenderInput
+}
+
+export type MutationAuthWebArgs = {
+  input: ExternalWebAuthInput
 }
 
 export type MutationCreateUserArgs = {
@@ -273,6 +298,11 @@ export type RegisterPhoneInput = {
   countryCode?: InputMaybe<Scalars['String']>
   password: Scalars['String']
   phone: Scalars['String']
+}
+
+export type RegisterVerifyTokenType = {
+  __typename?: 'RegisterVerifyTokenType'
+  deviceId: Scalars['String']
 }
 
 export enum SortOrder {
@@ -399,13 +429,22 @@ export type AuthGoogleMutation = {
   authGoogle?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null } | null
 }
 
+export type AuthWebMutationVariables = Exact<{
+  input: ExternalWebAuthInput
+}>
+
+export type AuthWebMutation = {
+  __typename?: 'Mutation'
+  authWeb?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null; refreshToken?: string | null } | null
+}
+
 export type LoginEmailMutationVariables = Exact<{
   input: LoginEmailInput
 }>
 
 export type LoginEmailMutation = {
   __typename?: 'Mutation'
-  loginEmail?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null } | null
+  loginEmail?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null; deviceId?: string | null } | null
 }
 
 export type LoginPhoneMutationVariables = Exact<{
@@ -421,7 +460,10 @@ export type RegisterEmailMutationVariables = Exact<{
   input: RegisterEmailInput
 }>
 
-export type RegisterEmailMutation = { __typename?: 'Mutation'; registerEmail?: boolean | null }
+export type RegisterEmailMutation = {
+  __typename?: 'Mutation'
+  registerEmail: { __typename?: 'RegisterVerifyTokenType'; deviceId: string }
+}
 
 export type RegisterPhoneMutationVariables = Exact<{
   input: RegisterPhoneInput
@@ -524,10 +566,48 @@ export function useAuthGoogleMutation(
 export type AuthGoogleMutationHookResult = ReturnType<typeof useAuthGoogleMutation>
 export type AuthGoogleMutationResult = Apollo.MutationResult<AuthGoogleMutation>
 export type AuthGoogleMutationOptions = Apollo.BaseMutationOptions<AuthGoogleMutation, AuthGoogleMutationVariables>
+export const AuthWebDocument = gql`
+  mutation authWeb($input: ExternalWebAuthInput!) {
+    authWeb(input: $input) {
+      accessToken
+      refreshToken
+    }
+  }
+`
+export type AuthWebMutationFn = Apollo.MutationFunction<AuthWebMutation, AuthWebMutationVariables>
+
+/**
+ * __useAuthWebMutation__
+ *
+ * To run a mutation, you first call `useAuthWebMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAuthWebMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [authWebMutation, { data, loading, error }] = useAuthWebMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAuthWebMutation(
+  baseOptions?: Apollo.MutationHookOptions<AuthWebMutation, AuthWebMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useMutation<AuthWebMutation, AuthWebMutationVariables>(AuthWebDocument, options)
+}
+export type AuthWebMutationHookResult = ReturnType<typeof useAuthWebMutation>
+export type AuthWebMutationResult = Apollo.MutationResult<AuthWebMutation>
+export type AuthWebMutationOptions = Apollo.BaseMutationOptions<AuthWebMutation, AuthWebMutationVariables>
 export const LoginEmailDocument = gql`
   mutation loginEmail($input: LoginEmailInput!) {
     loginEmail(input: $input) {
       accessToken
+      deviceId
     }
   }
 `
@@ -598,7 +678,9 @@ export type LoginPhoneMutationResult = Apollo.MutationResult<LoginPhoneMutation>
 export type LoginPhoneMutationOptions = Apollo.BaseMutationOptions<LoginPhoneMutation, LoginPhoneMutationVariables>
 export const RegisterEmailDocument = gql`
   mutation registerEmail($input: RegisterEmailInput!) {
-    registerEmail(input: $input)
+    registerEmail(input: $input) {
+      deviceId
+    }
   }
 `
 export type RegisterEmailMutationFn = Apollo.MutationFunction<RegisterEmailMutation, RegisterEmailMutationVariables>
