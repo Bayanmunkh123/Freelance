@@ -38,4 +38,7 @@
     "formik",
     "iconify"
   ],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
 }

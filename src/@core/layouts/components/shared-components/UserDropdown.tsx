@@ -23,7 +23,8 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
-import { AuthDialog } from 'src/scene/auth/authLogin/AuthLogin.scene'
+import { AuthDialog } from 'src/scene/auth/AuthDialog'
+import { AuthModalType } from 'src/utils/constants'
 
 interface Props {
   hidden: boolean
