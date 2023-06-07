@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Box,
@@ -21,10 +21,12 @@ import { LoginEmailInput, LoginPhoneInput, useLoginEmailMutation, useLoginPhoneM
 import { AuthSocial } from '../components/AuthSocial'
 import { validationLoginEmailSchema, validationLoginPhoneSchema } from 'src/validators/auth/auth.validator'
 import { useRouter } from 'next/router'
+import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
+import { useApolloClient } from '@apollo/client'
 
 export type AuthLoginProps = {
   visibleAuthDialog: AuthModalType | undefined
-  setVisibleAuthDialog: (type: AuthModalType) => void
+  setVisibleAuthDialog: (type: AuthModalType | undefined) => void
 }
 
 export const AuthLogin = (props: AuthLoginProps) => {
@@ -32,20 +34,35 @@ export const AuthLogin = (props: AuthLoginProps) => {
   const { visibleAuthDialog, setVisibleAuthDialog } = props
 
   const Router = useRouter()
-  const [onLoginEmail, { loading: loadingEmail }] = useLoginEmailMutation({
-    fetchPolicy: 'no-cache',
-    onCompleted: data => {
-      console.log(data)
-      if (data.loginEmail?.deviceId) localStorage.setItem('deviceId', data.loginEmail?.deviceId)
+  const apolloClient = useApolloClient()
 
-      setVisibleAuthDialog(false)
-      Router.push('/')
+  const [onLoginEmail] = useLoginEmailMutation({
+    fetchPolicy: 'no-cache',
+    onCompleted: async data => {
+      if (data.loginEmail?.deviceId) {
+        localStorage.setItem('deviceId', data.loginEmail?.deviceId)
+      }
+      destroyCookieToken(undefined)
+      if (data?.loginEmail?.accessToken) {
+        setCookieToken(data.loginEmail)
+        if (data?.loginEmail?.accessToken) {
+          alert('Амжилттай')
+          await apolloClient.cache.reset()
+          window.location.reload()
+
+          setVisibleAuthDialog(undefined)
+        }
+        Router.push('/admin')
+      } else {
+        alert('AMjiltgui')
+      }
     },
     onError: (error: unknown) => {
       alert(error)
     }
   })
-  const [onLoginPhone, { loading: loadingPhone }] = useLoginPhoneMutation({
+
+  const [onLoginPhone] = useLoginPhoneMutation({
     fetchPolicy: 'no-cache',
     onCompleted: data => {
       console.log(data)
@@ -81,8 +98,6 @@ export const AuthLogin = (props: AuthLoginProps) => {
       })
     }
   }
-  const uuid = window.crypto.randomUUID()
-  console.log(uuid)
 
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>

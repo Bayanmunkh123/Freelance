@@ -32,6 +32,8 @@ interface Props {
 }
 
 const UserLayout = ({ children, contentHeightFixed }: Props) => {
+  console.log('UserLayout START')
+
   // ** Hooks
   const { settings, saveSettings } = useSettings()
 
@@ -51,8 +53,10 @@ const UserLayout = ({ children, contentHeightFixed }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  if (user?.role && [UserRoleEnum.ADMINISTRATOR, UserRoleEnum.ADMIN].includes(user?.role)) {
+  if (user?.role && [UserRoleEnum.ADMIN, UserRoleEnum.EDITOR].includes(user?.role)) {
     settings.layout = 'vertical'
+
+    // saveSettings({ ...settings, navHidden: false })
   } else {
     settings.layout = 'horizontal'
   }

@@ -24,6 +24,8 @@ interface Props {
 }
 
 const GuestLayout = ({ children, contentHeightFixed }: Props) => {
+  console.log('GuestLayout START')
+
   // ** Hooks
   const { settings, saveSettings } = useSettings()
 
@@ -46,7 +48,7 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
   }
 
   settings.layout = 'horizontal'
-  settings.navHidden = true
+  settings.navHidden = false
 
   return (
     <Layout

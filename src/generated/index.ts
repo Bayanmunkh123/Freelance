@@ -114,6 +114,11 @@ export enum FileSizeEnum {
   THUMB = 'THUMB'
 }
 
+export type InvitationCreateInput = {
+  email: Scalars['String']
+  role?: InputMaybe<OrganizationUserRoleEnum>
+}
+
 export type Job = {
   __typename?: 'Job'
   createdAt: Scalars['DateTime']
@@ -133,6 +138,7 @@ export type LoginEmailInput = {
 
 export type LoginPhoneInput = {
   countryCode?: InputMaybe<Scalars['String']>
+  deviceId?: InputMaybe<Scalars['String']>
   password: Scalars['String']
   phone: Scalars['String']
 }
@@ -152,12 +158,14 @@ export type Mutation = {
   authPhoneVerifyToken?: Maybe<AuthVerifyTokenType>
   authPhoneVerifyTokenSender?: Maybe<Scalars['Boolean']>
   authWeb?: Maybe<AuthVerifyTokenType>
+  createInvitation?: Maybe<Scalars['Boolean']>
   createUser?: Maybe<User>
   loginEmail?: Maybe<AuthVerifyTokenType>
   loginPhone?: Maybe<AuthVerifyTokenType>
   logout?: Maybe<Scalars['Boolean']>
   registerEmail: RegisterVerifyTokenType
-  registerPhone?: Maybe<Scalars['Boolean']>
+  registerPhone: RegisterVerifyTokenType
+  updateUser?: Maybe<User>
 }
 
 export type MutationAccountEliminateArgs = {
@@ -212,6 +220,10 @@ export type MutationAuthWebArgs = {
   input: ExternalWebAuthInput
 }
 
+export type MutationCreateInvitationArgs = {
+  input: InvitationCreateInput
+}
+
 export type MutationCreateUserArgs = {
   input: UserCreateInput
 }
@@ -230,6 +242,10 @@ export type MutationRegisterEmailArgs = {
 
 export type MutationRegisterPhoneArgs = {
   input: RegisterPhoneInput
+}
+
+export type MutationUpdateUserArgs = {
+  input: UserUpdateInput
 }
 
 export type Organization = {
@@ -287,6 +303,10 @@ export type Query = {
   meAuth?: Maybe<AuthUserType>
   user?: Maybe<User>
   users?: Maybe<UsersType>
+}
+
+export type QueryUsersArgs = {
+  input?: InputMaybe<UsersWhereInput>
 }
 
 export type RegisterEmailInput = {
@@ -351,10 +371,9 @@ export type UserAccount = {
 
 export type UserCreateInput = {
   countryCode?: InputMaybe<Scalars['String']>
-  email?: InputMaybe<Scalars['String']>
+  email: Scalars['String']
   image?: InputMaybe<Scalars['String']>
-  password?: InputMaybe<Scalars['String']>
-  phone?: InputMaybe<Scalars['String']>
+  phone: Scalars['String']
 }
 
 export type UserInvitation = {
@@ -367,7 +386,7 @@ export type UserInvitation = {
   inviterId: Scalars['String']
   organization?: Maybe<Organization>
   organizationId: Scalars['String']
-  role: OrganizationUserRoleEnum
+  role?: Maybe<OrganizationUserRoleEnum>
   token?: Maybe<Scalars['String']>
   updatedAt: Scalars['DateTime']
 }
@@ -410,15 +429,73 @@ export enum UserStatusEnum {
   INACTIVE = 'INACTIVE'
 }
 
+export type UserUpdateInput = {
+  countryCode?: InputMaybe<Scalars['String']>
+  email: Scalars['String']
+  id: Scalars['ID']
+  image?: InputMaybe<Scalars['String']>
+  password?: InputMaybe<Scalars['String']>
+  phone: Scalars['String']
+  status?: InputMaybe<UserStatusEnum>
+  userName?: InputMaybe<Scalars['String']>
+}
+
 export type UsersType = {
   __typename?: 'UsersType'
   count?: Maybe<Scalars['Int']>
   data?: Maybe<Array<User>>
 }
 
+export type UsersWhereInput = {
+  role?: InputMaybe<Scalars['String']>
+}
+
+export type MeAuthQueryVariables = Exact<{ [key: string]: never }>
+
+export type MeAuthQuery = {
+  __typename?: 'Query'
+  meAuth?: {
+    __typename?: 'AuthUserType'
+    id: string
+    role: UserRoleEnum
+    email?: string | null
+    countryCode?: string | null
+    phone?: string | null
+    userName?: string | null
+    createdAt?: any | null
+    updatedAt?: any | null
+    image?: string | null
+    organizationUsers?: Array<{
+      __typename?: 'OrganizationUser'
+      id: string
+      role?: OrganizationUserRoleEnum | null
+    }> | null
+  } | null
+}
+
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>
 
 export type LogoutMutation = { __typename?: 'Mutation'; logout?: boolean | null }
+
+export type UsersQueryVariables = Exact<{
+  input?: InputMaybe<UsersWhereInput>
+}>
+
+export type UsersQuery = {
+  __typename?: 'Query'
+  users?: {
+    __typename?: 'UsersType'
+    count?: number | null
+    data?: Array<{
+      __typename?: 'User'
+      id: string
+      userId?: string | null
+      userName?: string | null
+      role?: UserRoleEnum | null
+      email?: string | null
+    }> | null
+  } | null
+}
 
 export type AuthGoogleMutationVariables = Exact<{
   input: ExternalAuthInput
@@ -444,7 +521,12 @@ export type LoginEmailMutationVariables = Exact<{
 
 export type LoginEmailMutation = {
   __typename?: 'Mutation'
-  loginEmail?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null; deviceId?: string | null } | null
+  loginEmail?: {
+    __typename?: 'AuthVerifyTokenType'
+    accessToken?: string | null
+    refreshToken?: string | null
+    deviceId?: string | null
+  } | null
 }
 
 export type LoginPhoneMutationVariables = Exact<{
@@ -453,7 +535,12 @@ export type LoginPhoneMutationVariables = Exact<{
 
 export type LoginPhoneMutation = {
   __typename?: 'Mutation'
-  loginPhone?: { __typename?: 'AuthVerifyTokenType'; accessToken?: string | null } | null
+  loginPhone?: {
+    __typename?: 'AuthVerifyTokenType'
+    accessToken?: string | null
+    refreshToken?: string | null
+    deviceId?: string | null
+  } | null
 }
 
 export type RegisterEmailMutationVariables = Exact<{
@@ -469,7 +556,10 @@ export type RegisterPhoneMutationVariables = Exact<{
   input: RegisterPhoneInput
 }>
 
-export type RegisterPhoneMutation = { __typename?: 'Mutation'; registerPhone?: boolean | null }
+export type RegisterPhoneMutation = {
+  __typename?: 'Mutation'
+  registerPhone: { __typename?: 'RegisterVerifyTokenType'; deviceId: string }
+}
 
 export type AuthEmailForgetPasswordMutationVariables = Exact<{
   input: AuthEmailVerifyTokenSenderInput
@@ -499,6 +589,54 @@ export type AuthEmailResetPasswordMutation = {
   } | null
 }
 
+export const MeAuthDocument = gql`
+  query meAuth {
+    meAuth {
+      id
+      role
+      email
+      countryCode
+      phone
+      userName
+      createdAt
+      updatedAt
+      organizationUsers {
+        id
+        role
+      }
+      image
+    }
+  }
+`
+
+/**
+ * __useMeAuthQuery__
+ *
+ * To run a query within a React component, call `useMeAuthQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeAuthQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeAuthQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeAuthQuery(baseOptions?: Apollo.QueryHookOptions<MeAuthQuery, MeAuthQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useQuery<MeAuthQuery, MeAuthQueryVariables>(MeAuthDocument, options)
+}
+export function useMeAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeAuthQuery, MeAuthQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useLazyQuery<MeAuthQuery, MeAuthQueryVariables>(MeAuthDocument, options)
+}
+export type MeAuthQueryHookResult = ReturnType<typeof useMeAuthQuery>
+export type MeAuthLazyQueryHookResult = ReturnType<typeof useMeAuthLazyQuery>
+export type MeAuthQueryResult = Apollo.QueryResult<MeAuthQuery, MeAuthQueryVariables>
 export const LogoutDocument = gql`
   mutation logout {
     logout
@@ -530,6 +668,50 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>
+export const UsersDocument = gql`
+  query Users($input: UsersWhereInput) {
+    users(input: $input) {
+      data {
+        id
+        userId
+        userName
+        role
+        email
+      }
+      count
+    }
+  }
+`
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options)
+}
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options)
+}
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>
 export const AuthGoogleDocument = gql`
   mutation authGoogle($input: ExternalAuthInput!) {
     authGoogle(input: $input) {
@@ -607,6 +789,7 @@ export const LoginEmailDocument = gql`
   mutation loginEmail($input: LoginEmailInput!) {
     loginEmail(input: $input) {
       accessToken
+      refreshToken
       deviceId
     }
   }
@@ -644,6 +827,8 @@ export const LoginPhoneDocument = gql`
   mutation loginPhone($input: LoginPhoneInput!) {
     loginPhone(input: $input) {
       accessToken
+      refreshToken
+      deviceId
     }
   }
 `
@@ -717,7 +902,9 @@ export type RegisterEmailMutationOptions = Apollo.BaseMutationOptions<
 >
 export const RegisterPhoneDocument = gql`
   mutation registerPhone($input: RegisterPhoneInput!) {
-    registerPhone(input: $input)
+    registerPhone(input: $input) {
+      deviceId
+    }
   }
 `
 export type RegisterPhoneMutationFn = Apollo.MutationFunction<RegisterPhoneMutation, RegisterPhoneMutationVariables>

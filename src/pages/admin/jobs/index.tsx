@@ -4,7 +4,24 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
+import { initializeApollo } from 'src/lib/apollo/client'
+import { ME_AUTH } from 'src/hooks/utils/queries'
 
+export const getServerSideProps = async context => {
+  const client = initializeApollo()
+
+  const meQuery = await client.query({
+    fetchPolicy: 'no-cache',
+    query: ME_AUTH
+  })
+  console.log('meQuery', meQuery)
+
+  return {
+    props: {
+      user: meQuery.data
+    }
+  }
+}
 const Home = () => {
   return (
     <Grid container spacing={6}>

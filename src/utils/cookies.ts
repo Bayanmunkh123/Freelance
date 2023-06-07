@@ -3,6 +3,7 @@ import { setCookie, destroyCookie } from 'nookies'
 import { AuthVerifyTokenType } from 'src/generated'
 
 export const setCookieToken = (token: AuthVerifyTokenType | undefined) => {
+  console.log(token)
   setCookie(null, config.ACCESS_TOKEN_KEY, token?.accessToken || '', {
     path: '/',
     maxAge: 60 * 60 * 60,

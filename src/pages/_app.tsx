@@ -1,11 +1,13 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { Context } from 'react-apollo'
+import { getDataFromTree } from '@apollo/client/react/ssr'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -42,18 +44,16 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 import { ApolloProvider } from '@apollo/client'
-import { Context } from 'react-apollo'
 
 import { useApollo } from 'src/lib/apollo/client'
 
-import { ME_AUTH } from 'src/hooks/utils/queries'
-import { AuthUserType, MeQueryResult, UserRoleEnum } from 'src/generated'
+import { UserContextType } from 'src/context/types'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
   title: string | null
-  user: AuthUserType | null
+  user: UserContextType | null
 }
 type GuardProps = {
   authGuard: boolean
@@ -73,9 +73,7 @@ if (themeConfig.routingLoader) {
     NProgress.done()
   })
 }
-
 const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
-  console.log('Guard', authGuard, guestGuard)
   if (guestGuard) {
     return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
   } else if (!guestGuard && !authGuard) {
@@ -87,7 +85,9 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component, pageProps, title, user } = props
+  const { Component, pageProps, title } = props
+  const [user, setUser] = useState<UserContextType | null>(null)
+  console.log('props', props)
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
@@ -111,9 +111,7 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  const apolloClient = useApollo(pageProps.initialApollo)
-  console.log('authGuard', authGuard)
-  console.log('guestGuard', guestGuard)
+  const apolloClient = useApollo(pageProps?.initialApollo)
 
   return (
     <>
@@ -128,7 +126,7 @@ const App = (props: ExtendedAppProps) => {
         <title>{title || 'OnedayJOB'}</title>
       </Head>
       <ApolloProvider client={apolloClient}>
-        <AuthProvider data={user}>
+        <AuthProvider user={user} setUser={setUser}>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
@@ -153,46 +151,43 @@ const App = (props: ExtendedAppProps) => {
   )
 }
 
-App.getInitialProps = async (context: Context) => {
-  const { Component, ctx } = context
-  let pageProps = {}
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx)
-  }
+// App.getInitialProps = async (context: Context) => {
+//   const { Component, ctx } = context
 
-  const { pathname, apolloClient } = ctx
-  const title = 'BAIHGUI' // ROUTES.getTitle(pathname) || ''
+//   const apolloClient = initializeApollo()
+//   ctx.apolloClient = apolloClient
+//   let appProps = {}
+//   if (typeof App.getInitialProps === 'function') {
+//     appProps = await App.getInitialProps(context)
+//   }
 
-  const meQuery: MeQueryResult = await apolloClient?.query({
-    fetchPolicy: 'no-cache',
-    query: ME_AUTH
-  })
-
-  if (meQuery?.data?.me) {
-    const user = meQuery.data?.me
-    const isAdministrator = user.role === UserRoleEnum.ADMINISTRATOR
-    const isAdmin = user.role === UserRoleEnum.ADMIN
-    const isUser = user.role === UserRoleEnum.USER
-    const isHost = !!user?.userHost
-    const _roles = { isAdministrator, isAdmin, isUser, isHost }
-    const _user = { ...user, roles: _roles, permissions: ['Web'] }
-
-    return { title, pageProps, pathname, apolloClient, user: _user }
-  }
-
-  return { title, pageProps, pathname, apolloClient, autData: undefined }
-}
-export default App
-
-// export default withApollo(({ initialState, headers }) => {
-//   const link = splitLink()
-//   const authLink = createAuthLink(headers)
-
-//   const apolloClient: any = new ApolloClient({
-//     ssrMode: typeof window === 'undefined',
-//     link: ApolloLink.from([errorLink, authLink, link]),
-//     cache: localCache.restore(initialState || {})
+//   const meQuery = await apolloClient.query({
+//     fetchPolicy: 'no-cache',
+//     query: ME_AUTH
 //   })
 
-//   return apolloClient
-// })(App)
+//   if (meQuery.data.meAuth) {
+//     const user = meQuery?.data?.meAuth
+//     const isAdmin = user.role === UserRoleEnum.ADMIN
+//     const isEditor = user.role === UserRoleEnum.EDITOR
+//     const isMember = user.role === UserRoleEnum.MEMBER
+
+//     const _roles = { isAdmin, isEditor, isMember }
+
+//     const _user: UserContextType = {
+//       ...user,
+//       roles: _roles,
+//       permissions: ['Web']
+//     }
+
+//     return {
+//       ...appProps,
+//       pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() },
+//       user: '_user'
+//     }
+//   }
+
+//   return { ...appProps, pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() } }
+// }
+
+export default App

@@ -1,4 +1,4 @@
-import { AuthUserType } from 'src/generated'
+import { AuthUserType, MeAuthQuery } from 'src/generated'
 
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
@@ -19,10 +19,20 @@ export type AuthValuesType = {
   loading: boolean
   setLoading: (value: boolean) => void
 
-  user?: AuthUserType | null
-  setUser: (value: AuthUserType | null) => void
-  roles?: RoleType | null
+  user?: UserContextType
+  setUser: (value: UserContextType) => void
+  roles?: RoleType
   permissions?: string[]
 
   logout: () => void
 }
+
+export type UserContextType =
+  | (MeAuthQuery['meAuth'] & {
+      roles: {
+        isAdmin: boolean
+        isEditor: boolean
+        isMember: boolean
+      }
+    } & { permissions: string[] })
+  | null

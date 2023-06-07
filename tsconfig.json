@@ -33,7 +33,8 @@
   },
   "include": [
     "src",
-    "codegen.ts"
+    "codegen.ts",
+    "apps/permissions"
   ],
   "exclude": [
     "node_modules"

@@ -21,6 +21,7 @@ export const LOGIN_EMAIL = gql`
   mutation loginEmail($input: LoginEmailInput!) {
     loginEmail(input: $input) {
       accessToken
+      refreshToken
       deviceId
     }
   }
@@ -29,6 +30,8 @@ export const LOGIN_PHONE = gql`
   mutation loginPhone($input: LoginPhoneInput!) {
     loginPhone(input: $input) {
       accessToken
+      refreshToken
+      deviceId
     }
   }
 `
@@ -42,7 +45,9 @@ export const REGISTER_EMAIL = gql`
 `
 export const REGISTER_PHONE = gql`
   mutation registerPhone($input: RegisterPhoneInput!) {
-    registerPhone(input: $input)
+    registerPhone(input: $input) {
+      deviceId
+    }
   }
 `
 export const EMAIL_FORGET_PASSWORD = gql`

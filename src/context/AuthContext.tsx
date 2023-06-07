@@ -5,12 +5,12 @@ import { createContext, useState, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 
 // ** Types
-import { AuthValuesType } from './types'
+import { AuthValuesType, UserContextType } from './types'
 
 import { LOGOUT } from 'src/hooks/utils/queries'
 import { useApolloClient } from '@apollo/client'
-import { AuthUserType } from 'src/generated'
-import { destroyCookieToken } from 'src/lib/cookies'
+import { UserRoleEnum, useMeAuthQuery } from 'src/generated'
+import { destroyCookieToken } from 'src/utils/cookies'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -25,15 +25,15 @@ const AuthContext = createContext(defaultProvider)
 
 type Props = {
   children: ReactNode
-  data: AuthUserType | null
+  user: UserContextType | null
+  setUser: (value: UserContextType) => void
 }
 
-const AuthProvider = ({ children, data }: Props) => {
-  console.log('AuthContext === data', data)
+const AuthProvider = ({ children, user, setUser }: Props) => {
   const apolloClient = useApolloClient()
 
   // ** States
-  const [user, setUser] = useState<AuthUserType | null>(data || null)
+
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
   // ** Hooks
@@ -136,11 +136,31 @@ const AuthProvider = ({ children, data }: Props) => {
   //   }
   // })
 
+  useMeAuthQuery({
+    onCompleted: data => {
+      if (data?.meAuth?.id) {
+        const user = data?.meAuth
+        const isAdmin = user.role === UserRoleEnum.ADMIN
+        const isEditor = user.role === UserRoleEnum.EDITOR
+        const isMember = user.role === UserRoleEnum.MEMBER
+
+        const _roles = { isAdmin, isEditor, isMember }
+
+        const _user: UserContextType = {
+          ...user,
+          roles: _roles,
+          permissions: ['Web']
+        }
+        setUser(_user)
+      }
+    }
+  })
+
   const handleLogout = async () => {
-    await apolloClient.query({ query: LOGOUT })
+    await apolloClient.mutate({ mutation: LOGOUT })
     destroyCookieToken(undefined)
     await apolloClient.cache.reset()
-    router.push('/login')
+    router.push('/')
   }
 
   const values = {

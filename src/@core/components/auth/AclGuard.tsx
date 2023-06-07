@@ -23,6 +23,7 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** Util Import
 import getHomeRoute from 'src/layouts/components/acl/getHomeRoute'
+import { AuthUserType } from 'src/generated'
 
 interface AclGuardProps {
   children: ReactNode
@@ -41,7 +42,7 @@ const AclGuard = (props: AclGuardProps) => {
 
   // ** Vars
   let ability: AppAbility
-
+  console.log('AclGuard AUTH', aclAbilities)
   useEffect(() => {
     if (auth.user && auth.user.role && !guestGuard && router.route === '/') {
       const homeRoute = getHomeRoute(auth.user.role)
@@ -51,7 +52,7 @@ const AclGuard = (props: AclGuardProps) => {
 
   // User is logged in, build ability for the user based on his role
   if (auth.user && !ability) {
-    ability = buildAbilityFor(auth.user.role, aclAbilities.subject)
+    ability = buildAbilityFor(auth?.user as AuthUserType, aclAbilities.subject)
     if (router.route === '/') {
       return <Spinner />
     }

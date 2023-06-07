@@ -1,13 +1,5 @@
 import { useMemo } from 'react'
-import {
-  ApolloClient,
-  ApolloLink,
-  GraphQLRequest,
-  HttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  split
-} from '@apollo/client'
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 
 import { errorLink } from './errorLink'
 
@@ -17,6 +9,7 @@ import { createClient } from 'graphql-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { config } from 'src/configs'
 import { setContext } from '@apollo/client/link/context'
+import cookie from 'cookie'
 
 const httpLink = new HttpLink({
   uri: config.BACKEND_URL,
@@ -45,32 +38,38 @@ const splitLink =
       )
     : httpLink
 
-function isRefreshRequest(operation: GraphQLRequest) {
-  return operation.operationName === 'refreshToken'
-}
+const authLink = setContext(async (_, { headers }) => {
+  let newHeaders = headers
 
-// Returns access-token if operation is not a refresh token request
-function returnTokenDependingOnOperation(operation: GraphQLRequest) {
-  if (isRefreshRequest(operation)) return localStorage.getItem(config.REFRESH_TOKEN_KEY) || ''
-  else return localStorage.getItem(config.ACCESS_TOKEN_KEY) || ''
-}
+  // Add AccessToken header
+  const accessToken = process.browser
+    ? cookie.parse(document?.cookie || '')[config.ACCESS_TOKEN_KEY]
+    : cookie.parse(headers?.cookie || '')[config.ACCESS_TOKEN_KEY]
 
-const authLink = setContext(async (operation, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = returnTokenDependingOnOperation(operation)
+  if (accessToken) {
+    newHeaders = { ...newHeaders, [config.ACCESS_TOKEN_KEY]: accessToken }
+  }
 
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      Authorization: token ? `Bearer ${token}` : ''
+  // Add RefreshToken header
+  const refreshToken = process.browser
+    ? cookie.parse(document?.cookie || '')[config.REFRESH_TOKEN_KEY]
+    : cookie.parse(headers?.cookie || '')[config.REFRESH_TOKEN_KEY]
+
+  if (refreshToken) {
+    newHeaders = {
+      ...newHeaders,
+      [config.REFRESH_TOKEN_KEY]: refreshToken
     }
+  }
+
+  return {
+    headers: newHeaders
   }
 })
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
-function createApolloClient() {
+export function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: ApolloLink.from([errorLink, authLink, splitLink]),
