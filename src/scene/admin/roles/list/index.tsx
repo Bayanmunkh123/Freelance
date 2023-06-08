@@ -46,8 +46,8 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import { useUsersLazyQuery } from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
 import PageHeader from 'src/@core/components/page-header'
-import RolesCards from 'src/views/apps/roles/RoleCards'
-import RoleTable from 'src/views/apps/roles/Table'
+import RolesCards from '../components/RoleCards'
+import RoleTable from '../components/Table'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }

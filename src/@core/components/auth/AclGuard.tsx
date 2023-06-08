@@ -5,7 +5,7 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 // ** Types
-import type { ACLObj, AppAbility } from 'src/configs/acl'
+import type { ACLObj, AppAbility, Subjects } from 'src/configs/acl'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -42,8 +42,9 @@ const AclGuard = (props: AclGuardProps) => {
 
   // ** Vars
   let ability: AppAbility
-  console.log('AclGuard AUTH', aclAbilities)
   useEffect(() => {
+    console.log('AclGuard', auth.user)
+    console.log('AclGuard --- guestGuard', guestGuard)
     if (auth.user && auth.user.role && !guestGuard && router.route === '/') {
       const homeRoute = getHomeRoute(auth.user.role)
       router.replace(homeRoute)
@@ -52,7 +53,7 @@ const AclGuard = (props: AclGuardProps) => {
 
   // User is logged in, build ability for the user based on his role
   if (auth.user && !ability) {
-    ability = buildAbilityFor(auth?.user as AuthUserType, aclAbilities.subject)
+    ability = buildAbilityFor(auth?.user as AuthUserType, aclAbilities.subject as Subjects)
     if (router.route === '/') {
       return <Spinner />
     }

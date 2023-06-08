@@ -33,7 +33,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import FooterIllustrationsV2 from 'src/components/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const RegisterIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({

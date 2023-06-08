@@ -23,6 +23,7 @@ import { validationLoginEmailSchema, validationLoginPhoneSchema } from 'src/vali
 import { useRouter } from 'next/router'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { useApolloClient } from '@apollo/client'
+import { config } from 'src/configs'
 
 export type AuthLoginProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -40,7 +41,7 @@ export const AuthLogin = (props: AuthLoginProps) => {
     fetchPolicy: 'no-cache',
     onCompleted: async data => {
       if (data.loginEmail?.deviceId) {
-        localStorage.setItem('deviceId', data.loginEmail?.deviceId)
+        localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
       }
       destroyCookieToken(undefined)
       if (data?.loginEmail?.accessToken) {

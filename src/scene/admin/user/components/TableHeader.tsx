@@ -2,9 +2,11 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import { useContext } from 'react'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 interface TableHeaderProps {
   value: string
@@ -15,6 +17,7 @@ interface TableHeaderProps {
 const TableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { handleFilter, toggle, value } = props
+  const ability = useContext(AbilityContext)
 
   return (
     <Box sx={{ p: 5, pb: 3, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -26,6 +29,7 @@ const TableHeader = (props: TableHeaderProps) => {
       >
         Export
       </Button>
+
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           size='small'
@@ -34,10 +38,11 @@ const TableHeader = (props: TableHeaderProps) => {
           placeholder='Search User'
           onChange={e => handleFilter(e.target.value)}
         />
-
-        <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
-          Add User
-        </Button>
+        {ability?.can('create', 'User') && (
+          <Button sx={{ mb: 2 }} onClick={toggle} variant='contained'>
+            Хэрэглэгч нэмэх
+          </Button>
+        )}
       </Box>
     </Box>
   )

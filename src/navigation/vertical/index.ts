@@ -6,17 +6,26 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Jobs',
       path: '/admin/jobs',
-      icon: 'mdi:home-outline'
+      icon: 'mdi:home-outline',
+      action: 'read',
+      subject: 'Job',
+      auth: true
     },
     {
       title: 'Users',
       path: '/admin/users',
-      icon: 'mdi:user-outline'
+      icon: 'mdi:user-outline',
+      action: 'read',
+      subject: 'User',
+      auth: true
     },
     {
       title: 'Roles',
       path: '/admin/roles',
-      icon: 'mdi:shield-outline'
+      icon: 'mdi:shield-outline',
+      action: 'read',
+      subject: 'Role',
+      auth: true
     },
     {
       path: '/acl',

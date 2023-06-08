@@ -32,7 +32,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { UserRoleEnum } from 'src/generated'
 
 interface CardDataType {
   title: string
@@ -62,15 +61,12 @@ const rolesArr: string[] = [
 ]
 
 const RolesCards = () => {
-  // ** States
   const [open, setOpen] = useState<boolean>(false)
-  const [dialogTitle, setDialogTitle] = useState<'Add' | 'Edit'>('Add')
   const [selectedCheckbox, setSelectedCheckbox] = useState<string[]>([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState<boolean>(false)
 
   const handleClickOpen = () => setOpen(true)
 
-  console.log(UserRoleEnum.ADMIN)
   const handleClose = () => {
     setOpen(false)
     setSelectedCheckbox([])
@@ -115,7 +111,7 @@ const RolesCards = () => {
         <Card>
           <CardContent>
             <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant='body2'>{`Total ${item.totalUsers} users`}</Typography>
+              <Typography variant='body2'>{`Нийт ${item.totalUsers}`}</Typography>
               <AvatarGroup max={4} sx={{ '& .MuiAvatar-root': { width: 40, height: 40, fontSize: '0.875rem' } }}>
                 {item.avatars.map((img, index: number) => (
                   <Avatar key={index} alt={item.title} src={`/images/avatars/${img}`} />
@@ -133,10 +129,9 @@ const RolesCards = () => {
                   onClick={e => {
                     e.preventDefault()
                     handleClickOpen()
-                    setDialogTitle('Edit')
                   }}
                 >
-                  Edit Role
+                  Role засах
                 </Typography>
               </Box>
               <IconButton sx={{ color: 'text.secondary' }}>
@@ -151,40 +146,6 @@ const RolesCards = () => {
   return (
     <Grid container spacing={6} className='match-height'>
       {renderCards()}
-      <Grid item xs={12} sm={6} lg={4}>
-        <Card
-          sx={{ cursor: 'pointer' }}
-          onClick={() => {
-            handleClickOpen()
-            setDialogTitle('Add')
-          }}
-        >
-          <Grid container sx={{ height: '100%' }}>
-            <Grid item xs={5}>
-              <Box sx={{ height: '100%', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-                <img width={65} height={130} alt='add-role' src='/images/pages/add-new-role-illustration.png' />
-              </Box>
-            </Grid>
-            <Grid item xs={7}>
-              <CardContent>
-                <Box sx={{ textAlign: 'right' }}>
-                  <Button
-                    variant='contained'
-                    sx={{ mb: 2.5, whiteSpace: 'nowrap' }}
-                    onClick={() => {
-                      handleClickOpen()
-                      setDialogTitle('Add')
-                    }}
-                  >
-                    Add Role
-                  </Button>
-                  <Typography variant='body2'>Add role, if it doesn't exist.</Typography>
-                </Box>
-              </CardContent>
-            </Grid>
-          </Grid>
-        </Card>
-      </Grid>
       <Dialog fullWidth maxWidth='md' scroll='body' onClose={handleClose} open={open}>
         <DialogTitle
           sx={{
@@ -194,7 +155,7 @@ const RolesCards = () => {
           }}
         >
           <Typography variant='h5' component='span'>
-            {`${dialogTitle} Role`}
+            Role солих
           </Typography>
           <Typography variant='body2'>Set Role Permissions</Typography>
         </DialogTitle>
@@ -320,10 +281,10 @@ const RolesCards = () => {
         >
           <Box className='demo-space-x'>
             <Button size='large' type='submit' variant='contained' onClick={handleClose}>
-              Submit
+              Нэмэх
             </Button>
             <Button size='large' color='secondary' variant='outlined' onClick={handleClose}>
-              Cancel
+              Цуцлах
             </Button>
           </Box>
         </DialogActions>

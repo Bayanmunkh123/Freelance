@@ -5,6 +5,7 @@
 const tokenKeys = {
   ACCESS_TOKEN_KEY: 'access-token',
   REFRESH_TOKEN_KEY: 'refresh-token',
+  DEVICE_ID: 'device-id',
   WS_TOKEN_KEY: 'ws-token'
 }
 

@@ -6,6 +6,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import { initializeApollo } from 'src/lib/apollo/client'
 import { ME_AUTH } from 'src/hooks/utils/queries'
+import { SubjectsEnum, ActionsEnum } from 'src/configs/acl'
 
 export const getServerSideProps = async context => {
   const client = initializeApollo()
@@ -14,7 +15,6 @@ export const getServerSideProps = async context => {
     fetchPolicy: 'no-cache',
     query: ME_AUTH
   })
-  console.log('meQuery', meQuery)
 
   return {
     props: {
@@ -22,7 +22,7 @@ export const getServerSideProps = async context => {
     }
   }
 }
-const Home = () => {
+const JobsList = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -53,4 +53,9 @@ const Home = () => {
   )
 }
 
-export default Home
+JobsList.acl = {
+  action: ActionsEnum.Read,
+  subject: SubjectsEnum.Job
+}
+
+export default JobsList

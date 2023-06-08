@@ -8,6 +8,7 @@ import { AuthModalType } from 'src/utils/constants'
 import { LoginEmailInput, LoginPhoneInput, useRegisterEmailMutation, useRegisterPhoneMutation } from 'src/generated'
 import { AuthSocial } from '../components/AuthSocial'
 import { validationRegisterEmailSchema, validationRegisterPhoneSchema } from 'src/validators/auth/auth.validator'
+import { config } from 'src/configs'
 
 export type AuthRegisterProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -20,7 +21,7 @@ export const AuthRegister = (props: AuthRegisterProps) => {
   const [onRegisterEmail] = useRegisterEmailMutation({
     onCompleted: data => {
       console.log(data)
-      if (data.registerEmail.deviceId) localStorage.setItem('deviceId', data.registerEmail.deviceId)
+      if (data.registerEmail.deviceId) localStorage.setItem(config.DEVICE_ID, data.registerEmail.deviceId)
     }
   })
   const [onRegisterPhone] = useRegisterPhoneMutation({

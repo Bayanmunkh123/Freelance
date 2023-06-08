@@ -1,11 +1,8 @@
-// ** React Imports
-import { useState, useEffect, MouseEvent, useCallback } from 'react'
+import { useState, MouseEvent, useCallback, useContext } from 'react'
 
-// ** Next Imports
 import Link from 'next/link'
 import { GetStaticProps, InferGetStaticPropsType } from 'next/types'
 
-// ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Menu from '@mui/material/Menu'
@@ -22,38 +19,34 @@ import CardContent from '@mui/material/CardContent'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-// ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Store Imports
-import { useDispatch, useSelector } from 'react-redux'
-
-// ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
 
-// ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
-// ** Actions Imports
-
-// ** Third Party Components
 import axios from 'axios'
 
-// ** Types Imports
-
-// import { CardStatsType } from 'src/@fake-db/types'
 import { ThemeColor } from 'src/@core/layouts/types'
 
-// import { UsersType } from 'src/types/apps/userTypes'
 import { CardStatsHorizontalProps } from 'src/@core/components/card-statistics/types'
 
-// ** Custom Table Components Imports
-import TableHeader from 'src/views/apps/user/list/TableHeader'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import { UserRoleEnum, useUsersLazyQuery } from 'src/generated'
+import {
+  sUsersQuery,
+  useOrganizationUsersQuery,
+  useOrganizationsQuery,
+  useRolesQuery,
+  useUsersQuery
+} from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
+import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
+
+import { AbilityContext } from 'src/layouts/components/acl/Can'
+import TableHeader from '../components/TableHeader'
+import AddUserDrawer from '../components/AddUserDrawer'
+import { useOnSearch } from 'src/hooks/useOnSearch'
+import { OrgRoles } from 'src/utils/constants'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -63,13 +56,14 @@ interface UserStatusType {
   [key: string]: ThemeColor
 }
 
-// ** Vars
 const userRoleObj: UserRoleType = {
   admin: { icon: 'mdi:laptop', color: 'error.main' },
-  author: { icon: 'mdi:cog-outline', color: 'warning.main' },
+  owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-  maintainer: { icon: 'mdi:chart-donut', color: 'success.main' },
-  subscriber: { icon: 'mdi:account-outline', color: 'primary.main' }
+  finance: { icon: 'mdi:chart-donut', color: 'success.main' },
+  sales: { icon: 'mdi:account-outline', color: 'primary.main' },
+  support: { icon: 'mdi:account-outline', color: 'primary.main' },
+  viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
 }
 
 // interface CellType {
@@ -94,8 +88,8 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 }))
 
 // ** renders client column
-const renderClient = (row: UsersType) => {
-  if (row.avatar.length) {
+const renderClient = (row: any) => {
+  if (row.image?.length) {
     return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
   } else {
     return (
@@ -104,16 +98,13 @@ const renderClient = (row: UsersType) => {
         color={row.avatarColor || 'primary'}
         sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
       >
-        {getInitials(row.fullName ? row.fullName : 'John Doe')}
+        {getInitials(row.firstName ? row.firstName : 'John Doe')}
       </CustomAvatar>
     )
   }
 }
 
 const RowOptions = ({ id }: { id: number | string }) => {
-  // ** Hooks
-
-  // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -179,13 +170,13 @@ const columns: GridColDef[] = [
     field: 'userName',
     headerName: 'UserName',
     renderCell: ({ row }: CellType) => {
-      const { fullName, username } = row
+      const { username, profile } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* {renderClient(row)} */}
+          {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <LinkStyled href='/apps/user/view/overview/'>{fullName}</LinkStyled>
+            <LinkStyled href='/apps/user/view/overview/'>{profile?.firstName}</LinkStyled>
             <Typography noWrap variant='caption'>
               {`@${username}`}
             </Typography>
@@ -197,12 +188,25 @@ const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 250,
+    field: 'organization',
+    headerName: 'Байгуулга',
+    renderCell: ({ row }: CellType) => {
+      return (
+        <Typography key={row.id} noWrap variant='body2'>
+          {row?.organization?.name}
+        </Typography>
+      )
+    }
+  },
+  {
+    flex: 0.2,
+    minWidth: 250,
     field: 'email',
     headerName: 'Email',
     renderCell: ({ row }: CellType) => {
       return (
         <Typography noWrap variant='body2'>
-          {row.email}
+          {row.user.email}
         </Typography>
       )
     }
@@ -217,7 +221,7 @@ const columns: GridColDef[] = [
         <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3 } }}>
           {/* <Icon icon={userRoleObj[row.role].icon} fontSize={20} /> */}
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
+            {row.orgRole}
           </Typography>
         </Box>
       )
@@ -265,53 +269,55 @@ const columns: GridColDef[] = [
 ]
 
 export const UserListScene = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  // ** State
-  const [roleData, setRoleData] = useState()
-  const [role, setRole] = useState<string>()
+  const variables = useOrganizationUserVariables()
+
+  const ability = useContext(AbilityContext)
+  const onSearch = useOnSearch()
+
   const [value, setValue] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const user = useAuth()
 
-  // ** Hooks
-  // const dispatch = useDispatch<AppDispatch>()
-  // const store = useSelector((state: RootState) => state.user)
-
-  const [onUsersLazyQuery] = useUsersLazyQuery({
+  const { data, loading } = useOrganizationUsersQuery({
     fetchPolicy: 'no-cache',
+    variables,
     onCompleted: data => {
-      if (data?.users?.data) setRoleData(data?.users?.data)
+      console.log(data)
+
+      // if (data?.users?.data) setRoleData(data?.users?.data)
     },
     onError: (error: unknown) => {
       alert(error)
     }
   })
-  useEffect(() => {
-    onUsersLazyQuery({
-      variables: {
-        input: {
-          role: role ? role : undefined
-        }
-      }
-    })
-  }, [role])
 
+  const { data: RolesList } = useRolesQuery({
+    fetchPolicy: 'no-cache',
+
+    // variables,
+    onCompleted: data => {
+      console.log(data)
+
+      // if (data?.users?.data) setRoleData(data?.users?.data)
+    },
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
   const handleFilter = useCallback((val: string) => {
+    onSearch('role', val)
     setValue(val)
   }, [])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setRole(e.target.value)
+    console.log(e.target.value)
+    onSearch('role', e.target.value)
   }, [])
 
-  const handlePlanChange = useCallback((e: SelectChangeEvent) => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-    setStatus(e.target.value)
-  }, [])
+  // const handleStatusChange = useCallback((e: SelectChangeEvent) => {
+  //   setStatus(e.target.value)
+  // }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
@@ -332,26 +338,28 @@ export const UserListScene = ({ apiData }: InferGetStaticPropsType<typeof getSta
       </Grid>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Search Filters' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+          <CardHeader title='Хайх' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
           <CardContent>
             <Grid container spacing={6}>
               <Grid item sm={4} xs={12}>
                 <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
+                  <InputLabel id='role-select'>Role сонгох</InputLabel>
                   <Select
                     fullWidth
-                    value={role}
+                    value={RolesList}
                     id='select-role'
                     label='Select Role'
                     labelId='role-select'
                     onChange={handleRoleChange}
                     inputProps={{ placeholder: 'Select Role' }}
                   >
-                    {roleData?.map(role => (
-                      <MenuItem key={role.id} value={role.role}>
-                        {role.role}
-                      </MenuItem>
-                    ))}
+                    {OrgRoles.map((role, key) => {
+                      return (
+                        <MenuItem key={key} value={role.name}>
+                          {role.name}
+                        </MenuItem>
+                      )
+                    })}
                   </Select>
                 </FormControl>
               </Grid>
@@ -361,7 +369,7 @@ export const UserListScene = ({ apiData }: InferGetStaticPropsType<typeof getSta
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
-            rows={roleData ? roleData : []}
+            rows={data ? data.organizationUsers?.data : []}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick
@@ -372,8 +380,7 @@ export const UserListScene = ({ apiData }: InferGetStaticPropsType<typeof getSta
           />
         </Card>
       </Grid>
-
-      {/* <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} /> */}
+      {ability?.can('create', 'User') && <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />}
     </Grid>
   )
 }

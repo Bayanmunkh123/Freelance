@@ -13,7 +13,12 @@ export const ME_AUTH = gql`
       updatedAt
       organizationUsers {
         id
-        role
+        orgRole
+      }
+      profile {
+        id
+        firstName
+        lastName
       }
       image
     }
@@ -21,7 +26,7 @@ export const ME_AUTH = gql`
 `
 
 export const LOGOUT = gql`
-  mutation logout {
-    logout
+  mutation logout($deviceId: String) {
+    logout(deviceId: $deviceId)
   }
 `

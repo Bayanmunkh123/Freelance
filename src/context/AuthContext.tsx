@@ -9,8 +9,9 @@ import { AuthValuesType, UserContextType } from './types'
 
 import { LOGOUT } from 'src/hooks/utils/queries'
 import { useApolloClient } from '@apollo/client'
-import { UserRoleEnum, useMeAuthQuery } from 'src/generated'
+import { UserRoleEnum, useLogoutMutation, useMeAuthQuery } from 'src/generated'
 import { destroyCookieToken } from 'src/utils/cookies'
+import { config } from 'src/configs'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -157,8 +158,11 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
   })
 
   const handleLogout = async () => {
-    await apolloClient.mutate({ mutation: LOGOUT })
+    const deviceId = localStorage.getItem(config.DEVICE_ID)
+    await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
     destroyCookieToken(undefined)
+    localStorage.removeItem(config.DEVICE_ID)
+    setUser(null)
     await apolloClient.cache.reset()
     router.push('/')
   }

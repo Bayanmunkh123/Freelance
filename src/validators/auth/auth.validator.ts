@@ -3,6 +3,16 @@ import { descriptive } from '../../utils/locale'
 
 yup.setLocale(descriptive)
 
+const showErrors = (field: string, valueLen: number, min: number) => {
+  if (valueLen === 0) {
+    return `${field} заавал оруулна уу.`
+  } else if (valueLen > 0 && valueLen < min) {
+    return `${field} хамгийн багадаа ${min} тэмдэгт байна.`
+  } else {
+    return ''
+  }
+}
+
 export const validationLoginEmailSchema = yup.object().shape({
   email: yup.string().email().required().label('И-мэйл'),
   password: yup.string().min(6).required().label('Нууц үг')
@@ -47,4 +57,14 @@ export const validationForgetEmailSchema = yup.object().shape({
 })
 export const validationForgetPhoneSchema = yup.object().shape({
   email: yup.string().email().required().label('Утасны дугаар')
+})
+
+export const validationAddUserSchema = yup.object().shape({
+  firstName: yup.string().min(3).required().label('Нэр'),
+  lastName: yup.string().min(3).required().label('Овог'),
+  email: yup.string().email().required().label('И-мэйл'),
+  orgRole: yup.string().required().label('Role'),
+
+  // .label('Байгуулга'),
+  organization: yup.string().required()
 })

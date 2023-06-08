@@ -136,3 +136,12 @@ export enum AuthModalType {
   ConfirmCode = 'CONFIRM_CODE',
   ConfirmPassword = 'CONFIRM_PASSWORD'
 }
+
+export const OrgRoles = [
+  { id: 1, name: 'OWNER' },
+  { id: 2, name: 'EDITOR' },
+  { id: 3, name: 'FINANCE' },
+  { id: 4, name: 'SALES' },
+  { id: 5, name: 'SUPPORT' },
+  { id: 6, name: 'VIEWER' }
+]

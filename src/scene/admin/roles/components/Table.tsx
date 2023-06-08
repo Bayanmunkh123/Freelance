@@ -1,11 +1,7 @@
-// ** React Imports
 import { useState, useEffect, MouseEvent, useCallback } from 'react'
-
-// ** Next Imports
 import Link from 'next/link'
 import { GetStaticProps, InferGetStaticPropsType } from 'next/types'
 
-// ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Menu from '@mui/material/Menu'
@@ -22,38 +18,15 @@ import CardContent from '@mui/material/CardContent'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-// ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Store Imports
-import { useDispatch, useSelector } from 'react-redux'
-
-// ** Custom Components Imports
-import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
-
-// ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
-
-// ** Actions Imports
-
-// ** Third Party Components
-import axios from 'axios'
-
-// ** Types Imports
-
-// import { CardStatsType } from 'src/@fake-db/types'
 import { ThemeColor } from 'src/@core/layouts/types'
-
-// import { UsersType } from 'src/types/apps/userTypes'
-import { CardStatsHorizontalProps } from 'src/@core/components/card-statistics/types'
-
-// ** Custom Table Components Imports
-import TableHeader from 'src/views/apps/user/list/TableHeader'
-import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import { UserRoleEnum, useUsersLazyQuery } from 'src/generated'
+import TableHeader from './TableHeader'
+import { useUsersLazyQuery } from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
+import axios from 'axios'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -318,46 +291,7 @@ const RoleTable = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        {apiData && (
-          <Grid container spacing={6}>
-            {apiData.statsHorizontal.map((item: CardStatsHorizontalProps, index: number) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatisticsHorizontal {...item} icon={<Icon icon={item.icon as string} />} />
-                </Grid>
-              )
-            })}
-          </Grid>
-        )}
-      </Grid>
-      <Grid item xs={12}>
         <Card>
-          <CardHeader title='Search Filters' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
-                  <Select
-                    fullWidth
-                    value={role}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    {roleData?.map(role => (
-                      <MenuItem key={role.id} value={role.role}>
-                        {role.role}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-          <Divider />
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
@@ -372,8 +306,6 @@ const RoleTable = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) 
           />
         </Card>
       </Grid>
-
-      {/* <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} /> */}
     </Grid>
   )
 }
