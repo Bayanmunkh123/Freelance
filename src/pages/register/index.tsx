@@ -31,9 +31,9 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Hooks
 import { useSettings } from 'src/@core/hooks/useSettings'
+import FooterIllustrationsV2 from 'src/@core/components/footer/FooterIllustrationsV2'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/components/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const RegisterIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({

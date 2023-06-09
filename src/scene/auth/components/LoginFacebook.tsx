@@ -6,7 +6,7 @@ import { initializeApp } from 'firebase/app'
 import { getAuth, FacebookAuthProvider, User, signInWithPopup } from 'firebase/auth'
 import { firebaseConfig } from 'src/utils/firebase/config'
 import { useApolloClient } from '@apollo/client'
-import { useAuthGoogleMutation, useAuthWebMutation } from 'src/generated'
+import { useAuthWebMutation } from 'src/generated'
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)

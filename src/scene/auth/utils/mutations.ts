@@ -23,6 +23,12 @@ export const LOGIN_EMAIL = gql`
       accessToken
       refreshToken
       deviceId
+      sessionList {
+        id
+        deviceName
+        deviceType
+        deviceOs
+      }
     }
   }
 `
@@ -69,14 +75,15 @@ export const AUTH_EMAIL_RESET_PASSWORD_INPUT = gql`
   }
 `
 
-// export const AUTH_WEB = gql`
-//   mutation AuthWeb($input: ExternalWebAuthInput!) {
-//     authWeb(input: $input) {
-//       accessToken
-//       refreshToken
-//     }
-//   }
-// `
+export const ACCOUNT_ELIMINATE = gql`
+  mutation AccountEliminate($input: AccountEliminateInputType!) {
+    accountEliminate(input: $input) {
+      accessToken
+      refreshToken
+      deviceId
+    }
+  }
+`
 
 // OLD
 // export const AUTH_VERIFY_TOKEN_SENDER = gql`

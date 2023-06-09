@@ -162,8 +162,8 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
     await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
     destroyCookieToken(undefined)
     localStorage.removeItem(config.DEVICE_ID)
-    setUser(null)
     await apolloClient.cache.reset()
+    setUser(null)
     router.push('/')
   }
 

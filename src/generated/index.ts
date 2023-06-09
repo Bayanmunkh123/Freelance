@@ -19,6 +19,12 @@ export type Scalars = {
   JSON: any
 }
 
+export type AccountEliminateInputType = {
+  email: Scalars['String']
+  id: Scalars['ID']
+  password: Scalars['String']
+}
+
 export enum AccountProviderTypeEnum {
   APPLE = 'APPLE',
   EMAIL = 'EMAIL',
@@ -83,6 +89,7 @@ export type AuthVerifyTokenType = {
   isEmailConfirmed?: Maybe<Scalars['Boolean']>
   isPhoneConfirmed?: Maybe<Scalars['Boolean']>
   refreshToken?: Maybe<Scalars['String']>
+  sessionList?: Maybe<Array<Maybe<SessionListType>>>
 }
 
 export type ExternalAuthAppleInput = {
@@ -131,6 +138,12 @@ export type Job = {
   updatedAt: Scalars['DateTime']
 }
 
+export type JobCreateInput = {
+  location: Scalars['String']
+  name: Scalars['String']
+  organizationId: Scalars['String']
+}
+
 export type LoginEmailInput = {
   deviceId?: InputMaybe<Scalars['String']>
   email: Scalars['String']
@@ -146,7 +159,7 @@ export type LoginPhoneInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  accountEliminate?: Maybe<Scalars['Boolean']>
+  accountEliminate?: Maybe<AuthVerifyTokenType>
   authApple?: Maybe<AuthVerifyTokenType>
   authEmailForgetPassword?: Maybe<Scalars['Boolean']>
   authEmailResetPassword?: Maybe<AuthVerifyTokenType>
@@ -160,6 +173,7 @@ export type Mutation = {
   authPhoneVerifyTokenSender?: Maybe<Scalars['Boolean']>
   authWeb?: Maybe<AuthVerifyTokenType>
   createInvitation?: Maybe<Scalars['Boolean']>
+  createJob?: Maybe<Job>
   createOrganization?: Maybe<Organization>
   createUser?: Maybe<User>
   deleteUser?: Maybe<Scalars['Boolean']>
@@ -173,7 +187,7 @@ export type Mutation = {
 }
 
 export type MutationAccountEliminateArgs = {
-  deviceId: Scalars['String']
+  input: AccountEliminateInputType
 }
 
 export type MutationAuthAppleArgs = {
@@ -226,6 +240,10 @@ export type MutationAuthWebArgs = {
 
 export type MutationCreateInvitationArgs = {
   input: InvitationCreateInput
+}
+
+export type MutationCreateJobArgs = {
+  input: JobCreateInput
 }
 
 export type MutationCreateOrganizationArgs = {
@@ -343,20 +361,24 @@ export type OrganizationUsersWhereInput = {
   orgRole?: InputMaybe<OrganizationUserRoleEnum>
 }
 
-export type OrganizationWhereInput = {
-  orgRole?: InputMaybe<OrganizationUserRoleEnum>
-}
-
 export type OrganizationsType = {
   __typename?: 'OrganizationsType'
   count?: Maybe<Scalars['Int']>
   data?: Maybe<Array<Organization>>
 }
 
+export type Permission = {
+  __typename?: 'Permission'
+  id: Scalars['Int']
+  name: Scalars['String']
+  orgUser?: Maybe<OrganizationUser>
+  orgUserId: Scalars['String']
+}
+
 export type PermissionsType = {
   __typename?: 'PermissionsType'
   count?: Maybe<Scalars['Int']>
-  data?: Maybe<Array<OrganizationUser>>
+  data?: Maybe<Array<Permission>>
 }
 
 export type Query = {
@@ -374,7 +396,7 @@ export type QueryOrganizationUsersArgs = {
 }
 
 export type QueryRolesArgs = {
-  input?: InputMaybe<OrganizationWhereInput>
+  input?: InputMaybe<RoleWhereInput>
 }
 
 export type QueryUsersArgs = {
@@ -397,10 +419,22 @@ export type RegisterVerifyTokenType = {
   deviceId: Scalars['String']
 }
 
+export type RoleWhereInput = {
+  orgRole?: InputMaybe<OrganizationUserRoleEnum>
+}
+
 export type RolesType = {
   __typename?: 'RolesType'
   count?: Maybe<Scalars['Int']>
   data?: Maybe<Array<OrganizationUser>>
+}
+
+export type SessionListType = {
+  __typename?: 'SessionListType'
+  deviceName: Scalars['String']
+  deviceOs: Scalars['String']
+  deviceType: Scalars['String']
+  id: Scalars['ID']
 }
 
 export enum SortOrder {
@@ -515,7 +549,6 @@ export type UserUpdateInput = {
   lastName?: InputMaybe<Scalars['String']>
   orgRole: OrganizationUserRoleEnum
   organizationId: Scalars['String']
-  password?: InputMaybe<Scalars['String']>
   status?: InputMaybe<UserStatusEnum>
   userName?: InputMaybe<Scalars['String']>
 }
@@ -644,7 +677,7 @@ export type OrganizationUsersQuery = {
 }
 
 export type RolesQueryVariables = Exact<{
-  input?: InputMaybe<OrganizationWhereInput>
+  input?: InputMaybe<RoleWhereInput>
 }>
 
 export type RolesQuery = {
@@ -695,6 +728,13 @@ export type LoginEmailMutation = {
     accessToken?: string | null
     refreshToken?: string | null
     deviceId?: string | null
+    sessionList?: Array<{
+      __typename?: 'SessionListType'
+      id: string
+      deviceName: string
+      deviceType: string
+      deviceOs: string
+    } | null> | null
   } | null
 }
 
@@ -755,6 +795,20 @@ export type AuthEmailResetPasswordMutation = {
     __typename?: 'AuthVerifyTokenType'
     accessToken?: string | null
     refreshToken?: string | null
+  } | null
+}
+
+export type AccountEliminateMutationVariables = Exact<{
+  input: AccountEliminateInputType
+}>
+
+export type AccountEliminateMutation = {
+  __typename?: 'Mutation'
+  accountEliminate?: {
+    __typename?: 'AuthVerifyTokenType'
+    accessToken?: string | null
+    refreshToken?: string | null
+    deviceId?: string | null
   } | null
 }
 
@@ -1058,7 +1112,7 @@ export type OrganizationUsersQueryHookResult = ReturnType<typeof useOrganization
 export type OrganizationUsersLazyQueryHookResult = ReturnType<typeof useOrganizationUsersLazyQuery>
 export type OrganizationUsersQueryResult = Apollo.QueryResult<OrganizationUsersQuery, OrganizationUsersQueryVariables>
 export const RolesDocument = gql`
-  query Roles($input: OrganizationWhereInput) {
+  query Roles($input: RoleWhereInput) {
     roles(input: $input) {
       data {
         orgRole
@@ -1220,6 +1274,12 @@ export const LoginEmailDocument = gql`
       accessToken
       refreshToken
       deviceId
+      sessionList {
+        id
+        deviceName
+        deviceType
+        deviceOs
+      }
     }
   }
 `
@@ -1502,6 +1562,53 @@ export type AuthEmailResetPasswordMutationResult = Apollo.MutationResult<AuthEma
 export type AuthEmailResetPasswordMutationOptions = Apollo.BaseMutationOptions<
   AuthEmailResetPasswordMutation,
   AuthEmailResetPasswordMutationVariables
+>
+export const AccountEliminateDocument = gql`
+  mutation AccountEliminate($input: AccountEliminateInputType!) {
+    accountEliminate(input: $input) {
+      accessToken
+      refreshToken
+      deviceId
+    }
+  }
+`
+export type AccountEliminateMutationFn = Apollo.MutationFunction<
+  AccountEliminateMutation,
+  AccountEliminateMutationVariables
+>
+
+/**
+ * __useAccountEliminateMutation__
+ *
+ * To run a mutation, you first call `useAccountEliminateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccountEliminateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accountEliminateMutation, { data, loading, error }] = useAccountEliminateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAccountEliminateMutation(
+  baseOptions?: Apollo.MutationHookOptions<AccountEliminateMutation, AccountEliminateMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+
+  return Apollo.useMutation<AccountEliminateMutation, AccountEliminateMutationVariables>(
+    AccountEliminateDocument,
+    options
+  )
+}
+export type AccountEliminateMutationHookResult = ReturnType<typeof useAccountEliminateMutation>
+export type AccountEliminateMutationResult = Apollo.MutationResult<AccountEliminateMutation>
+export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<
+  AccountEliminateMutation,
+  AccountEliminateMutationVariables
 >
 
 export interface PossibleTypesResultData {

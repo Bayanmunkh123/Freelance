@@ -82,8 +82,9 @@ export const ORGANIZATION_USER_LIST = gql`
     }
   }
 `
+
 export const ROLES_LIST = gql`
-  query Roles($input: OrganizationWhereInput) {
+  query Roles($input: RoleWhereInput) {
     roles(input: $input) {
       data {
         orgRole

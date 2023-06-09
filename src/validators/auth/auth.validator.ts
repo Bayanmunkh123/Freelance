@@ -64,7 +64,5 @@ export const validationAddUserSchema = yup.object().shape({
   lastName: yup.string().min(3).required().label('Овог'),
   email: yup.string().email().required().label('И-мэйл'),
   orgRole: yup.string().required().label('Role'),
-
-  // .label('Байгуулга'),
-  organization: yup.string().required()
+  organization: yup.string().required().label('Байгуулга')
 })

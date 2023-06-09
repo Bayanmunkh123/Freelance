@@ -12,9 +12,9 @@ import Box, { BoxProps } from '@mui/material/Box'
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
+import FooterIllustrations from 'src/@core/components/footer/FooterIllustrations'
 
 // ** Demo Imports
-import FooterIllustrations from 'src/components/views/pages/misc/FooterIllustrations'
 
 // ** Styled Components
 const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({

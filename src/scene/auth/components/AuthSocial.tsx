@@ -14,7 +14,8 @@ export const AuthSocial = () => {
         href='/'
         component={Link}
         sx={{ color: '#497ce2' }}
-        onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+
+        // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
         <LoginFacebook />
       </IconButton>
@@ -22,14 +23,16 @@ export const AuthSocial = () => {
         href='/'
         component={Link}
         sx={{ color: '#1da1f2' }}
-        onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+
+        // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
         <Icon icon='mdi:twitter' />
       </IconButton>
       <IconButton
         href='/'
         component={Link}
-        onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+
+        // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
         sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
       >
         <Icon icon='mdi:github' />
@@ -38,11 +41,9 @@ export const AuthSocial = () => {
         href='/'
         component={Link}
         sx={{ color: '#db4437' }}
-
-        // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+        onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
       >
         <LoginGoogle />
-        {/* <Icon icon='mdi:google' /> */}
       </IconButton>
     </Box>
   )
