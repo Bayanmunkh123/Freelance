@@ -1,8 +1,8 @@
 import React from 'react'
-import { Card, CardContent, Typography, FormControl, InputLabel, MenuItem, OutlinedInput, Button } from '@mui/material'
+import { Card, CardContent, Typography, FormControl, MenuItem, Button } from '@mui/material'
 
 import { AuthModalType } from 'src/utils/constants'
-import { LoginEmailInput, useAccountEliminateMutation, useLoginEmailMutation } from 'src/generated'
+import { LoginEmailInput, useAccountEliminateMutation } from 'src/generated'
 import { config } from 'src/configs'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { useApolloClient } from '@apollo/client'
