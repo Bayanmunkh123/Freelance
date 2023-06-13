@@ -7,7 +7,7 @@ const JobList: NextPage = () => <JobListScene />
 
 JobList.acl = {
   action: ActionsEnum.Read,
-  subject: SubjectsEnum.Job
+  subject: SubjectsEnum.Company
 }
 
 export default JobList

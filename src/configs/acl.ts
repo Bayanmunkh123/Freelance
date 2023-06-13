@@ -3,14 +3,15 @@ import { AuthUserType } from 'src/generated'
 
 export type Actions = 'manage' | 'create' | 'read' | 'update' | 'delete'
 
-export type Subjects = 'all' | 'User' | 'Role' | 'Job'
+export type Subjects = 'all' | 'User' | 'Role' | 'Company'
 
 export enum SubjectsEnum {
   All = 'all',
   User = 'User',
   Role = 'Role',
-  Job = 'Job'
+  Company = 'Company'
 }
+
 export enum ActionsEnum {
   Manage = 'manage',
   Read = 'read',

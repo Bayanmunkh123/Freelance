@@ -9,7 +9,7 @@ import { AuthValuesType, UserContextType } from './types'
 
 import { LOGOUT } from 'src/hooks/utils/queries'
 import { useApolloClient } from '@apollo/client'
-import { UserRoleEnum, useLogoutMutation, useMeAuthQuery } from 'src/generated'
+import { UserRoleEnum, useMeAuthQuery } from 'src/generated'
 import { destroyCookieToken } from 'src/utils/cookies'
 import { config } from 'src/configs'
 

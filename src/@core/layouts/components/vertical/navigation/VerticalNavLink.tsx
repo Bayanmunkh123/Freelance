@@ -101,6 +101,7 @@ const VerticalNavLink = ({
       return false
     }
   }
+  console.log('item', item)
 
   return (
     <CanViewNavLink navLink={item}>

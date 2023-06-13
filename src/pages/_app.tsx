@@ -6,8 +6,6 @@ import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { Context } from 'react-apollo'
-import { getDataFromTree } from '@apollo/client/react/ssr'
 
 // ** Loader Import
 import NProgress from 'nprogress'
