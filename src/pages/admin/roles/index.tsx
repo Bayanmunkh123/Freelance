@@ -1,9 +1,9 @@
 import React from 'react'
 import { NextPage } from 'next'
-import { RoleListScene } from 'src/scene/admin/roles/list'
+import { RoleScene } from 'src/scene/admin/roles/list/role.list.scene'
 import { ActionsEnum, SubjectsEnum } from 'src/configs/acl'
 
-const RoleList: NextPage = () => <RoleListScene />
+const RoleList: NextPage = () => <RoleScene />
 
 RoleList.acl = {
   action: ActionsEnum.Read,

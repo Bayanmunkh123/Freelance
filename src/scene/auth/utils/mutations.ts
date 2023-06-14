@@ -23,7 +23,7 @@ export const LOGIN_EMAIL = gql`
       accessToken
       refreshToken
       deviceId
-      sessionList {
+      devices {
         id
         deviceName
         deviceType

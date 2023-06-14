@@ -17,7 +17,7 @@ export interface RoleType {
 
 export type AuthValuesType = {
   loading: boolean
-  setLoading: (value: boolean) => void
+  // setLoading: (value: boolean) => void
 
   user?: UserContextType
   setUser: (value: UserContextType) => void

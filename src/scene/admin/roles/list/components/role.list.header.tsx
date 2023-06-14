@@ -9,17 +9,19 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import { RoleType } from 'src/context/types'
+import { OrgRoles } from 'src/utils/constants'
 
 interface TableHeaderProps {
   plan: string
-  value: string
+  roleList: string | undefined
   handleFilter: (val: string) => void
-  handlePlanChange: (e: SelectChangeEvent) => void
+  handleRoleChange: (e: SelectChangeEvent) => void
 }
 
 const TableHeader = (props: TableHeaderProps) => {
   // ** Props
-  const { plan, handlePlanChange, handleFilter, value } = props
+  const { plan, handleRoleChange, handleFilter, roleList } = props
 
   return (
     <Box sx={{ p: 5, pb: 3, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -29,29 +31,31 @@ const TableHeader = (props: TableHeaderProps) => {
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           size='small'
-          value={value}
+          value={roleList}
           placeholder='Search User'
           sx={{ mr: 6, mb: 2 }}
           onChange={e => handleFilter(e.target.value)}
         />
-        <FormControl size='small' sx={{ mb: 2 }}>
-          <InputLabel id='plan-select'>Select Plan</InputLabel>
-          <Select
-            size='small'
-            value={plan}
-            id='select-plan'
-            label='Select Plan'
-            labelId='plan-select'
-            onChange={handlePlanChange}
-            inputProps={{ placeholder: 'Select Plan' }}
-          >
-            <MenuItem value=''>Select Plan</MenuItem>
-            <MenuItem value='basic'>Basic</MenuItem>
-            <MenuItem value='company'>Company</MenuItem>
-            <MenuItem value='enterprise'>Enterprise</MenuItem>
-            <MenuItem value='team'>Team</MenuItem>
-          </Select>
-        </FormControl>
+         <FormControl fullWidth>
+                  <InputLabel id='role-select'>Role сонгох</InputLabel>
+                  <Select
+                    fullWidth
+                    value={roleList as string}
+                    id='select-role'
+                    label='Select Role'
+                    labelId='role-select'
+                    onChange={handleRoleChange}
+                    inputProps={{ placeholder: 'Select Role' }}
+                  >
+                    {OrgRoles.map((role, key) => {
+                      return (
+                        <MenuItem key={key} value={role.name}>
+                          {role.name}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
       </Box>
     </Box>
   )

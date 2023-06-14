@@ -9,7 +9,8 @@ export enum SubjectsEnum {
   All = 'all',
   User = 'User',
   Role = 'Role',
-  Company = 'Company'
+  Company = 'Company',
+  Job = 'Job'
 }
 
 export enum ActionsEnum {
@@ -29,78 +30,68 @@ export type ACLObj = {
   subject: Subjects | string
   condition?: Record<string, unknown> | null
 }
-
-const getRolesJson = (user: AuthUserType) => {
-  return [
-    {
-      id: 1,
-      name: 'ADMIN',
-      permissions: {
-        can: [
-          {
-            action: 'manage',
-            subject: 'all'
-          }
-        ]
+const rolesData = {
+  User: {
+    can: [
+      {
+        actions: ['read', 'update', 'delete', 'create'],
+        roles: ['ADMIN', 'EDITOR', 'MEMBER']
       }
-    },
-    {
-      id: 2,
-      name: 'EDITOR',
-      permissions: {
-        can: [
-          {
-            action: 'manage',
-            subject: 'all'
-          }
-        ]
+    ],
+    cannot: []
+  },
+  Job: {
+    can: [
+      {
+        actions: ['read', 'update', 'delete', 'create'],
+        roles: ['ADMIN', 'EDITOR', 'MEMBER']
       }
-    },
-    {
-      id: 3,
-      name: 'MEMBER',
-      orgRole: 'OWNER',
-      permissions: {
-        can: [
-          {
-            action: ['read', 'create', 'update', 'delete'],
-            subject: 'User',
-            condition: { organizationUsers: { some: { userId: user.id } } }
-          },
-          {
-            action: 'read',
-            subject: 'Role'
-          },
-          {
-            action: 'read',
-            subject: 'Job'
-          }
-        ]
+    ],
+    cannot: []
+  },
+  Role: {
+    can: [
+      {
+        actions: ['read'],
+        roles: ['ADMIN', 'EDITOR', 'MEMBER']
+      },
+      {
+        actions: ['create', 'update', 'delete'],
+        roles: ['ADMIN']
       }
-    }
-  ]
+    ],
+    cannot: [
+      {
+        actions: ['create', 'udpate', 'delete'],
+        roles: ['MEMBER']
+      }
+    ]
+  }
 }
 
 const defineRulesFor = (user: AuthUserType, subject: Subjects) => {
   const { role } = user
-  const { can, rules } = new AbilityBuilder(AppAbility)
+  const { can, cannot, rules } = new AbilityBuilder(AppAbility)
+  if (user && ['ADMIN', 'EDITOR', 'MEMBER'].includes(role)) {
+    Object.entries(rolesData).forEach(([subject, permissions]) => {
+      permissions.can.forEach(permission => {
+        if (permission.roles.includes(user.role)) {
+          permission.actions.forEach(action => {
+            can(action, subject)
+          })
+        }
+      })
+      permissions.cannot.forEach(permission => {
+        if (permission.roles.includes(user.role)) {
+          permission.actions.forEach(action => {
+            cannot(action, subject)
+          })
+        }
+      })
+    })
 
-  const jsonData = getRolesJson(user)
-  jsonData.forEach(item => {
-    if (role === 'ADMIN' && item.name === 'ADMIN') {
-      item.permissions.can.forEach(perm => {
-        can(perm.action, perm.subject)
-      })
-    } else if (role === 'EDITOR' && item.name === 'EDITOR') {
-      item.permissions.can.forEach(perm => {
-        can(perm.action, perm.subject)
-      })
-    } else if (role === 'MEMBER' && item.name === 'MEMBER') {
-      item.permissions.can.forEach(perm => {
-        can(perm.action, perm.subject)
-      })
-    }
-  })
+    return rules
+  }
 
   return rules
 }
@@ -119,13 +110,3 @@ export const defaultACLObj: ACLObj = {
 }
 
 export default defineRulesFor
-
-// if (role === 'ADMIN') {
-//   can('manage', 'all')
-// } else if (role === 'EDITOR') {
-//   can('manage', 'all')
-// } else if (role === 'MEMBER') {
-//   // can('read', 'User', { organizationUsers: { some: { userId: user.id } } })
-//   can(['read', 'create', 'update', 'delete'], subject)
-
-//   // can(['read', 'create', 'update', 'delete'], 'User')

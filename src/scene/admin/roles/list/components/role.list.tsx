@@ -23,10 +23,14 @@ import Icon from 'src/@core/components/icon'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
 import { ThemeColor } from 'src/@core/layouts/types'
-import TableHeader from './TableHeader'
-import { useUsersLazyQuery } from 'src/generated'
+import TableHeader from './role.list.header'
+import { AuthUserType, OrganizationUser, useOrganizationUsersQuery, useRolesQuery, useUsersLazyQuery } from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
 import axios from 'axios'
+import { useRoleVariables } from '../../../utils/useRoleVariables'
+import { useOnSearch } from 'src/hooks/useOnSearch'
+import { useOrganizationUserVariables } from '../../../utils/useOrganizationUserVariables'
+import { UserContextType } from 'src/context/types'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -45,9 +49,9 @@ const userRoleObj: UserRoleType = {
   subscriber: { icon: 'mdi:account-outline', color: 'primary.main' }
 }
 
-// interface CellType {
-//   row: UsersType
-// }
+interface CellType {
+  row: OrganizationUser
+}
 
 const userStatusObj: UserStatusType = {
   active: 'success',
@@ -67,26 +71,24 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 }))
 
 // ** renders client column
-const renderClient = (row: UsersType) => {
-  if (row.avatar.length) {
-    return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
-  } else {
-    return (
-      <CustomAvatar
-        skin='light'
-        color={row.avatarColor || 'primary'}
-        sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
-      >
-        {getInitials(row.fullName ? row.fullName : 'John Doe')}
-      </CustomAvatar>
-    )
-  }
-}
+// const renderClient = (row: UserContextType) => {
+//   if (row.avatar.length) {
+//     return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
+//   } else {
+//     return (
+//       <CustomAvatar
+//         skin='light'
+//         color={row.avatarColor || 'primary'}
+//         sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
+//       >
+//         {getInitials(row.fullName ? row.fullName : 'John Doe')}
+//       </CustomAvatar>
+//     )
+//   }
+// }
 
 const RowOptions = ({ id }: { id: number | string }) => {
-  // ** Hooks
 
-  // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -152,15 +154,13 @@ const columns: GridColDef[] = [
     field: 'userName',
     headerName: 'UserName',
     renderCell: ({ row }: CellType) => {
-      const { fullName, username } = row
-
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {/* {renderClient(row)} */}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <LinkStyled href='/apps/user/view/overview/'>{fullName}</LinkStyled>
+            <LinkStyled href='/apps/user/view/overview/'>{row?.user?.profile?.firstName}</LinkStyled>
             <Typography noWrap variant='caption'>
-              {`@${username}`}
+              {`@${row?.user?.userName}`}
             </Typography>
           </Box>
         </Box>
@@ -175,7 +175,7 @@ const columns: GridColDef[] = [
     renderCell: ({ row }: CellType) => {
       return (
         <Typography noWrap variant='body2'>
-          {row.email}
+          {row?.user?.email}
         </Typography>
       )
     }
@@ -190,7 +190,7 @@ const columns: GridColDef[] = [
         <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3 } }}>
           {/* <Icon icon={userRoleObj[row.role].icon} fontSize={20} /> */}
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
+            {row?.orgRole}
           </Typography>
         </Box>
       )
@@ -233,57 +233,42 @@ const columns: GridColDef[] = [
     sortable: false,
     field: 'actions',
     headerName: 'Actions',
-    renderCell: ({ row }: CellType) => <RowOptions id={row.id} />
+    renderCell: ({ row }: CellType) => <RowOptions id={row?.id ? row?.id : 0} />
   }
 ]
 
-const RoleTable = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  // ** State
-  const [roleData, setRoleData] = useState()
-  const [role, setRole] = useState<string>()
+const RoleListTable = () => {
+  const variables = useOrganizationUserVariables()
+  const onSearch = useOnSearch()
+
   const [value, setValue] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-  const user = useAuth()
 
-  // ** Hooks
-  // const dispatch = useDispatch<AppDispatch>()
-  // const store = useSelector((state: RootState) => state.user)
 
-  const [onUsersLazyQuery] = useUsersLazyQuery({
+  const { data: rolesList } = useRolesQuery({
     fetchPolicy: 'no-cache',
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
+
+  const { data, loading } = useOrganizationUsersQuery({
+    fetchPolicy: 'no-cache',
+    variables,
     onCompleted: data => {
-      if (data?.users?.data) setRoleData(data?.users?.data)
+      console.log(data)
+
+      // if (data?.users?.data) setRoleData(data?.users?.data)
     },
     onError: (error: unknown) => {
       alert(error)
     }
   })
-  useEffect(() => {
-    onUsersLazyQuery({
-      variables: {
-        input: {
-          role: role ? role : undefined
-        }
-      }
-    })
-  }, [role])
 
   const handleFilter = useCallback((val: string) => {
+    onSearch('role', val)
     setValue(val)
-  }, [])
-
-  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback((e: SelectChangeEvent) => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-    setStatus(e.target.value)
   }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
@@ -292,10 +277,11 @@ const RoleTable = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) 
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
+          <TableHeader roleList={rolesList} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
+            loading={loading}
             autoHeight
-            rows={roleData ? roleData : []}
+            rows={data ? data.organizationUsers?.data : []}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick
@@ -309,15 +295,5 @@ const RoleTable = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) 
     </Grid>
   )
 }
-export default RoleTable
+export default RoleListTable
 
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await axios.get('/cards/statistics')
-  const apiData: CardStatsType = res.data
-
-  return {
-    props: {
-      apiData
-    }
-  }
-}

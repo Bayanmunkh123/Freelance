@@ -16,7 +16,7 @@ import { config } from 'src/configs'
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   loading: false,
-  setLoading: () => Boolean,
+  // setLoading: () => Boolean,
   user: null,
   setUser: () => null,
   logout: () => Promise.resolve()
@@ -30,15 +30,58 @@ type Props = {
   setUser: (value: UserContextType) => void
 }
 
-const AuthProvider = ({ children, user, setUser }: Props) => {
+const AuthProvider = ({ children, user, setUser  }: Props) => {
   const apolloClient = useApolloClient()
-
-  // ** States
-
-  const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
 
   // ** Hooks
   const router = useRouter()
+  const {loading} = useMeAuthQuery({
+    onCompleted: data => {
+      if (data?.meAuth?.id) {
+        const user = data?.meAuth
+          const isAdmin = user.role === UserRoleEnum.ADMIN
+        const isEditor = user.role === UserRoleEnum.EDITOR
+        const isMember = user.role === UserRoleEnum.MEMBER
+
+        const _roles = { isAdmin, isEditor, isMember }
+
+        const _user: UserContextType = {
+          ...user,
+          roles: _roles,
+          permissions: ['Web']
+        }
+        console.log("_user", _user)
+        setUser(_user)
+      }
+    },
+    onError: (error) => {
+      alert(error)
+    }
+  })
+
+  const handleLogout = async () => {
+    const deviceId = localStorage.getItem(config.DEVICE_ID)
+    await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
+    await apolloClient.cache.reset()  
+    destroyCookieToken(undefined)
+    setUser(null)
+    router.push("/").then(() => {
+      window.location.reload()
+    })
+  }
+
+  const values = {
+    loading,
+    // setLoading,
+    user,
+    setUser,
+    logout: handleLogout
+  }
+
+  return <AuthContext.Provider value={values} >{children}</AuthContext.Provider>
+}
+
+export { AuthContext, AuthProvider }
 
   // useEffect(() => {
   //   const initAuth = async (): Promise<void> => {
@@ -137,45 +180,4 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
   //   }
   // })
 
-  useMeAuthQuery({
-    onCompleted: data => {
-      if (data?.meAuth?.id) {
-        const user = data?.meAuth
-        const isAdmin = user.role === UserRoleEnum.ADMIN
-        const isEditor = user.role === UserRoleEnum.EDITOR
-        const isMember = user.role === UserRoleEnum.MEMBER
-
-        const _roles = { isAdmin, isEditor, isMember }
-
-        const _user: UserContextType = {
-          ...user,
-          roles: _roles,
-          permissions: ['Web']
-        }
-        setUser(_user)
-      }
-    }
-  })
-
-  const handleLogout = async () => {
-    const deviceId = localStorage.getItem(config.DEVICE_ID)
-    await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
-    destroyCookieToken(undefined)
-    localStorage.removeItem(config.DEVICE_ID)
-    await apolloClient.cache.reset()
-    setUser(null)
-    router.push('/')
-  }
-
-  const values = {
-    loading,
-    setLoading,
-    user,
-    setUser,
-    logout: handleLogout
-  }
-
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
-}
-
-export { AuthContext, AuthProvider }
+  

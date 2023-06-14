@@ -1,11 +1,5 @@
-// ** React Imports
-import { useState, useEffect, MouseEvent, useCallback } from 'react'
-
-// ** Next Imports
+import { useState, MouseEvent, useCallback, useContext } from 'react'
 import Link from 'next/link'
-import { GetStaticProps, InferGetStaticPropsType } from 'next/types'
-
-// ** MUI Imports
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Menu from '@mui/material/Menu'
@@ -21,33 +15,24 @@ import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-
-// ** Icon Imports
 import Icon from 'src/@core/components/icon'
-
-// ** Custom Components Imports
-
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
-
-// ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
-
-// ** Actions Imports
-
-// ** Third Party Components
-import axios from 'axios'
-
-// ** Types Imports
-
-// import { CardStatsType } from 'src/@fake-db/types'
 import { ThemeColor } from 'src/@core/layouts/types'
-
-import { useUsersLazyQuery } from 'src/generated'
+import {
+  OrganizationUser,
+  useOrganizationUsersQuery,
+  useRolesQuery,
+} from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
-import PageHeader from 'src/@core/components/page-header'
-import RolesCards from '../components/RoleCards'
-import RoleTable from '../components/Table'
+import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
+
+import { AbilityContext } from 'src/layouts/components/acl/Can'
+import TableHeader from './components/user.list.header'
+import AddUserDrawer from '../add/user.add.drawer'
+import { useOnSearch } from 'src/hooks/useOnSearch'
+import { OrgRoles } from 'src/utils/constants'
+import { UserContextType } from 'src/context/types'
 
 interface UserRoleType {
   [key: string]: { icon: string; color: string }
@@ -57,18 +42,19 @@ interface UserStatusType {
   [key: string]: ThemeColor
 }
 
-// ** Vars
 const userRoleObj: UserRoleType = {
   admin: { icon: 'mdi:laptop', color: 'error.main' },
-  author: { icon: 'mdi:cog-outline', color: 'warning.main' },
+  owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-  maintainer: { icon: 'mdi:chart-donut', color: 'success.main' },
-  subscriber: { icon: 'mdi:account-outline', color: 'primary.main' }
+  finance: { icon: 'mdi:chart-donut', color: 'success.main' },
+  sales: { icon: 'mdi:account-outline', color: 'primary.main' },
+  support: { icon: 'mdi:account-outline', color: 'primary.main' },
+  viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
 }
 
-// interface CellType {
-//   row: UsersType
-// }
+interface CellType {
+  row: OrganizationUser
+}
 
 const userStatusObj: UserStatusType = {
   active: 'success',
@@ -88,8 +74,8 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 }))
 
 // ** renders client column
-const renderClient = (row: UsersType) => {
-  if (row.avatar.length) {
+const renderClient = (row: any) => {
+  if (row.image?.length) {
     return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
   } else {
     return (
@@ -98,16 +84,13 @@ const renderClient = (row: UsersType) => {
         color={row.avatarColor || 'primary'}
         sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
       >
-        {getInitials(row.fullName ? row.fullName : 'John Doe')}
+        {getInitials(row.firstName ? row.firstName : 'John Doe')}
       </CustomAvatar>
     )
   }
 }
 
 const RowOptions = ({ id }: { id: number | string }) => {
-  // ** Hooks
-
-  // ** State
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -173,18 +156,30 @@ const columns: GridColDef[] = [
     field: 'userName',
     headerName: 'UserName',
     renderCell: ({ row }: CellType) => {
-      const { fullName, username } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* {renderClient(row)} */}
+          {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
-            <LinkStyled href='/apps/user/view/overview/'>{fullName}</LinkStyled>
+            <LinkStyled href='/apps/user/view/overview/'>{row?.user?.profile?.firstName}</LinkStyled>
             <Typography noWrap variant='caption'>
-              {`@${username}`}
+              {`@${row?.user?.userName}`}
             </Typography>
           </Box>
         </Box>
+      )
+    }
+  },
+  {
+    flex: 0.2,
+    minWidth: 250,
+    field: 'organization',
+    headerName: 'Байгуулга',
+    renderCell: ({ row }: CellType) => {
+      return (
+        <Typography key={row.id} noWrap variant='body2'>
+          {row?.organization?.name}
+        </Typography>
       )
     }
   },
@@ -196,7 +191,7 @@ const columns: GridColDef[] = [
     renderCell: ({ row }: CellType) => {
       return (
         <Typography noWrap variant='body2'>
-          {row.email}
+          {row?.user?.email}
         </Typography>
       )
     }
@@ -211,7 +206,7 @@ const columns: GridColDef[] = [
         <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3 } }}>
           {/* <Icon icon={userRoleObj[row.role].icon} fontSize={20} /> */}
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
+            {row?.orgRole}
           </Typography>
         </Box>
       )
@@ -254,97 +249,116 @@ const columns: GridColDef[] = [
     sortable: false,
     field: 'actions',
     headerName: 'Actions',
-    renderCell: ({ row }: CellType) => <RowOptions id={row.id} />
+    renderCell: ({ row }: CellType) => <RowOptions id={row?.id ? row?.id  : 0} />
   }
 ]
 
-export const RoleListScene = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  // ** State
-  const [roleData, setRoleData] = useState()
-  const [role, setRole] = useState<string>()
+export const UserListScene = () => {
+  const variables = useOrganizationUserVariables()
+
+  const ability = useContext(AbilityContext)
+  const onSearch = useOnSearch()
+
   const [value, setValue] = useState<string>('')
-  const [status, setStatus] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-  const user = useAuth()
 
-  // ** Hooks
-  // const dispatch = useDispatch<AppDispatch>()
-  // const store = useSelector((state: RootState) => state.user)
 
-  const [onUsersLazyQuery] = useUsersLazyQuery({
+  const { data} = useOrganizationUsersQuery({
     fetchPolicy: 'no-cache',
+    variables,
     onCompleted: data => {
-      if (data?.users?.data) setRoleData(data?.users?.data)
+      console.log(data.organizationUsers?.data)
+
+      // if (data?.users?.data) setRoleData(data?.users?.data)
     },
     onError: (error: unknown) => {
       alert(error)
     }
   })
-  useEffect(() => {
-    onUsersLazyQuery({
-      variables: {
-        input: {
-          role: role ? role : undefined
-        }
-      }
-    })
-  }, [role])
 
+  const { data: RolesList } = useRolesQuery({
+    fetchPolicy: 'no-cache',
+    onError: (error: unknown) => {
+      alert(error)
+    }
+  })
   const handleFilter = useCallback((val: string) => {
+    onSearch('role', val)
     setValue(val)
   }, [])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setRole(e.target.value)
+    onSearch('role', e.target.value)
   }, [])
 
-  const handlePlanChange = useCallback((e: SelectChangeEvent) => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-    setStatus(e.target.value)
-  }, [])
+  // const handleStatusChange = useCallback((e: SelectChangeEvent) => {
+  //   setStatus(e.target.value)
+  // }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   return (
     <Grid container spacing={6}>
-      <PageHeader
-        title={<Typography variant='h5'>Roles List</Typography>}
-        subtitle={
-          <Typography variant='body2'>
-            A role provided access to predefined menus and features so that depending on assigned role an administrator
-            can have access to what he need
-          </Typography>
-        }
-      />
-      <Grid item xs={12} sx={{ mb: 5 }}>
-        <RolesCards />
-      </Grid>
-      <PageHeader
-        title={<Typography variant='h5'>Total users with their roles</Typography>}
-        subtitle={
-          <Typography variant='body2'>
-            Find all of your company’s administrator accounts and their associate roles.
-          </Typography>
-        }
-      />
+      {/* <Grid item xs={12}>
+        {apiData && (
+          <Grid container spacing={6}>
+            {apiData.statsHorizontal.map((item: CardStatsHorizontalProps, index: number) => {
+              return (
+                <Grid item xs={12} md={3} sm={6} key={index}>
+                  <CardStatisticsHorizontal {...item} icon={<Icon icon={item.icon as string} />} />
+                </Grid>
+              )
+            })}
+          </Grid>
+        )}
+      </Grid> */}
       <Grid item xs={12}>
-        <RoleTable />
+        <Card>
+          <CardHeader title='Хайх' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+          <CardContent>
+            <Grid container spacing={6}>
+              <Grid item sm={4} xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id='role-select'>Role сонгох</InputLabel>
+                  <Select
+                    fullWidth
+                    value={RolesList as string}
+                    id='select-role'
+                    label='Select Role'
+                    labelId='role-select'
+                    onChange={handleRoleChange}
+                    inputProps={{ placeholder: 'Select Role' }}
+                  >
+                    {OrgRoles.map((role, key) => {
+                      return (
+                        <MenuItem key={key} value={role.name}>
+                          {role.name}
+                        </MenuItem>
+                      )
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <Divider />
+          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
+          <DataGrid
+            autoHeight
+            rows={data ? data.organizationUsers?.data : []}
+            columns={columns}
+            checkboxSelection
+            disableRowSelectionOnClick
+            pageSizeOptions={[10, 25, 50]}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            sx={{ '& .MuiDataGrid-columnHeaders': { borderRadius: 0 } }}
+          />
+        </Card>
       </Grid>
+      {ability?.can('create', 'User') && <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />}
     </Grid>
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await axios.get('/cards/statistics')
-  const apiData: CardStatsType = res.data
-
-  return {
-    props: {
-      apiData
-    }
-  }
-}

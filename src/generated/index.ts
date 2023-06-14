@@ -86,10 +86,11 @@ export type AuthVerifyTokenType = {
   __typename?: 'AuthVerifyTokenType'
   accessToken?: Maybe<Scalars['String']>
   deviceId?: Maybe<Scalars['String']>
+  devices?: Maybe<Array<Maybe<UserDevice>>>
   isEmailConfirmed?: Maybe<Scalars['Boolean']>
   isPhoneConfirmed?: Maybe<Scalars['Boolean']>
   refreshToken?: Maybe<Scalars['String']>
-  sessionList?: Maybe<Array<Maybe<SessionListType>>>
+  userId?: Maybe<Scalars['String']>
 }
 
 export type ExternalAuthAppleInput = {
@@ -429,14 +430,6 @@ export type RolesType = {
   data?: Maybe<Array<OrganizationUser>>
 }
 
-export type SessionListType = {
-  __typename?: 'SessionListType'
-  deviceName: Scalars['String']
-  deviceOs: Scalars['String']
-  deviceType: Scalars['String']
-  id: Scalars['ID']
-}
-
 export enum SortOrder {
   ASC = 'asc',
   DESC = 'desc'
@@ -447,6 +440,7 @@ export type User = {
   accounts?: Maybe<Array<UserAccount>>
   countryCode?: Maybe<Scalars['String']>
   createdAt: Scalars['DateTime']
+  devices?: Maybe<Array<UserDevice>>
   email?: Maybe<Scalars['String']>
   id: Scalars['ID']
   image?: Maybe<Scalars['String']>
@@ -489,13 +483,22 @@ export type UserCreateInput = {
   organizationId: Scalars['String']
 }
 
+export type UserDevice = {
+  __typename?: 'UserDevice'
+  deviceName: Scalars['String']
+  deviceOs: Scalars['String']
+  deviceType: Scalars['String']
+  id: Scalars['ID']
+  sessions?: Maybe<Array<UserSession>>
+  userId: Scalars['String']
+}
+
 export type UserInvitation = {
   __typename?: 'UserInvitation'
   createdAt: Scalars['DateTime']
   email: Scalars['String']
   id: Scalars['ID']
   inviteAccepted?: Maybe<Scalars['Boolean']>
-  inviter?: Maybe<User>
   inviterId: Scalars['String']
   orgRole?: Maybe<OrganizationUserRoleEnum>
   organization?: Maybe<Organization>
@@ -525,15 +528,12 @@ export enum UserRoleEnum {
 export type UserSession = {
   __typename?: 'UserSession'
   createdAt: Scalars['DateTime']
-  deviceName: Scalars['String']
-  deviceToken: Scalars['String']
-  deviceType: Scalars['String']
+  device?: Maybe<UserDevice>
   expires: Scalars['String']
   fcmToken?: Maybe<Scalars['String']>
   id: Scalars['ID']
   isActive: Scalars['Boolean']
   updatedAt: Scalars['DateTime']
-  user?: Maybe<User>
   userId: Scalars['String']
 }
 
@@ -728,8 +728,8 @@ export type LoginEmailMutation = {
     accessToken?: string | null
     refreshToken?: string | null
     deviceId?: string | null
-    sessionList?: Array<{
-      __typename?: 'SessionListType'
+    devices?: Array<{
+      __typename?: 'UserDevice'
       id: string
       deviceName: string
       deviceType: string
@@ -1274,7 +1274,7 @@ export const LoginEmailDocument = gql`
       accessToken
       refreshToken
       deviceId
-      sessionList {
+      devices {
         id
         deviceName
         deviceType

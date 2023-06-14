@@ -30,17 +30,12 @@ const LoginEmail = (props: LoginEmailProps) => {
       destroyCookieToken(undefined)
       if (data?.loginEmail?.accessToken) {
         setCookieToken(data.loginEmail)
-
         alert('Амжилттай')
-
         await apolloClient.cache.reset()
         window.location.reload()
-
         setVisibleAuthDialog(null)
-
-        Router.push('/')
       } else {
-        setSessionData(data.loginEmail?.sessionList, loginInput)
+        setSessionData(data.loginEmail?.devices, loginInput)
         setVisibleAuthDialog(AuthModalType.SessionManage)
       }
     },
@@ -58,13 +53,12 @@ const LoginEmail = (props: LoginEmailProps) => {
           email: values.email,
           password: values.password
         })
-        const deviceId = localStorage.getItem('deviceId')
         onLoginEmail({
           variables: {
             input: {
               email: values?.email,
               password: values.password,
-              deviceId: deviceId
+              deviceId: localStorage.getItem(config.DEVICE_ID)
             }
           }
         })

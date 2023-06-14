@@ -5,7 +5,7 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 // ** Types
-import type { ACLObj, AppAbility, Subjects } from 'src/configs/acl'
+import type { ACLObj, Actions, AppAbility, Subjects } from 'src/configs/acl'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -37,23 +37,24 @@ const AclGuard = (props: AclGuardProps) => {
   const { aclAbilities, children, guestGuard = false, authGuard = true } = props
 
   // ** Hooks
-  const auth = useAuth()
+  const {user, loading} = useAuth()
   const router = useRouter()
 
-  // ** Vars
+  if(loading) 
+    return <Spinner />
+  
   let ability: AppAbility
   useEffect(() => {
-    console.log('AclGuard', auth.user)
-    console.log('AclGuard --- guestGuard', guestGuard)
-    if (auth.user && auth.user.role && !guestGuard && router.route === '/') {
-      const homeRoute = getHomeRoute(auth.user.role)
+
+    if (user && user.role && !guestGuard && router.route === '/') {
+      const homeRoute = getHomeRoute(user?.role)
       router.replace(homeRoute)
     }
-  }, [auth.user, guestGuard, router])
+  }, [ user, guestGuard])
 
   // User is logged in, build ability for the user based on his role
-  if (auth.user && !ability) {
-    ability = buildAbilityFor(auth?.user as AuthUserType, aclAbilities.subject as Subjects)
+  if (user && !ability) {
+    ability = buildAbilityFor(user as AuthUserType, aclAbilities.subject as Subjects)
     if (router.route === '/') {
       return <Spinner />
     }
@@ -62,7 +63,7 @@ const AclGuard = (props: AclGuardProps) => {
   // If guest guard or no guard is true or any error page
   if (guestGuard || router.route === '/404' || router.route === '/500' || !authGuard) {
     // If user is logged in and his ability is built
-    if (auth.user && ability) {
+    if (user && ability) {
       return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>
     } else {
       // If user is not logged in (render pages like login, register etc..)
@@ -71,7 +72,7 @@ const AclGuard = (props: AclGuardProps) => {
   }
 
   // Check the access of current user and render pages
-  if (ability && auth.user && ability.can(aclAbilities.action, aclAbilities.subject)) {
+  if (ability && user && ability.can(aclAbilities.action as Actions, aclAbilities.subject as Subjects)) {
     if (router.route === '/') {
       return <Spinner />
     }

@@ -41,17 +41,18 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import { ApolloProvider } from '@apollo/client'
+import {  ApolloProvider } from '@apollo/client'
 
-import { useApollo } from 'src/lib/apollo/client'
 
 import { UserContextType } from 'src/context/types'
+import { initializeApollo } from 'src/lib/apollo/client'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
   title: string | null
-  user: UserContextType | null
+  // user: UserContextType | null
+  // apolloClient: ApolloClient<NormalizedCacheObject>
 }
 type GuardProps = {
   authGuard: boolean
@@ -83,7 +84,7 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component, pageProps, title } = props
+  const { Component,  title, pageProps } = props
   const [user, setUser] = useState<UserContextType | null>(null)
   console.log('props', props)
 
@@ -106,10 +107,9 @@ const App = (props: ExtendedAppProps) => {
     getLayout =
       Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
   }
-
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  const apolloClient = useApollo(pageProps?.initialApollo)
+  const apolloClient = initializeApollo()
 
   return (
     <>
@@ -124,7 +124,7 @@ const App = (props: ExtendedAppProps) => {
         <title>{title || 'OnedayJOB'}</title>
       </Head>
       <ApolloProvider client={apolloClient}>
-        <AuthProvider user={user} setUser={setUser}>
+        <AuthProvider user={user} setUser={setUser} >
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
@@ -149,43 +149,50 @@ const App = (props: ExtendedAppProps) => {
   )
 }
 
-// App.getInitialProps = async (context: Context) => {
-//   const { Component, ctx } = context
 
-//   const apolloClient = initializeApollo()
-//   ctx.apolloClient = apolloClient
-//   let appProps = {}
-//   if (typeof App.getInitialProps === 'function') {
-//     appProps = await App.getInitialProps(context)
-//   }
+// App.getInitialProps = async (context) => {
+//   console.log(context)
 
-//   const meQuery = await apolloClient.query({
-//     fetchPolicy: 'no-cache',
-//     query: ME_AUTH
-//   })
+  
+// const {data,error} = useQuery(ME_AUTH)
 
-//   if (meQuery.data.meAuth) {
-//     const user = meQuery?.data?.meAuth
-//     const isAdmin = user.role === UserRoleEnum.ADMIN
-//     const isEditor = user.role === UserRoleEnum.EDITOR
-//     const isMember = user.role === UserRoleEnum.MEMBER
+// console.log("ME_AUTH", data)
+  // const { Component, ctx } = context
 
-//     const _roles = { isAdmin, isEditor, isMember }
+  // const apolloClient = createApolloClient()
+  // ctx.apolloClient = apolloClient
+  // let appProps = {}
+  // if (typeof App.getInitialProps === 'function') {
+  //   appProps = await App.getInitialProps(context)
+  // }
 
-//     const _user: UserContextType = {
-//       ...user,
-//       roles: _roles,
-//       permissions: ['Web']
-//     }
+  // const meQuery = await apolloClient.query({
+  //   fetchPolicy: 'no-cache',
+  //   query: ME_AUTH
+  // })
 
-//     return {
-//       ...appProps,
-//       pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() },
-//       user: '_user'
-//     }
-//   }
+  // if (meQuery.data.meAuth) {
+  //   const user = meQuery?.data?.meAuth
+  //   const isAdmin = user.role === UserRoleEnum.ADMIN
+  //   const isEditor = user.role === UserRoleEnum.EDITOR
+  //   const isMember = user.role === UserRoleEnum.MEMBER
 
-//   return { ...appProps, pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() } }
+  //   const _roles = { isAdmin, isEditor, isMember }
+
+  //   const _user: UserContextType = {
+  //     ...user,
+  //     roles: _roles,
+  //     permissions: ['Web']
+  //   }
+
+  //   return {
+  //     ...appProps,
+  //     pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() },
+  //     user: '_user'
+  //   }
+  // }
+// return {title: ""}
+//   // return { ...appProps, pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() } }
 // }
 
 export default App

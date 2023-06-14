@@ -17,6 +17,8 @@ export type AuthSessionManageProps = {
 
 export const AuthSessionManage = (props: AuthSessionManageProps) => {
   const { setVisibleAuthDialog, sessionList, loginInputs } = props
+
+  console.log(sessionList)
   const apolloClient = useApolloClient()
   const Router = useRouter()
 
@@ -26,6 +28,7 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
       if (data.accountEliminate?.deviceId) {
         localStorage.setItem(config.DEVICE_ID, data.accountEliminate?.deviceId)
       }
+      
       if (data.accountEliminate?.accessToken) {
         destroyCookieToken(undefined)
         if (data?.accountEliminate?.accessToken) {
