@@ -669,6 +669,7 @@ export type OrganizationUsersQuery = {
         userName?: string | null
         role?: UserRoleEnum | null
         email?: string | null
+        image?: string | null
         profile?: { __typename?: 'UserProfile'; id: string; firstName?: string | null; lastName?: string | null } | null
       } | null
     }> | null
@@ -1062,6 +1063,7 @@ export const OrganizationUsersDocument = gql`
           userName
           role
           email
+          image
           profile {
             id
             firstName

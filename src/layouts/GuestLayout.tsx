@@ -25,7 +25,6 @@ interface Props {
 
 const GuestLayout = ({ children, contentHeightFixed }: Props) => {
   console.log('GuestLayout START')
-  console.log('children', children)
 
   // ** Hooks
   const { settings, saveSettings } = useSettings()

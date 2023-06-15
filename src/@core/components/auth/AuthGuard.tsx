@@ -13,8 +13,9 @@ interface AuthGuardProps {
 }
 
 const AuthGuard = (props: AuthGuardProps) => {
+  console.log('AuthGuard START')
   const { children, fallback } = props
-  const auth = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
 
   useEffect(
@@ -23,14 +24,16 @@ const AuthGuard = (props: AuthGuardProps) => {
         return
       }
 
-      if (auth.user === null && !window.localStorage.getItem('userData')) {
+      console.log('AuthGuard USEeffect USER', user)
+      if (user === null) {
         if (router.asPath !== '/') {
           router.replace({
-            pathname: '/login',
-            query: { returnUrl: router.asPath }
+            pathname: '/'
+
+            // query: { returnUrl: router.asPath }
           })
         } else {
-          router.replace('/login')
+          router.replace('/')
         }
       }
     },
@@ -38,7 +41,7 @@ const AuthGuard = (props: AuthGuardProps) => {
     [router.route]
   )
 
-  if (auth.loading || auth.user === null) {
+  if (loading || user === null) {
     return fallback
   }
 

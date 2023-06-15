@@ -24,7 +24,13 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
 import { ThemeColor } from 'src/@core/layouts/types'
 import TableHeader from './role.list.header'
-import { AuthUserType, OrganizationUser, useOrganizationUsersQuery, useRolesQuery, useUsersLazyQuery } from 'src/generated'
+import {
+  AuthUserType,
+  OrganizationUser,
+  useOrganizationUsersQuery,
+  useRolesQuery,
+  useUsersLazyQuery
+} from 'src/generated'
 import { useAuth } from 'src/hooks/useAuth'
 import axios from 'axios'
 import { useRoleVariables } from '../../../utils/useRoleVariables'
@@ -71,24 +77,19 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 }))
 
 // ** renders client column
-// const renderClient = (row: UserContextType) => {
-//   if (row.avatar.length) {
-//     return <CustomAvatar src={row.avatar} sx={{ mr: 3, width: 34, height: 34 }} />
-//   } else {
-//     return (
-//       <CustomAvatar
-//         skin='light'
-//         color={row.avatarColor || 'primary'}
-//         sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}
-//       >
-//         {getInitials(row.fullName ? row.fullName : 'John Doe')}
-//       </CustomAvatar>
-//     )
-//   }
-// }
+const renderClient = (row: OrganizationUser) => {
+  if (row?.user?.image) {
+    return <CustomAvatar src={`/images/${row.user.image}`} sx={{ mr: 3, width: 34, height: 34 }} />
+  } else {
+    return (
+      <CustomAvatar skin='light' color={'primary'} sx={{ mr: 3, width: 34, height: 34, fontSize: '1rem' }}>
+        {getInitials(row?.user?.profile?.firstName ? row?.user?.profile?.firstName : 'John Doe')}
+      </CustomAvatar>
+    )
+  }
+}
 
 const RowOptions = ({ id }: { id: number | string }) => {
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -156,7 +157,7 @@ const columns: GridColDef[] = [
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* {renderClient(row)} */}
+          {renderClient(row)}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
             <LinkStyled href='/apps/user/view/overview/'>{row?.user?.profile?.firstName}</LinkStyled>
             <Typography noWrap variant='caption'>
@@ -245,7 +246,6 @@ const RoleListTable = () => {
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
-
   const { data: rolesList } = useRolesQuery({
     fetchPolicy: 'no-cache',
     onError: (error: unknown) => {
@@ -296,4 +296,3 @@ const RoleListTable = () => {
   )
 }
 export default RoleListTable
-

@@ -34,28 +34,28 @@ interface AclGuardProps {
 
 const AclGuard = (props: AclGuardProps) => {
   // ** Props
-  const { aclAbilities, children, guestGuard = false, authGuard = true } = props
+  const { aclAbilities, children, guestGuard = true, authGuard = false } = props
 
   // ** Hooks
-  const {user, loading} = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
 
-  if(loading) 
-    return <Spinner />
-  
   let ability: AppAbility
-  useEffect(() => {
 
+  useEffect(() => {
     if (user && user.role && !guestGuard && router.route === '/') {
-      const homeRoute = getHomeRoute(user?.role)
+      console.log('AclGuard USEeffect')
+      const homeRoute = getHomeRoute(user.role)
       router.replace(homeRoute)
     }
-  }, [ user, guestGuard])
+  }, [user, guestGuard])
+
+  if (loading) return <Spinner />
 
   // User is logged in, build ability for the user based on his role
   if (user && !ability) {
     ability = buildAbilityFor(user as AuthUserType, aclAbilities.subject as Subjects)
-    if (router.route === '/') {
+    if (router.route === '/' && !ability) {
       return <Spinner />
     }
   }

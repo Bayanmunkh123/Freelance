@@ -1,19 +1,11 @@
 import { onError } from '@apollo/client/link/error'
 
-export const errorLink = onError(({ networkError, graphQLErrors, operation, forward }) => {
-  console.log(networkError, graphQLErrors, operation, forward)
+export const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.forEach(error => {
-      console.log('key', error.message)
-    })
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+    )
   }
 
-  if (networkError) {
-    if (networkError?.message.includes('Timeout')) {
-      console.warn(networkError)
-
-      return
-    }
-    console.log('networkError: ', JSON.stringify(networkError, null, 2))
-  }
+  if (networkError) console.log(`[Network error]: ${networkError}`)
 })

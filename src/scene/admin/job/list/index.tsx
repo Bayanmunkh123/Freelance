@@ -1,7 +1,6 @@
 import { useState, MouseEvent, useCallback, useContext } from 'react'
 
 import Link from 'next/link'
-import { GetStaticProps, InferGetStaticPropsType } from 'next/types'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -22,24 +21,12 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Icon from 'src/@core/components/icon'
 
 import CustomAvatar from 'src/@core/components/mui/avatar'
-import CardStatisticsHorizontal from 'src/@core/components/card-statistics/card-stats-horizontal'
 
 import { getInitials } from 'src/@core/utils/get-initials'
 
-import axios from 'axios'
-
 import { ThemeColor } from 'src/@core/layouts/types'
 
-import { CardStatsHorizontalProps } from 'src/@core/components/card-statistics/types'
-
-import {
-  sUsersQuery,
-  useOrganizationUsersQuery,
-  useOrganizationsQuery,
-  useRolesQuery,
-  useUsersQuery
-} from 'src/generated'
-import { useAuth } from 'src/hooks/useAuth'
+import { useOrganizationUsersQuery, useRolesQuery } from 'src/generated'
 import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
 
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -268,7 +255,7 @@ const columns: GridColDef[] = [
   }
 ]
 
-export const JobListScene = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) => {
+export const JobListScene = () => {
   const variables = useOrganizationUserVariables()
 
   const ability = useContext(AbilityContext)
@@ -319,19 +306,6 @@ export const JobListScene = ({ apiData }: InferGetStaticPropsType<typeof getStat
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        {apiData && (
-          <Grid container spacing={6}>
-            {apiData.statsHorizontal.map((item: CardStatsHorizontalProps, index: number) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatisticsHorizontal {...item} icon={<Icon icon={item.icon as string} />} />
-                </Grid>
-              )
-            })}
-          </Grid>
-        )}
-      </Grid>
-      <Grid item xs={12}>
         <Card>
           <CardHeader title='Хайх' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
           <CardContent>
@@ -378,15 +352,4 @@ export const JobListScene = ({ apiData }: InferGetStaticPropsType<typeof getStat
       {ability?.can('create', 'User') && <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />}
     </Grid>
   )
-}
-
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await axios.get('/cards/statistics')
-  const apiData: CardStatsType = res.data
-
-  return {
-    props: {
-      apiData
-    }
-  }
 }

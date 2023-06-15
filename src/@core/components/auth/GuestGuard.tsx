@@ -13,22 +13,23 @@ interface GuestGuardProps {
 }
 
 const GuestGuard = (props: GuestGuardProps) => {
+  console.log('GuestGuard START')
   const { children, fallback } = props
   const auth = useAuth()
-  const router = useRouter()
 
-  useEffect(() => {
-    if (!router.isReady) {
-      return
-    }
+  // const router = useRouter()
 
-    if (window.localStorage.getItem('userData')) {
-      router.replace('/')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.route])
+  // useEffect(() => {
+  //   if (!router.isReady) {
+  //     return
+  //   }
 
-  if (auth.loading || (!auth.loading && auth.user !== null)) {
+  //   if (auth.user) {
+  //     router.replace('/')
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [router.route])
+  if (auth.loading) {
     return fallback
   }
 

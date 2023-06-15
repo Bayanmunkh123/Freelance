@@ -3,10 +3,9 @@ import { ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
-import { Router } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { getDataFromTree } from '@apollo/react-ssr'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -47,8 +46,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } fr
 import { UserContextType } from 'src/context/types'
 
 // import { initializeApollo } from 'src/lib/apollo/client'
-import withApollo from 'src/lib/apollo/withApollo'
 import { config } from 'src/configs'
+import { useApollo } from 'src/lib/apollo/client'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -77,7 +76,7 @@ if (themeConfig.routingLoader) {
     NProgress.done()
   })
 }
-const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
+const Guard = ({ children, guestGuard, authGuard }: GuardProps) => {
   if (guestGuard) {
     return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
   } else if (!guestGuard && !authGuard) {
@@ -89,31 +88,31 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component, title, pageProps, apollo } = props
+  const router = useRouter()
+
+  const { Component, title, pageProps } = props
   const [user, setUser] = useState<UserContextType | null>(null)
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
-  let getLayout =
-    Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
+
+  // const getLayout =
+  //   Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
 
   const setConfig = Component.setConfig ?? undefined
 
-  let authGuard = Component.authGuard ?? true
-  let guestGuard = Component.guestGuard ?? false
-  if (user) {
-    authGuard = true
-    guestGuard = false
-    getLayout = Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
-  } else {
-    authGuard = false
-    guestGuard = false
-    getLayout =
-      Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
-  }
+  const authGuard = Component.authGuard ?? true
+  const guestGuard = Component.guestGuard ?? true
+
+  // if (user && router.pathname.startsWith('/admin')) {
+  //   console.log('Component.getLayout ', Component.getLayout)
+  //   getLayout = page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>
+  // } else {
+  //   getLayout = page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
+  // }
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  // const apolloClient = initializeApollo()
+  const apolloClient = useApollo(pageProps.initialState)
 
   return (
     <>
@@ -125,9 +124,9 @@ const App = (props: ExtendedAppProps) => {
         />
         <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
-        <title>{title || 'OnedayJOB'}</title>
+        <title>{title || 'TAB Systems'}</title>
       </Head>
-      <ApolloProvider client={apollo}>
+      <ApolloProvider client={apolloClient}>
         <AuthProvider user={user} setUser={setUser}>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
@@ -136,7 +135,16 @@ const App = (props: ExtendedAppProps) => {
                   <ThemeComponent settings={settings}>
                     <Guard authGuard={authGuard} guestGuard={guestGuard}>
                       <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                        {getLayout(<Component {...pageProps} />)}
+                        {/* {getLayout(<Component {...pageProps} />)} */}
+                        {user && router.pathname.startsWith('/admin') ? (
+                          <UserLayout contentHeightFixed={contentHeightFixed}>
+                            {<Component {...pageProps} />}
+                          </UserLayout>
+                        ) : (
+                          <GuestLayout contentHeightFixed={contentHeightFixed}>
+                            {<Component {...pageProps} />}
+                          </GuestLayout>
+                        )}
                       </AclGuard>
                     </Guard>
                     <ReactHotToast>
@@ -197,11 +205,4 @@ const App = (props: ExtendedAppProps) => {
 //   // return { ...appProps, pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() } }
 // }
 
-export default withApollo(
-  ({ initialState }) =>
-    new ApolloClient({
-      uri: config.BACKEND_URL,
-      cache: new InMemoryCache().restore(initialState || {})
-    }),
-  { getDataFromTree }
-)(App)
+export default App

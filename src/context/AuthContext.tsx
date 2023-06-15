@@ -1,9 +1,6 @@
 // ** React Imports
 import { createContext, ReactNode } from 'react'
 
-// ** Next Import
-import { useRouter } from 'next/router'
-
 // ** Types
 import { AuthValuesType, UserContextType } from './types'
 
@@ -12,6 +9,7 @@ import { useApolloClient } from '@apollo/client'
 import { UserRoleEnum, useMeAuthQuery } from 'src/generated'
 import { destroyCookieToken } from 'src/utils/cookies'
 import { config } from 'src/configs'
+import { useRouter } from 'next/router'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -33,12 +31,11 @@ type Props = {
 
 const AuthProvider = ({ children, user, setUser }: Props) => {
   const apolloClient = useApolloClient()
+  const router = useRouter()
 
   // ** Hooks
-  const router = useRouter()
   const { loading } = useMeAuthQuery({
     onCompleted: data => {
-      console.log(data)
       if (data?.meAuth?.id) {
         const user = data?.meAuth
         const isAdmin = user.role === UserRoleEnum.ADMIN
@@ -52,7 +49,6 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
           roles: _roles,
           permissions: ['Web']
         }
-        console.log('_user', _user)
         setUser(_user)
       }
     },
@@ -60,22 +56,30 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
       alert(error)
     }
   })
-
   const handleLogout = async () => {
     const deviceId = localStorage.getItem(config.DEVICE_ID)
+
     await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
-    await apolloClient.cache.reset()
     destroyCookieToken(undefined)
+
+    // router.replace('/')
+
     setUser(null)
-    router.push('/').then(() => {
-      window.location.reload()
-    })
+
+    // if (typeof window !== 'undefined') {
+    //   window.location.reload()
+    // }
+
+    window.location.reload()
+
+    await apolloClient.cache.reset()
+
+    // router.push('/').then(() => {
+    // })
   }
 
   const values = {
     loading,
-
-    // setLoading,
     user,
     setUser,
     logout: handleLogout

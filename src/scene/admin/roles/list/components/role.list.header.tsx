@@ -21,7 +21,7 @@ interface TableHeaderProps {
 
 const TableHeader = (props: TableHeaderProps) => {
   // ** Props
-  const { plan, handleRoleChange, handleFilter, roleList } = props
+  const { handleRoleChange, handleFilter, roleList } = props
 
   return (
     <Box sx={{ p: 5, pb: 3, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -36,26 +36,26 @@ const TableHeader = (props: TableHeaderProps) => {
           sx={{ mr: 6, mb: 2 }}
           onChange={e => handleFilter(e.target.value)}
         />
-         <FormControl fullWidth>
-                  <InputLabel id='role-select'>Role сонгох</InputLabel>
-                  <Select
-                    fullWidth
-                    value={roleList as string}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    {OrgRoles.map((role, key) => {
-                      return (
-                        <MenuItem key={key} value={role.name}>
-                          {role.name}
-                        </MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id='role-select'>Role сонгох</InputLabel>
+          <Select
+            fullWidth
+            value={roleList as string}
+            id='select-role'
+            label='Select Role'
+            labelId='role-select'
+            onChange={handleRoleChange}
+            inputProps={{ placeholder: 'Select Role' }}
+          >
+            {OrgRoles.map((role, key) => {
+              return (
+                <MenuItem key={key} value={role.name}>
+                  {role.name}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
       </Box>
     </Box>
   )

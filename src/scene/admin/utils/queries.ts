@@ -71,6 +71,7 @@ export const ORGANIZATION_USER_LIST = gql`
           userName
           role
           email
+          image
           profile {
             id
             firstName

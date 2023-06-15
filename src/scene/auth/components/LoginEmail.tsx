@@ -16,7 +16,7 @@ type LoginEmailProps = {
 }
 const LoginEmail = (props: LoginEmailProps) => {
   const apolloClient = useApolloClient()
-  const Router = useRouter()
+  const router = useRouter()
 
   const { setVisibleAuthDialog, setSessionData } = props
   const [loginInput, setLoginInput] = useState({ email: '', password: '' })
@@ -30,10 +30,15 @@ const LoginEmail = (props: LoginEmailProps) => {
       destroyCookieToken(undefined)
       if (data?.loginEmail?.accessToken) {
         setCookieToken(data.loginEmail)
-        alert('Амжилттай')
+        console.log('Амжилттай')
+
         await apolloClient.cache.reset()
-        window.location.reload()
+        const returnUrl = router.query.returnUrl
+
         setVisibleAuthDialog(null)
+        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        console.log('redirectURL', redirectURL)
+        router.push(redirectURL as string)
       } else {
         setSessionData(data.loginEmail?.devices, loginInput)
         setVisibleAuthDialog(AuthModalType.SessionManage)

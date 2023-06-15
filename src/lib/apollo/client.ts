@@ -74,21 +74,8 @@ export function createApolloClient(initialState: any) {
     cache: new InMemoryCache().restore(initialState)
   })
 }
-let globalApolloClient: any = null
 
 export function initializeApollo(initialState = null) {
-  if (typeof window === 'undefined') {
-    return createApolloClient(initialState)
-  }
-  // Reuse client on the client-side
-  if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(initialState)
-  }
-
-  return globalApolloClient
-}
-
-export function initializeApolloV2(initialState = null) {
   const _apolloClient = apolloClient ?? createApolloClient(null)
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -115,5 +102,6 @@ export function initializeApolloV2(initialState = null) {
 
 export function useApollo(initialState: any) {
   const store = useMemo(() => initializeApollo(initialState), [initialState])
+
   return store
 }
