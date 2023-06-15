@@ -90,7 +90,6 @@ export type AuthVerifyTokenType = {
   isEmailConfirmed?: Maybe<Scalars['Boolean']>
   isPhoneConfirmed?: Maybe<Scalars['Boolean']>
   refreshToken?: Maybe<Scalars['String']>
-  userId?: Maybe<Scalars['String']>
 }
 
 export type ExternalAuthAppleInput = {

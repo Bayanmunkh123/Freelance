@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import { withApollo } from 'src/lib/apollo/withApollo'
 
 const Home = () => {
   return (
@@ -36,5 +35,4 @@ const Home = () => {
   )
 }
 
-
-export default withApollo()(Home)
+export default Home

@@ -1,92 +1,106 @@
-import React from 'react'
+import { NextPage } from 'next'
 import App from 'next/app'
-import Head from 'next/head'
-import { initializeApollo } from './client'
-import {  ApolloProvider } from '@apollo/client'
+import React from 'react'
+import { ApolloContext, InitApolloClient, WithApolloOptions, WithApolloProps, WithApolloState } from './types'
+import initApollo from './initApollo'
 
-export const withApollo =
-  ({ ssr = true } = {}) =>
-  PageComponent => {
-    const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
-      let client
-      if (apolloClient) {
-        // Happens on: getDataFromTree & next.js ssr
-        client = apolloClient
-      } else {
-        // Happens on: next.js csr
-        // client = initApolloClient(apolloState, undefined);
-        client = initializeApollo(apolloState)
+// Gets the display name of a JSX component for dev tools
+function getDisplayName(Component: React.ComponentType<any>) {
+  return Component.displayName || Component.name || 'Unknown'
+}
+
+export default function withApollo<TCache = any>(client: InitApolloClient<TCache>, options: WithApolloOptions = {}) {
+  type ApolloProps = Partial<WithApolloProps<TCache>>
+
+  return (Page: NextPage<any> | typeof App, pageOptions: WithApolloOptions = {}) => {
+    const getInitialProps = Page.getInitialProps
+    const getDataFromTree = 'getDataFromTree' in pageOptions ? pageOptions.getDataFromTree : options.getDataFromTree
+    const render = pageOptions.render || options.render
+    const onError = pageOptions.onError || options.onError
+
+    function WithApollo({ apollo, apolloState, router, ...props }: ApolloProps) {
+      const apolloClient =
+        apollo ||
+        initApollo<TCache>(client, {
+          initialState: apolloState?.data,
+          router
+        })
+
+      if (render) {
+        return render({
+          Page: Page as NextPage<any>,
+          props: { ...props, apollo: apolloClient }
+        })
       }
-      
-      return (
-          <ApolloProvider client={client}>
-            <PageComponent {...pageProps} />
-          </ApolloProvider>
-          )
+
+      return <Page {...props} apollo={apolloClient} />
     }
-    
 
-    // Set the correct displayName in development
-    if (process.env.NODE_ENV !== 'production') {
-      const displayName = PageComponent.displayName || PageComponent.name || 'Component'
-      WithApollo.displayName = `withApollo(${displayName})`
-    }
-    if (ssr || PageComponent.getInitialProps) {
-      WithApollo.getInitialProps = async ctx => {
-        const { AppTree } = ctx
+    WithApollo.displayName = `WithApollo(${getDisplayName(Page)})`
 
-        // Initialize ApolloClient, add it to the ctx object so
-        // we can use it in `PageComponent.getInitialProp`.
-        const apolloClient = (ctx.apolloClient = initializeApollo(null))
+    if (getInitialProps || getDataFromTree) {
+      WithApollo.getInitialProps = async (pageCtx: ApolloContext) => {
+        const ctx = 'Component' in pageCtx ? pageCtx.ctx : pageCtx
+        const router = 'Component' in pageCtx ? pageCtx.router : undefined
+        const { AppTree } = pageCtx
+        const headers = ctx.req ? ctx.req.headers : {}
+        const apollo = initApollo<TCache>(client, {
+          ctx,
+          headers,
+          router
+        })
+        const apolloState: WithApolloState<TCache> = {}
 
-        // Run wrapped getInitialProps methods
         let pageProps = {}
-        if (PageComponent.getInitialProps) {
-          pageProps = await PageComponent.getInitialProps(ctx)
+
+        if (getInitialProps) {
+          ctx.apolloClient = apollo
+          pageProps = await getInitialProps(pageCtx as any)
         }
 
-        // Only on the server:
         if (typeof window === 'undefined') {
-          // When redirecting, the response is finished.
-          // No point in continuing to render
-          if (ctx.res && ctx.res.finished) {
+          if (ctx.res && (ctx.res.headersSent || ctx.res.finished)) {
             return pageProps
           }
 
-          // Only if ssr is enabled
-          if (ssr) {
+          if (getDataFromTree) {
             try {
-              // Run all GraphQL queries
-              const { getDataFromTree } = await import('@apollo/react-ssr')
-              await getDataFromTree(
-                <AppTree
-                  pageProps={{
-                    ...pageProps,
-                    apolloClient
-                  }}
-                />
-              )
+              const props = { ...pageProps, apolloState, apollo }
+              const appTreeProps = 'Component' in pageCtx ? props : { pageProps: props }
+
+              await getDataFromTree(<AppTree {...appTreeProps} />)
             } catch (error) {
-              // Prevent Apollo Client GraphQL errors from crashing SSR.
-              // Handle them in components via the data.error prop:
-              // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
-              console.error('Error while running `getDataFromTree`', error)
+              if (onError) {
+                onError(error as Error, ctx)
+              } else {
+                // Prevent Apollo Client GraphQL errors from crashing SSR.
+                if (process.env.NODE_ENV !== 'production') {
+                  // tslint:disable-next-line no-console This is a necessary debugging log
+                  console.error('GraphQL error occurred [getDataFromTree]', error)
+                }
+              }
             }
 
-            // getDataFromTree does not call componentWillUnmount
-            // head side effect therefore need to be cleared manually
+            apolloState.data = apollo.cache.extract()
           }
         }
 
-        // Extract query data from the Apollo store
-        const apolloState = apolloClient.cache.extract()
+        // To avoid calling initApollo() twice in the server we send the Apollo Client as a prop
+        // to the component, otherwise the component would have to call initApollo() again but this
+        // time without the context, once that happens the following code will make sure we send
+        // the prop as `null` to the browser
+        ;(apollo as any).toJSON = () => {
+          return null
+        }
 
         return {
           ...pageProps,
-          apolloState
+          apolloState,
+          apollo
         }
       }
     }
 
     return WithApollo
   }
+}

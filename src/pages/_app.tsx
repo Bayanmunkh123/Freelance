@@ -6,6 +6,7 @@ import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { getDataFromTree } from '@apollo/react-ssr'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -41,16 +42,20 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import {  ApolloProvider } from '@apollo/client'
-
+import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 
 import { UserContextType } from 'src/context/types'
-import { initializeApollo } from 'src/lib/apollo/client'
+
+// import { initializeApollo } from 'src/lib/apollo/client'
+import withApollo from 'src/lib/apollo/withApollo'
+import { config } from 'src/configs'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage
   title: string | null
+  apollo: ApolloClient<NormalizedCacheObject>
+
   // user: UserContextType | null
   // apolloClient: ApolloClient<NormalizedCacheObject>
 }
@@ -84,9 +89,8 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
 
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
-  const { Component,  title, pageProps } = props
+  const { Component, title, pageProps, apollo } = props
   const [user, setUser] = useState<UserContextType | null>(null)
-  console.log('props', props)
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
@@ -109,7 +113,7 @@ const App = (props: ExtendedAppProps) => {
   }
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  const apolloClient = initializeApollo()
+  // const apolloClient = initializeApollo()
 
   return (
     <>
@@ -123,8 +127,8 @@ const App = (props: ExtendedAppProps) => {
         <meta name='viewport' content='initial-scale=1, width=device-width' />
         <title>{title || 'OnedayJOB'}</title>
       </Head>
-      <ApolloProvider client={apolloClient}>
-        <AuthProvider user={user} setUser={setUser} >
+      <ApolloProvider client={apollo}>
+        <AuthProvider user={user} setUser={setUser}>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
@@ -149,50 +153,55 @@ const App = (props: ExtendedAppProps) => {
   )
 }
 
-
 // App.getInitialProps = async (context) => {
 //   console.log(context)
 
-  
 // const {data,error} = useQuery(ME_AUTH)
 
 // console.log("ME_AUTH", data)
-  // const { Component, ctx } = context
+// const { Component, ctx } = context
 
-  // const apolloClient = createApolloClient()
-  // ctx.apolloClient = apolloClient
-  // let appProps = {}
-  // if (typeof App.getInitialProps === 'function') {
-  //   appProps = await App.getInitialProps(context)
-  // }
+// const apolloClient = createApolloClient()
+// ctx.apolloClient = apolloClient
+// let appProps = {}
+// if (typeof App.getInitialProps === 'function') {
+//   appProps = await App.getInitialProps(context)
+// }
 
-  // const meQuery = await apolloClient.query({
-  //   fetchPolicy: 'no-cache',
-  //   query: ME_AUTH
-  // })
+// const meQuery = await apolloClient.query({
+//   fetchPolicy: 'no-cache',
+//   query: ME_AUTH
+// })
 
-  // if (meQuery.data.meAuth) {
-  //   const user = meQuery?.data?.meAuth
-  //   const isAdmin = user.role === UserRoleEnum.ADMIN
-  //   const isEditor = user.role === UserRoleEnum.EDITOR
-  //   const isMember = user.role === UserRoleEnum.MEMBER
+// if (meQuery.data.meAuth) {
+//   const user = meQuery?.data?.meAuth
+//   const isAdmin = user.role === UserRoleEnum.ADMIN
+//   const isEditor = user.role === UserRoleEnum.EDITOR
+//   const isMember = user.role === UserRoleEnum.MEMBER
 
-  //   const _roles = { isAdmin, isEditor, isMember }
+//   const _roles = { isAdmin, isEditor, isMember }
 
-  //   const _user: UserContextType = {
-  //     ...user,
-  //     roles: _roles,
-  //     permissions: ['Web']
-  //   }
+//   const _user: UserContextType = {
+//     ...user,
+//     roles: _roles,
+//     permissions: ['Web']
+//   }
 
-  //   return {
-  //     ...appProps,
-  //     pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() },
-  //     user: '_user'
-  //   }
-  // }
+//   return {
+//     ...appProps,
+//     pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() },
+//     user: '_user'
+//   }
+// }
 // return {title: ""}
 //   // return { ...appProps, pageProps: { ...appProps.pageProps, initialApolloState: apolloClient.cache.extract() } }
 // }
 
-export default App
+export default withApollo(
+  ({ initialState }) =>
+    new ApolloClient({
+      uri: config.BACKEND_URL,
+      cache: new InMemoryCache().restore(initialState || {})
+    }),
+  { getDataFromTree }
+)(App)
