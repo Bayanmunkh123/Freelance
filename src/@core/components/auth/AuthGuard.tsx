@@ -13,35 +13,37 @@ interface AuthGuardProps {
 }
 
 const AuthGuard = (props: AuthGuardProps) => {
-  console.log('AuthGuard START')
+  // console.log('AuthGuard START')
   const { children, fallback } = props
-  const { user, loading } = useAuth()
+  const auth = useAuth()
   const router = useRouter()
 
-  useEffect(
-    () => {
-      if (!router.isReady) {
-        return
-      }
+  // useEffect(
+  //   () => {
+  //     if (!router.isReady) {
+  //       return
+  //     }
 
-      console.log('AuthGuard USEeffect USER', user)
-      if (user === null) {
-        if (router.asPath !== '/') {
-          router.replace({
-            pathname: '/'
+  //     console.log('AuthGuard useEffect USER', auth.user)
+  //     if (auth.user === null) {
+  //       if (router.asPath !== '/') {
+  //         router.replace({
+  //           pathname: '/'
 
-            // query: { returnUrl: router.asPath }
-          })
-        } else {
-          router.replace('/')
-        }
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.route]
-  )
+  //           // query: { returnUrl: router.asPath }
+  //         })
+  //       }
 
-  if (loading || user === null) {
+  //       // else {
+  //       // router.replace('/')
+  //       // }
+  //     }
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [router.route]
+  // )
+
+  if (auth.loading || auth.user === null) {
     return fallback
   }
 

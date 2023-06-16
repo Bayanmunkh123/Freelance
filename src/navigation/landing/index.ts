@@ -4,18 +4,45 @@ import { HorizontalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): HorizontalNavItemsType => {
   return [
     {
-      title: 'Нээлттэй ажлын зар',
-      path: '/home',
+      title: 'Ажил',
+      path: '/admin/jobs',
+      action: 'read',
+      subject: 'NavLink',
+      auth: true
+    },
+    {
+      title: 'Хэрэглэгчид',
+      path: '/admin/users',
+      action: 'read',
+      subject: 'NavLink',
+      auth: true
+    },
+    {
+      title: 'Roles',
+      path: '/admin/roles',
+      action: 'read',
+      subject: 'NavLink',
+      auth: true
+    },
+    {
+      title: 'Product',
+      path: '/product',
+      action: 'read',
+      subject: 'Product',
       auth: false
     },
     {
-      title: 'Ажил олгогч',
-      path: '/company',
+      title: 'Service',
+      path: '/service',
+      action: 'read',
+      subject: 'Service',
       auth: false
     },
     {
-      title: 'Ажил хайгч',
-      path: '/staff',
+      title: 'About',
+      path: '/about-us',
+      action: 'read',
+      subject: 'About',
       auth: false
     }
   ]

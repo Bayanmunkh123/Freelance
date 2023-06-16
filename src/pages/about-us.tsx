@@ -1,21 +1,21 @@
-// ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
-const SecondPage = () => {
+const Home = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Create Awesome 🙌'></CardHeader>
+          <CardHeader title='About Us'></CardHeader>
           <CardContent>
-            <Typography sx={{ mb: 2 }}>This is your second page.</Typography>
+            {/* <Typography sx={{ mb: 2 }}>All the best for your new project.</Typography> */}
             <Typography>
-              Chocolate sesame snaps pie carrot cake pastry pie lollipop muffin. Carrot cake dragée chupa chups jujubes.
-              Macaroon liquorice cookie wafer tart marzipan bonbon. Gingerbread jelly-o dragée chocolate.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis accusantium facere similique esse aut
+              necessitatibus, quod delectus, temporibus quisquam dolores corporis animi libero debitis eos, ut fugit
+              nesciunt odit culpa.
             </Typography>
           </CardContent>
         </Card>
@@ -24,4 +24,4 @@ const SecondPage = () => {
   )
 }
 
-export default SecondPage
+export default Home

@@ -7,17 +7,15 @@ import { AuthModalType } from 'src/utils/constants'
 import { AuthSocial } from '../components/AuthSocial'
 import LoginEmail from '../components/LoginEmail'
 import LoginPhone from '../components/LoginPhone'
-import { LoginEmailInput } from 'src/generated'
 
 export type AuthLoginProps = {
   visibleAuthDialog: AuthModalType | null
   setVisibleAuthDialog: (type: AuthModalType | null) => void
-  setSessionData: (data: any, loginInput: LoginEmailInput) => void
 }
 
 export const AuthLogin = (props: AuthLoginProps) => {
   const [type, setType] = useState('email')
-  const { setVisibleAuthDialog, setSessionData } = props
+  const { setVisibleAuthDialog } = props
 
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
@@ -48,7 +46,7 @@ export const AuthLogin = (props: AuthLoginProps) => {
             </TabList>
           </Box>
           <TabPanel value='email'>
-            <LoginEmail setVisibleAuthDialog={setVisibleAuthDialog} setSessionData={setSessionData} />
+            <LoginEmail setVisibleAuthDialog={setVisibleAuthDialog} />
           </TabPanel>
           <TabPanel value='phone'>
             <LoginPhone setVisibleAuthDialog={setVisibleAuthDialog} />

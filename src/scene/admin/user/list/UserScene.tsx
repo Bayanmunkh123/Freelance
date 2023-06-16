@@ -18,44 +18,31 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Icon from 'src/@core/components/icon'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { getInitials } from 'src/@core/utils/get-initials'
-import { ThemeColor } from 'src/@core/layouts/types'
-import { OrganizationUser, useOrganizationUsersQuery, useRolesQuery } from 'src/generated'
-import { useAuth } from 'src/hooks/useAuth'
+import { OrganizationUser, useOrganizationUsersQuery } from 'src/generated'
 import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
 
 import { AbilityContext } from 'src/layouts/components/acl/Can'
-import TableHeader from './components/user.list.header'
-import AddUserDrawer from '../add/user.add.drawer'
+import { UserTableHeader } from './components/UserTableHeader'
+import { UserAddDrawer } from '../add/UserAddDrawer'
 import { useOnSearch } from 'src/hooks/useOnSearch'
 import { OrgRoles } from 'src/utils/constants'
-import { UserContextType } from 'src/context/types'
 
-interface UserRoleType {
-  [key: string]: { icon: string; color: string }
-}
+// interface UserRoleType {
+//   [key: string]: { icon: string; color: string }
+// }
 
-interface UserStatusType {
-  [key: string]: ThemeColor
-}
-
-const userRoleObj: UserRoleType = {
-  admin: { icon: 'mdi:laptop', color: 'error.main' },
-  owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
-  editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-  finance: { icon: 'mdi:chart-donut', color: 'success.main' },
-  sales: { icon: 'mdi:account-outline', color: 'primary.main' },
-  support: { icon: 'mdi:account-outline', color: 'primary.main' },
-  viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
-}
+// const userRoleObj: UserRoleType = {
+//   admin: { icon: 'mdi:laptop', color: 'error.main' },
+//   owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
+//   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
+//   finance: { icon: 'mdi:chart-donut', color: 'success.main' },
+//   sales: { icon: 'mdi:account-outline', color: 'primary.main' },
+//   support: { icon: 'mdi:account-outline', color: 'primary.main' },
+//   viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
+// }
 
 interface CellType {
   row: OrganizationUser
-}
-
-const userStatusObj: UserStatusType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
 }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -229,7 +216,6 @@ const columns: GridColDef[] = [
   //         label={row.status}
   //         color={userStatusObj[row.status]}
   //         sx={{ textTransform: 'capitalize', '& .MuiChip-label': { lineHeight: '18px' } }}
-  //       />
   //     )
   //   }
   // },
@@ -243,13 +229,14 @@ const columns: GridColDef[] = [
   }
 ]
 
-export const UserListScene = () => {
+export const UserScene = () => {
   const variables = useOrganizationUserVariables()
 
   const ability = useContext(AbilityContext)
   const onSearch = useOnSearch()
 
   const [value, setValue] = useState<string>('')
+  const [selectedRole, setSelectedRole] = useState<string>('')
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
 
@@ -266,18 +253,13 @@ export const UserListScene = () => {
     }
   })
 
-  const { data: RolesList } = useRolesQuery({
-    fetchPolicy: 'no-cache',
-    onError: (error: unknown) => {
-      alert(error)
-    }
-  })
   const handleFilter = useCallback((val: string) => {
     onSearch('role', val)
     setValue(val)
   }, [])
 
   const handleRoleChange = useCallback((e: SelectChangeEvent) => {
+    setSelectedRole(e.target.value)
     onSearch('role', e.target.value)
   }, [])
 
@@ -286,25 +268,13 @@ export const UserListScene = () => {
   // }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+  console.log('RolesList')
 
   return (
     <Grid container spacing={6}>
-      {/* <Grid item xs={12}>
-        {apiData && (
-          <Grid container spacing={6}>
-            {apiData.statsHorizontal.map((item: CardStatsHorizontalProps, index: number) => {
-              return (
-                <Grid item xs={12} md={3} sm={6} key={index}>
-                  <CardStatisticsHorizontal {...item} icon={<Icon icon={item.icon as string} />} />
-                </Grid>
-              )
-            })}
-          </Grid>
-        )}
-      </Grid> */}
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Хайх' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
+          <CardHeader title='Хэрэглэгчид' sx={{ pb: 4, '& .MuiCardHeader-title': { letterSpacing: '.15px' } }} />
           <CardContent>
             <Grid container spacing={6}>
               <Grid item sm={4} xs={12}>
@@ -312,7 +282,7 @@ export const UserListScene = () => {
                   <InputLabel id='role-select'>Role сонгох</InputLabel>
                   <Select
                     fullWidth
-                    value={RolesList as string}
+                    value={selectedRole}
                     id='select-role'
                     label='Select Role'
                     labelId='role-select'
@@ -332,7 +302,7 @@ export const UserListScene = () => {
             </Grid>
           </CardContent>
           <Divider />
-          <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
+          <UserTableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
             rows={data ? data.organizationUsers?.data : []}
@@ -346,7 +316,7 @@ export const UserListScene = () => {
           />
         </Card>
       </Grid>
-      {ability?.can('create', 'User') && <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />}
+      {ability?.can('create', 'User') && <UserAddDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />}
     </Grid>
   )
 }

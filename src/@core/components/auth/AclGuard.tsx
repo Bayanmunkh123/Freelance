@@ -22,7 +22,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { useAuth } from 'src/hooks/useAuth'
 
 // ** Util Import
-import getHomeRoute from 'src/layouts/components/acl/getHomeRoute'
 import { AuthUserType } from 'src/generated'
 
 interface AclGuardProps {
@@ -37,24 +36,15 @@ const AclGuard = (props: AclGuardProps) => {
   const { aclAbilities, children, guestGuard = true, authGuard = false } = props
 
   // ** Hooks
-  const { user, loading } = useAuth()
+  const auth = useAuth()
   const router = useRouter()
 
   let ability: AppAbility
-
-  useEffect(() => {
-    if (user && user.role && !guestGuard && router.route === '/') {
-      console.log('AclGuard USEeffect')
-      const homeRoute = getHomeRoute(user.role)
-      router.replace(homeRoute)
-    }
-  }, [user, guestGuard])
-
-  if (loading) return <Spinner />
+  if (auth.loading) return <Spinner />
 
   // User is logged in, build ability for the user based on his role
-  if (user && !ability) {
-    ability = buildAbilityFor(user as AuthUserType, aclAbilities.subject as Subjects)
+  if (auth.user && !ability) {
+    ability = buildAbilityFor(auth.user as AuthUserType, aclAbilities.subject as Subjects)
     if (router.route === '/' && !ability) {
       return <Spinner />
     }
@@ -63,7 +53,7 @@ const AclGuard = (props: AclGuardProps) => {
   // If guest guard or no guard is true or any error page
   if (guestGuard || router.route === '/404' || router.route === '/500' || !authGuard) {
     // If user is logged in and his ability is built
-    if (user && ability) {
+    if (auth.user && ability) {
       return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>
     } else {
       // If user is not logged in (render pages like login, register etc..)
@@ -72,7 +62,7 @@ const AclGuard = (props: AclGuardProps) => {
   }
 
   // Check the access of current user and render pages
-  if (ability && user && ability.can(aclAbilities.action as Actions, aclAbilities.subject as Subjects)) {
+  if (ability && auth.user && ability.can(aclAbilities.action as Actions, aclAbilities.subject as Subjects)) {
     if (router.route === '/') {
       return <Spinner />
     }

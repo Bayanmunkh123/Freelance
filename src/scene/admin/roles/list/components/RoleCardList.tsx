@@ -60,7 +60,7 @@ const rolesArr: string[] = [
   'Payroll'
 ]
 
-const RolesCards = () => {
+export const RoleCardList = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [selectedCheckbox, setSelectedCheckbox] = useState<string[]>([])
   const [isIndeterminateCheckbox, setIsIndeterminateCheckbox] = useState<boolean>(false)
@@ -292,5 +292,3 @@ const RolesCards = () => {
     </Grid>
   )
 }
-
-export default RolesCards

@@ -14,7 +14,7 @@ interface TableHeaderProps {
   handleFilter: (val: string) => void
 }
 
-const TableHeader = (props: TableHeaderProps) => {
+export const UserTableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { handleFilter, toggle, value } = props
   const ability = useContext(AbilityContext)
@@ -47,5 +47,3 @@ const TableHeader = (props: TableHeaderProps) => {
     </Box>
   )
 }
-
-export default TableHeader

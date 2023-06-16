@@ -4,7 +4,6 @@ import { OrganizationUserRoleEnum, OrganizationUsersWhereInput } from 'src/gener
 export const useOrganizationUserVariables = () => {
   const { query } = useRouter()
   const where = {} as OrganizationUsersWhereInput
-  console.log(query?.role?.toString())
   if (query.role) where.orgRole = query?.role?.toString() as OrganizationUserRoleEnum
 
   return {

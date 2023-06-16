@@ -1,12 +1,9 @@
-// ** React Imports
-import { useState, useEffect, MouseEvent, useCallback } from 'react'
-
 // ** Next Imports
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import PageHeader from 'src/@core/components/page-header'
-import RolesCards from './components/role.cards'
-import RoleListTable from './components/role.list'
+import { RoleCardList } from './components/RoleCardList'
+import { RoleListTable } from './components/RoleTableList'
 
 export const RoleScene = () => {
   return (
@@ -21,7 +18,7 @@ export const RoleScene = () => {
         }
       />
       <Grid item xs={12} sx={{ mb: 5 }}>
-        <RolesCards />
+        <RoleCardList />
       </Grid>
       <PageHeader
         title={<Typography variant='h5'>Total users with their roles</Typography>}

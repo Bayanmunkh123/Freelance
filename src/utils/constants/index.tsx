@@ -134,8 +134,9 @@ export enum AuthModalType {
   Forget = 'FORGET',
   NewPassword = 'NEW_PASSWORD',
   ConfirmCode = 'CONFIRM_CODE',
-  ConfirmPassword = 'CONFIRM_PASSWORD',
-  SessionManage = 'SESSION_MANAGE'
+  ChangePassword = 'CHANGE_PASSWORD',
+  SessionManage = 'SESSION_MANAGE',
+  TokenVerify = 'TOKEN_VERIFY'
 }
 
 export const OrgRoles = [

@@ -26,13 +26,6 @@ const navigation = (): VerticalNavItemsType => {
       action: 'read',
       subject: 'Role',
       auth: true
-    },
-    {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline'
     }
   ]
 }

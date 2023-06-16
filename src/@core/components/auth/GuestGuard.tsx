@@ -1,8 +1,5 @@
 // ** React Imports
-import { ReactNode, ReactElement, useEffect } from 'react'
-
-// ** Next Import
-import { useRouter } from 'next/router'
+import { ReactNode, ReactElement } from 'react'
 
 // ** Hooks Import
 import { useAuth } from 'src/hooks/useAuth'
@@ -13,22 +10,10 @@ interface GuestGuardProps {
 }
 
 const GuestGuard = (props: GuestGuardProps) => {
-  console.log('GuestGuard START')
+  // console.log('GuestGuard START')
   const { children, fallback } = props
   const auth = useAuth()
 
-  // const router = useRouter()
-
-  // useEffect(() => {
-  //   if (!router.isReady) {
-  //     return
-  //   }
-
-  //   if (auth.user) {
-  //     router.replace('/')
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [router.route])
   if (auth.loading) {
     return fallback
   }
@@ -37,3 +22,16 @@ const GuestGuard = (props: GuestGuardProps) => {
 }
 
 export default GuestGuard
+
+// const router = useRouter()
+
+// useEffect(() => {
+//   if (!router.isReady) {
+//     return
+//   }
+
+//   if (auth.user) {
+//     router.replace('/')
+//   }
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }, [router.route])

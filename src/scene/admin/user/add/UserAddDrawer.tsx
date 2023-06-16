@@ -20,7 +20,6 @@ import { TextField } from 'formik-mui'
 
 import { Stack } from '@mui/material'
 import { OrgRoles } from 'src/utils/constants'
-import { useRouter } from 'next/router'
 
 interface SidebarAddUserType {
   open: boolean
@@ -42,13 +41,12 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.background.default
 }))
 
-const SidebarAddUser = (props: SidebarAddUserType) => {
-  const router = useRouter()
+export const UserAddDrawer = (props: SidebarAddUserType) => {
   const { open, toggle } = props
 
   const [onCreateUser] = useCreateUserMutation({
     onCompleted: data => {
-      if (data.createUser?.id) router.push('/')
+      if (data.createUser?.id) window.location.reload()
     }
   })
 
@@ -159,5 +157,3 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     </Drawer>
   )
 }
-
-export default SidebarAddUser

@@ -9,13 +9,13 @@ const Home = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Home'></CardHeader>
+          <CardHeader title='Service'></CardHeader>
           <CardContent>
-            {/* <Typography sx={{ mb: 2 }}></Typography> */}
+            {/* <Typography sx={{ mb: 2 }}>All the best for your new project.</Typography> */}
             <Typography>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, laborum! Voluptas accusamus atque
-              dicta, vero explicabo ratione deserunt, possimus voluptatem nostrum obcaecati maxime nam eius totam,
-              repellat voluptate maiores id?
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat vero veniam, eaque sit doloribus
+              voluptatem voluptatibus totam. Temporibus non aliquam officia neque blanditiis, fugit dolorum perferendis
+              repellat est, ipsam delectus.
             </Typography>
           </CardContent>
         </Card>

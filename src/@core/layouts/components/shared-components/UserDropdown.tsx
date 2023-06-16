@@ -25,6 +25,7 @@ import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
 import { AuthDialog } from 'src/scene/auth/AuthDialog'
 import { AuthModalType } from 'src/utils/constants'
+import { AuthModalProvider } from 'src/context/AuthModalContext'
 
 interface Props {
   hidden: boolean
@@ -199,7 +200,9 @@ const UserDropdown = (props: Props) => {
               >
                 Нэвтрэх
               </Button>
-              <AuthDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+              <AuthModalProvider>
+                <AuthDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
+              </AuthModalProvider>
             </>
           )}
         </>

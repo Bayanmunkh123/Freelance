@@ -48,7 +48,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
 
   const [onCreateUser] = useCreateUserMutation({
     onCompleted: data => {
-      if (data.createUser?.id) router.push('/')
+      if (data.createUser?.id) window.location.reload()
     }
   })
 

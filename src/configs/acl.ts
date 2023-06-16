@@ -66,6 +66,15 @@ const rolesData = {
         roles: ['MEMBER']
       }
     ]
+  },
+  NavLink: {
+    can: [
+      {
+        actions: ['read'],
+        roles: ['ADMIN', 'EDITOR', 'MEMBER']
+      }
+    ],
+    cannot: []
   }
 }
 

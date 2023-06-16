@@ -48,7 +48,7 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
   }
 
   settings.layout = 'horizontal'
-  settings.navHidden = false
+  settings.navHidden = true
 
   return (
     <Layout
@@ -96,12 +96,6 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
       }}
       {...(settings.layout === 'horizontal' && {
         horizontalLayoutProps: {
-          navMenu: {
-            navItems: LandingNavItems()
-
-            // Uncomment the below line when using server-side menu in horizontal layout and comment the above line
-            // navItems: horizontalMenuItems
-          },
           appBar: {
             content: () => (
               <HorizontalAppBarContent
@@ -113,8 +107,15 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
                 }}
               />
             )
+
+            // navItems: LandingNavItems()
+
+            // Uncomment the below line when using server-side menu in horizontal layout and comment the above line
+            // navItems: horizontalMenuItems
           }
         }
+
+        // }
       })}
     >
       {children}

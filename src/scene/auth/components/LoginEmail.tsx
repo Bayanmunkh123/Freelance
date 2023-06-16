@@ -1,72 +1,85 @@
+import React from 'react'
 import { useApolloClient } from '@apollo/client'
 import { Button, Box, Checkbox, Divider, FormControlLabel, Stack, Typography } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
 import { config } from 'src/configs'
 import { LoginEmailInput, useLoginEmailMutation } from 'src/generated'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 import { AuthModalType } from 'src/utils/constants'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { validationLoginEmailSchema } from 'src/validators/auth/auth.validator'
+import crypto from 'crypto-js'
 
 type LoginEmailProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
-  setSessionData: (data: any, loginInput: LoginEmailInput) => void
 }
 const LoginEmail = (props: LoginEmailProps) => {
+  const { setVisibleAuthDialog } = props
   const apolloClient = useApolloClient()
-  const router = useRouter()
 
-  const { setVisibleAuthDialog, setSessionData } = props
-  const [loginInput, setLoginInput] = useState({ email: '', password: '' })
+  const { setUserData, setSessionList } = useAuthModalContext()
+  const router = useRouter()
 
   const [onLoginEmail] = useLoginEmailMutation({
     fetchPolicy: 'no-cache',
-    onCompleted: async data => {
-      if (data.loginEmail?.deviceId) {
-        localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
-      }
-      destroyCookieToken(undefined)
-      if (data?.loginEmail?.accessToken) {
-        setCookieToken(data.loginEmail)
-        console.log('Амжилттай')
-
-        await apolloClient.cache.reset()
-        const returnUrl = router.query.returnUrl
-
-        setVisibleAuthDialog(null)
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
-        console.log('redirectURL', redirectURL)
-        router.push(redirectURL as string)
-      } else {
-        setSessionData(data.loginEmail?.devices, loginInput)
-        setVisibleAuthDialog(AuthModalType.SessionManage)
-      }
-    },
     onError: (error: unknown) => {
       alert(error)
     }
   })
+  const handleSubmit = async (values: LoginEmailInput & { remember: boolean }) => {
+    if (values?.remember) {
+      localStorage.setItem(
+        'credentials-email',
+        crypto.AES.encrypt(
+          JSON.stringify({ ...values, remember: values?.remember }),
+          'onehrmn_credentials_secret'
+        ).toString()
+      )
+    } else localStorage.removeItem('credentials-email')
+
+    setUserData(values)
+
+    const { data } = await onLoginEmail({
+      variables: {
+        input: {
+          email: values?.email,
+          password: values.password,
+          deviceId: localStorage.getItem(config.DEVICE_ID)
+        }
+      }
+    })
+    if (data?.loginEmail?.deviceId) {
+      localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
+    }
+
+    destroyCookieToken(undefined)
+    if (data?.loginEmail?.accessToken) {
+      setCookieToken(data?.loginEmail)
+      console.log('Амжилттай')
+
+      await apolloClient.cache.reset()
+      const returnUrl = router.query.returnUrl
+      setVisibleAuthDialog(null)
+      const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/jobs'
+      router.replace(redirectURL as string).then(() => window.location.reload)
+    } else if (data?.loginEmail && !data?.loginEmail?.isEmailConfirmed) {
+      setVisibleAuthDialog(AuthModalType.TokenVerify)
+
+      // setVerifyModal(true)
+    } else {
+      setSessionList(data?.loginEmail?.devices)
+      setVisibleAuthDialog(AuthModalType.SessionManage)
+    }
+  }
 
   return (
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={{ email: '', password: '', remember: false }}
       validationSchema={validationLoginEmailSchema}
-      onSubmit={(values: LoginEmailInput, formikHelpers) => {
-        setLoginInput({
-          email: values.email,
-          password: values.password
-        })
-        onLoginEmail({
-          variables: {
-            input: {
-              email: values?.email,
-              password: values.password,
-              deviceId: localStorage.getItem(config.DEVICE_ID)
-            }
-          }
-        })
+      onSubmit={(values: LoginEmailInput & { remember: boolean }, formikHelpers) => {
+        handleSubmit(values)
         formikHelpers.setSubmitting(false)
       }}
     >
@@ -87,6 +100,7 @@ const LoginEmail = (props: LoginEmailProps) => {
           >
             <FormControlLabel
               label='Remember Me'
+              name='remember'
               control={<Checkbox />}
               sx={{ '& .MuiFormControlLabel-label': { color: 'text.primary' } }}
             />

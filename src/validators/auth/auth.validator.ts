@@ -40,7 +40,7 @@ export const validationRegisterPhoneSchema = yup.object().shape({
 })
 
 export const validationConfirmCodeSchema = yup.object().shape({
-  confirmCode: yup.string().min(6).required().label('Баталгаажуулах код')
+  code: yup.string().min(6).required().label('Баталгаажуулах код')
 })
 
 export const validationConfirmPasswordSchema = yup.object().shape({

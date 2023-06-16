@@ -1,46 +1,58 @@
 // ** React Imports
 import React from 'react'
-import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
+import { Box, Card, CardContent, Stack, Typography, Button } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { LoginEmailInput, LoginPhoneInput, useAuthEmailResetPasswordMutation } from 'src/generated'
+import {
+  AuthEmailResetPasswordInput,
+  LoginEmailInput,
+  LoginPhoneInput,
+  useAuthEmailResetPasswordMutation
+} from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
 import { validationConfirmPasswordSchema } from 'src/validators/auth/auth.validator'
+import FallbackSpinner from 'src/@core/components/spinner'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 
-export type AuthConfirmPasswordProps = {
+export type AuthChangePasswordProps = {
   visibleAuthDialog: AuthModalType | undefined
   setVisibleAuthDialog: (type: AuthModalType) => void
 }
 
-export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
-  const { visibleAuthDialog, setVisibleAuthDialog } = props
-  const [onAuthEmailResetPassword] = useAuthEmailResetPasswordMutation({
-    onCompleted: data => {
-      console.log(data)
+export const AuthChangePassword = (props: AuthChangePasswordProps) => {
+  const { setVisibleAuthDialog } = props
+  const { userData } = useAuthModalContext()
+
+  const [onAuthEmailResetPassword, { loading }] = useAuthEmailResetPasswordMutation({
+    onError: error => {
+      console.log(error)
     }
   })
-  const handleSubmit = (values: LoginEmailInput | LoginPhoneInput) => {
-    onAuthEmailResetPassword({
-      variables: {
-        input: {
-          email: values.email,
-          password: values.password
+  const handleSubmit = async values => {
+    if (userData?.email) {
+      const { data } = await onAuthEmailResetPassword({
+        variables: {
+          input: {
+            email: userData?.email,
+            password: values.password
+          }
         }
-      }
-    })
+      })
+
+      if (data?.authEmailResetPassword?.accessToken) setVisibleAuthDialog(AuthModalType.Login)
+    }
   }
 
   return (
     <Card sx={{ zIndex: 1, width: '460px' }}>
       <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
-        <Typography variant='h6' sx={{ ml: 2, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
+        <Typography variant='h6' sx={{ ml: 2, mb: 5, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
           Нууц үг солих
         </Typography>
         <Formik
-          initialValues={{ email: '', password: '' }} //password
+          initialValues={{ password: '', confirmPassword: '' }} //password
           validationSchema={validationConfirmPasswordSchema}
-          onSubmit={(values: LoginEmailInput | LoginPhoneInput, formikHelpers) => {
-            console.log('onSubmit === values', values)
+          onSubmit={(values: any, formikHelpers) => {
             handleSubmit(values)
             formikHelpers.setSubmitting(false)
           }}
@@ -65,10 +77,8 @@ export const AuthConfirmPassword = (props: AuthConfirmPasswordProps) => {
                   color='primary'
                   fullWidth
                   disabled={formikProps.isSubmitting}
-                  onClick={() => setVisibleAuthDialog(AuthModalType.ConfirmPassword)}
                 >
-                  Илгээх
-                  {/*  solih? */}
+                  солих
                 </Button>
               </Box>
             </Form>

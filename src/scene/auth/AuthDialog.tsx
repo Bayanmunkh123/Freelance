@@ -1,16 +1,18 @@
 // ** React Imports
 import React, { forwardRef, Fragment, ReactElement, Ref, useState, useEffect } from 'react'
 import Slide, { SlideProps } from '@mui/material/Slide'
-import { Dialog, DialogContent } from '@mui/material'
+import { CircularProgress, Dialog, DialogContent } from '@mui/material'
 import { AuthModalType } from 'src/utils/constants'
-import { AuthLogin } from './authLogin'
-import { AuthRegister } from './authRegister'
-import { AuthForget } from './authForgetPassword'
-import { AuthConfirmCode } from './authConfirmCode'
-import { AuthConfirmPassword } from './authConfirmPassword'
-import { AuthSessionManage } from './authSessionManage'
+import { AuthTokenVerify } from './modals/AuthTokenVerify'
+import { AuthSessionManage } from './modals/AuthSessionManage'
+import { AuthChangePassword } from './modals/AuthChangePassword'
+import { AuthConfirmCode } from './modals/AuthConfirmCode'
+import { AuthForget } from './modals/AuthForgetPassword'
+import { AuthRegister } from './modals/AuthRegister'
+import { AuthLogin } from './modals/AuthLogin'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 
-const Transition = forwardRef(function Transition(
+export const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
   ref: Ref<unknown>
 ) {
@@ -24,51 +26,44 @@ export type AuthDialogProps = {
 
 export const AuthDialog = (props: AuthDialogProps) => {
   const { open, setOpen } = props
-  const [sessionList, setSessionList] = useState()
-  const [loginInputs, setLoginInputs] = useState()
   const handleClose = () => setOpen(false)
   const [visibleAuthDialog, setVisibleAuthDialog] = useState<AuthModalType | null>(AuthModalType.Login)
   useEffect(() => {
     if (!open) setVisibleAuthDialog(AuthModalType.Login)
   }, [open])
 
-  const setSessionData = (data, loginInput) => {
-    console.log('data', data)
-    console.log('loginINput', loginInput)
-    setSessionList(data)
-    setLoginInputs(loginInput)
-  }
+  const { loading } = useAuthModalContext()
 
   return (
     <Fragment>
       <Dialog open={open} keepMounted onClose={handleClose} TransitionComponent={Transition}>
         <DialogContent sx={{ padding: 0 }}>
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && (
-            <AuthLogin
-              visibleAuthDialog={visibleAuthDialog}
-              setVisibleAuthDialog={setVisibleAuthDialog}
-              setSessionData={setSessionData}
-            />
-          )}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Register && (
-            <AuthRegister visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
-          )}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.Forget && (
-            <AuthForget visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
-          )}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmCode && (
-            <AuthConfirmCode visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
-          )}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmPassword && (
-            <AuthConfirmPassword visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
-          )}
-          {visibleAuthDialog && visibleAuthDialog === AuthModalType.SessionManage && (
-            <AuthSessionManage
-              visibleAuthDialog={visibleAuthDialog}
-              setVisibleAuthDialog={setVisibleAuthDialog}
-              sessionList={sessionList}
-              loginInputs={loginInputs}
-            />
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <>
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && (
+                <AuthLogin visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.Register && (
+                <AuthRegister visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.Forget && (
+                <AuthForget visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.ConfirmCode && (
+                <AuthConfirmCode visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.ChangePassword && (
+                <AuthChangePassword visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.SessionManage && (
+                <AuthSessionManage visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+              {visibleAuthDialog && visibleAuthDialog === AuthModalType.TokenVerify && (
+                <AuthTokenVerify visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
+              )}
+            </>
           )}
         </DialogContent>
       </Dialog>

@@ -174,7 +174,7 @@ const HorizontalNavGroup = (props: Props) => {
   }
 
   return (
-    <x navGroup={item}>
+    <CanViewNavGroup navGroup={item}>
       {/* @ts-ignore */}
       <MainWrapper {...(WrapperCondition ? { onClickAway: handleGroupClose } : { onMouseLeave: handleGroupClose })}>
         <ChildWrapper>
@@ -268,7 +268,7 @@ const HorizontalNavGroup = (props: Props) => {
           </List>
         </ChildWrapper>
       </MainWrapper>
-    </x>
+    </CanViewNavGroup>
   )
 }
 

@@ -19,7 +19,7 @@ interface TableHeaderProps {
   handleRoleChange: (e: SelectChangeEvent) => void
 }
 
-const TableHeader = (props: TableHeaderProps) => {
+export const RoleTableHeader = (props: TableHeaderProps) => {
   // ** Props
   const { handleRoleChange, handleFilter, roleList } = props
 
@@ -60,5 +60,3 @@ const TableHeader = (props: TableHeaderProps) => {
     </Box>
   )
 }
-
-export default TableHeader

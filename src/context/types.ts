@@ -1,4 +1,4 @@
-import { AuthUserType, MeAuthQuery } from 'src/generated'
+import { AuthUserType, LoginEmailInput, LoginPhoneInput, MeAuthQuery, UserDevice } from 'src/generated'
 
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
@@ -17,6 +17,7 @@ export interface RoleType {
 
 export type AuthValuesType = {
   loading: boolean
+
   // setLoading: (value: boolean) => void
 
   user?: UserContextType
@@ -25,6 +26,14 @@ export type AuthValuesType = {
   permissions?: string[]
 
   logout: () => void
+}
+export type AuthModalValuesType = {
+  userData: LoginEmailInput | null
+  setUserData: (value: LoginEmailInput | LoginPhoneInput) => void
+  sessionList: UserDevice[] | null
+  setSessionList: (value: any) => void
+  reset: boolean
+  setReset: (value: boolean) => void
 }
 
 export type UserContextType =

@@ -41,12 +41,11 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import { ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 
 import { UserContextType } from 'src/context/types'
 
 // import { initializeApollo } from 'src/lib/apollo/client'
-import { config } from 'src/configs'
 import { useApollo } from 'src/lib/apollo/client'
 
 // ** Extend App Props with Emotion
@@ -59,6 +58,7 @@ type ExtendedAppProps = AppProps & {
   // apolloClient: ApolloClient<NormalizedCacheObject>
 }
 type GuardProps = {
+  user: UserContextType | null
   authGuard: boolean
   guestGuard: boolean
   children: ReactNode
@@ -76,7 +76,9 @@ if (themeConfig.routingLoader) {
     NProgress.done()
   })
 }
-const Guard = ({ children, guestGuard, authGuard }: GuardProps) => {
+const Guard = ({ user, children, guestGuard, authGuard }: GuardProps) => {
+  // console.log('AUTHGURAD', authGuard)
+  // console.log('GUESTGUARD', guestGuard)
   if (guestGuard) {
     return <GuestGuard fallback={<Spinner />}>{children}</GuestGuard>
   } else if (!guestGuard && !authGuard) {
@@ -96,20 +98,19 @@ const App = (props: ExtendedAppProps) => {
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
 
-  // const getLayout =
-  //   Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
+  let getLayout =
+    Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
 
   const setConfig = Component.setConfig ?? undefined
 
   const authGuard = Component.authGuard ?? true
   const guestGuard = Component.guestGuard ?? true
 
-  // if (user && router.pathname.startsWith('/admin')) {
-  //   console.log('Component.getLayout ', Component.getLayout)
-  //   getLayout = page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>
-  // } else {
-  //   getLayout = page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
-  // }
+  if (user && router.pathname.startsWith('/admin')) {
+    getLayout = page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>
+  } else {
+    getLayout = page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
+  }
   const aclAbilities = Component.acl ?? defaultACLObj
 
   const apolloClient = useApollo(pageProps.initialState)
@@ -133,10 +134,10 @@ const App = (props: ExtendedAppProps) => {
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                    <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                    <Guard user={user} authGuard={authGuard} guestGuard={guestGuard}>
                       <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
-                        {/* {getLayout(<Component {...pageProps} />)} */}
-                        {user && router.pathname.startsWith('/admin') ? (
+                        {getLayout(<Component {...pageProps} />)}
+                        {/* {user && router.pathname.startsWith('/admin') ? (
                           <UserLayout contentHeightFixed={contentHeightFixed}>
                             {<Component {...pageProps} />}
                           </UserLayout>
@@ -144,7 +145,7 @@ const App = (props: ExtendedAppProps) => {
                           <GuestLayout contentHeightFixed={contentHeightFixed}>
                             {<Component {...pageProps} />}
                           </GuestLayout>
-                        )}
+                        )} */}
                       </AclGuard>
                     </Guard>
                     <ReactHotToast>

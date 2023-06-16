@@ -2,23 +2,23 @@ import React from 'react'
 import { Card, CardContent, Typography, FormControl, MenuItem, Button } from '@mui/material'
 
 import { AuthModalType } from 'src/utils/constants'
-import { LoginEmailInput, useAccountEliminateMutation } from 'src/generated'
+import { useAccountEliminateMutation } from 'src/generated'
 import { config } from 'src/configs'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { useApolloClient } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 
 export type AuthSessionManageProps = {
   visibleAuthDialog: AuthModalType | undefined
   setVisibleAuthDialog: (type: AuthModalType | null) => void
-  sessionList: any
-  loginInputs: LoginEmailInput
 }
 
 export const AuthSessionManage = (props: AuthSessionManageProps) => {
-  const { setVisibleAuthDialog, sessionList, loginInputs } = props
-
-  console.log(sessionList)
+  const { setVisibleAuthDialog } = props
+  const { sessionList, userData } = useAuthModalContext()
+  console.log('AuthSessionManage', sessionList)
+  console.log('userData', userData)
   const apolloClient = useApolloClient()
   const Router = useRouter()
 
@@ -28,7 +28,7 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
       if (data.accountEliminate?.deviceId) {
         localStorage.setItem(config.DEVICE_ID, data.accountEliminate?.deviceId)
       }
-      
+
       if (data.accountEliminate?.accessToken) {
         destroyCookieToken(undefined)
         if (data?.accountEliminate?.accessToken) {
@@ -61,15 +61,16 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
               {name.deviceOs} - {name.deviceType} - {name.deviceName}
               <Button
                 onClick={() => {
-                  onAccountEliminate({
-                    variables: {
-                      input: {
-                        id: name.id,
-                        email: loginInputs.email,
-                        password: loginInputs.password
+                  userData &&
+                    onAccountEliminate({
+                      variables: {
+                        input: {
+                          id: name.id,
+                          email: userData?.email,
+                          password: userData?.password
+                        }
                       }
-                    }
-                  })
+                    })
                 }}
               >
                 X

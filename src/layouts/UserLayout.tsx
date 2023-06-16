@@ -53,17 +53,10 @@ const UserLayout = ({ children, contentHeightFixed }: Props) => {
    */
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
-  if (user?.role && [UserRoleEnum.ADMIN, UserRoleEnum.EDITOR, UserRoleEnum.MEMBER].includes(user?.role)) {
-    settings.layout = 'vertical'
-
-    // saveSettings({ ...settings, navHidden: false })
-  } else {
-    settings.layout = 'horizontal'
-  }
-
   if (hidden && settings.layout === 'horizontal') {
     settings.layout = 'vertical'
   }
+  settings.navHidden = false
 
   return (
     <Layout

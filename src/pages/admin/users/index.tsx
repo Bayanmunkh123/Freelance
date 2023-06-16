@@ -1,9 +1,9 @@
 import React from 'react'
 import { NextPage } from 'next'
-import { UserListScene } from 'src/scene/admin/user/list/user.list.scene'
+import { UserScene } from 'src/scene/admin/user/list/UserScene'
 import { ActionsEnum, SubjectsEnum } from 'src/configs/acl'
 
-const UserList: NextPage = () => <UserListScene />
+const UserList: NextPage = () => <UserScene />
 
 UserList.acl = {
   action: ActionsEnum.Read,
