@@ -200,9 +200,7 @@ const UserDropdown = (props: Props) => {
               >
                 Нэвтрэх
               </Button>
-              <AuthModalProvider>
-                <AuthDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
-              </AuthModalProvider>
+              <AuthDialog open={openLoginDialog} setOpen={setOpenLoginDialog} />
             </>
           )}
         </>

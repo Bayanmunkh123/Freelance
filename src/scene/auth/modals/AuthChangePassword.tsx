@@ -1,18 +1,11 @@
 // ** React Imports
-import React from 'react'
-import { Box, Card, CardContent, Stack, Typography, Button } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
+import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
+import { Field, Form, Formik } from 'formik'
 import { TextField } from 'formik-mui'
-import {
-  AuthEmailResetPasswordInput,
-  LoginEmailInput,
-  LoginPhoneInput,
-  useAuthEmailResetPasswordMutation
-} from 'src/generated'
+import { useAuthEmailResetPasswordMutation } from 'src/generated'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 import { AuthModalType } from 'src/utils/constants'
 import { validationConfirmPasswordSchema } from 'src/validators/auth/auth.validator'
-import FallbackSpinner from 'src/@core/components/spinner'
-import { useAuthModalContext } from 'src/hooks/useAuth'
 
 export type AuthChangePasswordProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -23,7 +16,7 @@ export const AuthChangePassword = (props: AuthChangePasswordProps) => {
   const { setVisibleAuthDialog } = props
   const { userData } = useAuthModalContext()
 
-  const [onAuthEmailResetPassword, { loading }] = useAuthEmailResetPasswordMutation({
+  const [onAuthEmailResetPassword] = useAuthEmailResetPasswordMutation({
     onError: error => {
       console.log(error)
     }

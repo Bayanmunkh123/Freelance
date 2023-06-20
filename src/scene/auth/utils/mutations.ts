@@ -31,7 +31,15 @@ export const LOGIN_PHONE = gql`
     loginPhone(input: $input) {
       accessToken
       refreshToken
+      isEmailConfirmed
+      isPhoneConfirmed
       deviceId
+      devices {
+        id
+        deviceName
+        deviceType
+        deviceOs
+      }
     }
   }
 `
@@ -72,6 +80,7 @@ export const AUTH_EMAIL_VERIFY_TOKEN = gql`
     authEmailVerifyToken(input: $input) {
       accessToken
       refreshToken
+      resetToken
       deviceId
       devices {
         id

@@ -17,8 +17,6 @@ export type AuthSessionManageProps = {
 export const AuthSessionManage = (props: AuthSessionManageProps) => {
   const { setVisibleAuthDialog } = props
   const { sessionList, userData } = useAuthModalContext()
-  console.log('AuthSessionManage', sessionList)
-  console.log('userData', userData)
   const apolloClient = useApolloClient()
   const Router = useRouter()
 

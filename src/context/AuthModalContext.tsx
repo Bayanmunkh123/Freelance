@@ -1,26 +1,46 @@
 import { createContext, ReactNode, useReducer } from 'react'
-import { AuthModalValuesType } from './types'
-import { LoginEmailInput, LoginPhoneInput, UserDevice } from 'src/generated'
+import { AuthModalValuesType, UserData } from './types'
+import { LoginEmailInput, LoginPhoneInput, RegisterEmailInput, RegisterPhoneInput, UserDevice } from 'src/generated'
 
-const actions = {
-  LOGIN: 'LOGIN',
-  SET_SESSION_LIST: 'SET_SESSION_LIST',
-  SET_RESET: 'SET_RESET'
+enum ActionTypeEnum {
+  LOGIN = 'LOGIN',
+  SET_SESSION_LIST = 'SET_SESSION_LIST',
+  SET_RESET = 'SET_RESET'
 }
 
-const modalReducer = (state, action) => {
+type ActionType =
+  | {
+      type: ActionTypeEnum.LOGIN
+      payload: UserData | null
+    }
+  | {
+      type: ActionTypeEnum.SET_SESSION_LIST
+      payload: UserDevice[] | null
+    }
+  | {
+      type: ActionTypeEnum.SET_RESET
+      payload: boolean | null
+    }
+
+type StateType = {
+  userData: UserData | null
+  sessionList: UserDevice[] | null
+  reset: boolean | null
+}
+
+const modalReducer = (state: StateType, action: ActionType) => {
   switch (action.type) {
-    case actions.LOGIN:
+    case ActionTypeEnum.LOGIN:
       return {
         ...state,
         userData: action.payload
       }
-    case actions.SET_SESSION_LIST:
+    case ActionTypeEnum.SET_SESSION_LIST:
       return {
         ...state,
         sessionList: action.payload
       }
-    case actions.SET_RESET:
+    case ActionTypeEnum.SET_RESET:
       return {
         ...state,
         reset: action.payload
@@ -45,8 +65,8 @@ const AuthModalContext = createContext(defaultProvider)
 type Props = {
   children: ReactNode
 }
-const initialState = {
-  userData: {},
+const initialState: StateType = {
+  userData: null,
   sessionList: [],
   reset: false
 }
@@ -56,16 +76,16 @@ const AuthModalProvider = ({ children }: Props) => {
 
   const values = {
     userData: state.userData,
-    setUserData: (value: LoginEmailInput | LoginPhoneInput) => {
-      dispatch({ type: actions.LOGIN, payload: value })
+    setUserData: (value: StateType['userData']) => {
+      dispatch({ type: ActionTypeEnum.LOGIN, payload: value })
     },
     sessionList: state?.sessionList,
-    setSessionList: (value: UserDevice) => {
-      dispatch({ type: actions.SET_SESSION_LIST, payload: value })
+    setSessionList: (value: StateType['sessionList']) => {
+      dispatch({ type: ActionTypeEnum.SET_SESSION_LIST, payload: value })
     },
     reset: state?.reset,
-    setReset: (value: boolean) => {
-      dispatch({ type: actions.SET_RESET, payload: value })
+    setReset: (value: StateType['reset']) => {
+      dispatch({ type: ActionTypeEnum.SET_RESET, payload: value })
     }
   }
 

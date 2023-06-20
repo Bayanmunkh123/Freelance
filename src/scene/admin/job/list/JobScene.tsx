@@ -1,67 +1,30 @@
-import { useState, MouseEvent, useCallback, useContext } from 'react'
-
-import Link from 'next/link'
-
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import Menu from '@mui/material/Menu'
-import Grid from '@mui/material/Grid'
-import Divider from '@mui/material/Divider'
-import { styled } from '@mui/material/styles'
-import MenuItem from '@mui/material/MenuItem'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import CardHeader from '@mui/material/CardHeader'
+import Divider from '@mui/material/Divider'
+import FormControl from '@mui/material/FormControl'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-
+import Typography from '@mui/material/Typography'
+import { styled } from '@mui/material/styles'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import Link from 'next/link'
+import { MouseEvent, useCallback, useContext, useState } from 'react'
 import Icon from 'src/@core/components/icon'
-
 import CustomAvatar from 'src/@core/components/mui/avatar'
-
 import { getInitials } from 'src/@core/utils/get-initials'
-
-import { ThemeColor } from 'src/@core/layouts/types'
-
 import { useOrganizationUsersQuery, useRolesQuery } from 'src/generated'
-import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
-
-import { AbilityContext } from 'src/layouts/components/acl/Can'
-import TableHeader from './components/TableHeader'
-import AddUserDrawer from './components/AddUserDrawer'
 import { useOnSearch } from 'src/hooks/useOnSearch'
+import { AbilityContext } from 'src/layouts/components/acl/Can'
 import { OrgRoles } from 'src/utils/constants'
-
-interface UserRoleType {
-  [key: string]: { icon: string; color: string }
-}
-
-interface UserStatusType {
-  [key: string]: ThemeColor
-}
-
-const userRoleObj: UserRoleType = {
-  admin: { icon: 'mdi:laptop', color: 'error.main' },
-  owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
-  editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-  finance: { icon: 'mdi:chart-donut', color: 'success.main' },
-  sales: { icon: 'mdi:account-outline', color: 'primary.main' },
-  support: { icon: 'mdi:account-outline', color: 'primary.main' },
-  viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
-}
-
-// interface CellType {
-//   row: UsersType
-// }
-
-const userStatusObj: UserStatusType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
-}
+import { useOrganizationUserVariables } from '../../utils/useOrganizationUserVariables'
+import AddUserDrawer from './components/AddUserDrawer'
+import TableHeader from './components/TableHeader'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,

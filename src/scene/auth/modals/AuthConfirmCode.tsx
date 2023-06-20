@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-mui'
-import { useAuthEmailVerifyTokenMutation, useAuthEmailVerifyTokenSenderMutation } from 'src/generated'
+import { TokenVerifyEnum, useAuthEmailVerifyTokenMutation, useAuthEmailVerifyTokenSenderMutation } from 'src/generated'
 import { AuthModalType } from 'src/utils/constants'
 import { validationConfirmCodeSchema } from 'src/validators/auth/auth.validator'
 import { useAuthModalContext } from 'src/hooks/useAuth'
@@ -13,6 +13,7 @@ import { useApolloClient } from '@apollo/client'
 import { useRouter } from 'next/router'
 import Countdown, { CountdownRenderProps } from 'react-countdown'
 import { LoadingButton } from '@mui/lab'
+import { handleAuthDialog } from '../utils/handleAuthDialog'
 
 export type AuthConfirmCodeProps = {
   visibleAuthDialog: AuthModalType | null
@@ -57,36 +58,31 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
 
   // SUBMIT
   const handleSubmit = async (value: any) => {
-    console.log(userData?.email)
     if (userData?.email) {
       const { data } = await onEmailVerifyToken({
         variables: {
           input: {
+            type: TokenVerifyEnum.RESET,
             email: userData?.email,
-            code: value.code.toString(),
-            reset: reset ? 'reset' : null
+            code: value.code.toString()
           }
         }
       })
-      if (data?.authEmailVerifyToken?.deviceId) {
-        localStorage.setItem(config.DEVICE_ID, data.authEmailVerifyToken?.deviceId)
-      }
-      console.log(data)
-      destroyCookieToken(undefined)
-      if (data?.authEmailVerifyToken?.accessToken) {
-        setCookieToken(data.authEmailVerifyToken)
-        console.log('Амжилттай')
-
-        await apolloClient.cache.reset()
-        const returnUrl = router.query.returnUrl
-        setVisibleAuthDialog(null)
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/jobs'
-        router.replace(redirectURL as string)
-      } else if (data?.authEmailVerifyToken?.devices) {
-        setSessionList(data?.authEmailVerifyToken?.devices)
-        setVisibleAuthDialog(AuthModalType.SessionManage)
-      } else if (reset) {
-        setVisibleAuthDialog(AuthModalType.ChangePassword)
+      if (data?.authEmailVerifyToken) {
+        if (data?.authEmailVerifyToken?.deviceId) {
+          localStorage.setItem(config.DEVICE_ID, data.authEmailVerifyToken?.deviceId)
+        }
+        console.log(data.authEmailVerifyToken.resetToken)
+        destroyCookieToken(undefined)
+        if (data?.authEmailVerifyToken?.accessToken) {
+          setCookieToken(data.authEmailVerifyToken)
+          handleAuthDialog({ apolloClient, router })
+        } else if (data?.authEmailVerifyToken?.devices) {
+          setSessionList(data?.authEmailVerifyToken?.devices)
+          setVisibleAuthDialog(AuthModalType.SessionManage)
+        } else if (reset) {
+          setVisibleAuthDialog(AuthModalType.ChangePassword)
+        }
       }
     }
   }

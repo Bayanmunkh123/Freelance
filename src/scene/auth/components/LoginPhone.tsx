@@ -9,6 +9,10 @@ import { LoginPhoneInput, useLoginPhoneMutation } from 'src/generated'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { validationLoginPhoneSchema } from 'src/validators/auth/auth.validator'
 import { AuthModalType } from 'src/utils/constants'
+import crypto from 'crypto-js'
+import { useAuthModalContext } from 'src/hooks/useAuth'
+import { encrypt } from 'src/utils/generateData'
+import { handleAuthDialog } from '../utils/handleAuthDialog'
 
 type LoginPhoneProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
@@ -16,57 +20,72 @@ type LoginPhoneProps = {
 const LoginPhone = (props: LoginPhoneProps) => {
   const { setVisibleAuthDialog } = props
 
-  const Router = useRouter()
+  const router = useRouter()
   const apolloClient = useApolloClient()
+
+  const { reset, setUserData, setSessionList } = useAuthModalContext()
 
   const [onLoginPhone] = useLoginPhoneMutation({
     fetchPolicy: 'no-cache',
-    onCompleted: async data => {
-      if (data.loginPhone?.deviceId) {
-        localStorage.setItem(config.DEVICE_ID, data.loginPhone?.deviceId)
-      }
-      destroyCookieToken(undefined)
-      if (data?.loginPhone?.accessToken) {
-        setCookieToken(data.loginPhone)
-        if (data?.loginPhone?.accessToken) {
-          alert('Амжилттай')
-          await apolloClient.cache.reset()
-          window.location.reload()
-
-          setVisibleAuthDialog(null)
-        }
-        Router.push('/')
-      } else {
-        alert('AMjiltgui')
-      }
-    },
     onError: (error: unknown) => {
       alert(error)
     }
   })
+  const handleSubmit = async (values: LoginPhoneInput & { remember: boolean }) => {
+    if (values?.remember) {
+      localStorage.setItem(
+        'credentials-phone',
+        crypto.AES.encrypt(
+          JSON.stringify({ ...values, remember: values?.remember }),
+          'onehrmn_credentials_secret'
+        ).toString()
+      )
+    } else localStorage.removeItem('credentials-phone')
+
+    setUserData(values as LoginPhoneInput)
+
+    const { data } = await onLoginPhone({
+      variables: {
+        input: {
+          phone: values.phone.toString(),
+          countryCode: '976',
+          password: encrypt(values.password),
+          deviceId: localStorage.getItem(config.DEVICE_ID)
+        }
+      }
+    })
+    if (data?.loginPhone?.deviceId) {
+      localStorage.setItem(config.DEVICE_ID, data.loginPhone.deviceId)
+    }
+    if (data?.loginPhone) {
+      destroyCookieToken(undefined)
+      if (data.loginPhone.accessToken) {
+        setCookieToken(data.loginPhone)
+        handleAuthDialog({ apolloClient, router })
+      } else if (data.loginPhone.devices) {
+        setSessionList(data.loginPhone.devices)
+        setVisibleAuthDialog(AuthModalType.SessionManage)
+      } else if (data.loginPhone && !data.loginPhone?.isPhoneConfirmed) {
+        setVisibleAuthDialog(AuthModalType.TokenVerify)
+      } else if (reset) {
+        setVisibleAuthDialog(AuthModalType.ChangePassword)
+      }
+    }
+  }
 
   return (
     <Formik
-      initialValues={{ phone: '', countryCode: '', password: '' }}
+      initialValues={{ phone: '', countryCode: '', password: '', remember: false }}
       validationSchema={validationLoginPhoneSchema}
-      onSubmit={(values: LoginPhoneInput, formikHelpers) => {
-        const deviceId = localStorage.getItem('deviceId')
-        onLoginPhone({
-          variables: {
-            input: {
-              phone: values?.phone,
-              password: values.password,
-              deviceId: deviceId
-            }
-          }
-        })
+      onSubmit={(values: LoginPhoneInput & { remember: boolean }, formikHelpers) => {
+        handleSubmit(values)
         formikHelpers.setSubmitting(false)
       }}
     >
       {() => (
         <Form noValidate autoComplete='off'>
           <Stack spacing={6}>
-            <Field component={TextField} name='phoneNumber' type='number' label='Утасны дугаар' size='small' />
+            <Field component={TextField} name='phone' type='number' label='Утасны дугаар' size='small' />
             <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
           </Stack>
 

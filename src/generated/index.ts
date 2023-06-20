@@ -43,7 +43,7 @@ export type AuthEmailResetPasswordInput = {
 export type AuthEmailVerifyTokenInput = {
   code: Scalars['String']
   email: Scalars['String']
-  reset?: InputMaybe<Scalars['String']>
+  type: TokenVerifyEnum
 }
 
 export type AuthEmailVerifyTokenSenderInput = {
@@ -60,7 +60,7 @@ export type AuthPhoneVerifyTokenInput = {
   code: Scalars['String']
   countryCode: Scalars['String']
   phone: Scalars['String']
-  reset?: InputMaybe<Scalars['String']>
+  type: TokenVerifyEnum
 }
 
 export type AuthPhoneVerifyTokenSenderInput = {
@@ -92,6 +92,7 @@ export type AuthVerifyTokenType = {
   isEmailConfirmed?: Maybe<Scalars['Boolean']>
   isPhoneConfirmed?: Maybe<Scalars['Boolean']>
   refreshToken?: Maybe<Scalars['String']>
+  resetToken?: Maybe<Scalars['String']>
 }
 
 export type ExternalAuthAppleInput = {
@@ -393,6 +394,10 @@ export type QueryRolesArgs = {
   input?: InputMaybe<RoleWhereInput>
 }
 
+export type QueryUserArgs = {
+  input?: InputMaybe<UsersWhereInput>
+}
+
 export type QueryUsersArgs = {
   input?: InputMaybe<UsersWhereInput>
 }
@@ -421,6 +426,11 @@ export type RolesType = {
 export enum SortOrder {
   ASC = 'asc',
   DESC = 'desc'
+}
+
+export enum TokenVerifyEnum {
+  AUTH = 'AUTH',
+  RESET = 'RESET'
 }
 
 export type User = {
@@ -729,7 +739,16 @@ export type LoginPhoneMutation = {
     __typename?: 'AuthVerifyTokenType'
     accessToken?: string | null
     refreshToken?: string | null
+    isEmailConfirmed?: boolean | null
+    isPhoneConfirmed?: boolean | null
     deviceId?: string | null
+    devices?: Array<{
+      __typename?: 'UserDevice'
+      id: string
+      deviceName: string
+      deviceType: string
+      deviceOs: string
+    } | null> | null
   } | null
 }
 
@@ -782,6 +801,7 @@ export type AuthEmailVerifyTokenMutation = {
     __typename?: 'AuthVerifyTokenType'
     accessToken?: string | null
     refreshToken?: string | null
+    resetToken?: string | null
     deviceId?: string | null
     devices?: Array<{
       __typename?: 'UserDevice'
@@ -1288,7 +1308,15 @@ export const LoginPhoneDocument = gql`
     loginPhone(input: $input) {
       accessToken
       refreshToken
+      isEmailConfirmed
+      isPhoneConfirmed
       deviceId
+      devices {
+        id
+        deviceName
+        deviceType
+        deviceOs
+      }
     }
   }
 `
@@ -1496,6 +1524,7 @@ export const AuthEmailVerifyTokenDocument = gql`
     authEmailVerifyToken(input: $input) {
       accessToken
       refreshToken
+      resetToken
       deviceId
       devices {
         id

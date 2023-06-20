@@ -60,6 +60,18 @@ const authLink = setContext(async (_, { headers }) => {
     }
   }
 
+  // Add Reset_token header
+  const resetToken = process.browser
+    ? cookie.parse(document?.cookie || '')[config.RESET_TOKEN_KEY]
+    : cookie.parse(headers?.cookie || '')[config.RESET_TOKEN_KEY]
+
+  if (resetToken) {
+    newHeaders = {
+      ...newHeaders,
+      [config.RESET_TOKEN_KEY]: resetToken
+    }
+  }
+
   return {
     headers: newHeaders
   }

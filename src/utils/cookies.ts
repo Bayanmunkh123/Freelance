@@ -1,5 +1,5 @@
-import { config } from 'src/utils/constants'
 import { setCookie, destroyCookie } from 'nookies'
+import { config } from 'src/configs'
 import { AuthVerifyTokenType } from 'src/generated'
 
 export const setCookieToken = (token: AuthVerifyTokenType | undefined) => {
@@ -15,8 +15,13 @@ export const setCookieToken = (token: AuthVerifyTokenType | undefined) => {
     httpOnly: false,
     secure: false
   })
+  setCookie(null, config.RESET_TOKEN_KEY, token?.resetToken || '', {
+    path: '/',
+    maxAge: 60 * 60 * 60,
+    httpOnly: false,
+    secure: false
+  })
 }
-
 export const destroyCookieToken = (res: any | undefined) => {
   destroyCookie(res ? { res } : null, config.ACCESS_TOKEN_KEY, {
     path: '/'

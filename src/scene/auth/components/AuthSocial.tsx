@@ -31,7 +31,6 @@ export const AuthSocial = () => {
       <IconButton
         href='/'
         component={Link}
-
         // onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
         sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
       >

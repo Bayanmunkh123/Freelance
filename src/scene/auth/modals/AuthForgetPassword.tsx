@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
-import { Box, Card, CardContent, Stack, Tab, Typography, Button } from '@mui/material'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { Formik, Form, Field } from 'formik'
+import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
+import { Field, Form, Formik } from 'formik'
 import { TextField } from 'formik-mui'
 import {
   AuthEmailResetPasswordInput,
   useAuthEmailForgetPasswordMutation,
   useAuthEmailVerifyTokenSenderMutation
 } from 'src/generated'
+import { useAuthModalContext } from 'src/hooks/useAuth'
 import { AuthModalType } from 'src/utils/constants'
 import { validationForgetEmailSchema } from 'src/validators/auth/auth.validator'
-import { useAuthModalContext } from 'src/hooks/useAuth'
 
 export type AuthForgetProps = {
   visibleAuthDialog: AuthModalType | undefined

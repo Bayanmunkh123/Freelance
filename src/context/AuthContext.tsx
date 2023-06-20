@@ -14,8 +14,6 @@ import { useRouter } from 'next/router'
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   loading: false,
-
-  // setLoading: () => Boolean,
   user: null,
   setUser: () => null,
   logout: () => Promise.resolve()
@@ -56,6 +54,7 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
       alert(error)
     }
   })
+  console.log(loading)
   const handleLogout = async () => {
     const deviceId = localStorage.getItem(config.DEVICE_ID)
 

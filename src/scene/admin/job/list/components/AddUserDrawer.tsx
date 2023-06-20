@@ -43,7 +43,6 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
-  const router = useRouter()
   const { open, toggle } = props
 
   const [onCreateUser] = useCreateUserMutation({
@@ -59,8 +58,6 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   })
 
   const submitHandler = (data: UserAddInput) => {
-    console.log('onSubmit === values', data)
-
     onCreateUser({
       variables: {
         input: {

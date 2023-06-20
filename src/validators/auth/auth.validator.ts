@@ -19,8 +19,9 @@ export const validationLoginEmailSchema = yup.object().shape({
 })
 
 export const validationLoginPhoneSchema = yup.object().shape({
-  phoneNumber: yup.string().required().label('Утасны дугаар'),
-  countryCode: yup.string().required(),
+  phone: yup.string().required().label('Утасны дугаар'),
+
+  // countryCode: yup.string().required(),
   password: yup.string().min(6).required().label('Нууц үг')
 })
 
@@ -34,8 +35,9 @@ export const validationRegisterEmailSchema = yup.object().shape({
 })
 
 export const validationRegisterPhoneSchema = yup.object().shape({
-  phoneNumber: yup.string().required().label('Утасны дугаар'),
-  countryCode: yup.string().required(),
+  phone: yup.string().required().label('Утасны дугаар'),
+
+  // countryCode: yup.string().required(),
   password: yup.string().min(8).required().label('Нууц үг')
 })
 

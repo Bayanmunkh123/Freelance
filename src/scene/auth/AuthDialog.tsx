@@ -10,7 +10,7 @@ import { AuthConfirmCode } from './modals/AuthConfirmCode'
 import { AuthForget } from './modals/AuthForgetPassword'
 import { AuthRegister } from './modals/AuthRegister'
 import { AuthLogin } from './modals/AuthLogin'
-import { useAuthModalContext } from 'src/hooks/useAuth'
+import { AuthModalProvider } from 'src/context/AuthModalContext'
 
 export const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -32,15 +32,11 @@ export const AuthDialog = (props: AuthDialogProps) => {
     if (!open) setVisibleAuthDialog(AuthModalType.Login)
   }, [open])
 
-  const { loading } = useAuthModalContext()
-
   return (
-    <Fragment>
-      <Dialog open={open} keepMounted onClose={handleClose} TransitionComponent={Transition}>
-        <DialogContent sx={{ padding: 0 }}>
-          {loading ? (
-            <CircularProgress />
-          ) : (
+    <AuthModalProvider>
+      <Fragment>
+        <Dialog open={open} keepMounted onClose={handleClose} TransitionComponent={Transition}>
+          <DialogContent sx={{ padding: 0 }}>
             <>
               {visibleAuthDialog && visibleAuthDialog === AuthModalType.Login && (
                 <AuthLogin visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
@@ -64,9 +60,9 @@ export const AuthDialog = (props: AuthDialogProps) => {
                 <AuthTokenVerify visibleAuthDialog={visibleAuthDialog} setVisibleAuthDialog={setVisibleAuthDialog} />
               )}
             </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </Fragment>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    </AuthModalProvider>
   )
 }

@@ -8,9 +8,11 @@ import { config } from 'src/configs'
 import { LoginEmailInput, useLoginEmailMutation } from 'src/generated'
 import { useAuthModalContext } from 'src/hooks/useAuth'
 import { AuthModalType } from 'src/utils/constants'
-import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 import { validationLoginEmailSchema } from 'src/validators/auth/auth.validator'
 import crypto from 'crypto-js'
+import { handleAuthDialog } from '../utils/handleAuthDialog'
+import { encrypt } from 'src/utils/generateData'
+import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 
 type LoginEmailProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
@@ -19,7 +21,7 @@ const LoginEmail = (props: LoginEmailProps) => {
   const { setVisibleAuthDialog } = props
   const apolloClient = useApolloClient()
 
-  const { setUserData, setSessionList } = useAuthModalContext()
+  const { reset, setUserData, setSessionList } = useAuthModalContext()
   const router = useRouter()
 
   const [onLoginEmail] = useLoginEmailMutation({
@@ -39,13 +41,13 @@ const LoginEmail = (props: LoginEmailProps) => {
       )
     } else localStorage.removeItem('credentials-email')
 
-    setUserData(values)
+    setUserData(values as LoginEmailInput)
 
     const { data } = await onLoginEmail({
       variables: {
         input: {
           email: values?.email,
-          password: values.password,
+          password: encrypt(values.password),
           deviceId: localStorage.getItem(config.DEVICE_ID)
         }
       }
@@ -53,24 +55,19 @@ const LoginEmail = (props: LoginEmailProps) => {
     if (data?.loginEmail?.deviceId) {
       localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
     }
-
-    destroyCookieToken(undefined)
-    if (data?.loginEmail?.accessToken) {
-      setCookieToken(data?.loginEmail)
-      console.log('Амжилттай')
-
-      await apolloClient.cache.reset()
-      const returnUrl = router.query.returnUrl
-      setVisibleAuthDialog(null)
-      const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/jobs'
-      router.replace(redirectURL as string).then(() => window.location.reload)
-    } else if (data?.loginEmail && !data?.loginEmail?.isEmailConfirmed) {
-      setVisibleAuthDialog(AuthModalType.TokenVerify)
-
-      // setVerifyModal(true)
-    } else {
-      setSessionList(data?.loginEmail?.devices)
-      setVisibleAuthDialog(AuthModalType.SessionManage)
+    if (data?.loginEmail) {
+      destroyCookieToken(undefined)
+      if (data.loginEmail.accessToken) {
+        setCookieToken(data?.loginEmail)
+        handleAuthDialog({ apolloClient, router })
+      } else if (data.loginEmail.devices) {
+        setSessionList(data.loginEmail.devices)
+        setVisibleAuthDialog(AuthModalType.SessionManage)
+      } else if (data?.loginEmail && !data?.loginEmail?.isEmailConfirmed) {
+        setVisibleAuthDialog(AuthModalType.TokenVerify)
+      } else if (reset) {
+        setVisibleAuthDialog(AuthModalType.ChangePassword)
+      }
     }
   }
 

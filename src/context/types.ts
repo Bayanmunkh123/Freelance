@@ -1,4 +1,11 @@
-import { AuthUserType, LoginEmailInput, LoginPhoneInput, MeAuthQuery, UserDevice } from 'src/generated'
+import {
+  LoginEmailInput,
+  LoginPhoneInput,
+  MeAuthQuery,
+  RegisterEmailInput,
+  RegisterPhoneInput,
+  UserDevice
+} from 'src/generated'
 
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
@@ -27,12 +34,14 @@ export type AuthValuesType = {
 
   logout: () => void
 }
+export type UserData = LoginEmailInput & LoginPhoneInput & RegisterEmailInput & RegisterPhoneInput
+
 export type AuthModalValuesType = {
-  userData: LoginEmailInput | null
+  userData: UserData | null
   setUserData: (value: LoginEmailInput | LoginPhoneInput) => void
   sessionList: UserDevice[] | null
   setSessionList: (value: any) => void
-  reset: boolean
+  reset: boolean | null
   setReset: (value: boolean) => void
 }
 
