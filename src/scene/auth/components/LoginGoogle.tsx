@@ -7,30 +7,27 @@ import { getAuth, GoogleAuthProvider, User, signInWithPopup } from 'firebase/aut
 import { firebaseConfig } from 'src/utils/firebase/config'
 import { useApolloClient } from '@apollo/client'
 import { useAuthWebMutation } from 'src/generated'
+import { setCookieToken } from 'src/utils/cookies'
+import { handleAuthDialog } from '../utils/handleAuthDialog'
+import { useRouter } from 'next/router'
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 
 const LoginGoogle = () => {
   const apolloClient = useApolloClient()
+  const router = useRouter()
 
   const [onAuthGoogle] = useAuthWebMutation({
     fetchPolicy: 'no-cache',
     onCompleted: async data => {
-      console.log(data)
-
-      // if (data.authWeb) {
-      //   console.log(authWeb?.accessToken)
-
-      //   // showSuccess('Амжилттай')
-      //   // setCookieToken(authWeb)
-      //   await apolloClient.cache.reset()
-      //   window.location.reload()
-      // } else {
-      //   alert('ERROR')
-
-      //   // showError('Дахин оролдоно уу?')
-      // }
+      if (data.authWeb)
+        if (data.authWeb.accessToken) {
+          setCookieToken(data?.authWeb)
+          handleAuthDialog({ apolloClient, router })
+        } else {
+          alert('ERROR')
+        }
     },
     onError: (error: unknown) => {
       console.log('LoginGoogle === useAuthWebMutation === error', error)
@@ -39,7 +36,6 @@ const LoginGoogle = () => {
   })
   const onSuccess = async (res: User, token: string) => {
     const provider = res?.providerData?.[0]
-    console.log(provider)
     onAuthGoogle({
       variables: {
         input: {
@@ -58,8 +54,6 @@ const LoginGoogle = () => {
       provider.addScope('email')
       const result = await signInWithPopup(auth, provider)
       const token = await result.user.getIdToken()
-      console.log('result', result.user)
-      console.log('token', token)
       onSuccess(result.user, token)
     } catch (error) {
       console.log('LoginGoogle === responseGoogle === error', error)

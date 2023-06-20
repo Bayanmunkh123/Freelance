@@ -5,7 +5,8 @@ import { LoginEmailInput, LoginPhoneInput, RegisterEmailInput, RegisterPhoneInpu
 enum ActionTypeEnum {
   LOGIN = 'LOGIN',
   SET_SESSION_LIST = 'SET_SESSION_LIST',
-  SET_RESET = 'SET_RESET'
+  SET_RESET = 'SET_RESET',
+  SET_RESET_TOKEN = 'SET_RESET_TOKEN'
 }
 
 type ActionType =
@@ -21,11 +22,16 @@ type ActionType =
       type: ActionTypeEnum.SET_RESET
       payload: boolean | null
     }
+  | {
+      type: ActionTypeEnum.SET_RESET_TOKEN
+      payload: string | null
+    }
 
 type StateType = {
   userData: UserData | null
   sessionList: UserDevice[] | null
   reset: boolean | null
+  resetToken: string | null
 }
 
 const modalReducer = (state: StateType, action: ActionType) => {
@@ -45,6 +51,11 @@ const modalReducer = (state: StateType, action: ActionType) => {
         ...state,
         reset: action.payload
       }
+    case ActionTypeEnum.SET_RESET_TOKEN:
+      return {
+        ...state,
+        resetToken: action.payload
+      }
     default:
       return state
   }
@@ -57,7 +68,9 @@ const defaultProvider: AuthModalValuesType = {
   sessionList: null,
   setSessionList: () => null,
   reset: false,
-  setReset: () => null
+  setReset: () => null,
+  resetToken: null,
+  setResetToken: () => null
 }
 
 const AuthModalContext = createContext(defaultProvider)
@@ -68,7 +81,8 @@ type Props = {
 const initialState: StateType = {
   userData: null,
   sessionList: [],
-  reset: false
+  reset: false,
+  resetToken: null
 }
 
 const AuthModalProvider = ({ children }: Props) => {
@@ -86,6 +100,10 @@ const AuthModalProvider = ({ children }: Props) => {
     reset: state?.reset,
     setReset: (value: StateType['reset']) => {
       dispatch({ type: ActionTypeEnum.SET_RESET, payload: value })
+    },
+    resetToken: state?.resetToken,
+    setResetToken: (value: StateType['resetToken']) => {
+      dispatch({ type: ActionTypeEnum.SET_RESET_TOKEN, payload: value })
     }
   }
 

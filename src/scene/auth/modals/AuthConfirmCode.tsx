@@ -24,7 +24,7 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
   const { setVisibleAuthDialog } = props
   const apolloClient = useApolloClient()
   const router = useRouter()
-  const { reset, userData, setSessionList } = useAuthModalContext()
+  const { reset, userData, setSessionList, setResetToken } = useAuthModalContext()
 
   const [disabled, setDisabled] = useState(false)
 
@@ -72,7 +72,6 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
         if (data?.authEmailVerifyToken?.deviceId) {
           localStorage.setItem(config.DEVICE_ID, data.authEmailVerifyToken?.deviceId)
         }
-        console.log(data.authEmailVerifyToken.resetToken)
         destroyCookieToken(undefined)
         if (data?.authEmailVerifyToken?.accessToken) {
           setCookieToken(data.authEmailVerifyToken)
@@ -80,7 +79,8 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
         } else if (data?.authEmailVerifyToken?.devices) {
           setSessionList(data?.authEmailVerifyToken?.devices)
           setVisibleAuthDialog(AuthModalType.SessionManage)
-        } else if (reset) {
+        } else if (reset && data.authEmailVerifyToken.resetToken) {
+          setResetToken(data.authEmailVerifyToken.resetToken)
           setVisibleAuthDialog(AuthModalType.ChangePassword)
         }
       }

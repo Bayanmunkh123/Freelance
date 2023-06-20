@@ -19,10 +19,11 @@ type LoginEmailProps = {
 }
 const LoginEmail = (props: LoginEmailProps) => {
   const { setVisibleAuthDialog } = props
+
   const apolloClient = useApolloClient()
+  const router = useRouter()
 
   const { reset, setUserData, setSessionList } = useAuthModalContext()
-  const router = useRouter()
 
   const [onLoginEmail] = useLoginEmailMutation({
     fetchPolicy: 'no-cache',
@@ -52,10 +53,9 @@ const LoginEmail = (props: LoginEmailProps) => {
         }
       }
     })
-    if (data?.loginEmail?.deviceId) {
-      localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
-    }
     if (data?.loginEmail) {
+      if (data?.loginEmail?.deviceId) localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
+
       destroyCookieToken(undefined)
       if (data.loginEmail.accessToken) {
         setCookieToken(data?.loginEmail)

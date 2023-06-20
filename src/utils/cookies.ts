@@ -15,12 +15,6 @@ export const setCookieToken = (token: AuthVerifyTokenType | undefined) => {
     httpOnly: false,
     secure: false
   })
-  setCookie(null, config.RESET_TOKEN_KEY, token?.resetToken || '', {
-    path: '/',
-    maxAge: 60 * 60 * 60,
-    httpOnly: false,
-    secure: false
-  })
 }
 export const destroyCookieToken = (res: any | undefined) => {
   destroyCookie(res ? { res } : null, config.ACCESS_TOKEN_KEY, {

@@ -43,6 +43,8 @@ export type AuthModalValuesType = {
   setSessionList: (value: any) => void
   reset: boolean | null
   setReset: (value: boolean) => void
+  resetToken: string | null
+  setResetToken: (value: string) => void
 }
 
 export type UserContextType =
