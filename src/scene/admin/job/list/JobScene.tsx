@@ -119,7 +119,7 @@ const columns: GridColDef[] = [
     minWidth: 230,
     field: 'userName',
     headerName: 'UserName',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       const { username, profile } = row
 
       return (
@@ -140,7 +140,7 @@ const columns: GridColDef[] = [
     minWidth: 250,
     field: 'organization',
     headerName: 'Байгуулга',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       return (
         <Typography key={row.id} noWrap variant='body2'>
           {row?.organization?.name}
@@ -153,7 +153,7 @@ const columns: GridColDef[] = [
     minWidth: 250,
     field: 'email',
     headerName: 'Email',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       return (
         <Typography noWrap variant='body2'>
           {row.user.email}
@@ -166,7 +166,7 @@ const columns: GridColDef[] = [
     field: 'role',
     minWidth: 150,
     headerName: 'Role',
-    renderCell: ({ row }: CellType) => {
+    renderCell: ({ row }) => {
       return (
         <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 3 } }}>
           {/* <Icon icon={userRoleObj[row.role].icon} fontSize={20} /> */}
@@ -177,44 +177,13 @@ const columns: GridColDef[] = [
       )
     }
   },
-
-  // {
-  //   flex: 0.15,
-  //   minWidth: 120,
-  //   headerName: 'Plan',
-  //   field: 'currentPlan',
-  //   renderCell: ({ row }: CellType) => {
-  //     return (
-  //       <Typography variant='subtitle1' noWrap sx={{ textTransform: 'capitalize' }}>
-  //         {row.currentPlan}
-  //       </Typography>
-  //     )
-  //   }
-  // },
-  // {
-  //   flex: 0.1,
-  //   minWidth: 110,
-  //   field: 'status',
-  //   headerName: 'Status',
-  //   renderCell: ({ row }: CellType) => {
-  //     return (
-  //       <CustomChip
-  //         skin='light'
-  //         size='small'
-  //         label={row.status}
-  //         color={userStatusObj[row.status]}
-  //         sx={{ textTransform: 'capitalize', '& .MuiChip-label': { lineHeight: '18px' } }}
-  //       />
-  //     )
-  //   }
-  // },
   {
     flex: 0.1,
     minWidth: 90,
     sortable: false,
     field: 'actions',
     headerName: 'Actions',
-    renderCell: ({ row }: CellType) => <RowOptions id={row.id} />
+    renderCell: ({ row }) => <RowOptions id={row.id} />
   }
 ]
 
@@ -231,9 +200,6 @@ export const JobScene = () => {
   const { data } = useOrganizationUsersQuery({
     fetchPolicy: 'no-cache',
     variables,
-    onCompleted: data => {
-      // if (data?.users?.data) setRoleData(data?.users?.data)
-    },
     onError: (error: unknown) => {
       alert(error)
     }
@@ -241,11 +207,6 @@ export const JobScene = () => {
 
   const { data: RolesList } = useRolesQuery({
     fetchPolicy: 'no-cache',
-
-    // variables,
-    onCompleted: data => {
-      // if (data?.users?.data) setRoleData(data?.users?.data)
-    },
     onError: (error: unknown) => {
       alert(error)
     }
@@ -278,7 +239,7 @@ export const JobScene = () => {
                   <InputLabel id='role-select'>Role сонгох</InputLabel>
                   <Select
                     fullWidth
-                    value={RolesList}
+                    value={RolesList ? RolesList : undefined}
                     id='select-role'
                     label='Select Role'
                     labelId='role-select'

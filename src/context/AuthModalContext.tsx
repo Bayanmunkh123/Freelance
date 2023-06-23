@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useReducer } from 'react'
 import { AuthModalValuesType, UserData } from './types'
-import { LoginEmailInput, LoginPhoneInput, RegisterEmailInput, RegisterPhoneInput, UserDevice } from 'src/generated'
+import { UserDevice } from 'src/generated'
 
 enum ActionTypeEnum {
   LOGIN = 'LOGIN',

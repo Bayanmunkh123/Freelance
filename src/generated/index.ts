@@ -147,6 +147,16 @@ export type JobCreateInput = {
   organizationId: Scalars['String']
 }
 
+export type JobsType = {
+  __typename?: 'JobsType'
+  count?: Maybe<Scalars['Int']>
+  data?: Maybe<Array<Job>>
+}
+
+export type JobsWhereInput = {
+  organizationId: Scalars['String']
+}
+
 export type LoginEmailInput = {
   deviceId?: InputMaybe<Scalars['String']>
   email: Scalars['String']
@@ -378,12 +388,22 @@ export type PermissionsType = {
 
 export type Query = {
   __typename?: 'Query'
+  job?: Maybe<Job>
+  jobs?: Maybe<JobsType>
   meAuth?: Maybe<AuthUserType>
   organizationUsers?: Maybe<OrganizationUsersType>
   organizations?: Maybe<OrganizationsType>
   roles?: Maybe<RolesType>
   user?: Maybe<User>
   users?: Maybe<UsersType>
+}
+
+export type QueryJobArgs = {
+  input?: InputMaybe<JobsWhereInput>
+}
+
+export type QueryJobsArgs = {
+  input?: InputMaybe<JobsWhereInput>
 }
 
 export type QueryOrganizationUsersArgs = {

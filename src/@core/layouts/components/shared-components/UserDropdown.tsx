@@ -24,8 +24,6 @@ import { useAuth } from 'src/hooks/useAuth'
 import { Settings } from 'src/@core/context/settingsContext'
 import { Button } from '@mui/material'
 import { AuthDialog } from 'src/scene/auth/AuthDialog'
-import { AuthModalType } from 'src/utils/constants'
-import { AuthModalProvider } from 'src/context/AuthModalContext'
 
 interface Props {
   hidden: boolean
@@ -129,9 +127,7 @@ const UserDropdown = (props: Props) => {
                   <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
                 </Badge>
                 <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-                  <Typography sx={{ fontWeight: 600 }}>
-                    {user.firstName} {user.lastName}
-                  </Typography>
+                  <Typography sx={{ fontWeight: 600 }}>{user?.userName}</Typography>
                   <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
                     {user.role}
                   </Typography>

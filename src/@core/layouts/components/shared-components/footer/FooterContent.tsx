@@ -25,25 +25,22 @@ const FooterContent = () => {
           ❤️
         </Box>
         {` by `}
-        <LinkStyled target='_blank' href='https://pixinvent.com/'>
-          Pixinvent
+        <LinkStyled target='_blank' href='https://tabsolution.jp'>
+          Tab Systems Mongolia LLC
         </LinkStyled>
       </Typography>
       {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
-          <LinkStyled target='_blank' href='https://themeforest.net/licenses/standard'>
+          <LinkStyled target='_blank' href='https://tabsolution.jp'>
             License
           </LinkStyled>
-          <LinkStyled target='_blank' href='https://1.envato.market/pixinvent_portfolio'>
+          <LinkStyled target='_blank' href='https://tabsolution.jp'>
             More Themes
           </LinkStyled>
-          <LinkStyled
-            target='_blank'
-            href='https://demos.pixinvent.com/materialize-nextjs-admin-template/documentation'
-          >
+          <LinkStyled target='_blank' href='https://tabsolution.jp'>
             Documentation
           </LinkStyled>
-          <LinkStyled target='_blank' href='https://pixinvent.ticksy.com/'>
+          <LinkStyled target='_blank' href='https://tabsolution.jp'>
             Support
           </LinkStyled>
         </Box>

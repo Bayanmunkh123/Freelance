@@ -11,7 +11,8 @@ import { AuthModalType } from 'src/utils/constants'
 import { validationLoginEmailSchema } from 'src/validators/auth/auth.validator'
 import crypto from 'crypto-js'
 import { handleAuthDialog } from '../utils/handleAuthDialog'
-import { encrypt } from 'src/utils/generateData'
+
+// import { encrypt } from 'src/utils/generateData'
 import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
 
 type LoginEmailProps = {
@@ -48,7 +49,9 @@ const LoginEmail = (props: LoginEmailProps) => {
       variables: {
         input: {
           email: values?.email,
-          password: encrypt(values.password),
+
+          // password: encrypt(values.password),
+          password: values.password,
           deviceId: localStorage.getItem(config.DEVICE_ID)
         }
       }

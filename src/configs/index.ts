@@ -19,8 +19,9 @@ export const config = {
   ...tokenKeys,
   ...crypto,
   NODE_ENV: process.env.ENV || process.env.NODE_ENV,
-  BACKEND_URL: process.env.BACKEND_URL || 'http://localhost:4011/graphql',
-  BACKEND_WS_URL: process.env.BACKEND_WS_URL || 'ws://localhost:4011/subscriptions'
+  BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000/graphql',
+  BACKEND_WS_URL: process.env.NEXT_PUBLIC_BACKEND_WS_URL || 'ws://localhost:4000/subscriptions',
+  BUCKET_IMAGE_URL: process.env.NEXT_PUBLIC_BUCKET_IMAGE_URL || 'https://testimages.tab.mn'
 }
 
 export const MEDIA_TYPES = {

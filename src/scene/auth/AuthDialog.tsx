@@ -1,7 +1,7 @@
 // ** React Imports
 import React, { forwardRef, Fragment, ReactElement, Ref, useState, useEffect } from 'react'
 import Slide, { SlideProps } from '@mui/material/Slide'
-import { CircularProgress, Dialog, DialogContent } from '@mui/material'
+import { Dialog, DialogContent } from '@mui/material'
 import { AuthModalType } from 'src/utils/constants'
 import { AuthTokenVerify } from './modals/AuthTokenVerify'
 import { AuthSessionManage } from './modals/AuthSessionManage'
