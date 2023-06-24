@@ -1,5 +1,4 @@
 import Drawer from '@mui/material/Drawer'
-import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
@@ -16,7 +15,7 @@ import { OrganizationUserRoleEnum, useCreateUserMutation, useOrganizationsQuery 
 
 import { Formik, Form, Field } from 'formik'
 import { validationAddUserSchema } from 'src/validators/auth/auth.validator'
-import { TextField } from 'formik-mui'
+import { TextField, Select } from 'formik-mui'
 
 import { Stack } from '@mui/material'
 import { OrgRoles } from 'src/utils/constants'
@@ -106,10 +105,17 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
           {formikProps => (
             <Form>
               <Stack spacing={6}>
-                <Field component={TextField} name='firstName' type='text' label='Нэр' size='big' />
-                <Field component={TextField} name='lastName' type='text' label='Овог' size='big' />
-                <Field component={TextField} name='email' type='text' label='И-мейл' size='big' />
-                <FormControl fullWidth>
+                <Field component={TextField} name='firstName' type='text' label='Нэр' size='small' />
+                <Field component={TextField} name='lastName' type='text' label='Овог' size='medium' />
+                <Field component={TextField} name='email' type='text' label='И-мейл' size='medium' />
+                <Field component={Select} name='organization' type='select' label='Байгуулга сонгох' size='medium'>
+                  {OrgList?.organizations?.data?.map(org => (
+                    <MenuItem key={org.id} value={org.id}>
+                      {org.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+                {/* <FormControl fullWidth>
                   <InputLabel id='org-select'>Байгуулга сонгох</InputLabel>
                   <Select
                     value={formikProps.values.organization}
@@ -126,8 +132,15 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                       </MenuItem>
                     ))}
                   </Select>
-                </FormControl>
-                <FormControl fullWidth sx={{ mb: 6 }}>
+                </FormControl> */}
+                <Field component={Select} name='orgRole' type='select' label='Role сонгох' size='big'>
+                  {OrgRoles.map(role => (
+                    <MenuItem key={role.id} value={role.name}>
+                      {role.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+                {/* <FormControl fullWidth sx={{ mb: 6 }}>
                   <InputLabel id='role-select'>Role сонгох</InputLabel>
                   <Select
                     fullWidth
@@ -144,7 +157,7 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                       </MenuItem>
                     ))}
                   </Select>
-                </FormControl>
+                </FormControl> */}
                 <Button type='submit' size='large' variant='contained' sx={{ mr: 3 }}>
                   Нэмэх
                 </Button>

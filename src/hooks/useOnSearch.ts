@@ -2,17 +2,18 @@ import Router, { useRouter } from 'next/router'
 
 const isObject = (a: any) => !!a && a.constructor === Object
 
-const deleteMap = {}
+// const deleteMap = {}
 
 export const useOnSearch = () => {
   const { pathname, query } = useRouter()
 
   // On search we're remoing pagination
 
-  const onSearch = (key: string, value: string) => {
+  const onSearch = (key: any, value: string) => {
     let _query = { ...query }
     delete _query.page
-    if (deleteMap[key]) delete _query[deleteMap[key]]
+
+    // if (deleteMap[key]) delete _query[deleteMap[key]]
     if (!key) {
       _query = {}
     } else if (isObject(key)) {

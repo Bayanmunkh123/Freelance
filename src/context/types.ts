@@ -34,7 +34,7 @@ export type AuthValuesType = {
 
   logout: () => void
 }
-export type UserData = LoginEmailInput & LoginPhoneInput & RegisterEmailInput & RegisterPhoneInput
+export type UserData = LoginEmailInput | LoginPhoneInput | RegisterEmailInput | RegisterPhoneInput
 
 export type AuthModalValuesType = {
   userData: UserData | null
