@@ -1,5 +1,5 @@
-import { ApolloClient } from '@apollo/client'
-import { NextRouter } from 'next/router'
+import { ApolloClient } from "@apollo/client"
+import { NextRouter } from "next/router"
 
 type Props = {
   apolloClient: ApolloClient<object>
@@ -10,6 +10,6 @@ export const handleAuthDialog = async (props: Props) => {
   const { apolloClient, router } = props
   await apolloClient.cache.reset()
   const returnUrl = router.query.returnUrl
-  const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/admin/jobs'
+  const redirectURL = returnUrl && returnUrl !== "/" ? returnUrl : "/admin/jobs"
   router.replace(redirectURL as string).then(() => window.location.reload)
 }

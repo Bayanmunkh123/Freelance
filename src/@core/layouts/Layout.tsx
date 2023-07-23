@@ -1,13 +1,13 @@
 // ** React Import
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from "react"
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from "src/@core/layouts/types"
 
 // ** Layout Components
-import VerticalLayout from './components/vertical/VerticalLayout'
-import HorizontalLayout from './components/horizontal/HorizontalLayout'
-import BlankLayout from './BlankLayout'
+import VerticalLayout from "./components/vertical/VerticalLayout"
+import HorizontalLayout from "./components/horizontal/HorizontalLayout"
+import BlankLayout from "./BlankLayout"
 
 const Layout = (props: LayoutProps) => {
   // ** Props
@@ -19,12 +19,16 @@ const Layout = (props: LayoutProps) => {
   useEffect(() => {
     if (hidden) {
       if (settings.navCollapsed) {
-        saveSettings({ ...settings, navCollapsed: false, layout: 'vertical' })
+        saveSettings({ ...settings, navCollapsed: false, layout: "vertical" })
         isCollapsed.current = true
       }
     } else {
       if (isCollapsed.current) {
-        saveSettings({ ...settings, navCollapsed: true, layout: settings.lastLayout })
+        saveSettings({
+          ...settings,
+          navCollapsed: true,
+          layout: settings.lastLayout,
+        })
         isCollapsed.current = false
       } else {
         if (settings.lastLayout !== settings.layout) {
@@ -36,10 +40,11 @@ const Layout = (props: LayoutProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hidden])
 
-  if (settings.layout === 'horizontal' && props.horizontalLayoutProps) {
+  if (settings.layout === "horizontal" && props.horizontalLayoutProps) {
     return <HorizontalLayout {...props}>{children}</HorizontalLayout>
   }
-  if (props?.verticalLayoutProps) return <VerticalLayout {...props}>{children}</VerticalLayout>
+  if (props?.verticalLayoutProps)
+    return <VerticalLayout {...props}>{children}</VerticalLayout>
 
   return <BlankLayout>{children}</BlankLayout>
 }

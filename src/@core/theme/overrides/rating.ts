@@ -1,5 +1,5 @@
 // ** Type Import
-import { OwnerStateThemeType } from './'
+import { OwnerStateThemeType } from "./"
 
 const Rating = () => {
   return {
@@ -7,15 +7,15 @@ const Rating = () => {
       styleOverrides: {
         root: ({ theme }: OwnerStateThemeType) => ({
           color: theme.palette.warning.main,
-          '& svg': {
-            flexShrink: 0
-          }
+          "& svg": {
+            flexShrink: 0,
+          },
         }),
         iconEmpty: ({ theme }: OwnerStateThemeType) => ({
-          color: `rgba(${theme.palette.customColors.main}, 0.22)`
-        })
-      }
-    }
+          color: `rgba(${theme.palette.customColors.main}, 0.22)`,
+        }),
+      },
+    },
   }
 }
 

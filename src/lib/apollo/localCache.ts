@@ -1,4 +1,4 @@
-import { gql, InMemoryCache } from '@apollo/client'
+import { gql, InMemoryCache } from "@apollo/client"
 
 export const localCache = new InMemoryCache()
 
@@ -12,7 +12,7 @@ export function initialLocalCache() {
   localCache.writeQuery({
     query: LocalCacheInitQuery,
     data: {
-      shoppingCart: null
-    }
+      shoppingCart: null,
+    },
   })
 }

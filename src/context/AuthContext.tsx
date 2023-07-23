@@ -1,22 +1,22 @@
 // ** React Imports
-import { createContext, ReactNode } from 'react'
+import { createContext, ReactNode } from "react"
 
 // ** Types
-import { AuthValuesType, UserContextType } from './types'
+import { AuthValuesType, UserContextType } from "./types"
 
-import { LOGOUT } from 'src/hooks/utils/queries'
-import { useApolloClient } from '@apollo/client'
-import { UserRoleEnum, useMeAuthQuery } from 'src/generated'
-import { destroyCookieToken } from 'src/utils/cookies'
-import { config } from 'src/configs'
-import { useRouter } from 'next/router'
+import { LOGOUT } from "src/hooks/utils/queries"
+import { useApolloClient } from "@apollo/client"
+import { UserRoleEnum, useMeAuthQuery } from "src/generated"
+import { destroyCookieToken } from "src/utils/cookies"
+import { config } from "src/config"
+import { useRouter } from "next/router"
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   loading: false,
   user: null,
   setUser: () => null,
-  logout: () => Promise.resolve()
+  logout: () => Promise.resolve(),
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -33,7 +33,7 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
 
   // ** Hooks
   const { loading } = useMeAuthQuery({
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (data?.meAuth?.id) {
         const user = data?.meAuth
         const isAdmin = user.role === UserRoleEnum.ADMIN
@@ -45,20 +45,23 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
         const _user: UserContextType = {
           ...user,
           roles: _roles,
-          permissions: ['Web']
+          permissions: ["Web"],
         }
         setUser(_user)
       }
     },
-    onError: error => {
+    onError: (error) => {
       alert(error)
-    }
+    },
   })
   console.log(loading)
   const handleLogout = async () => {
     const deviceId = localStorage.getItem(config.DEVICE_ID)
 
-    await apolloClient.mutate({ mutation: LOGOUT, variables: { deviceId: deviceId } })
+    await apolloClient.mutate({
+      mutation: LOGOUT,
+      variables: { deviceId: deviceId },
+    })
     destroyCookieToken(undefined)
 
     setUser(null)
@@ -67,7 +70,7 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
     //   window.location.reload()
     // }
     await apolloClient.cache.reset()
-    router.replace('/')
+    router.replace("/")
 
     // window.location.reload()
 
@@ -79,7 +82,7 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
     loading,
     user,
     setUser,
-    logout: handleLogout
+    logout: handleLogout,
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client"
 
 export const AUTH_WEB = gql`
   mutation authWeb($input: ExternalWebAuthInput!) {
@@ -92,7 +92,9 @@ export const AUTH_EMAIL_VERIFY_TOKEN = gql`
   }
 `
 export const EMAIL_VERIFY_TOKEN_SENDER = gql`
-  mutation authEmailVerifyTokenSender($input: AuthEmailVerifyTokenSenderInput!) {
+  mutation authEmailVerifyTokenSender(
+    $input: AuthEmailVerifyTokenSenderInput!
+  ) {
     authEmailVerifyTokenSender(input: $input)
   }
 `

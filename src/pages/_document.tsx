@@ -1,22 +1,26 @@
 // ** React Import
-import { Children } from 'react'
+import { Children } from "react"
 
 // ** Next Import
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from "next/document"
 
 class CustomDocument extends Document {
   render() {
     return (
-      <Html lang='en'>
+      <Html lang="en">
         <Head>
-          <link rel='preconnect' href='https://fonts.googleapis.com' />
-          <link rel='preconnect' href='https://fonts.gstatic.com' />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
-            rel='stylesheet'
-            href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
           />
-          <link rel='apple-touch-icon' sizes='180x180' href='/images/apple-touch-icon.png' />
-          <link rel='shortcut icon' href='/images/favicon.png' />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"
+          />
+          <link rel="shortcut icon" href="/images/favicon.png" />
         </Head>
         <body>
           <Main />
@@ -27,24 +31,24 @@ class CustomDocument extends Document {
   }
 }
 
-CustomDocument.getInitialProps = async ctx => {
+CustomDocument.getInitialProps = async (ctx) => {
   const originalRenderPage = ctx.renderPage
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: App => props =>
+      enhanceApp: (App) => (props) =>
         (
           <App
             {...props} // @ts-ignore
           />
-        )
+        ),
     })
 
   const initialProps = await Document.getInitialProps(ctx)
 
   return {
     ...initialProps,
-    styles: [...Children.toArray(initialProps.styles)]
+    styles: [...Children.toArray(initialProps.styles)],
   }
 }
 

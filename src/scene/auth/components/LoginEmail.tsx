@@ -1,19 +1,27 @@
-import React from 'react'
-import { useApolloClient } from '@apollo/client'
-import { Button, Box, Checkbox, Divider, FormControlLabel, Stack, Typography } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
-import { TextField } from 'formik-mui'
-import { useRouter } from 'next/router'
-import { config } from 'src/configs'
-import { LoginEmailInput, useLoginEmailMutation } from 'src/generated'
-import { useAuthModalContext } from 'src/hooks/useAuth'
-import { AuthModalType } from 'src/utils/constants'
-import { validationLoginEmailSchema } from 'src/validators/auth/auth.validator'
-import crypto from 'crypto-js'
-import { handleAuthDialog } from '../utils/handleAuthDialog'
+import React from "react"
+import { useApolloClient } from "@apollo/client"
+import {
+  Button,
+  Box,
+  Checkbox,
+  Divider,
+  FormControlLabel,
+  Stack,
+  Typography,
+} from "@mui/material"
+import { Formik, Form, Field } from "formik"
+import { TextField } from "formik-mui"
+import { useRouter } from "next/router"
+import { config } from "src/config"
+import { LoginEmailInput, useLoginEmailMutation } from "src/generated"
+import { useAuthModalContext } from "src/hooks/useAuth"
+import { AuthModalType } from "src/utils/constants"
+import { validationLoginEmailSchema } from "src/validators/auth/auth.validator"
+import crypto from "crypto-js"
+import { handleAuthDialog } from "../utils/handleAuthDialog"
 
 // import { encrypt } from 'src/utils/generateData'
-import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
+import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
 
 type LoginEmailProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
@@ -27,21 +35,23 @@ const LoginEmail = (props: LoginEmailProps) => {
   const { reset, setUserData, setSessionList } = useAuthModalContext()
 
   const [onLoginEmail] = useLoginEmailMutation({
-    fetchPolicy: 'no-cache',
+    fetchPolicy: "no-cache",
     onError: (error: unknown) => {
       alert(error)
-    }
+    },
   })
-  const handleSubmit = async (values: LoginEmailInput & { remember: boolean }) => {
+  const handleSubmit = async (
+    values: LoginEmailInput & { remember: boolean },
+  ) => {
     if (values?.remember) {
       localStorage.setItem(
-        'credentials-email',
+        "credentials-email",
         crypto.AES.encrypt(
           JSON.stringify({ ...values, remember: values?.remember }),
-          'onehrmn_credentials_secret'
-        ).toString()
+          "onehrmn_credentials_secret",
+        ).toString(),
       )
-    } else localStorage.removeItem('credentials-email')
+    } else localStorage.removeItem("credentials-email")
 
     setUserData(values as LoginEmailInput)
 
@@ -52,12 +62,13 @@ const LoginEmail = (props: LoginEmailProps) => {
 
           // password: encrypt(values.password),
           password: values.password,
-          deviceId: localStorage.getItem(config.DEVICE_ID)
-        }
-      }
+          deviceId: localStorage.getItem(config.DEVICE_ID),
+        },
+      },
     })
     if (data?.loginEmail) {
-      if (data?.loginEmail?.deviceId) localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
+      if (data?.loginEmail?.deviceId)
+        localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
 
       destroyCookieToken(undefined)
       if (data.loginEmail.accessToken) {
@@ -76,55 +87,70 @@ const LoginEmail = (props: LoginEmailProps) => {
 
   return (
     <Formik
-      initialValues={{ email: '', password: '', remember: false }}
+      initialValues={{ email: "", password: "", remember: false }}
       validationSchema={validationLoginEmailSchema}
-      onSubmit={(values: LoginEmailInput & { remember: boolean }, formikHelpers) => {
+      onSubmit={(
+        values: LoginEmailInput & { remember: boolean },
+        formikHelpers,
+      ) => {
         handleSubmit(values)
         formikHelpers.setSubmitting(false)
       }}
     >
       {() => (
-        <Form noValidate autoComplete='off'>
+        <Form noValidate autoComplete="off">
           <Stack spacing={6}>
-            <Field component={TextField} name='email' type='email' label='И-мэйл хаяг' size='small' />
-            <Field component={TextField} name='password' type='password' label='Нууц үг' size='small' />
+            <Field
+              component={TextField}
+              name="email"
+              type="email"
+              label="И-мэйл хаяг"
+              size="small"
+            />
+            <Field
+              component={TextField}
+              name="password"
+              type="password"
+              label="Нууц үг"
+              size="small"
+            />
           </Stack>
           <Box
             sx={{
               mb: 4,
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between'
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
             }}
           >
             <FormControlLabel
-              label='Remember Me'
-              name='remember'
+              label="Remember Me"
+              name="remember"
               control={<Checkbox />}
-              sx={{ '& .MuiFormControlLabel-label': { color: 'text.primary' } }}
+              sx={{ "& .MuiFormControlLabel-label": { color: "text.primary" } }}
             />
             <Typography
-              variant='body2'
+              variant="body2"
               sx={{
-                color: 'primary.main',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                ':hover': {
-                  color: 'rgb(5,166,239, 0.5)'
-                }
+                color: "primary.main",
+                textDecoration: "none",
+                cursor: "pointer",
+                ":hover": {
+                  color: "rgb(5,166,239, 0.5)",
+                },
               }}
               onClick={() => setVisibleAuthDialog(AuthModalType.Forget)}
             >
               Нууц үгээ мартсан?
             </Typography>
           </Box>
-          <Box p='12px'>
+          <Box p="12px">
             <Button
-              type='submit'
-              variant='contained'
-              size='large'
-              color='primary'
+              type="submit"
+              variant="contained"
+              size="large"
+              color="primary"
               fullWidth
 
               // disabled={formikProps.isSubmitting}
@@ -134,16 +160,27 @@ const LoginEmail = (props: LoginEmailProps) => {
           </Box>
           <Divider
             sx={{
-              '& .MuiDivider-wrapper': { px: 4 },
-              mt: theme => `${theme.spacing(5)} !important`,
-              mb: theme => `${theme.spacing(3.5)} !important`
+              "& .MuiDivider-wrapper": { px: 4 },
+              mt: (theme) => `${theme.spacing(5)} !important`,
+              mb: (theme) => `${theme.spacing(3.5)} !important`,
             }}
           >
             Эсвэл
           </Divider>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', my: '20px' }}>
-            <Typography>Шинэ хэрэглэгч үү?</Typography>{' '}
-            <Button onClick={() => setVisibleAuthDialog(AuthModalType.Register)}>Бүртгүүлэх</Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              my: "20px",
+            }}
+          >
+            <Typography>Шинэ хэрэглэгч үү?</Typography>{" "}
+            <Button
+              onClick={() => setVisibleAuthDialog(AuthModalType.Register)}
+            >
+              Бүртгүүлэх
+            </Button>
           </Box>
         </Form>
       )}

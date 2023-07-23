@@ -1,6 +1,6 @@
 // ** Type Imports
-import { OwnerStateThemeType } from './'
-import { Skin } from 'src/@core/layouts/types'
+import { OwnerStateThemeType } from "./"
+import { Skin } from "src/@core/layouts/types"
 
 const Autocomplete = (skin: Skin) => {
   return {
@@ -8,10 +8,13 @@ const Autocomplete = (skin: Skin) => {
       styleOverrides: {
         paper: ({ theme }: OwnerStateThemeType) => ({
           boxShadow: theme.shadows[6],
-          ...(skin === 'bordered' && { boxShadow: 'none', border: `1px solid ${theme.palette.divider}` })
-        })
-      }
-    }
+          ...(skin === "bordered" && {
+            boxShadow: "none",
+            border: `1px solid ${theme.palette.divider}`,
+          }),
+        }),
+      },
+    },
   }
 }
 

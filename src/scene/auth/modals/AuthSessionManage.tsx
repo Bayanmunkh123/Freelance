@@ -1,13 +1,20 @@
-import React from 'react'
-import { Card, CardContent, Typography, FormControl, MenuItem, Button } from '@mui/material'
+import React from "react"
+import {
+  Card,
+  CardContent,
+  Typography,
+  FormControl,
+  MenuItem,
+  Button,
+} from "@mui/material"
 
-import { AuthModalType } from 'src/utils/constants'
-import { useAccountEliminateMutation } from 'src/generated'
-import { config } from 'src/configs'
-import { destroyCookieToken, setCookieToken } from 'src/utils/cookies'
-import { useApolloClient } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { useAuthModalContext } from 'src/hooks/useAuth'
+import { AuthModalType } from "src/utils/constants"
+import { useAccountEliminateMutation } from "src/generated"
+import { config } from "src/config"
+import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
+import { useApolloClient } from "@apollo/client"
+import { useRouter } from "next/router"
+import { useAuthModalContext } from "src/hooks/useAuth"
 
 export type AuthSessionManageProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -21,7 +28,7 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
   const Router = useRouter()
 
   const [onAccountEliminate] = useAccountEliminateMutation({
-    onCompleted: async data => {
+    onCompleted: async (data) => {
       console.log(data)
       if (data.accountEliminate?.deviceId) {
         localStorage.setItem(config.DEVICE_ID, data.accountEliminate?.deviceId)
@@ -32,29 +39,39 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
         if (data?.accountEliminate?.accessToken) {
           setCookieToken(data.accountEliminate)
 
-          alert('Амжилттай')
+          alert("Амжилттай")
 
           await apolloClient.cache.reset()
           window.location.reload()
 
           setVisibleAuthDialog(null)
 
-          Router.push('/')
+          Router.push("/")
         }
       } else {
-        alert('CHADAHGUI BAINA')
+        alert("CHADAHGUI BAINA")
       }
-    }
+    },
   })
 
   return (
-    <Card sx={{ zIndex: 1, width: '460px' }}>
-      <CardContent sx={{ p: theme => `${theme.spacing(13, 7, 6.5)} !important` }}>
-        <Typography variant='h6' sx={{ ml: 2, lineHeight: 1, fontWeight: 700, fontSize: '1.5rem !important' }}>
+    <Card sx={{ zIndex: 1, width: "460px" }}>
+      <CardContent
+        sx={{ p: (theme) => `${theme.spacing(13, 7, 6.5)} !important` }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            ml: 2,
+            lineHeight: 1,
+            fontWeight: 700,
+            fontSize: "1.5rem !important",
+          }}
+        >
           Төхөөрөмжийн Бүртгэл
         </Typography>
         <FormControl sx={{ m: 1, width: 500 }}>
-          {sessionList?.map(name => (
+          {sessionList?.map((name) => (
             <MenuItem key={name.id} value={name.id}>
               {name.deviceOs} - {name.deviceType} - {name.deviceName}
               <Button
@@ -65,9 +82,9 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
                         input: {
                           id: name.id,
                           email: userData?.email,
-                          password: userData?.password
-                        }
-                      }
+                          password: userData?.password,
+                        },
+                      },
                     })
                 }}
               >

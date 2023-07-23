@@ -1,13 +1,13 @@
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react"
 
 // ** MUI Imports
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContentText from '@mui/material/DialogContentText'
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogContent from "@mui/material/DialogContent"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContentText from "@mui/material/DialogContentText"
 
 export const DialogAlert = (error: any) => {
   // ** State
@@ -19,20 +19,24 @@ export const DialogAlert = (error: any) => {
 
   return (
     <Fragment>
-      <Button variant='outlined' onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={handleClickOpen}>
         Open dialog
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id='alert-dialog-title'>Use Google's location service?</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Use Google's location service?
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>{error.message}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {error.message}
+          </DialogContentText>
         </DialogContent>
-        <DialogActions className='dialog-actions-dense'>
+        <DialogActions className="dialog-actions-dense">
           <Button onClick={handleClose}>Disagree</Button>
           <Button onClick={handleClose}>Agree</Button>
         </DialogActions>

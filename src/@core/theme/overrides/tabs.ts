@@ -1,5 +1,5 @@
 // ** Type Import
-import { OwnerStateThemeType } from './'
+import { OwnerStateThemeType } from "./"
 
 const Tabs = () => {
   return {
@@ -9,24 +9,24 @@ const Tabs = () => {
           minWidth: 130,
           marginRight: theme.spacing(4),
           borderRight: `1px solid ${theme.palette.divider}`,
-          '& .MuiTab-root': {
-            minWidth: 130
-          }
-        })
-      }
+          "& .MuiTab-root": {
+            minWidth: 130,
+          },
+        }),
+      },
     },
     MuiTab: {
       styleOverrides: {
         root: {
-          lineHeight: 1.5
+          lineHeight: 1.5,
         },
         textColorSecondary: ({ theme }: OwnerStateThemeType) => ({
-          '&.Mui-selected': {
-            color: theme.palette.text.secondary
-          }
-        })
-      }
-    }
+          "&.Mui-selected": {
+            color: theme.palette.text.secondary,
+          },
+        }),
+      },
+    },
   }
 }
 
