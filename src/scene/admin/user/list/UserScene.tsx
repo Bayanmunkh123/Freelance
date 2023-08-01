@@ -341,7 +341,7 @@ export const UserScene = () => {
           />
           <DataGrid
             autoHeight
-            rows={data ? data.organizationUsers?.data : []}
+            rows={data?.organizationUsers?.data || []}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick

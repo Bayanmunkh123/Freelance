@@ -17,5 +17,10 @@ declare module "next" {
   }
 }
 
+declare namespace NodeJS {
+  export interface Process extends NodeJS.Process {
+    browser?: string
+  }
+}
 // setConfig?: () => void
 // contentHeightFixed?: boolean

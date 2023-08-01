@@ -13,12 +13,12 @@ import { config } from "src/config"
 import { useAuthEmailResetPasswordMutation } from "src/generated"
 import { useAuthModalContext } from "src/hooks/useAuth"
 import { AuthModalType } from "src/utils/constants"
-import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
 import { encrypt } from "src/utils/generateData"
 import { validationConfirmPasswordSchema } from "src/validators/auth/auth.validator"
 import { handleAuthDialog } from "../utils/handleAuthDialog"
 import { useApolloClient } from "@apollo/client"
 import { useRouter } from "next/router"
+import { removeItemToken, setItemToken } from "src/lib/apollo/tokenHandler"
 
 export type AuthChangePasswordProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -58,9 +58,9 @@ export const AuthChangePassword = (props: AuthChangePasswordProps) => {
             data.authEmailResetPassword?.deviceId,
           )
 
-        destroyCookieToken(undefined)
+        removeItemToken(null)
         if (data.authEmailResetPassword.accessToken) {
-          setCookieToken(data.authEmailResetPassword)
+          setItemToken(data.authEmailResetPassword)
           handleAuthDialog({ apolloClient, router })
         } else if (data.authEmailResetPassword.devices) {
           setSessionList(data.authEmailResetPassword.devices)

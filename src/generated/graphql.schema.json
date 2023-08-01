@@ -2245,7 +2245,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "RefreshTokenInput",
+                  "name": "RefreshToAccessTokenInput",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -3527,7 +3527,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "RefreshTokenInput",
+        "name": "RefreshToAccessTokenInput",
         "description": null,
         "fields": null,
         "inputFields": [

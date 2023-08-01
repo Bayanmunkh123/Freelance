@@ -1,69 +1,58 @@
-import { useState, useEffect, MouseEvent, useCallback } from "react"
 import Link from "next/link"
-import { GetStaticProps, InferGetStaticPropsType } from "next/types"
+import { MouseEvent, useCallback, useEffect, useState } from "react"
 
 import Box from "@mui/material/Box"
 import Card from "@mui/material/Card"
-import Menu from "@mui/material/Menu"
 import Grid from "@mui/material/Grid"
-import Divider from "@mui/material/Divider"
-import { styled } from "@mui/material/styles"
-import MenuItem from "@mui/material/MenuItem"
 import IconButton from "@mui/material/IconButton"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
-import CardHeader from "@mui/material/CardHeader"
-import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
-import CardContent from "@mui/material/CardContent"
+import { styled } from "@mui/material/styles"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
 
 import Icon from "src/@core/components/icon"
 
 import CustomAvatar from "src/@core/components/mui/avatar"
-import { getInitials } from "src/@core/utils/get-initials"
 import { ThemeColor } from "src/@core/layouts/types"
-import { RoleTableHeader } from "./RoleTableHeader"
+import { getInitials } from "src/@core/utils/get-initials"
 import {
-  AuthUserType,
   OrganizationUser,
+  OrganizationUserRoleEnum,
   useOrganizationUsersQuery,
   useRolesQuery,
-  useUsersLazyQuery,
 } from "src/generated"
-import { useAuth } from "src/hooks/useAuth"
-import axios from "axios"
-import { useRoleVariables } from "../../../utils/useRoleVariables"
 import { useOnSearch } from "src/hooks/useOnSearch"
 import { useOrganizationUserVariables } from "../../../utils/useOrganizationUserVariables"
-import { UserContextType } from "src/context/types"
+import { RoleTableHeader } from "./RoleTableHeader"
+import { SelectChangeEvent } from "@mui/material"
 
-interface UserRoleType {
-  [key: string]: { icon: string; color: string }
-}
+// interface UserRoleType {
+//   [key: string]: { icon: string; color: string }
+// }
 
 interface UserStatusType {
   [key: string]: ThemeColor
 }
 
 // ** Vars
-const userRoleObj: UserRoleType = {
-  admin: { icon: "mdi:laptop", color: "error.main" },
-  author: { icon: "mdi:cog-outline", color: "warning.main" },
-  editor: { icon: "mdi:pencil-outline", color: "info.main" },
-  maintainer: { icon: "mdi:chart-donut", color: "success.main" },
-  subscriber: { icon: "mdi:account-outline", color: "primary.main" },
-}
+// const userRoleObj: UserRoleType = {
+//   admin: { icon: "mdi:laptop", color: "error.main" },
+//   author: { icon: "mdi:cog-outline", color: "warning.main" },
+//   editor: { icon: "mdi:pencil-outline", color: "info.main" },
+//   maintainer: { icon: "mdi:chart-donut", color: "success.main" },
+//   subscriber: { icon: "mdi:account-outline", color: "primary.main" },
+// }
 
 interface CellType {
   row: OrganizationUser
 }
 
-const userStatusObj: UserStatusType = {
-  active: "success",
-  pending: "warning",
-  inactive: "secondary",
-}
+// const userStatusObj: UserStatusType = {
+//   active: "success",
+//   pending: "warning",
+//   inactive: "secondary",
+// }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -103,6 +92,7 @@ const renderClient = (row: OrganizationUser) => {
 }
 
 const RowOptions = ({ id }: { id: number | string }) => {
+  console.log(id)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -269,11 +259,14 @@ export const RoleListTable = () => {
   const onSearch = useOnSearch()
 
   const [value, setValue] = useState<string>("")
+  const [searchValue, setSearchValue] = useState("")
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   })
+
+  const clearSearch = () => setSearchValue("")
 
   const { data: rolesList } = useRolesQuery({
     fetchPolicy: "no-cache",
@@ -282,39 +275,60 @@ export const RoleListTable = () => {
     },
   })
 
-  const { data, loading } = useOrganizationUsersQuery({
-    fetchPolicy: "no-cache",
-    variables,
+  const {
+    data,
+    loading: organizationUserLoading,
+    refetch,
+  } = useOrganizationUsersQuery({
+    // fetchPolicy: "no-cache",
+    variables: {
+      input: {
+        // ...variables,
+        orgRole: "EDITOR" as OrganizationUserRoleEnum,
+      },
+    },
     onCompleted: (data) => {
       console.log(data)
-
-      // if (data?.users?.data) setRoleData(data?.users?.data)
     },
     onError: (error: unknown) => {
       alert(error)
     },
   })
 
-  const handleFilter = useCallback((val: string) => {
-    onSearch("role", val)
+  const handleFilter = (val: string) => {
+    // onSearch("orgRole", val)
+    refetch()
     setValue(val)
-  }, [])
+  }
+  // const handleFilter = useCallback((val: string) => {
+  //   // onSearch("orgRole", val)
+  //   refetch()
+  //   setValue(val)
+  // }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+
+  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
+    onSearch("orgRole", e.target.value)
+  }, [])
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
           <RoleTableHeader
-            roleList={rolesList}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            roleList={rolesList as string}
             handleFilter={handleFilter}
             toggle={toggleAddUserDrawer}
+            handleRoleChange={handleRoleChange}
+            clearSearch={clearSearch}
           />
           <DataGrid
-            loading={loading}
+            loading={organizationUserLoading}
             autoHeight
-            rows={data ? data.organizationUsers?.data : []}
+            rows={data?.organizationUsers?.data || []}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick

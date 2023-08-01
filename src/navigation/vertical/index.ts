@@ -8,7 +8,7 @@ const navigation = (): VerticalNavItemsType => {
       path: "/admin/jobs",
       icon: "mdi:home-outline",
       action: "read",
-      subject: "Job",
+      subject: "Admin_Jobs",
       auth: true,
     },
     {
@@ -16,7 +16,7 @@ const navigation = (): VerticalNavItemsType => {
       path: "/admin/users",
       icon: "mdi:user-outline",
       action: "read",
-      subject: "User",
+      subject: "Admin_Users",
       auth: true,
     },
     {
@@ -24,7 +24,7 @@ const navigation = (): VerticalNavItemsType => {
       path: "/admin/roles",
       icon: "mdi:shield-outline",
       action: "read",
-      subject: "Role",
+      subject: "Admin_Roles",
       auth: true,
     },
   ]

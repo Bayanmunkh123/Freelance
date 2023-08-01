@@ -11,10 +11,10 @@ import {
 import { AuthModalType } from "src/utils/constants"
 import { useAccountEliminateMutation } from "src/generated"
 import { config } from "src/config"
-import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
 import { useApolloClient } from "@apollo/client"
 import { useRouter } from "next/router"
 import { useAuthModalContext } from "src/hooks/useAuth"
+import { removeItemToken, setItemToken } from "src/lib/apollo/tokenHandler"
 
 export type AuthSessionManageProps = {
   visibleAuthDialog: AuthModalType | undefined
@@ -35,17 +35,13 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
       }
 
       if (data.accountEliminate?.accessToken) {
-        destroyCookieToken(undefined)
+        removeItemToken(null)
         if (data?.accountEliminate?.accessToken) {
-          setCookieToken(data.accountEliminate)
-
+          setItemToken(data.accountEliminate)
           alert("Амжилттай")
-
           await apolloClient.cache.reset()
           window.location.reload()
-
           setVisibleAuthDialog(null)
-
           Router.push("/")
         }
       } else {
@@ -81,7 +77,7 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
                       variables: {
                         input: {
                           id: name.id,
-                          email: userData?.email,
+                          email: userData?.email as string,
                           password: userData?.password,
                         },
                       },
