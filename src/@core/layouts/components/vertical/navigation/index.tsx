@@ -137,6 +137,7 @@ const Navigation = (props: Props) => {
     ) {
       container = hidden ? container.target : container
       if (shadowRef && container.scrollTop > 0) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         if (!shadowRef.current.classList.contains("scrolled")) {
           // @ts-ignore

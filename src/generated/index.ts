@@ -214,6 +214,7 @@ export type Mutation = {
   loginEmail?: Maybe<AuthVerifyTokenType>
   loginPhone?: Maybe<AuthVerifyTokenType>
   logout?: Maybe<Scalars["Boolean"]>
+  refreshAccessToken?: Maybe<RefreshTokenType>
   registerEmail?: Maybe<Scalars["Boolean"]>
   registerPhone?: Maybe<Scalars["Boolean"]>
   storageSignedUrlCreate?: Maybe<StorageWriteSignedUrl>
@@ -299,6 +300,10 @@ export type MutationLoginPhoneArgs = {
 
 export type MutationLogoutArgs = {
   deviceId?: InputMaybe<Scalars["String"]>
+}
+
+export type MutationRefreshAccessTokenArgs = {
+  input?: InputMaybe<RefreshToAccessTokenInput>
 }
 
 export type MutationRegisterEmailArgs = {
@@ -472,7 +477,7 @@ export type QueryUsersArgs = {
   input?: InputMaybe<UsersWhereInput>
 }
 
-export type RefreshTokenInput = {
+export type RefreshToAccessTokenInput = {
   refreshToken: Scalars["String"]
 }
 
@@ -734,6 +739,20 @@ export type LogoutMutationVariables = Exact<{
 export type LogoutMutation = {
   __typename?: "Mutation"
   logout?: boolean | null
+}
+
+export type RefreshAccessTokenMutationVariables = Exact<{
+  input: RefreshToAccessTokenInput
+}>
+
+export type RefreshAccessTokenMutation = {
+  __typename?: "Mutation"
+  refreshAccessToken?: {
+    __typename?: "RefreshTokenType"
+    accessToken?: string | null
+    refreshToken?: string | null
+    wsToken?: string | null
+  } | null
 }
 
 export type CreateJobMutationVariables = Exact<{
@@ -1196,6 +1215,58 @@ export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<
   LogoutMutation,
   LogoutMutationVariables
+>
+export const RefreshAccessTokenDocument = gql`
+  mutation refreshAccessToken($input: RefreshToAccessTokenInput!) {
+    refreshAccessToken(input: $input) {
+      accessToken
+      refreshToken
+      wsToken
+    }
+  }
+`
+export type RefreshAccessTokenMutationFn = Apollo.MutationFunction<
+  RefreshAccessTokenMutation,
+  RefreshAccessTokenMutationVariables
+>
+
+/**
+ * __useRefreshAccessTokenMutation__
+ *
+ * To run a mutation, you first call `useRefreshAccessTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshAccessTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshAccessTokenMutation, { data, loading, error }] = useRefreshAccessTokenMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRefreshAccessTokenMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RefreshAccessTokenMutation,
+    RefreshAccessTokenMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RefreshAccessTokenMutation,
+    RefreshAccessTokenMutationVariables
+  >(RefreshAccessTokenDocument, options)
+}
+export type RefreshAccessTokenMutationHookResult = ReturnType<
+  typeof useRefreshAccessTokenMutation
+>
+export type RefreshAccessTokenMutationResult =
+  Apollo.MutationResult<RefreshAccessTokenMutation>
+export type RefreshAccessTokenMutationOptions = Apollo.BaseMutationOptions<
+  RefreshAccessTokenMutation,
+  RefreshAccessTokenMutationVariables
 >
 export const CreateJobDocument = gql`
   mutation createJob($input: JobCreateInput!) {

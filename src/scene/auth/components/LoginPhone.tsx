@@ -14,13 +14,13 @@ import { useRouter } from "next/router"
 import React from "react"
 import { config } from "src/config"
 import { LoginPhoneInput, useLoginPhoneMutation } from "src/generated"
-import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
 import { validationLoginPhoneSchema } from "src/validators/auth/auth.validator"
 import { AuthModalType } from "src/utils/constants"
 import crypto from "crypto-js"
 import { useAuthModalContext } from "src/hooks/useAuth"
 import { encrypt } from "src/utils/generateData"
 import { handleAuthDialog } from "../utils/handleAuthDialog"
+import { removeItemToken, setItemToken } from "src/lib/apollo/tokenHandler"
 
 type LoginPhoneProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
@@ -68,9 +68,9 @@ const LoginPhone = (props: LoginPhoneProps) => {
       localStorage.setItem(config.DEVICE_ID, data.loginPhone.deviceId)
     }
     if (data?.loginPhone) {
-      destroyCookieToken(undefined)
+      removeItemToken(null)
       if (data.loginPhone.accessToken) {
-        setCookieToken(data.loginPhone)
+        setItemToken(data.loginPhone)
         handleAuthDialog({ apolloClient, router })
       } else if (data.loginPhone.devices) {
         setSessionList(data.loginPhone.devices)

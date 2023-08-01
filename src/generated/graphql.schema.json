@@ -2237,6 +2237,31 @@
             "deprecationReason": null
           },
           {
+            "name": "refreshAccessToken",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "RefreshToAccessTokenInput",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "RefreshTokenType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "registerEmail",
             "description": null,
             "args": [
@@ -3502,7 +3527,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "RefreshTokenInput",
+        "name": "RefreshToAccessTokenInput",
         "description": null,
         "fields": null,
         "inputFields": [

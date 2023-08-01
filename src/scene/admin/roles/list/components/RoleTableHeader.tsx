@@ -77,7 +77,7 @@ export const RoleTableHeader = (props: TableHeaderProps) => {
                 size="small"
                 title="Clear"
                 aria-label="Clear"
-                onClick={clearSearch}
+                onClick={() => clearSearch}
               >
                 <Icon icon="mdi:close" fontSize={20} />
               </IconButton>

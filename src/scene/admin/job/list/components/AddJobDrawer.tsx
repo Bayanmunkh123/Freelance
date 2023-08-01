@@ -62,17 +62,17 @@ export const AddJobDrawer = (props: SidebarAddUserType) => {
   })
 
   const submitHandler = (data: UserAddInput) => {
-    onCreateUserMutation({
-      variables: {
-        input: {
-          // firstName: data.firstName,
-          // lastName: data.lastName,
-          // email: data.email,
-          // orgRole: data.orgRole as OrganizationUserRoleEnum,
-          // organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
-        },
-      },
-    })
+    // onCreateUserMutation({
+    //   variables: {
+    //     input: {
+    //       firstName: data.firstName,
+    //       lastName: data.lastName,
+    //       email: data.email,
+    //       orgRole: data.orgRole as OrganizationUserRoleEnum,
+    //       organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
+    //     },
+    //   },
+    // })
   }
 
   const handleClose = () => {

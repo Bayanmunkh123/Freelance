@@ -21,7 +21,7 @@ import crypto from "crypto-js"
 import { handleAuthDialog } from "../utils/handleAuthDialog"
 
 // import { encrypt } from 'src/utils/generateData'
-import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
+import { removeItemToken, setItemToken } from "src/lib/apollo/tokenHandler"
 
 type LoginEmailProps = {
   setVisibleAuthDialog: (type: AuthModalType | null) => void
@@ -70,9 +70,9 @@ const LoginEmail = (props: LoginEmailProps) => {
       if (data?.loginEmail?.deviceId)
         localStorage.setItem(config.DEVICE_ID, data.loginEmail?.deviceId)
 
-      destroyCookieToken(undefined)
+      removeItemToken(null)
       if (data.loginEmail.accessToken) {
-        setCookieToken(data?.loginEmail)
+        setItemToken(data?.loginEmail)
         handleAuthDialog({ apolloClient, router })
       } else if (data.loginEmail.devices) {
         setSessionList(data.loginEmail.devices)
