@@ -2,15 +2,7 @@ import { RefreshAccessTokenMutation } from "./../../generated/index"
 import { ApolloClient, NormalizedCacheObject, gql } from "@apollo/client"
 import { config } from "src/config"
 import { AuthVerifyTokenType } from "src/generated"
-
-const REFRESH_ACCESS_TOKEN = gql`
-  mutation REFRESH_ACCESS_TOKEN($data: RefreshToAccessTokenInput!) {
-    refreshAccessToken(data: $data) {
-      accessToken
-      refreshToken
-    }
-  }
-`
+import { REFRESH_ACCESS_TOKEN } from "./mutations"
 
 export const getNewAccessToken = async (
   apolloClient: ApolloClient<NormalizedCacheObject>,
