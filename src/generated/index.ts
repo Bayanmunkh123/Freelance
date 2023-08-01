@@ -209,6 +209,7 @@ export type Mutation = {
   createInvitation?: Maybe<Scalars["Boolean"]>
   createJob?: Maybe<Job>
   createOrganization?: Maybe<Organization>
+  createOrganizationUser?: Maybe<OrganizationUser>
   createUser?: Maybe<User>
   deleteUser?: Maybe<Scalars["Boolean"]>
   loginEmail?: Maybe<AuthVerifyTokenType>
@@ -279,6 +280,10 @@ export type MutationCreateJobArgs = {
 
 export type MutationCreateOrganizationArgs = {
   input: OrganizationCreateInput
+}
+
+export type MutationCreateOrganizationUserArgs = {
+  input: OrganizationUserCreateInput
 }
 
 export type MutationCreateUserArgs = {
@@ -385,6 +390,13 @@ export type OrganizationUser = {
   userId: Scalars["String"]
 }
 
+export type OrganizationUserCreateInput = {
+  nickname: Scalars["String"]
+  orgRole: OrganizationUserRoleEnum
+  organizationId: Scalars["String"]
+  userId: Scalars["String"]
+}
+
 export enum OrganizationUserRoleEnum {
   EDITOR = "EDITOR",
   FINANCE = "FINANCE",
@@ -392,6 +404,10 @@ export enum OrganizationUserRoleEnum {
   SALES = "SALES",
   SUPPORT = "SUPPORT",
   VIEWER = "VIEWER",
+}
+
+export type OrganizationUserUpdateInput = {
+  nickname: Scalars["String"]
 }
 
 export type OrganizationUsersType = {
@@ -402,6 +418,7 @@ export type OrganizationUsersType = {
 
 export type OrganizationUsersWhereInput = {
   orgRole?: InputMaybe<OrganizationUserRoleEnum>
+  organizationId: Scalars["String"]
 }
 
 export type OrganizationsType = {
