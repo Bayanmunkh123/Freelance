@@ -40,13 +40,13 @@ const AclGuard = (props: AclGuardProps) => {
   const router = useRouter()
 
   let ability: AppAbility
+  console.log("auth.user", auth.user)
   if (auth.loading) return <Spinner />
-
   // User is logged in, build ability for the user based on his role
   if (auth.user && !ability) {
     ability = buildAbilityFor(
       auth.user as AuthUserType,
-      aclAbilities.subject as Subjects,
+      // aclAbilities.subject as Subjects,
     )
     if (router.route === "/" && !ability) {
       return <Spinner />

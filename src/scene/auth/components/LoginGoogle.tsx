@@ -12,9 +12,9 @@ import {
 import { firebaseConfig } from "src/utils/firebase/config"
 import { useApolloClient } from "@apollo/client"
 import { useAuthWebMutation } from "src/generated"
-import { setCookieToken } from "src/utils/cookies"
 import { handleAuthDialog } from "../utils/handleAuthDialog"
 import { useRouter } from "next/router"
+import { setItemToken } from "src/lib/apollo/tokenHandler"
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -28,7 +28,7 @@ const LoginGoogle = () => {
     onCompleted: async (data) => {
       if (data.authWeb)
         if (data.authWeb.accessToken) {
-          setCookieToken(data?.authWeb)
+          setItemToken(data?.authWeb)
           handleAuthDialog({ apolloClient, router })
         } else {
           alert("ERROR")

@@ -12,6 +12,7 @@ import {
 import { firebaseConfig } from "src/utils/firebase/config"
 import { useApolloClient } from "@apollo/client"
 import { useAuthWebMutation } from "src/generated"
+import { setItemToken } from "src/lib/apollo/tokenHandler"
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
@@ -23,8 +24,7 @@ const LoginFacebook = () => {
     fetchPolicy: "no-cache",
     onCompleted: async ({ authWeb }) => {
       if (authWeb?.accessToken) {
-        // showSuccess("Амжилттай")
-        // setCookieToken(authWeb)
+        setItemToken(authWeb)
         await apolloClient.cache.reset()
         window.location.reload()
       } else {

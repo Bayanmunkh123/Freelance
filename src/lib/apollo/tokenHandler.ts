@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client"
+import { RefreshAccessTokenMutation } from "./../../generated/index"
+import { ApolloClient, NormalizedCacheObject, gql } from "@apollo/client"
 import { config } from "src/config"
-import { parseCookies, setCookie } from "nookies"
-import { setCookieToken } from "src/utils/cookies"
+import { AuthVerifyTokenType } from "src/generated"
 
 const REFRESH_ACCESS_TOKEN = gql`
   mutation REFRESH_ACCESS_TOKEN($data: RefreshToAccessTokenInput!) {
@@ -12,33 +12,58 @@ const REFRESH_ACCESS_TOKEN = gql`
   }
 `
 
-export const getNewAccessToken = async (apolloClient: any) => {
-  let result
+export const getNewAccessToken = async (
+  apolloClient: ApolloClient<NormalizedCacheObject>,
+) => {
   try {
-    const cookies = parseCookies()
-    if (cookies["refresh-token"]) {
-      result = await apolloClient.mutate({
+    const refreshToken = localStorage.getItem(config.REFRESH_TOKEN_KEY)
+    if (refreshToken) {
+      const { data } = await apolloClient.mutate<{
+        refreshAccessToken: RefreshAccessTokenMutation["refreshAccessToken"]
+      }>({
         mutation: REFRESH_ACCESS_TOKEN,
         variables: {
-          data: {
-            refreshToken: cookies["refresh-token"],
+          input: {
+            refreshToken: refreshToken,
           },
         },
       })
-      const newRefreshToken =
-        result?.data?.refreshAccessToken?.refreshToken || ""
-      const newAccessToken = result?.data?.refreshAccessToken?.accessToken || ""
+      const _accessToken = data?.refreshAccessToken?.accessToken || ""
+      if (_accessToken) {
+        localStorage.setItem(config.ACCESS_TOKEN_KEY, _accessToken)
+      }
+      const _refreshToken = data?.refreshAccessToken?.refreshToken || ""
+      if (_refreshToken) {
+        localStorage.setItem(config.REFRESH_TOKEN_KEY, _refreshToken)
+      }
 
-      setCookieToken({
-        refreshToken: newRefreshToken,
-        accessToken: newAccessToken,
-      })
-    }
+      const _wsToken = data?.refreshAccessToken?.wsToken || ""
+      if (_wsToken) {
+        localStorage.setItem(config.REFRESH_TOKEN_KEY, _wsToken)
+      }
 
-    return !!cookies["refresh-token"]
+      return data?.refreshAccessToken?.accessToken
+    } else return null
   } catch (error) {
-    console.log("refreshAccessTokenError", error)
+    console.log("getNewAccessToken === error", error)
+    removeItemToken(null)
+    return null
   }
+}
 
-  return
+export const setItemToken = (token: AuthVerifyTokenType | undefined) => {
+  if (token?.accessToken)
+    localStorage.setItem(config.ACCESS_TOKEN_KEY, token?.accessToken)
+  if (token?.refreshToken)
+    localStorage.setItem(config.REFRESH_TOKEN_KEY, token.refreshToken)
+}
+
+export const removeItemToken = (token: AuthVerifyTokenType | null) => {
+  if (token?.accessToken) localStorage.removeItem(config.ACCESS_TOKEN_KEY)
+  else if (token?.refreshToken)
+    localStorage.removeItem(config.REFRESH_TOKEN_KEY)
+  else {
+    localStorage.removeItem(config.ACCESS_TOKEN_KEY)
+    localStorage.removeItem(config.REFRESH_TOKEN_KEY)
+  }
 }

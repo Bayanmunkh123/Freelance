@@ -12,12 +12,12 @@ import { AuthModalType } from "src/utils/constants"
 import { validationConfirmCodeSchema } from "src/validators/auth/auth.validator"
 import { useAuthModalContext } from "src/hooks/useAuth"
 import { config } from "src/config"
-import { destroyCookieToken, setCookieToken } from "src/utils/cookies"
 import { useApolloClient } from "@apollo/client"
 import { useRouter } from "next/router"
 import Countdown, { CountdownRenderProps } from "react-countdown"
 import { LoadingButton } from "@mui/lab"
 import { handleAuthDialog } from "../utils/handleAuthDialog"
+import { removeItemToken, setItemToken } from "src/lib/apollo/tokenHandler"
 
 export type AuthConfirmCodeProps = {
   visibleAuthDialog: AuthModalType | null
@@ -81,9 +81,9 @@ export const AuthConfirmCode = (props: AuthConfirmCodeProps) => {
             data.authEmailVerifyToken?.deviceId,
           )
         }
-        destroyCookieToken(undefined)
+        removeItemToken(null)
         if (data?.authEmailVerifyToken?.accessToken) {
-          setCookieToken(data.authEmailVerifyToken)
+          setItemToken(data.authEmailVerifyToken)
           handleAuthDialog({ apolloClient, router })
         } else if (data?.authEmailVerifyToken?.devices) {
           setSessionList(data?.authEmailVerifyToken?.devices)

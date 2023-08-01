@@ -1,13 +1,13 @@
 import { useMemo } from "react"
 import {
   ApolloClient,
-  ApolloLink,
   HttpLink,
   NormalizedCacheObject,
+  from,
+  fromPromise,
   split,
 } from "@apollo/client"
 
-// import { errorLink } from "./errorLink"
 import { onError } from "@apollo/client/link/error"
 
 import merge from "deepmerge"
@@ -16,10 +16,8 @@ import { createClient } from "graphql-ws"
 import { getMainDefinition } from "@apollo/client/utilities"
 import { config } from "src/config"
 import { setContext } from "@apollo/client/link/context"
-import cookie from "cookie"
-import { IncomingHttpHeaders } from "http"
 import { localCache } from "./localCache"
-import { graphQLErrorLink } from "./graphQLErrors"
+import { getNewAccessToken, removeItemToken } from "./tokenHandler"
 
 const httpLink = new HttpLink({
   uri: `${config.BACKEND_URL}/graphql`,
@@ -33,10 +31,7 @@ const wsLink =
           url: `${config.BACKEND_WS_URL}/graphql`,
           connectionParams: async () => {
             // Add AccessToken header
-            const accessToken = cookie.parse(document?.cookie || "")[
-              config.ACCESS_TOKEN_KEY
-            ]
-
+            const accessToken = localStorage.getItem(config.ACCESS_TOKEN_KEY)
             return { authentication: accessToken }
           },
         }),
@@ -59,74 +54,143 @@ const splitLink =
       )
     : httpLink
 
-function createAuthLink(serverHeaders?: IncomingHttpHeaders | undefined) {
-  return setContext(async (_, { headers }) => {
-    // Add AccessToken header
-    let newHeaders = headers
+const authLink = setContext((_, { headers }) => {
+  let newHeaders = headers
 
-    // Add AccessToken header
-    const accessToken = process.browser
-      ? cookie.parse(document?.cookie || "")[config.ACCESS_TOKEN_KEY]
-      : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
-          config.ACCESS_TOKEN_KEY
-        ]
-    if (accessToken) {
-      newHeaders = { ...newHeaders, [config.ACCESS_TOKEN_KEY]: accessToken }
-    }
-
-    // Add RefreshToken header
-    const refreshToken = process.browser
-      ? cookie.parse(document?.cookie || "")[config.REFRESH_TOKEN_KEY]
-      : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
-          config.REFRESH_TOKEN_KEY
-        ]
-
-    if (refreshToken) {
-      newHeaders = {
-        ...newHeaders,
-        [config.REFRESH_TOKEN_KEY]: refreshToken,
-      }
-    }
-
-    return {
-      headers: newHeaders,
-    }
-  })
-}
+  const accessToken = localStorage.getItem(config.ACCESS_TOKEN_KEY)
+  if (accessToken) {
+    newHeaders = { ...newHeaders, [config.ACCESS_TOKEN_KEY]: accessToken }
+  }
+  const refreshToken = localStorage.getItem(config.REFRESH_TOKEN_KEY)
+  if (refreshToken) {
+    newHeaders = { ...newHeaders, [config.REFRESH_TOKEN_KEY]: refreshToken }
+  }
+  return {
+    headers: newHeaders,
+  }
+})
 
 let apolloClient: ApolloClient<NormalizedCacheObject>
 
-function createApolloClient() {
-  const authLink = createAuthLink()
+const errorLink = onError((errors) => {
+  const { graphQLErrors, networkError, operation, response, forward } = errors
 
-  const errorLink = onError((errors) => {
-    const { graphQLErrors, networkError, operation, response } = errors
-
-    console.log(
-      `Error occured on operation: ${operation.operationName} with response of ${response}`,
-    )
-    if (graphQLErrors) {
-      graphQLErrorLink({ errors: errors, client: apolloClient })
-      graphQLErrors.forEach(({ message, locations, path }) =>
-        console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-        ),
-      )
+  console.log(
+    `Error occured on operation: ${operation.operationName} with response of ${response}`,
+  )
+  if (graphQLErrors) {
+    // graphQLErrorLink({ errors: errors, client: apolloClient })
+    // graphQLErrors.forEach(({ message, locations, path }) =>
+    //   console.log(
+    //     `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+    //   ),
+    // )
+    for (const error of graphQLErrors) {
+      console.log("[GraphQL error]: error", error)
+      if (!error.extensions.code) {
+        graphQLErrors.forEach(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          ),
+        )
+      }
+      switch (error.extensions.code) {
+        case "ACCESS_TOKEN_EXPIRED": {
+          if (operation.operationName === "refreshAccessToken") return
+          const refreshTokenPromise = new Promise((resolve, reject) => {
+            getNewAccessToken(apolloClient)
+              .then((accessToken) => resolve(accessToken))
+              .catch((e) => {
+                // logout()
+                console.log("getNewAccessToken catch error", e)
+                reject(e)
+              })
+          })
+          return fromPromise(refreshTokenPromise)
+            .filter((value) => Boolean(value))
+            .flatMap((accessToken) => {
+              console.log("fromPromise === accessToken", accessToken)
+              const oldHeaders = operation.getContext().headers
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  [config.ACCESS_TOKEN_KEY]: `${accessToken}`,
+                },
+              })
+              return forward(operation)
+            })
+        }
+        case "ACCESS_TOKEN_INVALID": {
+          if (operation.operationName === "refreshAccessToken") return
+          const refreshTokenPromise = new Promise((resolve, reject) => {
+            getNewAccessToken(apolloClient)
+              .then((accessToken) => resolve(accessToken))
+              .catch((e) => {
+                // logout()
+                console.log("getNewAccessToken catch error", e)
+                reject(e)
+              })
+          })
+          return fromPromise(refreshTokenPromise)
+            .filter((value) => Boolean(value))
+            .flatMap((accessToken) => {
+              console.log("fromPromise === accessToken", accessToken)
+              const oldHeaders = operation.getContext().headers
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  [config.ACCESS_TOKEN_KEY]: `${accessToken}`,
+                },
+              })
+              return forward(operation)
+            })
+        }
+        case "ACCESS_TOKEN_MISSING": {
+          removeItemToken(null)
+          return forward(operation)
+        }
+        case "REFRESH_TOKEN_EXPIRED": {
+          removeItemToken(null)
+          return forward(operation)
+        }
+        case "REFRESH_TOKEN_INVALID": {
+          removeItemToken(null)
+          return forward(operation)
+        }
+        case "REFRESH_TOKEN_MISSING":
+          removeItemToken(null)
+          return forward(operation)
+        default:
+          graphQLErrors.map(({ message, locations, path }) => {
+            console.log(
+              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            )
+          })
+      }
     }
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`)
-    }
-  })
+  }
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`)
+  }
+  return forward(operation)
+})
 
-  return new ApolloClient({
-    ssrMode: typeof window === "undefined",
-    link: ApolloLink.from([errorLink, authLink, splitLink]),
-    cache: localCache,
-  })
-}
+// function createApolloClient() {
+//   return new ApolloClient({
+//     ssrMode: typeof window === "undefined",
+//     link: ApolloLink.from([authLink, errorLink, splitLink]),
+//     cache: localCache,
+//   })
+// }
+
+const client = new ApolloClient({
+  ssrMode: typeof window === "undefined",
+  link: from([authLink, errorLink, httpLink]),
+  cache: localCache,
+})
 
 export function initializeApollo(initialState = null) {
-  const _apolloClient = apolloClient ?? createApolloClient()
+  const _apolloClient = apolloClient ?? client
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // get hydrated here

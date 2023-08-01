@@ -13,7 +13,7 @@ interface AuthGuardProps {
 }
 
 const AuthGuard = (props: AuthGuardProps) => {
-  // console.log('AuthGuard START')
+  console.log("AuthGuard START")
   const { children, fallback } = props
   const auth = useAuth()
   const router = useRouter()
@@ -42,7 +42,6 @@ const AuthGuard = (props: AuthGuardProps) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   //   [router.route]
   // )
-
   if (auth.loading || auth.user === null) {
     return fallback
   }

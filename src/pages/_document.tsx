@@ -36,12 +36,7 @@ CustomDocument.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) =>
-        (
-          <App
-            {...props} // @ts-ignore
-          />
-        ),
+      enhanceApp: (App) => (props) => <App {...props} />,
     })
 
   const initialProps = await Document.getInitialProps(ctx)

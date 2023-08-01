@@ -13,6 +13,7 @@ import Icon from "src/@core/components/icon"
 
 import {
   OrganizationUserRoleEnum,
+  useCreateJobMutation,
   useCreateUserMutation,
   useOrganizationsQuery,
 } from "src/generated"
@@ -45,12 +46,12 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
 }))
 
-const SidebarAddUser = (props: SidebarAddUserType) => {
+export const AddJobDrawer = (props: SidebarAddUserType) => {
   const { open, toggle } = props
 
-  const [onCreateUser] = useCreateUserMutation({
+  const [onCreateUserMutation] = useCreateJobMutation({
     onCompleted: (data) => {
-      if (data.createUser?.id) window.location.reload()
+      if (data.createJob?.id) window.location.reload()
     },
   })
 
@@ -61,17 +62,17 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   })
 
   const submitHandler = (data: UserAddInput) => {
-    onCreateUser({
-      variables: {
-        input: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          orgRole: data.orgRole as OrganizationUserRoleEnum,
-          organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
-        },
-      },
-    })
+    // onCreateUserMutation({
+    //   variables: {
+    //     input: {
+    //       firstName: data.firstName,
+    //       lastName: data.lastName,
+    //       email: data.email,
+    //       orgRole: data.orgRole as OrganizationUserRoleEnum,
+    //       organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
+    //     },
+    //   },
+    // })
   }
 
   const handleClose = () => {
@@ -218,5 +219,3 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
     </Drawer>
   )
 }
-
-export default SidebarAddUser

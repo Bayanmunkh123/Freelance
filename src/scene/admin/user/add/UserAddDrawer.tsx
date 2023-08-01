@@ -149,7 +149,11 @@ export const UserAddDrawer = (props: SidebarAddUserType) => {
                     id="select-org"
                     label="Байгуулга сонгох"
                     labelId="org-select"
-                    onChange={formikProps.handleChange("organization")}
+                    onChange={(event) => {
+                      formikProps.handleChange("organization")(
+                        event.target.value,
+                      )
+                    }}
 
                     // inputProps={{ placeholder: 'Байгуулга сонгох' }}
                   >
@@ -168,7 +172,9 @@ export const UserAddDrawer = (props: SidebarAddUserType) => {
                     id="select-role"
                     label="Role сонгох"
                     labelId="role-select"
-                    onChange={formikProps.handleChange("orgRole")}
+                    onChange={(event) => {
+                      formikProps.handleChange("orgRole")(event.target.value)
+                    }}
                     inputProps={{ placeholder: "Role сонгох" }}
                   >
                     {OrgRoles.map((role) => (

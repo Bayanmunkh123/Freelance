@@ -1,5 +1,11 @@
 // ** Type Imports
-import { ReactNode } from "react"
+import {
+  JSXElementConstructor,
+  ReactElement,
+  ReactFragment,
+  ReactNode,
+  ReactPortal,
+} from "react"
 import { AppBarProps } from "@mui/material/AppBar"
 import { Theme, SxProps, PaletteMode } from "@mui/material"
 import { Settings } from "src/@core/context/settingsContext"
@@ -63,7 +69,7 @@ export type NavGroup = {
 }
 
 export type NavLink = {
-  children: any
+  children: NavLink[]
   icon?: string
   path?: string
   title: string

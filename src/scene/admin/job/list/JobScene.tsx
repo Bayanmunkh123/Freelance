@@ -3,13 +3,10 @@ import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
 import Divider from "@mui/material/Divider"
-import FormControl from "@mui/material/FormControl"
 import Grid from "@mui/material/Grid"
 import IconButton from "@mui/material/IconButton"
-import InputLabel from "@mui/material/InputLabel"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Typography from "@mui/material/Typography"
 import { styled } from "@mui/material/styles"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
@@ -18,13 +15,11 @@ import { MouseEvent, useCallback, useContext, useState } from "react"
 import Icon from "src/@core/components/icon"
 import CustomAvatar from "src/@core/components/mui/avatar"
 import { getInitials } from "src/@core/utils/get-initials"
-import { useOrganizationUsersQuery, useRolesQuery } from "src/generated"
+import { Job, useJobsQuery } from "src/generated"
 import { useOnSearch } from "src/hooks/useOnSearch"
 import { AbilityContext } from "src/layouts/components/acl/Can"
-import { OrgRoles } from "src/utils/constants"
-import { useOrganizationUserVariables } from "../../utils/useOrganizationUserVariables"
-import AddUserDrawer from "./components/AddUserDrawer"
 import TableHeader from "./components/TableHeader"
+import { AddJobDrawer } from "./components/AddJobDrawer"
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -57,6 +52,7 @@ const renderClient = (row: any) => {
 }
 
 const RowOptions = ({ id }: { id: number | string }) => {
+  console.log(id)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -69,7 +65,6 @@ const RowOptions = ({ id }: { id: number | string }) => {
   }
 
   const handleDelete = () => {
-    // dispatch(deleteUser(id))
     handleRowOptionsClose()
   }
 
@@ -121,9 +116,7 @@ const columns: GridColDef[] = [
     minWidth: 230,
     field: "userName",
     headerName: "UserName",
-    renderCell: ({ row }) => {
-      const { username, profile } = row
-
+    renderCell: ({ row }: { row: Job }) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {renderClient(row)}
@@ -134,12 +127,10 @@ const columns: GridColDef[] = [
               flexDirection: "column",
             }}
           >
-            <LinkStyled href="/apps/user/view/overview/">
-              {profile?.firstName}
-            </LinkStyled>
-            <Typography noWrap variant="caption">
-              {`@${username}`}
-            </Typography>
+            <LinkStyled href="/apps/user/view/overview/">{row.name}</LinkStyled>
+            {/* <Typography noWrap variant="caption">
+              {`${row.location}`}
+            </Typography> */}
           </Box>
         </Box>
       )
@@ -150,10 +141,10 @@ const columns: GridColDef[] = [
     minWidth: 250,
     field: "organization",
     headerName: "Байгуулга",
-    renderCell: ({ row }) => {
+    renderCell: ({ row }: { row: Job }) => {
       return (
         <Typography key={row.id} noWrap variant="body2">
-          {row?.organization?.name}
+          {row.organization?.name}
         </Typography>
       )
     },
@@ -161,22 +152,22 @@ const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 250,
-    field: "email",
-    headerName: "Email",
-    renderCell: ({ row }) => {
+    field: "location",
+    headerName: "Хаяг",
+    renderCell: ({ row }: { row: Job }) => {
       return (
         <Typography noWrap variant="body2">
-          {row.user.email}
+          {row.location}
         </Typography>
       )
     },
   },
   {
     flex: 0.15,
-    field: "role",
+    field: "createdAt",
     minWidth: 150,
-    headerName: "Role",
-    renderCell: ({ row }) => {
+    headerName: "CreatedAt",
+    renderCell: ({ row }: { row: Job }) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center", "& svg": { mr: 3 } }}>
           {/* <Icon icon={userRoleObj[row.role].icon} fontSize={20} /> */}
@@ -184,7 +175,7 @@ const columns: GridColDef[] = [
             noWrap
             sx={{ color: "text.secondary", textTransform: "capitalize" }}
           >
-            {row.orgRole}
+            {row.createdAt}
           </Typography>
         </Box>
       )
@@ -201,47 +192,29 @@ const columns: GridColDef[] = [
 ]
 
 export const JobScene = () => {
-  const variables = useOrganizationUserVariables()
-
   const ability = useContext(AbilityContext)
   const onSearch = useOnSearch()
 
   const [value, setValue] = useState<string>("")
-  const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
+  const [addJobOpen, setAddJobOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   })
 
-  const { data } = useOrganizationUsersQuery({
+  const { data: dataJobs } = useJobsQuery({
     fetchPolicy: "no-cache",
-    variables,
     onError: (error: unknown) => {
       alert(error)
     },
   })
 
-  const { data: RolesList } = useRolesQuery({
-    fetchPolicy: "no-cache",
-    onError: (error: unknown) => {
-      alert(error)
-    },
-  })
   const handleFilter = useCallback((val: string) => {
     onSearch("role", val)
     setValue(val)
   }, [])
 
-  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    console.log(e.target.value)
-    onSearch("role", e.target.value)
-  }, [])
-
-  // const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-  //   setStatus(e.target.value)
-  // }, [])
-
-  const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
+  const toggleAddJobDrawer = () => setAddJobOpen(!addJobOpen)
 
   return (
     <Grid container spacing={6}>
@@ -252,40 +225,17 @@ export const JobScene = () => {
             sx={{ pb: 4, "& .MuiCardHeader-title": { letterSpacing: ".15px" } }}
           />
           <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="role-select">Role сонгох</InputLabel>
-                  <Select
-                    fullWidth
-                    value={RolesList ? RolesList : undefined}
-                    id="select-role"
-                    label="Select Role"
-                    labelId="role-select"
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: "Select Role" }}
-                  >
-                    {OrgRoles.map((role, key) => {
-                      return (
-                        <MenuItem key={key} value={role.name}>
-                          {role.name}
-                        </MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            <Grid container spacing={6}></Grid>
           </CardContent>
           <Divider />
           <TableHeader
             value={value}
             handleFilter={handleFilter}
-            toggle={toggleAddUserDrawer}
+            toggle={toggleAddJobDrawer}
           />
           <DataGrid
             autoHeight
-            rows={data ? data.organizationUsers?.data : []}
+            rows={dataJobs?.jobs?.data || []}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick
@@ -296,8 +246,8 @@ export const JobScene = () => {
           />
         </Card>
       </Grid>
-      {ability?.can("create", "User") && (
-        <AddUserDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
+      {ability?.can("create", "Admin_Job") && (
+        <AddJobDrawer open={addJobOpen} toggle={toggleAddJobDrawer} />
       )}
     </Grid>
   )

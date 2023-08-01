@@ -27,7 +27,7 @@ import themeConfig from "src/config/themeConfig"
 import { hasActiveChild, removeChildren } from "src/@core/layouts/utils"
 
 // ** Type Import
-import { NavGroup, LayoutProps } from "src/@core/layouts/types"
+import { NavGroup, LayoutProps, NavLink } from "src/@core/layouts/types"
 
 // ** Custom Components Imports
 import VerticalNavItems from "./VerticalNavItems"
@@ -93,12 +93,20 @@ const VerticalNavGroup = (props: Props) => {
 
       // If clicked Group has open group children, Also remove those children to close those groups
       if (item.children) {
-        removeChildren(item.children, openGroup, currentActiveGroup)
+        removeChildren(
+          item.children as NavLink[],
+          openGroup,
+          currentActiveGroup,
+        )
       }
     } else if (parent) {
       // ** If Group clicked is the child of an open group, first remove all the open groups under that parent
       if (parent.children) {
-        removeChildren(parent.children, openGroup, currentActiveGroup)
+        removeChildren(
+          item.children as NavLink[],
+          openGroup,
+          currentActiveGroup,
+        )
       }
 
       // ** After removing all the open groups under that parent, add the clicked group to open group array
@@ -153,7 +161,6 @@ const VerticalNavGroup = (props: Props) => {
     if (navCollapsed && !navHover) {
       setGroupActive([])
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath])
 
   useEffect(() => {
@@ -167,15 +174,12 @@ const VerticalNavGroup = (props: Props) => {
     ) {
       setGroupActive([...currentActiveGroup])
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navCollapsed, navHover])
 
   useEffect(() => {
     if (groupActive.length === 0 && !navCollapsed) {
       setGroupActive([])
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navHover])
 
   const icon = parent && !item.icon ? themeConfig.navSubItemIcon : item.icon
