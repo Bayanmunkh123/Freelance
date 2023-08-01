@@ -1,42 +1,56 @@
 // ** Next Import
-import Link from 'next/link'
+import Link from "next/link"
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import Box from "@mui/material/Box"
+import Typography from "@mui/material/Typography"
+import { styled } from "@mui/material/styles"
 
 // ** Type Import
-import { LayoutProps } from 'src/@core/layouts/types'
+import { LayoutProps } from "src/@core/layouts/types"
 
 interface Props {
-  hidden: LayoutProps['hidden']
-  settings: LayoutProps['settings']
-  saveSettings: LayoutProps['saveSettings']
-  appBarContent: NonNullable<NonNullable<LayoutProps['horizontalLayoutProps']>['appBar']>['content']
-  appBarBranding: NonNullable<NonNullable<LayoutProps['horizontalLayoutProps']>['appBar']>['branding']
+  hidden: LayoutProps["hidden"]
+  settings: LayoutProps["settings"]
+  saveSettings: LayoutProps["saveSettings"]
+  appBarContent: NonNullable<
+    NonNullable<LayoutProps["horizontalLayoutProps"]>["appBar"]
+  >["content"]
+  appBarBranding: NonNullable<
+    NonNullable<LayoutProps["horizontalLayoutProps"]>["appBar"]
+  >["branding"]
 }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  textDecoration: 'none',
-  marginRight: theme.spacing(8)
+  display: "flex",
+  alignItems: "center",
+  textDecoration: "none",
+  marginRight: theme.spacing(8),
 }))
 
 const AppBarContent = (props: Props) => {
   // ** Props
-  const { appBarContent: userAppBarContent, appBarBranding: userAppBarBranding } = props
+  const {
+    appBarContent: userAppBarContent,
+    appBarBranding: userAppBarBranding,
+  } = props
 
   // ** Hooks
   // const theme = useTheme()
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
       {userAppBarBranding ? (
         userAppBarBranding(props)
       ) : (
-        <LinkStyled href='/'>
+        <LinkStyled href="/">
           {/* <svg
             width='28'
             height='28'
@@ -59,10 +73,22 @@ const AppBarContent = (props: Props) => {
             </defs>
           </svg> */}
 
-          <Typography variant='h6' sx={{ ml: 2, mr: 1, fontWeight: 500, lineHeight: 1.2, color: 'primary.main' }}>
+          <Typography
+            variant="h6"
+            sx={{
+              ml: 2,
+              mr: 1,
+              fontWeight: 500,
+              lineHeight: 1.2,
+              color: "primary.main",
+            }}
+          >
             TAB
           </Typography>
-          <Typography variant='h6' sx={{ fontWeight: 700, lineHeight: 1.2, color: 'primary.main' }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 700, lineHeight: 1.2, color: "primary.main" }}
+          >
             Systems
           </Typography>
         </LinkStyled>

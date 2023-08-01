@@ -1,22 +1,22 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode } from "react"
 
 // ** MUI Imports
-import { Theme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery'
+import { Theme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 // ** Layout Imports
 // !Do not remove this Layout import
-import Layout from 'src/@core/layouts/Layout'
+import Layout from "src/@core/layouts/Layout"
 
 // ** Navigation Imports
-import LandingNavItems from 'src/navigation/landing'
+import LandingNavItems from "src/navigation/landing"
 
-import VerticalAppBarContent from './components/vertical/AppBarContent'
-import HorizontalAppBarContent from './components/horizontal/AppBarContent'
+import VerticalAppBarContent from "./components/vertical/AppBarContent"
+import HorizontalAppBarContent from "./components/horizontal/AppBarContent"
 
 // ** Hook Import
-import { useSettings } from 'src/@core/hooks/useSettings'
+import { useSettings } from "src/@core/hooks/useSettings"
 
 interface Props {
   children: ReactNode
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const GuestLayout = ({ children, contentHeightFixed }: Props) => {
-  console.log('GuestLayout START')
+  console.log("GuestLayout START")
 
   // ** Hooks
   const { settings, saveSettings } = useSettings()
@@ -41,13 +41,13 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
    *  to know more about what values can be passed to this hook.
    *  ! Do not change this value unless you know what you are doing. It can break the template.
    */
-  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
+  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down("lg"))
 
-  if (hidden && settings.layout === 'horizontal') {
-    settings.layout = 'vertical'
+  if (hidden && settings.layout === "horizontal") {
+    settings.layout = "vertical"
   }
 
-  settings.layout = 'horizontal'
+  settings.layout = "horizontal"
   settings.navHidden = true
 
   return (
@@ -58,7 +58,7 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
       contentHeightFixed={contentHeightFixed}
       horizontalLayoutProps={{
         navMenu: {
-          navItems: LandingNavItems()
+          navItems: LandingNavItems(),
 
           // Uncomment the below line when using server-side menu in vertical layout and comment the above line
           // navItems: verticalMenuItems
@@ -70,31 +70,31 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
               settings={settings}
               saveSettings={saveSettings}
               navMenu={{
-                navItems: LandingNavItems()
+                navItems: LandingNavItems(),
               }}
             />
-          )
-        }
+          ),
+        },
       }}
       verticalLayoutProps={{
         navMenu: {
-          navItems: LandingNavItems()
+          navItems: LandingNavItems(),
 
           // Uncomment the below line when using server-side menu in vertical layout and comment the above line
           // navItems: verticalMenuItems
         },
         appBar: {
-          content: props => (
+          content: (props) => (
             <VerticalAppBarContent
               hidden={hidden}
               settings={settings}
               saveSettings={saveSettings}
               toggleNavVisibility={props.toggleNavVisibility}
             />
-          )
-        }
+          ),
+        },
       }}
-      {...(settings.layout === 'horizontal' && {
+      {...(settings.layout === "horizontal" && {
         horizontalLayoutProps: {
           appBar: {
             content: () => (
@@ -103,17 +103,17 @@ const GuestLayout = ({ children, contentHeightFixed }: Props) => {
                 settings={settings}
                 saveSettings={saveSettings}
                 navMenu={{
-                  navItems: LandingNavItems()
+                  navItems: LandingNavItems(),
                 }}
               />
-            )
+            ),
 
             // navItems: LandingNavItems()
 
             // Uncomment the below line when using server-side menu in horizontal layout and comment the above line
             // navItems: horizontalMenuItems
-          }
-        }
+          },
+        },
 
         // }
       })}

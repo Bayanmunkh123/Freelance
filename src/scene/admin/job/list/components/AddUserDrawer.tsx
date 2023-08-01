@@ -1,25 +1,29 @@
-import Drawer from '@mui/material/Drawer'
-import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import { styled } from '@mui/material/styles'
+import Drawer from "@mui/material/Drawer"
+import Button from "@mui/material/Button"
+import MenuItem from "@mui/material/MenuItem"
+import { styled } from "@mui/material/styles"
 
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import Typography from '@mui/material/Typography'
-import Box, { BoxProps } from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
+import IconButton from "@mui/material/IconButton"
+import InputLabel from "@mui/material/InputLabel"
+import Typography from "@mui/material/Typography"
+import Box, { BoxProps } from "@mui/material/Box"
+import FormControl from "@mui/material/FormControl"
 
-import Icon from 'src/@core/components/icon'
+import Icon from "src/@core/components/icon"
 
-import { OrganizationUserRoleEnum, useCreateUserMutation, useOrganizationsQuery } from 'src/generated'
+import {
+  OrganizationUserRoleEnum,
+  useCreateUserMutation,
+  useOrganizationsQuery,
+} from "src/generated"
 
-import { Formik, Form, Field } from 'formik'
-import { validationAddUserSchema } from 'src/validators/auth/auth.validator'
-import { TextField, Select } from 'formik-mui'
+import { Formik, Form, Field } from "formik"
+import { validationAddUserSchema } from "src/validators/auth/auth.validator"
+import { TextField, Select } from "formik-mui"
 
-import { Stack } from '@mui/material'
-import { OrgRoles } from 'src/utils/constants'
-import { useRouter } from 'next/router'
+import { Stack } from "@mui/material"
+import { OrgRoles } from "src/utils/constants"
+import { useRouter } from "next/router"
 
 interface SidebarAddUserType {
   open: boolean
@@ -34,26 +38,26 @@ interface UserAddInput {
 }
 
 const Header = styled(Box)<BoxProps>(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+  display: "flex",
+  alignItems: "center",
   padding: theme.spacing(3, 4),
-  justifyContent: 'space-between',
-  backgroundColor: theme.palette.background.default
+  justifyContent: "space-between",
+  backgroundColor: theme.palette.background.default,
 }))
 
 const SidebarAddUser = (props: SidebarAddUserType) => {
   const { open, toggle } = props
 
   const [onCreateUser] = useCreateUserMutation({
-    onCompleted: data => {
+    onCompleted: (data) => {
       if (data.createUser?.id) window.location.reload()
-    }
+    },
   })
 
   const { data: OrgList } = useOrganizationsQuery({
-    onError: error => {
+    onError: (error) => {
       alert(error)
-    }
+    },
   })
 
   const submitHandler = (data: UserAddInput) => {
@@ -64,9 +68,9 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
           lastName: data.lastName,
           email: data.email,
           orgRole: data.orgRole as OrganizationUserRoleEnum,
-          organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b'
-        }
-      }
+          organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
+        },
+      },
     })
   }
 
@@ -79,21 +83,31 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
   return (
     <Drawer
       open={open}
-      anchor='right'
-      variant='temporary'
+      anchor="right"
+      variant="temporary"
       onClose={handleClose}
       ModalProps={{ keepMounted: true }}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
+      sx={{ "& .MuiDrawer-paper": { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Хэрэглэгч нэмэх</Typography>
-        <IconButton size='small' onClick={handleClose} sx={{ color: 'text.primary' }}>
-          <Icon icon='mdi:close' fontSize={20} />
+        <Typography variant="h6">Хэрэглэгч нэмэх</Typography>
+        <IconButton
+          size="small"
+          onClick={handleClose}
+          sx={{ color: "text.primary" }}
+        >
+          <Icon icon="mdi:close" fontSize={20} />
         </IconButton>
       </Header>
       <Box sx={{ p: 5 }}>
         <Formik
-          initialValues={{ firstName: '', lastName: '', email: '', organization: '', orgRole: '' }}
+          initialValues={{
+            firstName: "",
+            lastName: "",
+            email: "",
+            organization: "",
+            orgRole: "",
+          }}
           validationSchema={validationAddUserSchema}
           onSubmit={(values: UserAddInput, formikHelpers) => {
             console.log(values)
@@ -102,14 +116,38 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
             formikHelpers.setSubmitting(false)
           }}
         >
-          {formikProps => (
+          {(formikProps) => (
             <Form>
               <Stack spacing={6}>
-                <Field component={TextField} name='firstName' type='text' label='Нэр' size='small' />
-                <Field component={TextField} name='lastName' type='text' label='Овог' size='medium' />
-                <Field component={TextField} name='email' type='text' label='И-мейл' size='medium' />
-                <Field component={Select} name='organization' type='select' label='Байгуулга сонгох' size='medium'>
-                  {OrgList?.organizations?.data?.map(org => (
+                <Field
+                  component={TextField}
+                  name="firstName"
+                  type="text"
+                  label="Нэр"
+                  size="small"
+                />
+                <Field
+                  component={TextField}
+                  name="lastName"
+                  type="text"
+                  label="Овог"
+                  size="medium"
+                />
+                <Field
+                  component={TextField}
+                  name="email"
+                  type="text"
+                  label="И-мейл"
+                  size="medium"
+                />
+                <Field
+                  component={Select}
+                  name="organization"
+                  type="select"
+                  label="Байгуулга сонгох"
+                  size="medium"
+                >
+                  {OrgList?.organizations?.data?.map((org) => (
                     <MenuItem key={org.id} value={org.id}>
                       {org.name}
                     </MenuItem>
@@ -133,8 +171,14 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                     ))}
                   </Select>
                 </FormControl> */}
-                <Field component={Select} name='orgRole' type='select' label='Role сонгох' size='big'>
-                  {OrgRoles.map(role => (
+                <Field
+                  component={Select}
+                  name="orgRole"
+                  type="select"
+                  label="Role сонгох"
+                  size="big"
+                >
+                  {OrgRoles.map((role) => (
                     <MenuItem key={role.id} value={role.name}>
                       {role.name}
                     </MenuItem>
@@ -158,7 +202,12 @@ const SidebarAddUser = (props: SidebarAddUserType) => {
                     ))}
                   </Select>
                 </FormControl> */}
-                <Button type='submit' size='large' variant='contained' sx={{ mr: 3 }}>
+                <Button
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  sx={{ mr: 3 }}
+                >
                   Нэмэх
                 </Button>
               </Stack>

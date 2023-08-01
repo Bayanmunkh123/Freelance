@@ -1,5 +1,5 @@
 // ** Type Import
-import { OwnerStateThemeType } from './'
+import { OwnerStateThemeType } from "./"
 
 const Avatar = () => {
   return {
@@ -7,34 +7,34 @@ const Avatar = () => {
       styleOverrides: {
         colorDefault: ({ theme }: OwnerStateThemeType) => ({
           color: theme.palette.text.secondary,
-          backgroundColor: theme.palette.customColors.avatarBg
+          backgroundColor: theme.palette.customColors.avatarBg,
         }),
         rounded: {
-          borderRadius: 8
-        }
-      }
+          borderRadius: 8,
+        },
+      },
     },
     MuiAvatarGroup: {
       styleOverrides: {
         root: ({ theme }: OwnerStateThemeType) => ({
-          '&.pull-up': {
-            '& .MuiAvatar-root': {
-              cursor: 'pointer',
-              transition: 'box-shadow 0.2s ease, transform 0.2s ease',
-              '&:hover': {
+          "&.pull-up": {
+            "& .MuiAvatar-root": {
+              cursor: "pointer",
+              transition: "box-shadow 0.2s ease, transform 0.2s ease",
+              "&:hover": {
                 zIndex: 2,
                 boxShadow: theme.shadows[3],
-                transform: 'translateY(-4px)'
-              }
-            }
+                transform: "translateY(-4px)",
+              },
+            },
           },
-          justifyContent: 'flex-end',
-          '.MuiCard-root & .MuiAvatar-root': {
-            borderColor: theme.palette.background.paper
-          }
-        })
-      }
-    }
+          justifyContent: "flex-end",
+          ".MuiCard-root & .MuiAvatar-root": {
+            borderColor: theme.palette.background.paper,
+          },
+        }),
+      },
+    },
   }
 }
 

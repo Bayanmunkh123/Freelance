@@ -1,9 +1,13 @@
-import type { ACLObj } from 'src/configs/acl'
-import type { ReactElement, ReactNode } from 'react'
-import type { NextComponentType } from 'next/dist/shared/lib/utils'
+import type { ACLObj } from "src/config/acl"
+import type { ReactElement, ReactNode } from "react"
+import type { NextComponentType } from "next/dist/shared/lib/utils"
 
-declare module 'next' {
-  export declare type NextPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
+declare module "next" {
+  export declare type NextPage<P = object, IP = P> = NextComponentType<
+    NextPageContext,
+    IP,
+    P
+  > & {
     acl?: ACLObj
     authGuard?: boolean
     guestGuard?: boolean
@@ -12,3 +16,6 @@ declare module 'next' {
     getLayout?: (page: ReactElement) => ReactNode
   }
 }
+
+// setConfig?: () => void
+// contentHeightFixed?: boolean

@@ -1,4 +1,4 @@
-import Router, { useRouter } from 'next/router'
+import Router, { useRouter } from "next/router"
 
 const isObject = (a: any) => !!a && a.constructor === Object
 
@@ -17,7 +17,7 @@ export const useOnSearch = () => {
     if (!key) {
       _query = {}
     } else if (isObject(key)) {
-      Object.keys(key).forEach(k => {
+      Object.keys(key).forEach((k) => {
         if (!key[k]) delete _query[k]
         else _query[k] = key[k]
       })
@@ -25,7 +25,7 @@ export const useOnSearch = () => {
     else _query[key] = value
     Router.push({
       pathname,
-      query: _query
+      query: _query,
     })
   }
 

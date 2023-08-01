@@ -1,52 +1,59 @@
 // ** React Imports
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState } from "react"
 
 // ** Next Imports
-import Head from 'next/head'
-import { Router, useRouter } from 'next/router'
-import type { NextPage } from 'next'
-import type { AppProps } from 'next/app'
+import Head from "next/head"
+import { Router, useRouter } from "next/router"
+import type { NextPage } from "next"
+import type { AppProps } from "next/app"
 
 // ** Loader Import
-import NProgress from 'nprogress'
+import NProgress from "nprogress"
 
 // ** Config Imports
-import { defaultACLObj } from 'src/configs/acl'
-import themeConfig from 'src/configs/themeConfig'
+import { defaultACLObj } from "src/config/acl"
+import themeConfig from "src/config/themeConfig"
 
 // ** Third Party Import
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from "react-hot-toast"
 
 // ** Component Imports
-import GuestLayout from 'src/layouts/GuestLayout'
-import UserLayout from 'src/layouts/UserLayout'
+import GuestLayout from "src/layouts/GuestLayout"
+import UserLayout from "src/layouts/UserLayout"
 
-import AclGuard from 'src/@core/components/auth/AclGuard'
-import ThemeComponent from 'src/@core/theme/ThemeComponent'
-import AuthGuard from 'src/@core/components/auth/AuthGuard'
-import GuestGuard from 'src/@core/components/auth/GuestGuard'
+import AclGuard from "src/@core/components/auth/AclGuard"
+import ThemeComponent from "src/@core/theme/ThemeComponent"
+import AuthGuard from "src/@core/components/auth/AuthGuard"
+import GuestGuard from "src/@core/components/auth/GuestGuard"
 
 // ** Spinner Import
-import Spinner from 'src/@core/components/spinner'
+import Spinner from "src/@core/components/spinner"
 
 // ** Contexts
-import { AuthProvider } from 'src/context/AuthContext'
-import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsContext'
+import { AuthProvider } from "src/context/AuthContext"
+import {
+  SettingsConsumer,
+  SettingsProvider,
+} from "src/@core/context/settingsContext"
 
 // ** Styled Components
-import ReactHotToast from 'src/@core/styles/libs/react-hot-toast'
+import ReactHotToast from "src/@core/styles/libs/react-hot-toast"
 
 // ** React Perfect Scrollbar Style
-import 'react-perfect-scrollbar/dist/css/styles.css'
+import "react-perfect-scrollbar/dist/css/styles.css"
 
 // ** Global css styles
-import '../../styles/globals.css'
-import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
+import "../../styles/globals.css"
+import {
+  ApolloClient,
+  ApolloProvider,
+  NormalizedCacheObject,
+} from "@apollo/client"
 
-import { UserContextType } from 'src/context/types'
+import { UserContextType } from "src/context/types"
 
 // import { initializeApollo } from 'src/lib/apollo/client'
-import { useApollo } from 'src/lib/apollo/client'
+import { useApollo } from "src/lib/apollo/client"
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -66,13 +73,13 @@ type GuardProps = {
 
 // ** Pace Loader
 if (themeConfig.routingLoader) {
-  Router.events.on('routeChangeStart', () => {
+  Router.events.on("routeChangeStart", () => {
     NProgress.start()
   })
-  Router.events.on('routeChangeError', () => {
+  Router.events.on("routeChangeError", () => {
     NProgress.done()
   })
-  Router.events.on('routeChangeComplete', () => {
+  Router.events.on("routeChangeComplete", () => {
     NProgress.done()
   })
 }
@@ -99,17 +106,24 @@ const App = (props: ExtendedAppProps) => {
   const contentHeightFixed = Component.contentHeightFixed ?? false
 
   let getLayout =
-    Component.getLayout ?? (page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>)
+    Component.getLayout ??
+    ((page) => (
+      <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
+    ))
 
   const setConfig = Component.setConfig ?? undefined
 
   const authGuard = Component.authGuard ?? true
   const guestGuard = Component.guestGuard ?? true
 
-  if (user && router.pathname.startsWith('/admin')) {
-    getLayout = page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>
+  if (user && router.pathname.startsWith("/admin")) {
+    getLayout = (page) => (
+      <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>
+    )
   } else {
-    getLayout = page => <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
+    getLayout = (page) => (
+      <GuestLayout contentHeightFixed={contentHeightFixed}>{page}</GuestLayout>
+    )
   }
   const aclAbilities = Component.acl ?? defaultACLObj
 
@@ -120,22 +134,35 @@ const App = (props: ExtendedAppProps) => {
       <Head>
         <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
         <meta
-          name='description'
+          name="description"
           content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
         />
-        <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
-        <meta name='viewport' content='initial-scale=1, width=device-width' />
-        <title>{title || 'TAB Systems'}</title>
+        <meta
+          name="keywords"
+          content="Material Design, MUI, Admin Template, React Admin Template"
+        />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>{title || "TAB Systems"}</title>
       </Head>
       <ApolloProvider client={apolloClient}>
         <AuthProvider user={user} setUser={setUser}>
-          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+          <SettingsProvider
+            {...(setConfig ? { pageSettings: setConfig() } : {})}
+          >
             <SettingsConsumer>
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                    <Guard user={user} authGuard={authGuard} guestGuard={guestGuard}>
-                      <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard} authGuard={authGuard}>
+                    <Guard
+                      user={user}
+                      authGuard={authGuard}
+                      guestGuard={guestGuard}
+                    >
+                      <AclGuard
+                        aclAbilities={aclAbilities}
+                        guestGuard={guestGuard}
+                        authGuard={authGuard}
+                      >
                         {getLayout(<Component {...pageProps} />)}
                         {/* {user && router.pathname.startsWith('/admin') ? (
                           <UserLayout contentHeightFixed={contentHeightFixed}>
@@ -149,7 +176,10 @@ const App = (props: ExtendedAppProps) => {
                       </AclGuard>
                     </Guard>
                     <ReactHotToast>
-                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      <Toaster
+                        position={settings.toastPosition}
+                        toastOptions={{ className: "react-hot-toast" }}
+                      />
                     </ReactHotToast>
                   </ThemeComponent>
                 )

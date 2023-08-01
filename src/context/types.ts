@@ -4,8 +4,8 @@ import {
   MeAuthQuery,
   RegisterEmailInput,
   RegisterPhoneInput,
-  UserDevice
-} from 'src/generated'
+  UserDevice,
+} from "src/generated"
 
 export type ErrCallbackType = (err: { [key: string]: string }) => void
 
@@ -34,7 +34,11 @@ export type AuthValuesType = {
 
   logout: () => void
 }
-export type UserData = LoginEmailInput | LoginPhoneInput | RegisterEmailInput | RegisterPhoneInput
+export type UserData =
+  | LoginEmailInput
+  | LoginPhoneInput
+  | RegisterEmailInput
+  | RegisterPhoneInput
 
 export type AuthModalValuesType = {
   userData: UserData | null
@@ -48,7 +52,7 @@ export type AuthModalValuesType = {
 }
 
 export type UserContextType =
-  | (MeAuthQuery['meAuth'] & {
+  | (MeAuthQuery["meAuth"] & {
       roles: {
         isAdmin: boolean
         isEditor: boolean

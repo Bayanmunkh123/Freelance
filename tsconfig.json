@@ -20,9 +20,16 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "src/*": [
-        "src/*"
-      ],
+      "src/*": ["src/*"],
+      "components/*": ["src/components/*"],
+      "generated": ["src/generated/index"],
+      "layouts/*": ["src/layouts/*"],
+      "lib/*": ["src/lib/*"],
+      "middleware/*": ["src/middleware/*"],
+      "router/*": ["src/router/*"],
+      "scenes/*": ["src/scenes/*"],
+      "store": ["src/context/index"],
+      "utils/*": ["src/utils/*"],
       "apexcharts": [
         "./node_modules/apexcharts-clevision"
       ],

@@ -1,32 +1,32 @@
 // ** MUI Imports
-import { IconButton, styled, Theme } from '@mui/material'
-import Box from '@mui/material/Box'
-import { SxProps } from '@mui/system'
-import MuiToolbar, { ToolbarProps } from '@mui/material/Toolbar'
+import { IconButton, styled, Theme } from "@mui/material"
+import Box from "@mui/material/Box"
+import { SxProps } from "@mui/system"
+import MuiToolbar, { ToolbarProps } from "@mui/material/Toolbar"
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from "src/@core/components/icon"
 
 // ** Type Import
-import { Settings } from 'src/@core/context/settingsContext'
+import { Settings } from "src/@core/context/settingsContext"
 
 // ** Components
-import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
-import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
-import { HorizontalNavItemsType, LayoutProps } from 'src/@core/layouts/types'
-import Navigation from 'src/@core/layouts/components/horizontal/navigation'
+import ModeToggler from "src/@core/layouts/components/shared-components/ModeToggler"
+import UserDropdown from "src/@core/layouts/components/shared-components/UserDropdown"
+import { HorizontalNavItemsType, LayoutProps } from "src/@core/layouts/types"
+import Navigation from "src/@core/layouts/components/horizontal/navigation"
 
 const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
-  width: '100%',
+  width: "100%",
   padding: `${theme.spacing(0, 6)} !important`,
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down("sm")]: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(4)
+    paddingRight: theme.spacing(4),
   },
-  [theme.breakpoints.down('xs')]: {
+  [theme.breakpoints.down("xs")]: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
-  }
+    paddingRight: theme.spacing(2),
+  },
 }))
 
 interface Props {
@@ -46,38 +46,63 @@ const AppBarContent = (props: Props) => {
   const { skin, contentWidth } = settings
 
   return (
-    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box
+        className="actions-left"
+        sx={{ mr: 2, display: "flex", alignItems: "center" }}
+      >
         {hidden ? (
-          <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
-            <Icon icon='mdi:menu' />
+          <IconButton
+            color="inherit"
+            sx={{ ml: -2.75 }}
+            onClick={toggleNavVisibility}
+          >
+            <Icon icon="mdi:menu" />
           </IconButton>
         ) : null}
         {/* Navigation Menu */}
         {!hidden && navMenu?.navItems && (
-          <Box className='layout-horizontal-nav' sx={{ width: '100%', ...props?.navMenu?.sx }}>
+          <Box
+            className="layout-horizontal-nav"
+            sx={{ width: "100%", ...props?.navMenu?.sx }}
+          >
             <Toolbar
-              className='horizontal-nav-content-container'
+              className="horizontal-nav-content-container"
               sx={{
-                mx: 'auto',
-                ...(contentWidth === 'boxed' && { '@media (min-width:1440px)': { maxWidth: 1440 } }),
-                minHeight: theme =>
-                  `${(theme.mixins.toolbar.minHeight as number) - (skin === 'bordered' ? 1 : 0)}px !important`
+                mx: "auto",
+                ...(contentWidth === "boxed" && {
+                  "@media (min-width:1440px)": { maxWidth: 1440 },
+                }),
+                minHeight: (theme) =>
+                  `${
+                    (theme.mixins.toolbar.minHeight as number) -
+                    (skin === "bordered" ? 1 : 0)
+                  }px !important`,
               }}
             >
               <Navigation
                 settings={props.settings}
                 horizontalNavItems={
                   navMenu.navItems as NonNullable<
-                    NonNullable<LayoutProps['horizontalLayoutProps']>['navMenu']
-                  >['navItems']
+                    NonNullable<LayoutProps["horizontalLayoutProps"]>["navMenu"]
+                  >["navItems"]
                 }
               />
             </Toolbar>
           </Box>
         )}
       </Box>
-      <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        className="actions-right"
+        sx={{ display: "flex", alignItems: "center" }}
+      >
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <UserDropdown settings={settings} hidden={hidden} />
       </Box>
