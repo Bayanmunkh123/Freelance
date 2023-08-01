@@ -7,7 +7,7 @@ import {
 export const useOrganizationUserVariables = () => {
   const { query } = useRouter()
   const where = {} as OrganizationUsersWhereInput
-  if (query.role)
+  if (query.orgRole)
     where.orgRole = query?.role?.toString() as OrganizationUserRoleEnum
 
   return {

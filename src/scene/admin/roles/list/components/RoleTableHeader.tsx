@@ -11,18 +11,29 @@ import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Icon from "src/@core/components/icon"
 import { RoleType } from "src/context/types"
 import { OrgRoles } from "src/utils/constants"
+import { useState } from "react"
+import { IconButton } from "@mui/material"
 
 interface TableHeaderProps {
-  plan: string
+  // plan: string
   roleList: string | undefined
+  searchValue: string
   handleFilter: (val: string) => void
   handleRoleChange: (e: SelectChangeEvent) => void
+  toggle: (event: any) => void
+  setSearchValue: (e: string) => void
+  clearSearch: (e: string) => void
 }
 
 export const RoleTableHeader = (props: TableHeaderProps) => {
-  // ** Props
-  const { handleRoleChange, handleFilter, roleList } = props
-
+  const {
+    roleList,
+    searchValue,
+    handleRoleChange,
+    handleFilter,
+    setSearchValue,
+    clearSearch,
+  } = props
   return (
     <Box
       sx={{
@@ -45,10 +56,36 @@ export const RoleTableHeader = (props: TableHeaderProps) => {
       <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
         <TextField
           size="small"
-          value={roleList}
+          value={searchValue}
           placeholder="Search User"
           sx={{ mr: 6, mb: 2 }}
-          onChange={(e) => handleFilter(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <Box sx={{ mr: 2, display: "flex" }}>
+                <IconButton
+                  size="small"
+                  title="Search"
+                  aria-label="Search"
+                  onClick={() => handleFilter(searchValue)}
+                >
+                  <Icon icon="mdi:magnify" fontSize={20} />
+                </IconButton>
+              </Box>
+            ),
+            endAdornment: (
+              <IconButton
+                size="small"
+                title="Clear"
+                aria-label="Clear"
+                onClick={clearSearch}
+              >
+                <Icon icon="mdi:close" fontSize={20} />
+              </IconButton>
+            ),
+          }}
+          onChange={(e) => {
+            setSearchValue(e.target.value)
+          }}
         />
         <FormControl fullWidth>
           <InputLabel id="role-select">Role сонгох</InputLabel>

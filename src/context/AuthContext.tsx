@@ -30,10 +30,11 @@ type Props = {
 const AuthProvider = ({ children, user, setUser }: Props) => {
   const apolloClient = useApolloClient()
   const router = useRouter()
-
   // ** Hooks
   const { loading } = useMeAuthQuery({
     onCompleted: (data) => {
+      console.log("AuthProvider DATA === ", data)
+
       if (data?.meAuth?.id) {
         const user = data?.meAuth
         const isAdmin = user.role === UserRoleEnum.ADMIN
@@ -51,10 +52,10 @@ const AuthProvider = ({ children, user, setUser }: Props) => {
       }
     },
     onError: (error) => {
+      console.log(error)
       alert(error)
     },
   })
-  console.log(loading)
   const handleLogout = async () => {
     const deviceId = localStorage.getItem(config.DEVICE_ID)
 

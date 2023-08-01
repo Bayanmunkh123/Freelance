@@ -81,7 +81,7 @@ export const AuthSessionManage = (props: AuthSessionManageProps) => {
                       variables: {
                         input: {
                           id: name.id,
-                          email: userData?.email,
+                          email: userData?.email as string,
                           password: userData?.password,
                         },
                       },

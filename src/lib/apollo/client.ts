@@ -65,21 +65,23 @@ function createAuthLink(serverHeaders?: IncomingHttpHeaders | undefined) {
     let newHeaders = headers
 
     // Add AccessToken header
-    const accessToken = process.browser
-      ? cookie.parse(document?.cookie || "")[config.ACCESS_TOKEN_KEY]
-      : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
-          config.ACCESS_TOKEN_KEY
-        ]
+    const accessToken =
+      typeof window !== "undefined"
+        ? cookie.parse(document?.cookie || "")[config.ACCESS_TOKEN_KEY]
+        : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
+            config.ACCESS_TOKEN_KEY
+          ]
     if (accessToken) {
       newHeaders = { ...newHeaders, [config.ACCESS_TOKEN_KEY]: accessToken }
     }
 
     // Add RefreshToken header
-    const refreshToken = process.browser
-      ? cookie.parse(document?.cookie || "")[config.REFRESH_TOKEN_KEY]
-      : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
-          config.REFRESH_TOKEN_KEY
-        ]
+    const refreshToken =
+      typeof window !== "undefined"
+        ? cookie.parse(document?.cookie || "")[config.REFRESH_TOKEN_KEY]
+        : cookie.parse(headers?.cookie || serverHeaders?.cookie || "")[
+            config.REFRESH_TOKEN_KEY
+          ]
 
     if (refreshToken) {
       newHeaders = {

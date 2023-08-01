@@ -1,9 +1,11 @@
 import {
+  InputMaybe,
   LoginEmailInput,
   LoginPhoneInput,
   MeAuthQuery,
   RegisterEmailInput,
   RegisterPhoneInput,
+  Scalars,
   UserDevice,
 } from "src/generated"
 
@@ -34,15 +36,17 @@ export type AuthValuesType = {
 
   logout: () => void
 }
-export type UserData =
-  | LoginEmailInput
-  | LoginPhoneInput
-  | RegisterEmailInput
-  | RegisterPhoneInput
+export type UserData = {
+  email?: Scalars["String"]
+  countryCode?: InputMaybe<Scalars["String"]>
+  phone?: Scalars["String"]
+  deviceId?: InputMaybe<Scalars["String"]>
+  password: Scalars["String"]
+}
 
 export type AuthModalValuesType = {
   userData: UserData | null
-  setUserData: (value: LoginEmailInput | LoginPhoneInput) => void
+  setUserData: (value: UserData) => void
   sessionList: UserDevice[] | null
   setSessionList: (value: any) => void
   reset: boolean | null

@@ -128,7 +128,6 @@ const App = (props: ExtendedAppProps) => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   const apolloClient = useApollo(pageProps.initialState)
-
   return (
     <>
       <Head>

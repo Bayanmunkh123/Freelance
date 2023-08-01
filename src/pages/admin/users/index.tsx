@@ -1,15 +1,32 @@
 import React from "react"
 import { NextPage } from "next"
 import { UserScene } from "src/scene/admin/user/list/UserScene"
-import { ActionsEnum, SubjectsEnum } from "src/config/acl"
+import { RoleData } from "src/config/acl"
 
 const UserList: NextPage = () => <UserScene />
 
 UserList.acl = {
-  action: ActionsEnum.Read,
-  subject: SubjectsEnum.User,
+  action: "read",
+  subject: "Admin_Users",
 }
 
 UserList.guestGuard = false
+
+export const adminUsersPermission: RoleData = {
+  Admin_Users: {
+    can: [
+      {
+        actions: ["create", "update", "read", "delete"],
+        roles: ["ADMIN", "EDITOR"],
+      },
+      {
+        actions: ["create", "update", "read", "delete"],
+        roles: ["MEMBER"],
+        orgRoles: ["EDITOR", "FINANCE", "FINANCE"],
+      },
+    ],
+    cannot: [],
+  },
+}
 
 export default UserList
