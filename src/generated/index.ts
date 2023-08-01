@@ -177,6 +177,7 @@ export type JobsType = {
 
 export type JobsWhereInput = {
   organizationId: Scalars["String"]
+  search?: InputMaybe<Scalars["String"]>
 }
 
 export type LoginEmailInput = {
@@ -213,6 +214,7 @@ export type Mutation = {
   loginEmail?: Maybe<AuthVerifyTokenType>
   loginPhone?: Maybe<AuthVerifyTokenType>
   logout?: Maybe<Scalars["Boolean"]>
+  refreshAccessToken?: Maybe<RefreshTokenType>
   registerEmail?: Maybe<Scalars["Boolean"]>
   registerPhone?: Maybe<Scalars["Boolean"]>
   storageSignedUrlCreate?: Maybe<StorageWriteSignedUrl>
@@ -298,6 +300,10 @@ export type MutationLoginPhoneArgs = {
 
 export type MutationLogoutArgs = {
   deviceId?: InputMaybe<Scalars["String"]>
+}
+
+export type MutationRefreshAccessTokenArgs = {
+  input?: InputMaybe<RefreshTokenInput>
 }
 
 export type MutationRegisterEmailArgs = {
