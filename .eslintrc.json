@@ -11,7 +11,14 @@
     "no-unused-vars": 1,
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-explicit-any": 1,
-    "@typescript-eslint/no-unused-vars": [1, { "argsIgnorePattern": "^_" }]
+    "@typescript-eslint/no-unused-vars": [1, { "argsIgnorePattern": "^_" }],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "parser": "flow"
+      }
+    ]
   },
   "env": {
     "browser": true,
