@@ -93,7 +93,8 @@ const LoginEmail = (props: LoginEmailProps) => {
         values: LoginEmailInput & { remember: boolean },
         formikHelpers,
       ) => {
-        handleSubmit(values)
+        console.log(values)
+       // handleSubmit(values)
         formikHelpers.setSubmitting(false)
       }}
     >

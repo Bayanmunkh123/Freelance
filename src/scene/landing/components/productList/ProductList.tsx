@@ -61,7 +61,7 @@ function changeNot(): ListDataType[] {
   return Array.from(new Array(5)).map(() => ListData[getRandomInt(ListData.length)])
 }
 
-const CardMembership = () => {
+const ProductList = () => {
   const data = changeNot()
   const [icon, setIcon] = React.useState<JSX.Element>(<FavoriteBorderOutlinedIcon color='error' />)
   const [liked, setLiked] = React.useState<boolean>(false)
@@ -229,4 +229,4 @@ const CardMembership = () => {
   )
 }
 
-export default CardMembership
+export default ProductList

@@ -6,6 +6,8 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Chip from '@mui/material/Chip'
+import { Field } from 'formik'
+//import {Select} from 'formik-mui'
 
 const distNames = [
   'Баянгол',
@@ -35,37 +37,33 @@ const LocationSelect = () => {
   }
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel>Байршил</InputLabel>
-        <Select
-          multiple
-          value={selection}
-          onChange={handleChange}
-          input={<OutlinedInput label="Байршил" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip
-                  key={value}
-                  label={value}
-                  onMouseDown={(event) => {
-                    event.stopPropagation()
-                  }}
-                  onDelete={() => handleDelete(value)}
-                />
-              ))}
-            </Box>
-          )}
-        >
-          {distNames.map((name) => (
-            <MenuItem key={name} value={name}>
-              {name}
-            </MenuItem>
+    <Select
+      multiple
+      //name="location"
+      value={selection}
+      onChange={handleChange}
+      input={<OutlinedInput label="Байршил" />}
+      renderValue={(selected) => (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+          {selected.map((value) => (
+            <Chip
+              key={value}
+              label={value}
+              onMouseDown={(event) => {
+                event.stopPropagation()
+              }}
+              onDelete={() => handleDelete(value)}
+            />
           ))}
-        </Select>
-      </FormControl>
-    </div>
+        </Box>
+      )}
+    >
+      {distNames.map((name) => (
+        <MenuItem key={name} value={name}>
+          {name}
+        </MenuItem>
+      ))}
+    </Select>
   )
 }
 

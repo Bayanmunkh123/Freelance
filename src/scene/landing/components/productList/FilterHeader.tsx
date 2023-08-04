@@ -15,12 +15,25 @@ import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Stack from '@mui/material/Stack'
-import { useFormik } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import TextField from '@mui/material/TextField'
+import Slider from '@mui/material/Slider'
+import { FilterDialog } from './FilterDialog'
 
 /**Icon imports */
 import CloseIcon from '@mui/icons-material/Close'
 import SortIcon from '@mui/icons-material/Sort'
+const NumButton = () => {
+  return (
+    <ButtonGroup disableElevation>
+      <Button startIcon={<Checkbox />}>1</Button>
+      <Button startIcon={<Checkbox />}>2</Button>
+      <Button startIcon={<Checkbox />}>3</Button>
+      <Button startIcon={<Checkbox />}>4</Button>
+      <Button startIcon={<Checkbox />}>5+</Button>
+    </ButtonGroup>
+  )
+}
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false)
@@ -35,31 +48,27 @@ export default function ScrollDialog() {
 
   const handleChange = (newValue: number[]) => {
     setValue(newValue)
-
-    // if (!Array.isArray(newValue)) {
-    //   return;
-    // }
-
-    // if (newValue[1] - newValue[0] < minDistance) {
-    //   if (activeThumb === 0) {
-    //     const clamped = Math.min(newValue[0], 100 - minDistance);
-    //     setValue2([clamped, clamped + minDistance]);
-    //   } else {
-    //     const clamped = Math.max(newValue[1], minDistance);
-    //     setValue2([clamped - minDistance, clamped]);
-    //   }
-    // } else {
-    //   setValue2(newValue as number[]);
-    // }
   }
-  const formik = useFormik({
-    initialValues: {
-      values: number[]
-    },
-    onSubmit: (values: number[]) => {
-      alert(JSON.stringify(values, null, 2))
-    },
-  })
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     actionType: '',
+  //     location: '',
+  //     type: '',
+  //     price: {
+  //       min: 0,
+  //       max: 0,
+  //     },
+  //     size: 0,
+  //     bedNo: 0,
+  //     batho: 0,
+  //     highlight: '',
+  //     status: '',
+  //   },
+  //   onSubmit: (values: number[]) => {
+  //     alert(JSON.stringify(values, null, 2))
+  //   },
+  // })
 
   return (
     <>
@@ -72,7 +81,7 @@ export default function ScrollDialog() {
         scroll="paper"
         sx={{ '& .MuiPaper-root': {} }}
       >
-        <form>
+        {/* <form>
           <DialogTitle>
             Бүх Шүүлтүүр
             <IconButton onClick={handleClose}>
@@ -138,21 +147,51 @@ export default function ScrollDialog() {
                 <TextField
                   fullWidth
                   label="Доод үнэ"
-                  //value={formik.values.max}
-                  onChange={formik.handleChange}
+                  //value={formik.values.price.min}
+                  //onChange={formik.handleChange}
                 />
                 <TextField
                   fullWidth
                   label="Дээд үнэ"
-                  //value={formik.values.min}
-                  onChange={formik.handleChange}
+                  //value={formik.values.price.max}
+                  //onChange={formik.handleChange}
                 />
               </Stack>
+              <Box>
+                <Slider
+                  getAriaLabel={() => 'Minimum distance'}
+                  value={value}
+                  disableSwap
+                />
+              </Box>
+            </Box>
+            <Box>
+              <Typography>Өрөө</Typography>
+              <NumButton />
+            </Box>
+            <Box>
+              <Typography>Угаалгын өрөө</Typography>
+              <NumButton />
+            </Box>
+            <Box>
+              <Typography>Унтлагын өрөө</Typography>
+              <NumButton />
+            </Box>
+            <Box>
+              <Typography>Онцлог</Typography>
+              <NumButton />
+            </Box>
+            <Box>
+              <Typography>Статус</Typography>
+              <NumButton />
             </Box>
           </DialogContent>
-        </form>
+          <Button>Цэвэрлэх</Button>
+          <Button >Шүүх</Button>
+        </form> */}
         {/* <DialogActions>
         </DialogActions> */}
+        <FilterDialog />
       </Dialog>
     </>
   )

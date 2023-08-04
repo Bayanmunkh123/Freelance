@@ -11,13 +11,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 export const Header = () => {
   return (
-    <Stack direction="row">
+    <Stack direction="row" justifyContent="space-between" sx={{px: 25}}>
       <FormGroup row>
         <FormControlLabel control={<Checkbox />} label="Худалдан авах" />
         <FormControlLabel control={<Checkbox />} label="Түрээслэх" />
       </FormGroup>
       <LocationSelect />
-      {/* <FilterHeader hidden={false} /> */}
+      <FilterHeader />
       <Button endIcon={<KeyboardArrowDownIcon />}>Төрөл</Button>
     </Stack>
   )
