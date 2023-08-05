@@ -7,11 +7,15 @@ import {
   InputLabel,
   TextField,
   MenuItem,
+  Box,
+  Stack,
+  FormControlLabel,
+  Typography,
 } from '@mui/material'
 
 const filterApartmentSchema = yup.object().shape({
   location: yup.array().of(yup.string()).label('Байршил'),
-  type: yup.string().label('type'),
+  type: yup.string().label('Төрөл'),
   price: yup.number().min(1).max(2).label('Үнэ'),
   size: yup.number().min(1).max(1).label('Үнэ'),
   roomNo: yup.number().min(1).max(10).label('Өрөө'),
@@ -23,7 +27,7 @@ export const FilterBuy = () => {
   return (
     <Formik
       initialValues={{
-        location: '',
+        location: [],
         type: '',
         price: 0,
         size: 0,
@@ -37,19 +41,32 @@ export const FilterBuy = () => {
         console.log(values)
       }}
     >
-      {() => (
+      {(error) => (
         <Form noValidate autoComplete="off">
           <FormControl sx={{ m: 1, width: 300 }}>
             <InputLabel>Байршил</InputLabel>
-            <Field
+            <Field as="select" name="location" component={LocationSelect} />
+            {/* <Field
               name={'location'}
               label={'Байршил'}
               type="location"
               component={LocationSelect}
-            ></Field>
+            /> */}
           </FormControl>
-          <Field name={'type'} label={'Төрөл'} component={TextField}></Field>
-          <Button type="submit">Шүүх</Button>
+          <Field name="type" label={'Төрөл'} component={TextField} />
+          <Field name={'price'} label={'Үнэ'} component={TextField} />
+          <Field name={'size'} label={'Метр квадрат'} component={TextField} />
+          <Field name={'roomNo'} label={'Өрөө'} component={TextField} />
+          <Field
+            name={'bathNo'}
+            label={'Угаалгын өрөө'}
+            component={TextField}
+          />
+          <Field name={'bedNo'} label={'Унтлагын өрөө'} component={TextField} />
+          <Field name={'Status'} label={'Статус'} component={TextField} />
+          <Button type="submit" onClick={() => console.log(error)}>
+            Шүүх
+          </Button>
         </Form>
       )}
     </Formik>
