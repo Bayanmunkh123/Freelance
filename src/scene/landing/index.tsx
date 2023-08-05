@@ -6,8 +6,8 @@ import CardContent from '@mui/material/CardContent'
 import { HomeMain } from 'src/scene/landing/home/list/HomeMain'
 import { SuggestCard } from 'src/scene/landing/home/list/SuggestCard'
 import Paper from '@mui/material/Paper'
-import { Header } from 'src/scene/landing/home/list/productList/Header'
-import {SubHeader} from 'src/scene/landing/home/list/productList/SubHeader'
+import { Header } from 'src/scene/landing/home/list/components/Header'
+import {SubHeader} from 'src/scene/landing/home/list/components/SubHeader'
 import { Box } from '@mui/material'
 const HomeScene = () => {
   return (
