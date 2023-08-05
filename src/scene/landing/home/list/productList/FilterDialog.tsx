@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Box, Card, CardContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import { FilterBuy } from './FilterBuy'
+import FilterBuy from './FilterBuy'
 import { FilterRent } from './FilterRent'
 export const FilterDialog = () => {
   const [actionType, setActiontype] = useState('buy')
