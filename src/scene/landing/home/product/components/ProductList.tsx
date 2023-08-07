@@ -10,10 +10,13 @@ import CardContent from '@mui/material/CardContent'
 import IconButton from '@mui/material/IconButton'
 import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
+import { useRouter } from 'next/router'
 // ** Icon Imports
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
+import { Header } from '../../components/Header'
+import { SubHeader } from '../../components/SubHeader'
 
 function changeNot(): ListDataType[] {
   const getRandomInt = (max: number) =>
@@ -26,6 +29,7 @@ function changeNot(): ListDataType[] {
 
 const ProductList = () => {
   const data = changeNot()
+  const router = useRouter()
   const [icon, setIcon] = React.useState<JSX.Element>(
     <FavoriteBorderOutlinedIcon color="error" />,
   )
@@ -41,9 +45,22 @@ const ProductList = () => {
   }
 
   return (
-    <>
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        rowGap: '20px',
+      }}
+    >
+      <Header />
+      <SubHeader />
       {data.map((item, index: number) => (
-        <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+        <Box
+          key={index}
+          sx={{ display: 'flex', flexDirection: 'row', maxWidth: 1200 }}
+          onClick={() => router.push('/service')}
+        >
           <Box
             sx={{
               position: 'absolute',
@@ -183,7 +200,7 @@ const ProductList = () => {
           </Card>
         </Box>
       ))}
-    </>
+    </Card>
   )
 }
 

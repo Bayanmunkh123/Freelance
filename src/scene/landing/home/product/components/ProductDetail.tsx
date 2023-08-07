@@ -24,7 +24,7 @@ export const ProductDetail = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-betweens',
+        alignItems: 'center',
       }}
     >
       <Typography>{ListData[0].estateType}</Typography>

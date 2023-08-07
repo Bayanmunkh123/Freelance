@@ -136,10 +136,10 @@ export const HomeMain = () => {
           </Box>
         </Stack>
       </Stack>
-      <Grid container spacing={4} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center" sx={{ mt: '20px' }}>
         <SuggestCard />
       </Grid>
-      <Grid container spacing={4} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center" sx={{ mt: '20px' }}>
         <SuggestCard />
       </Grid>
     </>

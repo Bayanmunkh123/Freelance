@@ -12,7 +12,11 @@ import { Typography } from '@mui/material'
 
 export const SubHeader = () => {
   return (
-    <Stack direction="row" justifyContent="space-between" sx={{ px: 25 }}>
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      sx={{ px: 25, width: '100%' }}
+    >
       <Typography sx={{ borderLeft: `4px solid` }}>
         50 хайлтын үр дүн
       </Typography>

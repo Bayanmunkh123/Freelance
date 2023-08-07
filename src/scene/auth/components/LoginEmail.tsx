@@ -188,5 +188,4 @@ const LoginEmail = (props: LoginEmailProps) => {
     </Formik>
   )
 }
-
 export default LoginEmail
