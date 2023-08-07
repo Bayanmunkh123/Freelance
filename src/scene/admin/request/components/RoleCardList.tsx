@@ -42,7 +42,7 @@ interface CardDataType {
 const cardData: CardDataType[] = [
   {
     totalUsers: 4,
-    title: "Owner",
+    title: "Админ",
     avatars: ["1.png", "2.png", "3.png", "4.png"],
   },
   {
@@ -52,12 +52,12 @@ const cardData: CardDataType[] = [
   },
   {
     totalUsers: 5,
-    title: "Finance",
+    title: "Санхүүч",
     avatars: ["4.png", "5.png", "6.png", "7.png", "8.png"],
   },
-  { totalUsers: 3, title: "Sales", avatars: ["1.png", "2.png", "3.png"] },
-  { totalUsers: 2, title: "Support", avatars: ["4.png", "5.png"] },
-  { totalUsers: 2, title: "Viewer", avatars: ["4.png", "5.png"] },
+  { totalUsers: 3, title: "Худалдаалах", avatars: ["1.png", "2.png", "3.png"] },
+  { totalUsers: 2, title: "Тусламж", avatars: ["4.png", "5.png"] },
+  { totalUsers: 2, title: "Харах", avatars: ["4.png", "5.png"] },
 ]
 
 const rolesArr: string[] = [

@@ -9,12 +9,10 @@ export const RoleScene = () => {
   return (
     <Grid container spacing={6}>
       <PageHeader
-        title={<Typography variant="h5">Roles List</Typography>}
+        title={<Typography variant="h5">Гишүүдийн жагсаалт</Typography>}
         subtitle={
           <Typography variant="body2">
-            A role provided access to predefined menus and features so that
-            depending on assigned role an administrator can have access to what
-            he need
+            Гишүүдийн ангилал
           </Typography>
         }
       />
