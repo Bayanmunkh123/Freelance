@@ -3,10 +3,11 @@ import { AuthUserType } from "src/generated"
 import { adminJobsPermission } from "src/pages/admin/jobs"
 import { adminRolesPermission } from "src/pages/admin/roles"
 import { adminUsersPermission } from "src/pages/admin/users"
+import { adminRequestPermission } from "src/pages/admin/request"
 
 export type Actions = "manage" | "create" | "read" | "update" | "delete"
 
-export type Subjects = "all" | "Admin_Roles" | "Admin_Jobs" | "Admin_Users"
+export type Subjects = "all" | "Admin_Roles" | "Admin_Jobs" | "Admin_Users" | "Admin_Request"
 
 export type Roles = "ADMIN" | "EDITOR" | "MEMBER"
 
@@ -21,6 +22,7 @@ export enum SubjectsEnum {
   All = "all",
   User = "User",
   Role = "Role",
+  Request = "Request",
   Company = "Company",
   Job = "Job",
 }
@@ -60,6 +62,7 @@ const rolesData: RoleData = {
   ...adminJobsPermission,
   ...adminRolesPermission,
   ...adminUsersPermission,
+  ...adminRequestPermission,
 
   // Landing
 

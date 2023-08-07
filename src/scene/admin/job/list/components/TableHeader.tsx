@@ -35,6 +35,7 @@ const TableHeader = (props: TableHeaderProps) => {
         color="secondary"
         variant="outlined"
         startIcon={<Icon icon="mdi:export-variant" fontSize={20} />}
+        onClick={() => console.log(ability)}
       >
         Export
       </Button>

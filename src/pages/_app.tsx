@@ -141,7 +141,7 @@ const App = (props: ExtendedAppProps) => {
           content="Material Design, MUI, Admin Template, React Admin Template"
         />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <title>{title || "TAB Systems"}</title>
+        <title>{title || "Real Estate"}</title>
       </Head>
       <ApolloProvider client={apolloClient}>
         <AuthProvider user={user} setUser={setUser}>

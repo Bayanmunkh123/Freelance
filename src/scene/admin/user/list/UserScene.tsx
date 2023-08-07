@@ -73,7 +73,7 @@ const renderClient = (row: OrganizationUser) => {
         sx={{ mr: 3, width: 34, height: 34, fontSize: "1rem" }}
       >
         {getInitials(
-          row?.user?.profile?.firstName
+          row?.user?.profile?.firstName 
             ? row?.user?.profile?.firstName
             : "John Doe",
         )}
@@ -105,7 +105,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
       </IconButton>
       <Menu
         keepMounted
-        anchorEl={anchorEl}
+        anchorEl={anchorEl} 
         open={rowOptionsOpen}
         onClose={handleRowOptionsClose}
         anchorOrigin={{

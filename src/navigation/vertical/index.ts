@@ -4,7 +4,7 @@ import { VerticalNavItemsType } from "src/@core/layouts/types"
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: "Jobs",
+      title: "Хянах самбар",
       path: "/admin/jobs",
       icon: "mdi:home-outline",
       action: "read",
@@ -12,7 +12,7 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Users",
+      title: "Миний компани",
       path: "/admin/users",
       icon: "mdi:user-outline",
       action: "read",
@@ -20,9 +20,17 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Roles",
+      title: "Гишүүд",
       path: "/admin/roles",
       icon: "mdi:shield-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
+    {
+      title: "Санал хүсэлт",
+      path: "/admin/request",
+      icon: "mdi:FrequentlyAskedQuestions-outline",
       action: "read",
       subject: "Admin_Roles",
       auth: true,
