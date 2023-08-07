@@ -1,0 +1,190 @@
+import * as React from 'react'
+
+// ** MUI Imports
+import Card from '@mui/material/Card'
+import Grid from '@mui/material/Grid'
+import Divider from '@mui/material/Divider'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import CardContent from '@mui/material/CardContent'
+import IconButton from '@mui/material/IconButton'
+import { ListData, ListDataType } from './utils/ListData'
+import { DetailedBox } from './components/DetailedBox'
+// ** Icon Imports
+import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
+
+function changeNot(): ListDataType[] {
+  const getRandomInt = (max: number) =>
+    Math.floor(Math.random() * Math.floor(max))
+
+  return Array.from(new Array(5)).map(
+    () => ListData[getRandomInt(ListData.length)],
+  )
+}
+
+const ProductList = () => {
+  const data = changeNot()
+  const [icon, setIcon] = React.useState<JSX.Element>(
+    <FavoriteBorderOutlinedIcon color="error" />,
+  )
+  const [liked, setLiked] = React.useState<boolean>(false)
+  const getIcon = () => {
+    return icon
+  }
+  const handleChange = () => {
+    setLiked(!liked)
+    console.log()
+    if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
+    else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
+  }
+
+  return (
+    <>
+      {data.map((item, index: number) => (
+        <Box key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              height: '36px',
+              backgroundColor:
+                item.status === 'Онцлох'
+                  ? 'primary.main'
+                  : item.status === 'Шинэ'
+                  ? 'warning.main'
+                  : 'transparent',
+              padding: '2px 80px',
+              borderRadius: '10px 10px 10px 0',
+              color: 'common.white',
+              fontWeight: 700,
+              marginTop: '24px',
+            }}
+          >
+            {item.status}
+          </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              width: '20px',
+              height: '20px',
+              backgroundColor:
+                item.status === 'Онцлох'
+                  ? 'primary.main'
+                  : item.status === 'Шинэ'
+                  ? 'error.dark'
+                  : 'transparent',
+              borderRadius: '0 0 0 10px',
+
+              marginTop: '60px',
+            }}
+          >
+            {' '}
+          </Box>
+
+          <Card sx={{ mb: 5, ml: '20px' }}>
+            <Grid container spacing={6}>
+              <Grid
+                item
+                sm={5}
+                xs={12}
+                sx={{
+                  pt: ['0 !important', '1.5rem !important'],
+                  pl: ['1.5rem !important', '0 !important'],
+                }}
+              >
+                <Box>
+                  <img
+                    src={item.images[0]}
+                    alt={item.estateType}
+                    height={'320px'}
+                    width={'100%'}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ mb: 2 }}>
+                    {item.estateType}
+                  </Typography>
+                  <Typography variant="body2">{item.desc}</Typography>
+                  <Divider
+                    sx={{ my: (theme) => `${theme.spacing(3)} !important` }}
+                  />
+                  <Grid item xs={12} sm={7}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        '& svg': { color: 'primary.main' },
+                        marginBottom: 4,
+                      }}
+                    >
+                      <PinDropOutlinedIcon />
+                      <Typography variant="body2">{item.address}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    container
+                    spacing={4}
+                    sx={{
+                      '& .Typography-root': {
+                        color: (theme) => theme.palette.common.black,
+                      },
+                    }}
+                  >
+                    <Grid item xs={12} sm={3}>
+                      <DetailedBox
+                        title={`${item.roomNo}`}
+                        subTitle="өрөө"
+                        icon="MeetingRoomOutlinedIcon"
+                      />
+                      <DetailedBox
+                        title={`${item.bedNo}`}
+                        subTitle="унтлагын өрөө"
+                        icon="HotelIcon"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <DetailedBox
+                        title={`${item.area}`}
+                        subTitle="метр квадрат"
+                        icon="CompareArrowsIcon"
+                      />
+                      <DetailedBox
+                        title={`${item.bathNo}`}
+                        subTitle="угаалгын өрөө"
+                        icon="BathtubOutlinedIcon"
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={5}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        '& .Typography-root': { fontWeight: 700 },
+                      }}
+                    >
+                      <Typography variant="body2">{item.price} ₮</Typography>
+                      <IconButton
+                        onClick={handleChange}
+                        sx={{ border: `1px solid #DEDEDE}`, borderRadius: 100 }}
+                      >
+                        {getIcon()}
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Grid>
+            </Grid>
+          </Card>
+        </Box>
+      ))}
+    </>
+  )
+}
+
+export default ProductList

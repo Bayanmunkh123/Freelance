@@ -100,7 +100,7 @@ const LoginEmail = (props: LoginEmailProps) => {
     >
       {() => (
         <Form noValidate autoComplete="off">
-          <Stack spacing={6}>
+          <Stack  spacing={6}>
             <Field
               component={TextField}
               name="email"
@@ -129,7 +129,7 @@ const LoginEmail = (props: LoginEmailProps) => {
               label="Remember Me"
               name="remember"
               control={<Checkbox />}
-              sx={{ "& .MuiFormControlLabel-label": { color: "text.primary" } }}
+                  sx={{ "& .MuiFormControlLabel-label": { color: "text.primary" } }}
             />
             <Typography
               variant="body2"

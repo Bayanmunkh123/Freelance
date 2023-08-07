@@ -1,39 +1,11 @@
 import * as React from 'react'
 import Button from '@mui/material/Button'
-import Dialog, { DialogProps } from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import IconButton from '@mui/material/IconButton'
-import ButtonGroup from '@mui/material/ButtonGroup'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import LocationSelect from './LocationSelect'
-import RadioGroup from '@mui/material/RadioGroup'
-import FormLabel from '@mui/material/FormLabel'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Stack from '@mui/material/Stack'
-import { Formik, Form, Field } from 'formik'
-import TextField from '@mui/material/TextField'
-import Slider from '@mui/material/Slider'
+import Dialog from '@mui/material/Dialog'
 import { FilterDialog } from './FilterDialog'
 
 /**Icon imports */
 import CloseIcon from '@mui/icons-material/Close'
 import SortIcon from '@mui/icons-material/Sort'
-const NumButton = () => {
-  return (
-    <ButtonGroup disableElevation>
-      <Button startIcon={<Checkbox />}>1</Button>
-      <Button startIcon={<Checkbox />}>2</Button>
-      <Button startIcon={<Checkbox />}>3</Button>
-      <Button startIcon={<Checkbox />}>4</Button>
-      <Button startIcon={<Checkbox />}>5+</Button>
-    </ButtonGroup>
-  )
-}
 
 export default function ScrollDialog() {
   const [open, setOpen] = React.useState(false)
@@ -49,27 +21,6 @@ export default function ScrollDialog() {
   const handleChange = (newValue: number[]) => {
     setValue(newValue)
   }
-
-  // const formik = useFormik({
-  //   initialValues: {
-  //     actionType: '',
-  //     location: '',
-  //     type: '',
-  //     price: {
-  //       min: 0,
-  //       max: 0,
-  //     },
-  //     size: 0,
-  //     bedNo: 0,
-  //     batho: 0,
-  //     highlight: '',
-  //     status: '',
-  //   },
-  //   onSubmit: (values: number[]) => {
-  //     alert(JSON.stringify(values, null, 2))
-  //   },
-  // })
-
   return (
     <>
       <Button onClick={handleOpen} startIcon={<SortIcon />} size="medium">
@@ -79,7 +30,9 @@ export default function ScrollDialog() {
         open={open}
         onClose={handleClose}
         scroll="paper"
-        sx={{ '& .MuiPaper-root': {} }}
+        sx={{ '& .MuiPaper-root': { maxWidth : '700px' } }}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
       >
         {/* <form>
           <DialogTitle>

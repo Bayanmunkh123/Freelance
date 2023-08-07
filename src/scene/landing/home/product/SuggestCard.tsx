@@ -3,22 +3,9 @@ import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import { ListData, ListDataType } from './utils/ListData'
 import { useRouter } from 'next/router'
-interface ListDataType {
-  estateType: string;
-  address: string;
-  price: number;
-  imageUrl: string;
-}
-const ListData: ListDataType[] = [
-  {
-    estateType: 'Орон сууц',
-    address: 'Цагаан 7 хороолол Golden Art - Эрдэнэт, Монгол',
-    price: 95000000,
-    imageUrl:
-      'https://images.homes.com/listings/214/1007620603-872007331-original.jpg',
-  },
-]
+
 function changeNot(): ListDataType[] {
   const getRandomInt = (max: number) =>
     Math.floor(Math.random() * Math.floor(max))
@@ -41,7 +28,7 @@ export const SuggestCard = () => {
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
             }}
-            image={item.imageUrl}
+            image={item.images[0]}
           />
           <CardContent
             sx={{
