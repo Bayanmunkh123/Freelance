@@ -1,4 +1,4 @@
-import HomeScene from 'src/scene/landing'
+import { HomeScene } from 'src/scene/landing/home/HomeScene'
 
 const Home = () => <HomeScene />
 
