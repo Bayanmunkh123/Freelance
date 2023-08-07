@@ -3,12 +3,12 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import { IconButton, Grid } from '@mui/material'
-import { SuggestCard } from '../product/components/SuggestCard'
+import { SuggestCard } from './product/components/SuggestCard'
 
 /**Icon import */
 import IconSvg from 'src/layouts/components/IconSvg'
 
-export const HomeMain = () => {
+export const HomeScene = () => {
   return (
     <>
       <Stack
