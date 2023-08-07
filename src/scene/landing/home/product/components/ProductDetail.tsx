@@ -11,8 +11,8 @@ import ImageListItem from '@mui/material/ImageListItem'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
-import { ListData } from './utils/ListData'
-import { DetailedBox } from './components/DetailedBox'
+import { ListData } from '../utils/ListData'
+import { DetailedBox } from './DetailedBox'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -69,11 +69,11 @@ export const ProductDetail = () => {
         />
       </Stack>
       <Stack direction="row">
-      <DetailedBox
-          title="Нийт давхар- "
-          subTitle={`${ListData[0].floors}`}
-          icon="BusinessIcon"
-        />
+        <DetailedBox
+            title="Нийт давхар- "
+            subTitle={`${ListData[0].floors}`}
+            icon="BusinessIcon"
+          />
         <DetailedBox
           title="Давхар- "
           subTitle={`${ListData[0].floorNumber}`}

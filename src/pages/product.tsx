@@ -13,7 +13,7 @@ import CardContent from '@mui/material/CardContent'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import ProductList from 'src/scene/landing/home/product/ProductList'
+import ProductList from 'src/scene/landing/home/product/components/ProductList'
 const Product = () => {
   return (
     <>
