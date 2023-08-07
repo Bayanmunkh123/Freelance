@@ -12,7 +12,7 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Миний компани",
+      title: "Компаниуд",
       path: "/admin/users",
       icon: "mdi:user-outline",
       action: "read",
