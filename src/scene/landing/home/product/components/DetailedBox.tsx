@@ -8,7 +8,6 @@ import BusinessIcon from '@mui/icons-material/Business'
 import LayersIcon from '@mui/icons-material/Layers'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
-
 interface DetailedBoxType {
   title: string;
   subTitle: string;

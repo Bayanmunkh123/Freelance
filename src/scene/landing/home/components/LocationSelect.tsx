@@ -4,7 +4,11 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Chip from '@mui/material/Chip'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 //import {Select} from 'formik-mui'
+
+import SearchIcon from '@mui/icons-material/Search';
 
 const distNames = [
   'Баянгол',
@@ -34,11 +38,14 @@ const LocationSelect = () => {
   }
 
   return (
+  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+    <InputLabel id="demo-controlled-open-select-label">Байршил</InputLabel>
     <Select
       multiple
-      //name="location"
+      name="location"
       value={selection}
       onChange={handleChange}
+      //IconComponent={SearchIcon}
       input={<OutlinedInput label="Байршил" />}
       renderValue={(selected) => (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -61,6 +68,7 @@ const LocationSelect = () => {
         </MenuItem>
       ))}
     </Select>
+  </FormControl>
   )
 }
 

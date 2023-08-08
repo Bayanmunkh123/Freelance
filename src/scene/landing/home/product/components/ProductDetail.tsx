@@ -14,6 +14,7 @@ import { ListData } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
+import { DetailHeader } from '../../components/Header'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -28,6 +29,7 @@ export const ProductDetail = () => {
   }
   return (
     <Grid container spacing={2} maxWidth={1300} rowGap="20px">
+      <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">
           {ListData[0].name}
