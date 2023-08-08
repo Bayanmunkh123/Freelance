@@ -39,9 +39,15 @@ const DefaultPalette = (mode: Palette["mode"], skin: Skin): Palette => {
     },
     primary: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       light: "#37b7f2", // '#787EFF',
       main: "#42C3A7", //'#666CFF',
       dark: "#42C3A9", //'#5A5FE0',
+=======
+      light: "#42C3A7", // '#787EFF',
+      main: "#42C3A7", //'#666CFF',
+      dark: "#42C3A7", //'#5A5FE0',
+>>>>>>> caee96b716505309b4d36eeeaf6060189fd862af
 =======
       light: "#42C3A7", // '#787EFF',
       main: "#42C3A7", //'#666CFF',
