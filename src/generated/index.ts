@@ -1678,7 +1678,7 @@ export const ProductsDocument = gql`
       floorNumber
       floors
       images
-      location
+      address1
       name
       organizationId
       price

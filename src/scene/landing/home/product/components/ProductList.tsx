@@ -17,22 +17,21 @@ import { ConstructionStatusEnum, useProductsQuery } from 'src/generated'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
-import { Header } from '../../components/Header'
-import { SubHeader } from '../../components/SubHeader'
+import { Header, SubHeader } from '../../components/Header'
 
 const ProductList = () => {
   const { data } = useProductsQuery()
 
-  function changeNot(): ListDataType[] {
-    console.log(data)
-    const getRandomInt = (max: number) =>
-      Math.floor(Math.random() * Math.floor(max))
+  // function changeNot(): ListDataType[] {
+  //   console.log(data)
+  //   const getRandomInt = (max: number) =>
+  //     Math.floor(Math.random() * Math.floor(max))
 
-    return Array.from(new Array(5)).map(
-      () => ListData[getRandomInt(ListData.length)],
-    )
-  }
-  const data1 = changeNot()
+  //   return Array.from(new Array(5)).map(
+  //     () => ListData[getRandomInt(ListData.length)],
+  //   )
+  // }
+  // const data1 = changeNot()
   const router = useRouter()
   const [icon, setIcon] = React.useState<JSX.Element>(
     <FavoriteBorderOutlinedIcon color="error" />,
@@ -57,7 +56,7 @@ const ProductList = () => {
       }}
     >
       <Header />
-      <SubHeader />
+      <SubHeader count={2} />
       {data?.products?.data?.map((item, index: number) => (
         <Box
           key={index}
@@ -143,7 +142,7 @@ const ProductList = () => {
                     >
                       <PinDropOutlinedIcon />
                       <Typography variant="body2">
-                        {item.city} {item.district} {item.location}
+                        {item.city} {item.district} {item.address1}
                       </Typography>
                     </Box>
                   </Grid>
