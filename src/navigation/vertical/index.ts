@@ -35,6 +35,22 @@ const navigation = (): VerticalNavItemsType => {
       subject: "Admin_Roles",
       auth: true,
     },
+    {
+      title: "Миний компани",
+      path: "/admin/company",
+      icon: "mdi:shield-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
+    {
+      title: "Байгууллага",
+      path: "/admin/organization",
+      icon: "mdi:shield-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
   ]
 }
 

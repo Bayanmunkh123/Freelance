@@ -4,10 +4,19 @@ import { adminJobsPermission } from "src/pages/admin/jobs"
 import { adminRolesPermission } from "src/pages/admin/roles"
 import { adminUsersPermission } from "src/pages/admin/users"
 import { adminRequestPermission } from "src/pages/admin/request"
+import { adminCompanyPermission } from "src/pages/admin/company"
+import { adminOrganizationPermission } from "src/pages/admin/organization"
 
 export type Actions = "manage" | "create" | "read" | "update" | "delete"
 
-export type Subjects = "all" | "Admin_Roles" | "Admin_Jobs" | "Admin_Users" | "Admin_Request"
+export type Subjects =
+  | "all"
+  | "Admin_Roles"
+  | "Admin_Jobs"
+  | "Admin_Users"
+  | "Admin_Request"
+  | "Admin_Company"
+  | "Admin_Organization"
 
 export type Roles = "ADMIN" | "EDITOR" | "MEMBER"
 
@@ -63,6 +72,8 @@ const rolesData: RoleData = {
   ...adminRolesPermission,
   ...adminUsersPermission,
   ...adminRequestPermission,
+  ...adminCompanyPermission,
+  ...adminOrganizationPermission,
 
   // Landing
 
