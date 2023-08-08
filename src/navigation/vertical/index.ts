@@ -4,16 +4,8 @@ import { VerticalNavItemsType } from "src/@core/layouts/types"
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      title: "Jobs",
-      path: "/",
-=======
-=======
->>>>>>> caee96b716505309b4d36eeeaf6060189fd862af
       title: "Хянах самбар",
       path: "/admin/jobs",
->>>>>>> caee96b716505309b4d36eeeaf6060189fd862af
       icon: "mdi:home-outline",
       action: "read",
       subject: "Admin_Jobs",
