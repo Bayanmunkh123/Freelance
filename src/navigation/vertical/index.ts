@@ -4,15 +4,20 @@ import { VerticalNavItemsType } from "src/@core/layouts/types"
 const navigation = (): VerticalNavItemsType => {
   return [
     {
+<<<<<<< HEAD
       title: "Jobs",
       path: "/",
+=======
+      title: "Хянах самбар",
+      path: "/admin/jobs",
+>>>>>>> caee96b716505309b4d36eeeaf6060189fd862af
       icon: "mdi:home-outline",
       action: "read",
       subject: "Admin_Jobs",
       auth: true,
     },
     {
-      title: "Users",
+      title: "Компаниуд",
       path: "/admin/users",
       icon: "mdi:user-outline",
       action: "read",
@@ -20,8 +25,32 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Roles",
+      title: "Гишүүд",
       path: "/admin/roles",
+      icon: "mdi:shield-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
+    {
+      title: "Санал хүсэлт",
+      path: "/admin/request",
+      icon: "mdi:FrequentlyAskedQuestions-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
+    {
+      title: "Миний компани",
+      path: "/admin/company",
+      icon: "mdi:shield-outline",
+      action: "read",
+      subject: "Admin_Roles",
+      auth: true,
+    },
+    {
+      title: "Байгууллага",
+      path: "/admin/organization",
       icon: "mdi:shield-outline",
       action: "read",
       subject: "Admin_Roles",

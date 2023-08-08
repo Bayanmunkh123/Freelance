@@ -12,7 +12,7 @@ export const RoleScene = () => {
         title={<Typography variant="h5">Гишүүдийн жагсаалт</Typography>}
         subtitle={
           <Typography variant="body2">
-            Жагсаалтууд
+            Гишүүдийн ангилал
           </Typography>
         }
       />
@@ -21,11 +21,12 @@ export const RoleScene = () => {
       </Grid>
       <PageHeader
         title={
-          <Typography variant="h5">Нийт хэрэглэгч болон бүртгүүлсэн гишүүд</Typography>
+          <Typography variant="h5">Total users with their roles</Typography>
         }
         subtitle={
           <Typography variant="body2">
-            Админ хайх.
+            Find all of your company’s administrator accounts and their
+            associate roles.
           </Typography>
         }
       />

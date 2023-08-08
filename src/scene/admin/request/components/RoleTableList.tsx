@@ -1,49 +1,58 @@
-import { useState, MouseEvent, useCallback, useContext } from "react"
 import Link from "next/link"
+import { MouseEvent, useCallback, useEffect, useState } from "react"
+
 import Box from "@mui/material/Box"
 import Card from "@mui/material/Card"
-import Menu from "@mui/material/Menu"
 import Grid from "@mui/material/Grid"
-import Divider from "@mui/material/Divider"
-import { styled } from "@mui/material/styles"
-import MenuItem from "@mui/material/MenuItem"
 import IconButton from "@mui/material/IconButton"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
 import Typography from "@mui/material/Typography"
-import CardHeader from "@mui/material/CardHeader"
-import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
-import CardContent from "@mui/material/CardContent"
+import { styled } from "@mui/material/styles"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
-import Icon from "src/@core/components/icon"
-import CustomAvatar from "src/@core/components/mui/avatar"
-import { getInitials } from "src/@core/utils/get-initials"
-import { OrganizationUser, useOrganizationUsersQuery } from "src/generated"
-import { useOrganizationUserVariables } from "../../utils/useOrganizationUserVariables"
 
-import { AbilityContext } from "src/layouts/components/acl/Can"
-import { UserTableHeader } from "./components/UserTableHeader"
-import { UserAddDrawer } from "../add/UserAddDrawer"
+import Icon from "src/@core/components/icon"
+
+import CustomAvatar from "src/@core/components/mui/avatar"
+import { ThemeColor } from "src/@core/layouts/types"
+import { getInitials } from "src/@core/utils/get-initials"
+import {
+  OrganizationUser,
+  OrganizationUserRoleEnum,
+  useOrganizationUsersQuery,
+  useRolesQuery,
+} from "src/generated"
 import { useOnSearch } from "src/hooks/useOnSearch"
-import { OrgRoles } from "src/utils/constants"
+import { useOrganizationUserVariables } from "../../utils/useOrganizationUserVariables"
+import { RoleTableHeader } from "./RoleTableHeader"
+import { SelectChangeEvent } from "@mui/material"
 
 // interface UserRoleType {
 //   [key: string]: { icon: string; color: string }
 // }
 
+interface UserStatusType {
+  [key: string]: ThemeColor
+}
+
+// ** Vars
 // const userRoleObj: UserRoleType = {
-//   admin: { icon: 'mdi:laptop', color: 'error.main' },
-//   Эзэн: { icon: 'mdi:cog-outline', color: 'warning.main' },
-//   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
-//   finance: { icon: 'mdi:chart-donut', color: 'success.main' },
-//   sales: { icon: 'mdi:account-outline', color: 'primary.main' },
-//   support: { icon: 'mdi:account-outline', color: 'primary.main' },
-//   viewer: { icon: 'mdi:account-outline', color: 'primary.main' }
+//   admin: { icon: "mdi:laptop", color: "error.main" },
+//   author: { icon: "mdi:cog-outline", color: "warning.main" },
+//   editor: { icon: "mdi:pencil-outline", color: "info.main" },
+//   maintainer: { icon: "mdi:chart-donut", color: "success.main" },
+//   subscriber: { icon: "mdi:account-outline", color: "primary.main" },
 // }
 
 interface CellType {
   row: OrganizationUser
 }
+
+// const userStatusObj: UserStatusType = {
+//   active: "success",
+//   pending: "warning",
+//   inactive: "secondary",
+// }
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   fontWeight: 600,
@@ -73,7 +82,7 @@ const renderClient = (row: OrganizationUser) => {
         sx={{ mr: 3, width: 34, height: 34, fontSize: "1rem" }}
       >
         {getInitials(
-          row?.user?.profile?.firstName 
+          row?.user?.profile?.firstName
             ? row?.user?.profile?.firstName
             : "John Doe",
         )}
@@ -81,7 +90,9 @@ const renderClient = (row: OrganizationUser) => {
     )
   }
 }
+
 const RowOptions = ({ id }: { id: number | string }) => {
+  console.log(id)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const rowOptionsOpen = Boolean(anchorEl)
@@ -105,7 +116,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
       </IconButton>
       <Menu
         keepMounted
-        anchorEl={anchorEl} 
+        anchorEl={anchorEl}
         open={rowOptionsOpen}
         onClose={handleRowOptionsClose}
         anchorOrigin={{
@@ -144,8 +155,8 @@ const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 230,
-    field: "Хэрэглэгч",
-    headerName: "Хэрэглэгч",
+    field: "userName",
+    headerName: "UserName",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -171,19 +182,6 @@ const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 250,
-    field: "organization",
-    headerName: "Байгуулга",
-    renderCell: ({ row }: CellType) => {
-      return (
-        <Typography key={row.id} noWrap variant="body2">
-          {row?.organization?.name}
-        </Typography>
-      )
-    },
-  },
-  {
-    flex: 0.2,
-    minWidth: 250,
     field: "email",
     headerName: "Email",
     renderCell: ({ row }: CellType) => {
@@ -196,9 +194,9 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.15,
-    field: "Үүрэг",
+    field: "role",
     minWidth: 150,
-    headerName: "Үүрэг",
+    headerName: "Role",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center", "& svg": { mr: 3 } }}>
@@ -240,6 +238,7 @@ const columns: GridColDef[] = [
   //         label={row.status}
   //         color={userStatusObj[row.status]}
   //         sx={{ textTransform: 'capitalize', '& .MuiChip-label': { lineHeight: '18px' } }}
+  //       />
   //     )
   //   }
   // },
@@ -255,91 +254,79 @@ const columns: GridColDef[] = [
   },
 ]
 
-export const UserScene = () => {
+export const RoleListTable = () => {
   const variables = useOrganizationUserVariables()
-
-  const ability = useContext(AbilityContext)
   const onSearch = useOnSearch()
 
   const [value, setValue] = useState<string>("")
-  const [selectedRole, setSelectedRole] = useState<string>("")
+  const [searchValue, setSearchValue] = useState("")
   const [addUserOpen, setAddUserOpen] = useState<boolean>(false)
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   })
 
-  const { data } = useOrganizationUsersQuery({
-    fetchPolicy: "no-cache",
-    variables,
-    onCompleted: (data) => {
-      console.log(data.organizationUsers?.data)
+  const clearSearch = () => setSearchValue("")
 
-      // if (data?.users?.data) setRoleData(data?.users?.data)
+  const { data: rolesList } = useRolesQuery({
+    fetchPolicy: "no-cache",
+    onError: (error: unknown) => {
+      alert(error)
+    },
+  })
+
+  const {
+    data,
+    loading: organizationUserLoading,
+    refetch,
+  } = useOrganizationUsersQuery({
+    // fetchPolicy: "no-cache",
+    variables: {
+      input: {
+        // ...variables,
+        orgRole: "EDITOR" as OrganizationUserRoleEnum,
+      },
+    },
+    onCompleted: (data) => {
+      console.log(data)
     },
     onError: (error: unknown) => {
       alert(error)
     },
   })
 
-  const handleFilter = useCallback((val: string) => {
-    onSearch("role", val)
+  const handleFilter = (val: string) => {
+    // onSearch("orgRole", val)
+    refetch()
     setValue(val)
-  }, [])
-
-  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
-    setSelectedRole(e.target.value)
-    onSearch("role", e.target.value)
-  }, [])
-
-  // const handleStatusChange = useCallback((e: SelectChangeEvent) => {
-  //   setStatus(e.target.value)
+  }
+  // const handleFilter = useCallback((val: string) => {
+  //   // onSearch("orgRole", val)
+  //   refetch()
+  //   setValue(val)
   // }, [])
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
-  console.log("RolesList")
+
+  const handleRoleChange = useCallback((e: SelectChangeEvent) => {
+    onSearch("orgRole", e.target.value)
+  }, [])
 
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader
-            title="Хэрэглэгчид"
-            sx={{ pb: 4, "& .MuiCardHeader-title": { letterSpacing: ".15px" } }}
-          />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="role-select">Role сонгох</InputLabel>
-                  <Select
-                    fullWidth
-                    value={selectedRole}
-                    id="select-role"
-                    label="Select Role"
-                    labelId="role-select"
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: "Select Role" }}
-                  >
-                    {OrgRoles.map((role, key) => {
-                      return (
-                        <MenuItem key={key} value={role.name}>
-                          {role.name}
-                        </MenuItem>
-                      )
-                    })}
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-          <Divider />
-          <UserTableHeader
-            value={value}
+          <RoleTableHeader
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            roleList={rolesList as string}
             handleFilter={handleFilter}
             toggle={toggleAddUserDrawer}
+            handleRoleChange={handleRoleChange}
+            clearSearch={clearSearch}
           />
           <DataGrid
+            loading={organizationUserLoading}
             autoHeight
             rows={data?.organizationUsers?.data || []}
             columns={columns}
@@ -352,9 +339,6 @@ export const UserScene = () => {
           />
         </Card>
       </Grid>
-      {ability?.can("create", "User") && (
-        <UserAddDrawer open={addUserOpen} toggle={toggleAddUserDrawer} />
-      )}
     </Grid>
   )
 }
