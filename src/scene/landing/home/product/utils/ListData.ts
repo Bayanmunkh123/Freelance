@@ -1,14 +1,14 @@
 export interface ListDataType {
-    estateType: string
-    estateStatus: string
+    name: string
+    constStatus: string
     status: string
-    desc: string
+    description: string
     location: string
     address: string
-    roomNo: number
+    roomNumber: number
     bedNo: number
     bathNo: number
-    area: number
+    sqr: number
     price: number
     isFav: boolean
     images: string[]
@@ -17,9 +17,11 @@ export interface ListDataType {
     floors: number
     floorNumber: number
     highlights: string[]
+    city: string
+    district: string
   }
 export interface ProductInputType {
-    estateType: string
+    name: string
     constStatus: string
     status: string
     description: string
@@ -42,13 +44,12 @@ export interface ProductInputType {
 }
 export const ListData: ListDataType[] = [
     {
-      estateType: 'Орон сууц',
+      name: 'Орон сууц',
       constStatus: 'Шинэ барилга',
       status: 'Онцлох',
-      location: 'Улаанбаатар хот, Баянзүрх дүүрэг ',
+      location: 'Цагаан7 хороолол Golden Art - Эрдэнэт, Монгол',
       description: 'Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.',
-      address: ' Цагаан7 хороолол Golden Art - Эрдэнэт, Монгол',
-      roomNo: 2,
+      roomNumber: 2,
       bedNo: 2,
       bathNo: 1,
       sqr: 37,
@@ -56,6 +57,9 @@ export const ListData: ListDataType[] = [
       isFav: false,
       images: ['https://images.homes.com/listings/214/1007620603-872007331-original.jpg', 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg', 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg','https://images.homes.com/listings/214/1007620603-872007331-original.jpg'],
       parking: 2,
+      city: 'Улаанбаатар',
+      district: 'Баянзүрх',
+      organizationId:' string',
       releaseDate: 2023,
       floors: 12,
       priceSqr: 1,

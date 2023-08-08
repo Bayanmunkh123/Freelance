@@ -27,8 +27,11 @@ export const SuggestCard = () => {
               height: 140,
               borderTopLeftRadius: 10,
               borderTopRightRadius: 10,
+              boxShadow: (theme) => theme.shadows[5],
             }}
-            image={item.images[0]}
+            image={
+              'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
+            }
           />
           <CardContent
             sx={{
@@ -37,11 +40,11 @@ export const SuggestCard = () => {
             }}
           >
             <Typography variant="h6" sx={{ mb: 2 }}>
-              {item.estateType}
+              {item.name}
             </Typography>
             <Typography sx={{ mb: 2 }}>{item.price}</Typography>
             <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>
-              {item.address}
+              {item.city} хот {item.district} дүүрэг {item.location}
             </Typography>
           </CardContent>
           <Button

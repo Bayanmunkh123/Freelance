@@ -17,27 +17,59 @@ import { DetailedBox } from './DetailedBox'
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Grid } from '@mui/material'
 
 export const ProductDetail = () => {
+  const [expanded, setExpanded] = React.useState(false)
+  const [label, setLabel] = React.useState('Дэлгэрэнгүй харах')
+  const handleChange = (bool: boolean) => {
+    bool ? setLabel('Хураах') : setLabel('Дэлгэрэнгүй харах')
+    setExpanded(bool)
+  }
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
+    <Grid
+      container
+      spacing={2}
+      maxWidth={1300}
+      // sx={{
+      //   display: 'flex',
+      //   flexDirection: 'column',
+      //   alignItems: 'center',
+      // }}
     >
-      <Typography>{ListData[0].estateType}</Typography>
-      <Stack direction="row">
-        <Typography>{ListData[0].price}</Typography>
-        <Typography>{ListData[0].estateStatus}</Typography>
+      <Stack direction="column">
+        <Typography variant="h6" fontWeight="bold">
+          {ListData[0].name}
+        </Typography>
+        <Stack direction="row" columnGap="20px" alignItems="center">
+          <Typography variant="h6" fontWeight="bold">
+            {ListData[0].price}₮
+          </Typography>
+          <Typography
+            sx={{
+              border: (theme) => `1px solid ${theme.palette.primary.main}`,
+              borderRadius: '8px',
+              p: '10px 30px',
+            }}
+          >
+            {ListData[0].constStatus}
+          </Typography>
+        </Stack>
+        <Typography>
+          {ListData[0].location.concat(ListData[0].district)}
+        </Typography>
       </Stack>
-      <Typography>
-        {ListData[0].location.concat(ListData[0].address)}
-      </Typography>
-      <Stack direction="row">
-        <img src={ListData[0].images[0]} />
-        <ImageList sx={{ width: 500, height: 450 }} cols={2} rowHeight={164}>
+      <Stack direction="row" width="100%">
+        <img src={ListData[0].images[0]} style={{ borderRadius: '10px' }} />
+        <ImageList
+          sx={{
+            width: 500,
+            height: 450,
+            borderRadius: '10px',
+          }}
+          cols={2}
+          rowHeight={164}
+        >
           {ListData[0].images.map((url) => (
             <ImageListItem key={url}>
               <img src={url} loading="lazy" />
@@ -46,10 +78,10 @@ export const ProductDetail = () => {
         </ImageList>
       </Stack>
       <Divider />
-      <Stack direction="row">
+      <Stack direction="row" width="100%" columnGap="20px">
         <DetailedBox
           title="Нийт өрөө- "
-          subTitle={`${ListData[0].roomNo}`}
+          subTitle={`${ListData[0].roomNumber}`}
           icon="MeetingRoomOutlinedIcon"
         />
         <DetailedBox
@@ -59,7 +91,7 @@ export const ProductDetail = () => {
         />
         <DetailedBox
           title="Нийт метр квадрат- "
-          subTitle={`${ListData[0].area}`}
+          subTitle={`${ListData[0].sqr}`}
           icon="CompareArrowsIcon"
         />
         <DetailedBox
@@ -68,12 +100,12 @@ export const ProductDetail = () => {
           icon="BathtubOutlinedIcon"
         />
       </Stack>
-      <Stack direction="row">
+      <Stack direction="row" width="100%" columnGap="20px">
         <DetailedBox
-            title="Нийт давхар- "
-            subTitle={`${ListData[0].floors}`}
-            icon="BusinessIcon"
-          />
+          title="Нийт давхар- "
+          subTitle={`${ListData[0].floors}`}
+          icon="BusinessIcon"
+        />
         <DetailedBox
           title="Давхар- "
           subTitle={`${ListData[0].floorNumber}`}
@@ -81,7 +113,7 @@ export const ProductDetail = () => {
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${ListData[0].buildYear}`}
+          subTitle={`${ListData[0].releaseDate}`}
           icon="EventAvailableIcon"
         />
         <DetailedBox
@@ -90,39 +122,39 @@ export const ProductDetail = () => {
           icon="DirectionsCarIcon"
         />
       </Stack>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Дэлгэрэнгүй</Typography>
+      <Accordion expanded={expanded} onChange={() => handleChange(!expanded)}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Stack direction="row" justifyContent="space-between">
+            <Typography>Дэлгэрэнгүй</Typography>
+            <Typography sx={{ ml: '950px' }}>{label}</Typography>
+          </Stack>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{ListData[0].desc}</Typography>
+          <Typography>{ListData[0].description}</Typography>
         </AccordionDetails>
       </Accordion>
       <Typography>Байршил</Typography>
+      <Box>
       <Typography>Онцлог</Typography>
-      <Stack direction="row">
-        {ListData[0].highlights.map((item) => (
-          <Button
-            key={item}
-            startIcon={<CheckCircleIcon />}
-            sx={{
-              width: 180,
-              border: '1px solid',
-              borderRadius: '10px',
-              fontSize: '12px',
-              color: 'primary.main',
-            }}
-          >
-            {item}
-          </Button>
-        ))}
-      </Stack>
-
+        <Stack direction="row">
+          {ListData[0].highlights.map((item) => (
+            <Button
+              key={item}
+              startIcon={<CheckCircleIcon />}
+              sx={{
+                width: 180,
+                border: '1px solid',
+                borderRadius: '10px',
+                fontSize: '12px',
+                color: 'primary.main',
+              }}
+            >
+              {item}
+            </Button>
+          ))}
+        </Stack>
+      </Box>
       <Button>Худалдан авах</Button>
-    </Box>
+    </Grid>
   )
 }

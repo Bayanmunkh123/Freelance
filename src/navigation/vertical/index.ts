@@ -5,7 +5,7 @@ const navigation = (): VerticalNavItemsType => {
   return [
     {
       title: "Jobs",
-      path: "/admin/jobs",
+      path: "/",
       icon: "mdi:home-outline",
       action: "read",
       subject: "Admin_Jobs",

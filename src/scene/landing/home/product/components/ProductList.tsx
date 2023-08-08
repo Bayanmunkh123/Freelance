@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton'
 import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
+import { ConstructionStatusEnum, useProductsQuery } from 'src/generated'
+
 // ** Icon Imports
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
@@ -18,17 +20,19 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
 import { Header } from '../../components/Header'
 import { SubHeader } from '../../components/SubHeader'
 
-function changeNot(): ListDataType[] {
-  const getRandomInt = (max: number) =>
-    Math.floor(Math.random() * Math.floor(max))
-
-  return Array.from(new Array(5)).map(
-    () => ListData[getRandomInt(ListData.length)],
-  )
-}
-
 const ProductList = () => {
-  const data = changeNot()
+  const { data } = useProductsQuery()
+
+  function changeNot(): ListDataType[] {
+    console.log(data)
+    const getRandomInt = (max: number) =>
+      Math.floor(Math.random() * Math.floor(max))
+
+    return Array.from(new Array(5)).map(
+      () => ListData[getRandomInt(ListData.length)],
+    )
+  }
+  const data1 = changeNot()
   const router = useRouter()
   const [icon, setIcon] = React.useState<JSX.Element>(
     <FavoriteBorderOutlinedIcon color="error" />,
@@ -39,7 +43,6 @@ const ProductList = () => {
   }
   const handleChange = () => {
     setLiked(!liked)
-    console.log()
     if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
     else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
   }
@@ -55,7 +58,7 @@ const ProductList = () => {
     >
       <Header />
       <SubHeader />
-      {data.map((item, index: number) => (
+      {data?.products?.data?.map((item, index: number) => (
         <Box
           key={index}
           sx={{ display: 'flex', flexDirection: 'row', maxWidth: 1200 }}
@@ -66,11 +69,10 @@ const ProductList = () => {
               position: 'absolute',
               height: '36px',
               backgroundColor:
-                item.status === 'Онцлох'
+                //item.status === 'Онцлох'
+                item?.constStatus === ConstructionStatusEnum.NEW
                   ? 'primary.main'
-                  : item.status === 'Шинэ'
-                  ? 'warning.main'
-                  : 'transparent',
+                  : 'warning.main',
               padding: '2px 80px',
               borderRadius: '10px 10px 10px 0',
               color: 'common.white',
@@ -78,7 +80,7 @@ const ProductList = () => {
               marginTop: '24px',
             }}
           >
-            {item.status}
+            {'Онцлох'}
           </Box>
           <Box
             sx={{
@@ -86,9 +88,9 @@ const ProductList = () => {
               width: '20px',
               height: '20px',
               backgroundColor:
-                item.status === 'Онцлох'
+                item?.constStatus === ConstructionStatusEnum.NEW
                   ? 'primary.main'
-                  : item.status === 'Шинэ'
+                  : item?.constStatus === ConstructionStatusEnum.OLD
                   ? 'error.dark'
                   : 'transparent',
               borderRadius: '0 0 0 10px',
@@ -112,19 +114,21 @@ const ProductList = () => {
               >
                 <Box>
                   <img
-                    src={item.images[0]}
-                    alt={item.estateType}
+                    src={
+                      'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
+                    }
+                    alt={'Орон сууц'}
                     height={'320px'}
                     width={'100%'}
                   />
                 </Box>
               </Grid>
               <Grid item xs={12} sm={7}>
-                <CardContent>
+                <CardContent sx={{ width: 800 }}>
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    {item.estateType}
+                    {item.name}
                   </Typography>
-                  <Typography variant="body2">{item.desc}</Typography>
+                  <Typography variant="body2">{item.description}</Typography>
                   <Divider
                     sx={{ my: (theme) => `${theme.spacing(3)} !important` }}
                   />
@@ -138,7 +142,9 @@ const ProductList = () => {
                       }}
                     >
                       <PinDropOutlinedIcon />
-                      <Typography variant="body2">{item.address}</Typography>
+                      <Typography variant="body2">
+                        {item.city} {item.district} {item.location}
+                      </Typography>
                     </Box>
                   </Grid>
                   <Grid
@@ -152,32 +158,32 @@ const ProductList = () => {
                   >
                     <Grid item xs={12} sm={3}>
                       <DetailedBox
-                        title={`${item.roomNo}`}
+                        title={`${item.roomNumber}`}
                         subTitle="өрөө"
                         icon="MeetingRoomOutlinedIcon"
                       />
                       <DetailedBox
-                        title={`${item.bedNo}`}
+                        title={'1'}
                         subTitle="унтлагын өрөө"
                         icon="HotelIcon"
                       />
                     </Grid>
                     <Grid item xs={12} sm={3}>
                       <DetailedBox
-                        title={`${item.area}`}
+                        title={`${item.sqr}`}
                         subTitle="метр квадрат"
                         icon="CompareArrowsIcon"
                       />
                       <DetailedBox
-                        title={`${item.bathNo}`}
+                        title={'1'}
                         subTitle="угаалгын өрөө"
                         icon="BathtubOutlinedIcon"
                       />
                     </Grid>
                     <Grid
                       item
-                      xs={12}
-                      sm={5}
+                      xs={4}
+                      //sm={5}
                       sx={{
                         display: 'flex',
                         alignItems: 'center',

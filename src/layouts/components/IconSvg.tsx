@@ -1,6 +1,6 @@
 const IconSvg = (name: string) => {
   switch (name) {
-    case "rent":
+    case 'rent':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "rentButton":
+    case 'rentButton':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "shop":
+    case 'shop':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "office":
+    case 'office':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -254,7 +254,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "place":
+    case 'place':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -340,7 +340,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "parking":
+    case 'parking':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -411,7 +411,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "warehouse":
+    case 'warehouse':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -444,7 +444,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "building":
+    case 'building':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -500,7 +500,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "dept":
+    case 'dept':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -583,7 +583,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "house":
+    case 'house':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -655,7 +655,7 @@ const IconSvg = (name: string) => {
           </defs>
         </svg>
       )
-    case "public-dept":
+    case 'public-dept':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -722,7 +722,7 @@ const IconSvg = (name: string) => {
           />
         </svg>
       )
-    case "buy":
+    case 'buy':
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,5 @@
 import { AbilityBuilder, PureAbility } from "@casl/ability"
 import { AuthUserType } from "src/generated"
-import { adminJobsPermission } from "src/pages/admin/jobs"
 import { adminRolesPermission } from "src/pages/admin/roles"
 import { adminUsersPermission } from "src/pages/admin/users"
 
@@ -57,7 +56,6 @@ export type ACLObj = {
 }
 const rolesData: RoleData = {
   // Admin
-  ...adminJobsPermission,
   ...adminRolesPermission,
   ...adminUsersPermission,
 
