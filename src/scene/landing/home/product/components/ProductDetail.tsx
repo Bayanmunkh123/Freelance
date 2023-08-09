@@ -28,7 +28,7 @@ export const ProductDetail = () => {
     setExpanded(bool)
   }
   return (
-    <Grid container spacing={2} maxWidth={1300} rowGap="20px">
+    <Grid container spacing={2} maxWidth={1300} rowGap="20px" px="50px" rowGap="15px">
       <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">

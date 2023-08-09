@@ -9,7 +9,13 @@ import LocationSelect from './LocationSelect'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { MenuItem, InputLabel, FormControl, IconButton, Chip } from '@mui/material'
+import {
+  MenuItem,
+  InputLabel,
+  FormControl,
+  IconButton,
+  Chip,
+} from '@mui/material'
 
 //** Icon imports*/
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -37,11 +43,7 @@ export const Header = () => {
     setOpen(true)
   }
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      sx={{ px: 25, width: '100%' }}
-    >
+    <Grid container justifyContent="space-between" px="50px" rowGap="15px">
       <FormGroup row>
         <FormControlLabel control={<Checkbox />} label="Худалдан авах" />
         <FormControlLabel control={<Checkbox />} label="Түрээслэх" />
@@ -79,7 +81,7 @@ export const Header = () => {
         </Select>
       </FormControl>
       <FilterButton />
-    </Stack>
+    </Grid>
   )
 }
 interface Props {
@@ -103,7 +105,7 @@ export const SubHeader = (props: Props) => {
   }
 
   return (
-    <Grid container justifyContent="space-between">
+    <Grid container justifyContent="space-between" px="50px" rowGap="15px" >
       <Stack direction="row" columnGap="10px">
         <Typography
           variant="h6"
@@ -157,7 +159,7 @@ export const DetailHeader = () => {
     else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
   }
   return (
-    <Grid container justifyContent="space-between">
+    <Grid container justifyContent="space-between" rowGap="15px">
       <Stack direction="row" columnGap="10px">
         <Button
           startIcon={

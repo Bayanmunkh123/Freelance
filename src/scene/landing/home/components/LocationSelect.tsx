@@ -42,7 +42,7 @@ const LocationSelect = () => {
     <InputLabel id="demo-controlled-open-select-label">Байршил</InputLabel>
     <Select
       multiple
-      name="location"
+      zname="location"
       value={selection}
       onChange={handleChange}
       //IconComponent={SearchIcon}

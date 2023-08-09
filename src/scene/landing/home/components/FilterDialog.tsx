@@ -3,22 +3,12 @@ import { Grid, Tab, Typography, DialogContent } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { FilterBuy } from './FilterBuy'
 import { FilterRent } from './FilterRent'
+import CloseIcon from '@mui/icons-material/Close'
 
 export const FilterDialog = () => {
   const [actionType, setActiontype] = useState('buy')
   return (
     <DialogContent>
-      <Typography
-        variant="h6"
-        sx={{
-          ml: 2,
-          lineHeight: 1,
-          fontWeight: 700,
-          fontSize: '1.5rem !important',
-        }}
-      >
-        Бүх шүүлтүүр
-      </Typography>
       <TabContext value={actionType}>
         <Grid sx={{ mb: '20px' }}>
           <TabList
