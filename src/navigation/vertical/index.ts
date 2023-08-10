@@ -9,7 +9,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: "mdi:home-outline",
       action: "read",
       subject: "Admin_Jobs",
-      auth: true,
+      auth: false,
     },
     {
       title: "Users",
@@ -17,7 +17,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: "mdi:user-outline",
       action: "read",
       subject: "Admin_Users",
-      auth: true,
+      auth: false,
     },
     {
       title: "Roles",
@@ -25,8 +25,15 @@ const navigation = (): VerticalNavItemsType => {
       icon: "mdi:shield-outline",
       action: "read",
       subject: "Admin_Roles",
-      auth: true,
+      auth: false,
     },
+    {
+    title: 'Хэрэглэгч',
+    icon: 'mdi:account-outline',
+    path: '/pages/index',
+    subject: "User",
+    auth: false
+    }
   ]
 }
 
