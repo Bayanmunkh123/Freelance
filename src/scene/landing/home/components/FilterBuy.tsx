@@ -26,7 +26,7 @@ const filterApartmentSchema = yup.object().shape({
   roomNo: yup.number(),
   status: yup.string(),
 })
-const distNames = [
+export const distNames = [
   'Баянгол',
   'Баянзүрх',
   'Хан-Уул',
@@ -38,9 +38,9 @@ const distNames = [
   'Багануур',
 ]
 
-export const CustomSlider = ({ label, ...props }) => {
+export const CustomSlider = ({ ...props }) => {
   const [field, meta] = useField(props)
-  return <Slider label={label} {...field} {...props} />
+  return <Slider {...field} {...props} />
 }
 const CustomizedSelectForFormik = ({ children, form, field }) => {
   const { name, value } = field
@@ -57,7 +57,7 @@ const CustomizedSelectForFormik = ({ children, form, field }) => {
       value={value || []}
       onChange={(e) => {
         setFieldValue(name, e.target.value)
-        console.log("1",e.target.value)
+        console.log(e.target.value)
       }}
       renderValue={(selected) => (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -81,9 +81,6 @@ const CustomizedSelectForFormik = ({ children, form, field }) => {
 const CustomizedTextField = ({ form, field }) => {
   const { name, value } = field
   const { setFieldValue } = form
-  const clearField = () => {
-    setFieldValue(name, [])
-  }
 
   return (
     <TextField

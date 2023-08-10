@@ -1670,6 +1670,7 @@ export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<Account
 export const ProductsDocument = gql`
     query products($input: ProductsWhereInput) {
   products(input: $input) {
+    count
     data {
       city
       constStatus

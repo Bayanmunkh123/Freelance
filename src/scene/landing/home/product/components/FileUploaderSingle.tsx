@@ -59,15 +59,15 @@ const FileUploaderSingle = () => {
   ))
 
   return (
-    <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {}}>
+    <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {height: 200,  p: '40px', border: (theme)=> `1px solid ${theme.palette.grey[400]}`, borderRadius: "20px"}}>
       <input {...getInputProps()} />
       {files.length ? (
         img
       ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'] }}>
-            <HeadingTypography variant='h5'>Төслийн үндсэн зураг оруулах</HeadingTypography>
+          <Box  sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center', 'inherit'], }}>
+            <HeadingTypography variant='h6'>Төслийн үндсэн зураг оруулах</HeadingTypography>
               <Link href='/' onClick={e => e.preventDefault()}>
-                <AddPhotoAlternateIcon />
+                <AddPhotoAlternateIcon sx={{color: (theme) => theme.palette.primary.main, fontSize: '40px'}} />
               </Link>{' '}
           </Box>
       )}

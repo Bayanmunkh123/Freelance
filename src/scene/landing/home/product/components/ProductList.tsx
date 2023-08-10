@@ -21,17 +21,16 @@ import { Header, SubHeader } from '../../components/Header'
 
 const ProductList = () => {
   const { data } = useProductsQuery()
+  function changeNot(): ListDataType[] {
+    console.log(data)
+    const getRandomInt = (max: number) =>
+      Math.floor(Math.random() * Math.floor(max))
 
-  // function changeNot(): ListDataType[] {
-  //   console.log(data)
-  //   const getRandomInt = (max: number) =>
-  //     Math.floor(Math.random() * Math.floor(max))
-
-  //   return Array.from(new Array(5)).map(
-  //     () => ListData[getRandomInt(ListData.length)],
-  //   )
-  // }
-  // const data1 = changeNot()
+    return Array.from(new Array(5)).map(
+      () => ListData[getRandomInt(ListData.length)],
+    )
+  }
+  const data1 = changeNot()
   const router = useRouter()
   const [icon, setIcon] = React.useState<JSX.Element>(
     <FavoriteBorderOutlinedIcon color="error" />,
@@ -56,7 +55,7 @@ const ProductList = () => {
       }}
     >
       <Header />
-      <SubHeader count={2} />
+      <SubHeader count = {data?.products?.data?.length} />
       {data?.products?.data?.map((item, index: number) => (
         <Box
           key={index}

@@ -35,10 +35,10 @@ const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
 }))
 
 interface Props {
-  hidden: boolean
-  settings: Settings
-  saveSettings: (values: Settings) => void
-  toggleNavVisibility: () => void
+  hidden: boolean;
+  settings: Settings;
+  saveSettings: (values: Settings) => void;
+  toggleNavVisibility: () => void;
   navMenu?: {
     sx?: SxProps<Theme>
     navItems?: HorizontalNavItemsType
