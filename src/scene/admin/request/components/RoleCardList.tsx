@@ -55,9 +55,9 @@ const cardData: CardDataType[] = [
     title: "Санхүүч",
     avatars: ["4.png", "5.png", "6.png", "7.png", "8.png"],
   },
-  { totalUsers: 3, title: "Худалдаалах", avatars: ["1.png", "2.png", "3.png"] },
-  { totalUsers: 2, title: "Тусламж", avatars: ["4.png", "5.png"] },
-  { totalUsers: 2, title: "Харах", avatars: ["4.png", "5.png"] },
+  { totalUsers: 3, title: "Худалдаач", avatars: ["1.png", "2.png", "3.png"] },
+  { totalUsers: 2, title: "Туслагч", avatars: ["4.png", "5.png"] },
+  { totalUsers: 2, title: "Хэрэглэгч", avatars: ["4.png", "5.png"] },
 ]
 
 const rolesArr: string[] = [
@@ -370,6 +370,24 @@ export const RoleCardList = () => {
             ],
           }}
         >
+          <Box className="demo-space-x">
+            <Button
+              size="large"
+              type="submit"
+              variant="contained"
+              onClick={handleClose}
+            >
+              Нэмэх
+            </Button>
+            <Button
+              size="large"
+              color="secondary"
+              variant="outlined"
+              onClick={handleClose}
+            >
+              Цуцлах
+            </Button>
+          </Box>
           <Box className="demo-space-x">
             <Button
               size="large"
