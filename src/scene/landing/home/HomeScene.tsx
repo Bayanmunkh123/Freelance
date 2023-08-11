@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import { Grid } from '@mui/material'
-import { SuggestCard } from './product/components/SuggestCard'
+import { SuggestCard } from '../product/components/SuggestCard'
 import { HomeButton } from './components/HomeButton'
 
 /**Icon import */

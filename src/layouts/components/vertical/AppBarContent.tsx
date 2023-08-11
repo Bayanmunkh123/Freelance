@@ -4,12 +4,14 @@ import Box from "@mui/material/Box"
 import IconButton from "@mui/material/IconButton"
 import { SxProps } from "@mui/system"
 import MuiToolbar, { ToolbarProps } from "@mui/material/Toolbar"
+import Button from "@mui/material/Button"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 
 // ** Type Import
 import { Settings } from "src/@core/context/settingsContext"
+import { useRouter } from "next/router"
 
 // ** Components
 import ModeToggler from "src/@core/layouts/components/shared-components/ModeToggler"
@@ -33,10 +35,10 @@ const Toolbar = styled(MuiToolbar)<ToolbarProps>(({ theme }) => ({
 }))
 
 interface Props {
-  hidden: boolean
-  settings: Settings
-  saveSettings: (values: Settings) => void
-  toggleNavVisibility: () => void
+  hidden: boolean;
+  settings: Settings;
+  saveSettings: (values: Settings) => void;
+  toggleNavVisibility: () => void;
   navMenu?: {
     sx?: SxProps<Theme>
     navItems?: HorizontalNavItemsType
@@ -49,7 +51,7 @@ const AppBarContent = (props: Props) => {
 
   // const { user } = useAuth()
   const { skin, contentWidth } = settings
-
+  const router = useRouter()
   return (
     <Box
       sx={{
@@ -107,7 +109,8 @@ const AppBarContent = (props: Props) => {
       <Box
         className="actions-right"
         sx={{ display: "flex", alignItems: "center" }}
-      >
+      >         
+        <Button onClick={router.push('')}>Product үүсгэх</Button>
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <UserDropdown settings={settings} hidden={hidden} />
       </Box>

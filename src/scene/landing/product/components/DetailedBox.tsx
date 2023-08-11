@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 /**Icon imports */
 import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined'
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined'
@@ -8,7 +8,6 @@ import BusinessIcon from '@mui/icons-material/Business'
 import LayersIcon from '@mui/icons-material/Layers'
 import EventAvailableIcon from '@mui/icons-material/EventAvailable'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
-
 interface DetailedBoxType {
   title: string;
   subTitle: string;
@@ -40,13 +39,18 @@ export const DetailedBox = (props: DetailedBoxType) => {
     <Box
       sx={{
         py: 1.25,
-        mb: 4,
         display: 'flex',
         alignItems: 'center',
-        '& svg': { color: 'primary.main', mr: 2.5 },
+        '& svg': { color: 'primary.main' },
+        '& .MuiButtonBase-root': {
+          borderRadius: '30px',
+          backgroundColor: (theme) => theme.palette.primary.light,
+        },
+        columnGap: '20px',
       }}
     >
-      {getIcon(icon)}
+      <IconButton>{getIcon(icon)}</IconButton>
+
       <Typography variant="body2">
         {title} {subTitle}
       </Typography>

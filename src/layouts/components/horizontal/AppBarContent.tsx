@@ -3,6 +3,7 @@ import { IconButton, styled, Theme } from "@mui/material"
 import Box from "@mui/material/Box"
 import { SxProps } from "@mui/system"
 import MuiToolbar, { ToolbarProps } from "@mui/material/Toolbar"
+import Button from "@mui/material/Button"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"

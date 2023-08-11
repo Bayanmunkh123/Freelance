@@ -188,6 +188,7 @@ export type Mutation = {
   loginPhone?: Maybe<AuthVerifyTokenType>;
   logout?: Maybe<Scalars['Boolean']>;
   productCreate?: Maybe<Product>;
+  productDelete?: Maybe<Scalars['Boolean']>;
   refreshAccessToken?: Maybe<RefreshTokenType>;
   registerEmail?: Maybe<Scalars['Boolean']>;
   registerPhone?: Maybe<Scalars['Boolean']>;
@@ -298,6 +299,11 @@ export type MutationLogoutArgs = {
 
 export type MutationProductCreateArgs = {
   input: ProductInput;
+};
+
+
+export type MutationProductDeleteArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -443,45 +449,58 @@ export type PermissionsType = {
 
 export type Product = {
   __typename?: 'Product';
+  address1?: Maybe<Scalars['String']>;
   city: Scalars['String'];
   constStatus: ConstructionStatusEnum;
   description?: Maybe<Scalars['String']>;
   district: Scalars['String'];
   floorNumber: Scalars['Int'];
   floors: Scalars['Int'];
-  images: Scalars['String'];
-  location: Scalars['String'];
+  id: Scalars['ID'];
+  images?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   organizationId: Scalars['String'];
   price?: Maybe<Scalars['Int']>;
   priceSqr?: Maybe<Scalars['Int']>;
+  productStatus: ProductStatusEnum;
   releaseDate?: Maybe<Scalars['DateTime']>;
   roomNumber: Scalars['Int'];
   sqr: Scalars['Int'];
 };
 
 export type ProductInput = {
+  address1?: InputMaybe<Scalars['String']>;
   city: Scalars['String'];
   constStatus: ConstructionStatusEnum;
   description?: InputMaybe<Scalars['String']>;
   district: Scalars['String'];
   floorNumber: Scalars['Int'];
   floors: Scalars['Int'];
-  images: Scalars['String'];
-  location: Scalars['String'];
+  images?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   organizationId: Scalars['String'];
   price?: InputMaybe<Scalars['Int']>;
   priceSqr?: InputMaybe<Scalars['Int']>;
+  productStatus: ProductStatusEnum;
   releaseDate?: InputMaybe<Scalars['DateTime']>;
   roomNumber: Scalars['Int'];
   sqr: Scalars['Int'];
 };
 
+export enum ProductStatusEnum {
+  DEFAULT = 'DEFAULT',
+  HIGHLIGTH = 'HIGHLIGTH',
+  NEW = 'NEW'
+}
+
+export type ProductWhereInput = {
+  id: Scalars['ID'];
+};
+
 export type ProductsWhereInput = {
   city: Scalars['String'];
   district: Scalars['String'];
-  location: Scalars['String'];
+  roomNumber: Scalars['Int'];
 };
 
 export type Query = {
@@ -506,7 +525,7 @@ export type QueryOrganizationUsersArgs = {
 
 
 export type QueryProductArgs = {
-  input?: InputMaybe<ProductsWhereInput>;
+  input?: InputMaybe<ProductWhereInput>;
 };
 
 
@@ -910,7 +929,7 @@ export type ProductsQueryVariables = Exact<{
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'products', data?: Array<{ __typename?: 'Product', city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, images: string, location: string, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, roomNumber: number, releaseDate?: any | null, sqr: number }> | null } | null };
+export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'products', count?: number | null, data?: Array<{ __typename?: 'Product', address1?: string | null, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floors: number, floorNumber: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, productStatus: ProductStatusEnum, releaseDate?: any | null, roomNumber: number, sqr: number }> | null } | null };
 
 
 export const MeAuthDocument = gql`
@@ -1668,23 +1687,26 @@ export type AccountEliminateMutationHookResult = ReturnType<typeof useAccountEli
 export type AccountEliminateMutationResult = Apollo.MutationResult<AccountEliminateMutation>;
 export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<AccountEliminateMutation, AccountEliminateMutationVariables>;
 export const ProductsDocument = gql`
-    query products($input: ProductsWhereInput) {
+    query Products($input: ProductsWhereInput) {
   products(input: $input) {
+    count
     data {
+      address1
       city
       constStatus
       description
       district
-      floorNumber
       floors
+      floorNumber
+      id
       images
-      location
       name
       organizationId
       price
       priceSqr
-      roomNumber
+      productStatus
       releaseDate
+      roomNumber
       sqr
     }
   }

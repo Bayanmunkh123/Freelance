@@ -4,7 +4,6 @@ import * as React from 'react'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 import ImageList from '@mui/material/ImageList'
 import Stack from '@mui/material/Stack'
 import ImageListItem from '@mui/material/ImageListItem'
@@ -13,11 +12,13 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import { ListData } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
+import IconButton from '@mui/material/IconButton'
+import Grid from '@mui/material/Grid'
+import { DetailHeader } from '../../home/components/Header'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { Grid } from '@mui/material'
 
 export const ProductDetail = () => {
   const [expanded, setExpanded] = React.useState(false)
@@ -27,16 +28,8 @@ export const ProductDetail = () => {
     setExpanded(bool)
   }
   return (
-    <Grid
-      container
-      spacing={2}
-      maxWidth={1300}
-      // sx={{
-      //   display: 'flex',
-      //   flexDirection: 'column',
-      //   alignItems: 'center',
-      // }}
-    >
+    <Grid container spacing={2} maxWidth={1300} px="50px" rowGap="15px">
+      <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">
           {ListData[0].name}
@@ -49,18 +42,21 @@ export const ProductDetail = () => {
             sx={{
               border: (theme) => `1px solid ${theme.palette.primary.main}`,
               borderRadius: '8px',
-              p: '10px 30px',
+              p: '8px 30px',
             }}
           >
             {ListData[0].constStatus}
           </Typography>
         </Stack>
         <Typography>
-          {ListData[0].location.concat(ListData[0].district)}
+          {ListData[0].address1.concat(ListData[0].district)}
         </Typography>
       </Stack>
-      <Stack direction="row" width="100%">
-        <img src={ListData[0].images[0]} style={{ borderRadius: '10px' }} />
+      <Grid container>
+        <img
+          src={ListData[0].images[0]}
+          style={{ borderRadius: '10px', width: 500 }}
+        />
         <ImageList
           sx={{
             width: 500,
@@ -76,9 +72,9 @@ export const ProductDetail = () => {
             </ImageListItem>
           ))}
         </ImageList>
-      </Stack>
-      <Divider />
-      <Stack direction="row" width="100%" columnGap="20px">
+      </Grid>
+      <Divider sx={{ width: '100%' }} />
+      <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт өрөө- "
           subTitle={`${ListData[0].roomNumber}`}
@@ -99,8 +95,8 @@ export const ProductDetail = () => {
           subTitle={`${ListData[0].bathNo}`}
           icon="BathtubOutlinedIcon"
         />
-      </Stack>
-      <Stack direction="row" width="100%" columnGap="20px">
+      </Grid>
+      <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт давхар- "
           subTitle={`${ListData[0].floors}`}
@@ -113,7 +109,7 @@ export const ProductDetail = () => {
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${ListData[0].releaseDate}`}
+          subTitle={`${ListData[0].releaseDate.getFullYear()}`}
           icon="EventAvailableIcon"
         />
         <DetailedBox
@@ -121,40 +117,68 @@ export const ProductDetail = () => {
           subTitle={`${ListData[0].parking}`}
           icon="DirectionsCarIcon"
         />
-      </Stack>
+      </Grid>
       <Accordion expanded={expanded} onChange={() => handleChange(!expanded)}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography>Дэлгэрэнгүй</Typography>
-            <Typography sx={{ ml: '950px' }}>{label}</Typography>
-          </Stack>
+          <Grid container justifyContent="space-between">
+            <Typography variant="h6" fontWeight="bold">
+              Дэлгэрэнгүй мэдээлэл
+            </Typography>
+            <Typography fontWeight="medium">{label}</Typography>
+          </Grid>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>{ListData[0].description}</Typography>
         </AccordionDetails>
       </Accordion>
-      <Typography>Байршил</Typography>
-      <Box>
-      <Typography>Онцлог</Typography>
-        <Stack direction="row">
-          {ListData[0].highlights.map((item) => (
-            <Button
-              key={item}
-              startIcon={<CheckCircleIcon />}
-              sx={{
-                width: 180,
-                border: '1px solid',
-                borderRadius: '10px',
-                fontSize: '12px',
-                color: 'primary.main',
-              }}
-            >
-              {item}
-            </Button>
-          ))}
-        </Stack>
-      </Box>
-      <Button>Худалдан авах</Button>
+      <Typography variant="h6" fontWeight="bold">
+        Байршил
+      </Typography>
+      <Grid container>
+        <img src="https://i0.wp.com/www.cssscript.com/wp-content/uploads/2018/03/Simple-Location-Picker.png?fit=561%2C421&ssl=1" />
+      </Grid>
+
+      <Typography variant="h6" fontWeight="bold">
+        Онцлог
+      </Typography>
+      <Grid container columnGap="20px" rowGap="20px">
+        {ListData[0].highlights.map((item) => (
+          <Button
+            key={item}
+            size="small"
+            sx={{
+              width: 200,
+              borderRadius: '15px',
+              fontSize: '12px',
+              color: (theme) => theme.palette.grey[600],
+              '& .MuiSvgIcon-root': {
+                color: (theme) => theme.palette.primary.main,
+              },
+              '& .MuiButtonBase-root': {
+                borderRadius: '30px',
+                backgroundColor: (theme) => theme.palette.primary.light,
+              },
+              boxShadow: (theme) =>
+                `1px 1px 1px 1px ${theme.palette.grey[300]}`,
+            }}
+          >
+            <IconButton>
+              <CheckCircleIcon />
+            </IconButton>
+            {item}
+          </Button>
+        ))}
+      </Grid>
+      <Button
+        sx={{
+          backgroundColor: 'primary.main',
+          color: (theme) => theme.palette.customColors.lightBg,
+          px: '30px',
+          left: '80%',
+        }}
+      >
+        Худалдан авах
+      </Button>
     </Grid>
   )
 }

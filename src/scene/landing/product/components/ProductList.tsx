@@ -17,12 +17,10 @@ import { ConstructionStatusEnum, useProductsQuery } from 'src/generated'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
-import { Header } from '../../components/Header'
-import { SubHeader } from '../../components/SubHeader'
+import { Header, SubHeader } from '../../home/components/Header'
 
 const ProductList = () => {
   const { data } = useProductsQuery()
-
   function changeNot(): ListDataType[] {
     console.log(data)
     const getRandomInt = (max: number) =>
@@ -57,7 +55,7 @@ const ProductList = () => {
       }}
     >
       <Header />
-      <SubHeader />
+      <SubHeader count={data?.products?.data?.length} />
       {data?.products?.data?.map((item, index: number) => (
         <Box
           key={index}
@@ -114,9 +112,7 @@ const ProductList = () => {
               >
                 <Box>
                   <img
-                    src={
-                      'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
-                    }
+                    src={item.images}
                     alt={'Орон сууц'}
                     height={'320px'}
                     width={'100%'}
@@ -143,7 +139,7 @@ const ProductList = () => {
                     >
                       <PinDropOutlinedIcon />
                       <Typography variant="body2">
-                        {item.city} {item.district} {item.location}
+                        {item.city} {item.district} {item.address1}
                       </Typography>
                     </Box>
                   </Grid>

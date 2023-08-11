@@ -21,7 +21,7 @@ interface RenderValueType {
 const CustomCheckIcon = <CheckCircleIcon />
 const CustomUncheckedIcon = <RadioButtonUncheckedIcon />
 
-const RenderValues: RenderValueType[] = [
+export const RenderValues: RenderValueType[] = [
   {
     label: 'Орон сууц',
     value: 'apartment',
