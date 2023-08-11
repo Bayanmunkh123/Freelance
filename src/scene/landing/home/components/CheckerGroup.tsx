@@ -109,7 +109,7 @@ export const CheckerGroup = (props: CheckerGroupType) => {
     : null
   return (
     <>
-      {values.map((item: RenderValueType, index: number) => (
+      {values?.map((item: RenderValueType, index: number) => (
         <Button
           size="small"
           sx={{

@@ -14,9 +14,9 @@ import { useDropzone } from 'react-dropzone'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import { ProductInputType } from '../utils/ListData'
 interface FileProp {
-  name: string
-  type: string
-  size: number
+  name: string;
+  type: string;
+  size: number;
 }
 
 // Styled component for the upload image inside the dropzone area
@@ -40,7 +40,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const FileUploaderSingle = (formik) => {
+const FileUploaderSingle = () => {
   // ** State
   const [files, setFiles] = useState<File[]>([])
 
@@ -61,7 +61,7 @@ const FileUploaderSingle = (formik) => {
 
   return (
     <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {height: 200,  p: '40px', border: (theme)=> `1px solid ${theme.palette.grey[400]}`, borderRadius: "20px"}}>
-      <input name='images' type="file" {...getInputProps()} onChange={(event) => {formik.setFieldValue("images", event.target.files[0]  )}}/>
+      <input name='images' type="file" {...getInputProps()} />
       {files.length ? (
         img
       ) : (

@@ -8,8 +8,6 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 //import {Select} from 'formik-mui'
 
-import SearchIcon from '@mui/icons-material/Search';
-
 const distNames = [
   'Баянгол',
   'Баянзүрх',
@@ -38,37 +36,37 @@ const LocationSelect = () => {
   }
 
   return (
-  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-    <InputLabel id="demo-controlled-open-select-label">Байршил</InputLabel>
-    <Select
-      multiple
-      zname="location"
-      value={selection}
-      onChange={handleChange}
-      //IconComponent={SearchIcon}
-      input={<OutlinedInput label="Байршил" />}
-      renderValue={(selected) => (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          {selected.map((value) => (
-            <Chip
-              key={value}
-              label={value}
-              onMouseDown={(event) => {
-                event.stopPropagation()
-              }}
-              onDelete={() => handleDelete(value)}
-            />
-          ))}
-        </Box>
-      )}
-    >
-      {distNames.map((name) => (
-        <MenuItem key={name} value={name}>
-          {name}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
+    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-controlled-open-select-label">Байршил</InputLabel>
+      <Select
+        multiple
+        name="location"
+        value={selection}
+        onChange={handleChange}
+        //IconComponent={SearchIcon}
+        input={<OutlinedInput label="Байршил" />}
+        renderValue={(selected) => (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {selected.map((value) => (
+              <Chip
+                key={value}
+                label={value}
+                onMouseDown={(event) => {
+                  event.stopPropagation()
+                }}
+                onDelete={() => handleDelete(value)}
+              />
+            ))}
+          </Box>
+        )}
+      >
+        {distNames.map((name) => (
+          <MenuItem key={name} value={name}>
+            {name}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   )
 }
 

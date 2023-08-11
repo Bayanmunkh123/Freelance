@@ -110,7 +110,7 @@ const AppBarContent = (props: Props) => {
         className="actions-right"
         sx={{ display: "flex", alignItems: "center" }}
       >         
-        <Button onClick={router.push('')}>Product үүсгэх</Button>
+        <Button onClick={() => {router.replace('/product')}}>Product үүсгэх</Button>
         <ModeToggler settings={settings} saveSettings={saveSettings} />
         <UserDropdown settings={settings} hidden={hidden} />
       </Box>

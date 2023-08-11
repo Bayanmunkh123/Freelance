@@ -44,7 +44,7 @@ export const SuggestCard = () => {
             </Typography>
             <Typography sx={{ mb: 2 }}>{item.price}</Typography>
             <Typography variant="body2" sx={{ overflowWrap: 'break-word' }}>
-              {item.city} хот {item.district} дүүрэг {item.location}
+              {item.city} хот {item.district} дүүрэг {item.address1}
             </Typography>
           </CardContent>
           <Button
