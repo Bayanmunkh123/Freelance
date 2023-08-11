@@ -214,5 +214,4 @@ export const defaultACLObj: ACLObj = {
   action: "read",
   subject: "all",
 }
-
 export default defineRulesFor

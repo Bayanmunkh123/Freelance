@@ -1,6 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
@@ -32,7 +32,7 @@ const columns: GridColDef[] = [
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
-];
+]
 
 const rows = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
@@ -44,7 +44,9 @@ const rows = [
   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+  { id: 10, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  { id: 11, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+]
 
 export const CompanyScene = () => {
   return (
@@ -64,5 +66,5 @@ export const CompanyScene = () => {
         disableRowSelectionOnClick
       />
     </Box>
-  );
+  )
 }
