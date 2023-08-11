@@ -83,6 +83,13 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'Admin_Product',
       auth: true,
     },
+    {
+    title: 'Хэрэглэгч',
+    icon: 'mdi:account-outline',
+    path: '/pages/index',
+    subject: "User",
+    auth: false
+    }
   ]
 }
 
