@@ -14,7 +14,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: "Компаниуд",
       path: "/admin/users",
-      icon: "mdi-building",
+      icon: "mdi-shield",
       action: "read",
       subject: "Admin_Users",
       auth: true,
@@ -36,7 +36,7 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Миний компани",
+      title: "Байгууллага",
       path: "/admin/company",
       icon: "mdi-building",
       action: "read",
@@ -44,9 +44,9 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: "Байгууллага",
+      title: "Миний компани",
       path: "/admin/organization",
-      icon: "mdi:account",
+      icon: "mdi:building",
       action: "read",
       subject: "Admin_Roles",
       auth: true,
