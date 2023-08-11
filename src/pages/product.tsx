@@ -108,7 +108,7 @@ const FileUploaderMultiple = () => {
   return (
     <Grid container spacing={6} justifyContent="center">
       
-                    <Typography color='textSecondary'
+            <Typography color='textSecondary'
         sx={{
           '& a': {
             color: 'primary.main',
@@ -123,17 +123,18 @@ const FileUploaderMultiple = () => {
           },
         }}
         >           
-                      <div style={{ display: 'flex', flexDirection: 'column', textAlign:'left' }}>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Иргэний үнэмлэхний хуулбар</Typography>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Оршин суугаа газрын тодорхойлолт</Typography>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Ажлын газрын тодорхойлолт</Typography>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол визний хуулбар</Typography>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
-                        <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Дансны хуулга</Typography>
-                      </div>     
-                    </Typography> 
+              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', justifyContent: 'start' }}>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Иргэний үнэмлэхний хуулбар</Typography>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Оршин суугаа газрын тодорхойлолт</Typography>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Ажлын газрын тодорхойлолт</Typography>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол визний хуулбар</Typography>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
+                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Дансны хуулга</Typography>
+              </div>     
+            </Typography> 
+
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', minHeight: '100vh' }}>
-      <Grid item xs={20} md={10}>
+      
         <Card>
           <CardContent sx={{ textAlign: 'center'}}>
           <HeadingTypography variant='h5'>Иргэний үнэмлэхний хуулбар</HeadingTypography>
@@ -150,7 +151,6 @@ const FileUploaderMultiple = () => {
                       </Link>{' '}
                       дарж оруулна уу
                     </Typography>
-                    
                   </Box>                    
               </div >
               {files.length ? (
@@ -171,7 +171,7 @@ const FileUploaderMultiple = () => {
               </Fragment>
           </CardContent>
         </Card>
-      </Grid>
+      
       </div>
     </Grid>
     

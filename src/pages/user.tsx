@@ -146,7 +146,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
   const [secondDialogOpen, setSecondDialogOpen] = useState<boolean>(false)
   const [value, setValue] = useState<string>('1')
-  const [activeTab, setActiveTab] = useState<string>(tab)
+  const [activeTab, setActiveTab] = useState<string>('Account')
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // ** Hooks
@@ -162,7 +162,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
   const handleChange = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
     setIsLoading(true)
-    router.push(`/pages/${value.toLowerCase()}`).then(() => setIsLoading(false))
+    router.push(`/user${value.toLowerCase()}`).then(() => setIsLoading(false))
   }
 
   useEffect(() => {
@@ -219,7 +219,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
               <TabList
                 variant='scrollable'
                 scrollButtons='auto'
-                onChange={handleChange}
+                //onChange={handleChange}
                 aria-label='customized tabs example'
               >
                 <Tab
@@ -235,7 +235,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
                   value='order'
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                      <Icon icon='mdi:lock-open-outline' />
+                      <Icon icon='mdi:bookmark-outline' />
                       {!hideText && 'Захиалгын бүртгэл'}
                     </Box>
                   }
@@ -244,7 +244,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
                   value='billing'
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', ...(!hideText && { '& svg': { mr: 2 } }) }}>
-                      <Icon icon='mdi:bookmark-outline' />
+                      <Icon icon='mdi:account-plus-outline' />
                       {!hideText && 'Үндсэн бүртгэл'}
                     </Box>
                   }
@@ -252,7 +252,7 @@ const AccountSettings = ({ tab }: { tab: string }) => {
                   
               </TabList>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               {isLoading ? (
                 <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                   <CircularProgress sx={{ mb: 4 }} />
@@ -263,16 +263,15 @@ const AccountSettings = ({ tab }: { tab: string }) => {
                   {tabContentList[activeTab]}
                 </TabPanel>
               )}
-            </Grid>
-          </Grid>
-        </TabContext>
+            </Grid>*/}
+          </Grid> 
       {/* Account Details Card */}
       <Grid item xs={8} >
         <Card>
-          <TabContext value={value}>
+  
               
             <CardContent>
-              <TabPanel value='1' sx={{ p: 0 }}>
+              <TabPanel value='account' sx={{ p: 0 }}>
                 <form>
                   <CardContent sx={{ pt: 0 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -583,32 +582,16 @@ const AccountSettings = ({ tab }: { tab: string }) => {
                         </Button>
                       </Grid>
                       
-                      <Grid container spacing={6}>
-                        <Grid xs={12}>
-                        <Card>  
-                          <TabPanel value='2' sx={{ p: 0 }}>                                
-                            <CardHeader title="Service"></CardHeader>
-                            <CardContent sx={{ pt: 0 }}>
-                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                              <Typography>
-                                asdfasdfasdfasdf
-                              </Typography>
-                             </Box>
-                           </CardContent>
-                        </TabPanel>
-                        </Card>
-                        </Grid> 
-                      </Grid>
-
                         
                     </Grid>
                   </CardContent>
                 </form>
               </TabPanel>
             </CardContent>
-         </TabContext>
+      
         </Card>
       </Grid>
+      </TabContext>
     </Grid>
   )
 }
