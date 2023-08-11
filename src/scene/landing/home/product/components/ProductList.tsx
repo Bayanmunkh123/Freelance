@@ -112,9 +112,7 @@ const ProductList = () => {
               >
                 <Box>
                   <img
-                    src={
-                      'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
-                    }
+                    src={item.images}
                     alt={'Орон сууц'}
                     height={'320px'}
                     width={'100%'}

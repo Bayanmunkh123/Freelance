@@ -3,7 +3,7 @@ export interface ListDataType {
   constStatus: string;
   status: string;
   description: string;
-  address: string;
+  address1: string;
   roomNumber: number;
   bedNo: number;
   bathNo: number;
@@ -48,7 +48,7 @@ export const ListData: ListDataType[] = [
     name: 'Орон сууц',
     constStatus: 'Шинэ барилга',
     status: 'Онцлох',
-    address: 'Цагаан7 хороолол Golden Art - Эрдэнэт, Монгол',
+    address1: 'Цагаан7 хороолол Golden Art - Эрдэнэт, Монгол',
     description:
       'Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.',
     roomNumber: 2,

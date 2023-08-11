@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Grid, Typography, Stack, Button, Select, FormControl, InputLabel, MenuItem } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum } from 'src/generated'
+import { ConstructionStatusEnum, ProductStatusEnum } from 'src/generated'
 import * as yup from 'yup'
 import FileUploaderSingle from './FileUploaderSingle'
 import { RenderValues } from '../../components/CheckerGroup'
@@ -9,6 +9,8 @@ import { distNames } from '../../components/FilterBuy'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
 import DatePicker from 'react-datepicker'
+import { useMutation } from '@apollo/client'
+import { PRODUCT_CREATE } from '../../utils/mutation'
 
 export interface mongolianProvincesType {
   id: number;
@@ -133,7 +135,7 @@ interface ProductCreateInput{
     name: string
     city: string
     district: string
-    location: string
+    address1: string
     sqr: number
     sqrPrice: number
     releaseDate: Date | number
@@ -143,22 +145,18 @@ interface ProductCreateInput{
     floorNumber: number
     roomNumber: number
     constStatus: ConstructionStatusEnum
-    productStatus: string
+    productStatus: ProductStatusEnum
     description: string
+    organizationId: string
 }
 const validationCreateProductSchema = yup.object().shape({
-    firstName: yup.string().min(3).required().label("Нэр"),
-    lastName: yup.string().min(3).required().label("Овог"),
-    email: yup.string().email().required().label("И-мэйл"),
-    orgRole: yup.string().required().label("Role"),
-    organization: yup.string().required().label("Байгуулга"),
     images: yup.string(),
     name: yup.string().required(),
     city: yup.string(),
     district: yup.string(),
-    location: yup.string(),
+    address1: yup.string(),
     sqr: yup.number(),
-    sqrPrice: yup.number(),
+    priceSqr: yup.number(),
     releaseDate: yup.date(),
     //uliral: yup.number(),
     floors: yup.number(),
@@ -169,7 +167,35 @@ const validationCreateProductSchema = yup.object().shape({
     description: yup.string(),
   })
 const CreateProduct = () =>{
-  const [date, setDate] = React.useState<Date>(new Date())
+  const [onCreateProduct] = useMutation(PRODUCT_CREATE)
+  const submitHandler = (data: ProductCreateInput) => {
+    console.log("onSubmit === values", data)
+
+    onCreateProduct({
+      variables: {
+        input: {
+          images: "",
+          name: data.name,
+          city: data.city,
+          district: data.district,
+          address1: data.address1,
+          sqr: data.sqr,
+          priceSqr: data.sqrPrice,
+          releaseDate:data.releaseDate,
+          price: data.sqr * data.sqrPrice,
+          //uliral: number
+          floors: data.floors,
+          floorNumber: data.floorNumber,
+          roomNumber: data.roomNumber,
+          constStatus: data.constStatus,
+          productStatus: data.productStatus,
+          description: data.description,
+          organizationId: "d73e16eb-6bc8-4fae-ab18-e50da7b6bf8b"
+        },
+      },
+    })
+  }
+
     return (
       <>
             <Typography variant="h6" fontWeight="bold">Үндсэн мэдээлэл</Typography>
@@ -179,23 +205,23 @@ const CreateProduct = () =>{
             name: "",
             city: "",
             district: "",
-            location: "",
+            address1: "",
             sqr: 0,
-            sqrPrice: 0,
+            priceSqr: 0,
             releaseDate: new Date(),
             //uliral: 1,
             floors: 1,
             floorNumber: 1,
             roomNumber: 1,
             constStatus: ConstructionStatusEnum.NEW,
-            productStatus: "",
+            productStatus: ProductStatusEnum.HIGHLIGTH,
             description: "",
             price: 0,
           }}
-          validationSchema={validationCreateProductSchema}
-          onSubmit={(values: ProductCreateInput, formikHelpers) => {
+          //validationSchema={validationCreateProductSchema}
+          onSubmit={(values, formikHelpers) => {
             console.log(values)
-            //submitHandler(values)
+            submitHandler(values)
             formikHelpers.setSubmitting(false)
           }}
         >
@@ -272,7 +298,7 @@ const CreateProduct = () =>{
                 <Typography>Дэлгэрэнгүй байршил</Typography>
                 <Field
                   component={TextField}
-                  name="location"
+                  name="address1"
                   type="text"
                   label="Байршил"
                   size="big"
@@ -369,6 +395,7 @@ const CreateProduct = () =>{
                   label="Дэлгэрэнгүй мэдээлэл"
                   size="big"
                 />
+                <Button type="submit">үүсгэх</Button>
               </Stack>
             </Form>
            

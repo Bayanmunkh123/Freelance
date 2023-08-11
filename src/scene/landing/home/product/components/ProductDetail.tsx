@@ -28,7 +28,14 @@ export const ProductDetail = () => {
     setExpanded(bool)
   }
   return (
-    <Grid container spacing={2} maxWidth={1300} rowGap="20px" px="50px" rowGap="15px">
+    <Grid
+      container
+      spacing={2}
+      maxWidth={1300}
+      rowGap="20px"
+      px="50px"
+      rowGap="15px"
+    >
       <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">
@@ -49,7 +56,7 @@ export const ProductDetail = () => {
           </Typography>
         </Stack>
         <Typography>
-          {ListData[0].location.concat(ListData[0].district)}
+          {ListData[0].address1.concat(ListData[0].district)}
         </Typography>
       </Stack>
       <Grid container>
