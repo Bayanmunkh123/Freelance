@@ -50,7 +50,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const FileUploaderMultiple = () => {
+const RegisterOrder = () => {
   // ** State
   const [files, setFiles] = useState<File[]>([])
   const [imgSrc, setImgSrc] = useState<string>('/images/Group.png')
@@ -178,4 +178,4 @@ const FileUploaderMultiple = () => {
   )
 }
 
-export default FileUploaderMultiple
+export default RegisterOrder
