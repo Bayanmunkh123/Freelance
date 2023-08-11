@@ -17,7 +17,7 @@ import { ConstructionStatusEnum, useProductsQuery } from 'src/generated'
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
-import { Header, SubHeader } from '../../components/Header'
+import { Header, SubHeader } from '../../home/components/Header'
 
 const ProductList = () => {
   const { data } = useProductsQuery()
@@ -55,7 +55,7 @@ const ProductList = () => {
       }}
     >
       <Header />
-      <SubHeader count = {data?.products?.data?.length} />
+      <SubHeader count={data?.products?.data?.length} />
       {data?.products?.data?.map((item, index: number) => (
         <Box
           key={index}

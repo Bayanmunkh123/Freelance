@@ -14,7 +14,7 @@ import { ListData } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
-import { DetailHeader } from '../../components/Header'
+import { DetailHeader } from '../../home/components/Header'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -28,14 +28,7 @@ export const ProductDetail = () => {
     setExpanded(bool)
   }
   return (
-    <Grid
-      container
-      spacing={2}
-      maxWidth={1300}
-      rowGap="20px"
-      px="50px"
-      rowGap="15px"
-    >
+    <Grid container spacing={2} maxWidth={1300} px="50px" rowGap="15px">
       <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">
@@ -116,7 +109,7 @@ export const ProductDetail = () => {
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${ListData[0].releaseDate}`}
+          subTitle={`${ListData[0].releaseDate.getFullYear()}`}
           icon="EventAvailableIcon"
         />
         <DetailedBox
@@ -181,7 +174,7 @@ export const ProductDetail = () => {
           backgroundColor: 'primary.main',
           color: (theme) => theme.palette.customColors.lightBg,
           px: '30px',
-          left: '80%'
+          left: '80%',
         }}
       >
         Худалдан авах

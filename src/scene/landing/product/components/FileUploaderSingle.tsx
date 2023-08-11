@@ -11,7 +11,8 @@ import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import { ProductInputType } from '../utils/ListData'
 interface FileProp {
   name: string
   type: string
@@ -39,7 +40,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const FileUploaderSingle = () => {
+const FileUploaderSingle = (formik) => {
   // ** State
   const [files, setFiles] = useState<File[]>([])
 
@@ -55,12 +56,12 @@ const FileUploaderSingle = () => {
   })
 
   const img = files.map((file: FileProp) => (
-    <img key={file.name} alt={file.name} className='single-file-image' src={URL.createObjectURL(file as any)} />
+    <img key={file.name}  alt={file.name} className='single-file-image' src={URL.createObjectURL(file as any)} />
   ))
 
   return (
     <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {height: 200,  p: '40px', border: (theme)=> `1px solid ${theme.palette.grey[400]}`, borderRadius: "20px"}}>
-      <input {...getInputProps()} />
+      <input name='images' type="file" {...getInputProps()} onChange={(event) => {formik.setFieldValue("images", event.target.files[0]  )}}/>
       {files.length ? (
         img
       ) : (
