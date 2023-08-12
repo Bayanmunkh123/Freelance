@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Grid, Tab, Typography, DialogContent } from '@mui/material'
+import { Grid, Tab, DialogContent } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { FilterBuy } from './FilterBuy'
 import { FilterRent } from './FilterRent'
-import CloseIcon from '@mui/icons-material/Close'
 
 export const FilterDialog = () => {
   const [actionType, setActiontype] = useState('buy')
