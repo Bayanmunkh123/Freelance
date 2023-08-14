@@ -7,8 +7,8 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Icon from 'src/@core/components/icon'
 import { Tooltip  } from '@mui/material'
 /**Icon import */
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
+// import DeleteIcon from '@mui/icons-material/Delete'
+// import EditIcon from '@mui/icons-material/Edit'
 
 type ProductType = {
   isSold: boolean
@@ -96,12 +96,12 @@ const columns: GridColDef[] = [
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Tooltip title='Delete Invoice'>
           <IconButton size='small' sx={{ mr: 0.5 }} >
-            <DeleteIcon />
+            {/* <DeleteIcon /> */}
           </IconButton>
         </Tooltip>
         <Tooltip title='View'>
           <IconButton size='small'  sx={{ mr: 0.5 }} >
-            <EditIcon />
+            {/* <EditIcon /> */}
           </IconButton>
         </Tooltip>
       </Box>
