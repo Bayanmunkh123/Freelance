@@ -13,13 +13,13 @@ import { Formik, Form, Field } from 'formik'
 import { ConstructionStatusEnum, ProductStatusEnum } from 'src/generated'
 import * as yup from 'yup'
 import FileUploaderSingle from './FileUploaderSingle'
-import { RenderValues } from '../../home/components/CheckerGroup'
-import { distNames } from '../../home/components/FilterBuy'
+import { RenderValues } from '../../../landing/home/components/CheckerGroup'
+import { distNames } from '../../../landing/home/components/FilterBuy'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
 import DatePicker from 'react-datepicker'
 import { useMutation } from '@apollo/client'
-import { PRODUCT_CREATE } from '../../home/utils/mutation'
+import { PRODUCT_CREATE } from '../../../landing/home/utils/mutation'
 
 export interface mongolianProvincesType {
   id: number;

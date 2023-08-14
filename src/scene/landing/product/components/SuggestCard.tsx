@@ -55,7 +55,7 @@ export const SuggestCard = () => {
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
             }}
-            onClick={() => router.push('/product')}
+            onClick={() => router.push('/service')}
           >
             Дэлгэрэнгүй
           </Button>

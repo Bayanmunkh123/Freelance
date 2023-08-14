@@ -12,7 +12,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography'
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
-import { ProductInputType } from '../utils/ListData'
+import { ProductInputType } from '../../../landing/product/utils/ListData'
 interface FileProp {
   name: string;
   type: string;

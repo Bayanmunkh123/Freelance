@@ -1,3 +1,4 @@
+import * as React from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -11,6 +12,16 @@ import { HomeButton } from './components/HomeButton'
 import IconSvg from 'src/layouts/components/IconSvg'
 
 export const HomeScene = () => {
+  const [action, setAction] = React.useState<string>()
+  const [click, setClicked] = React.useState<boolean>(false)
+  const [click1, setClicked1] = React.useState<boolean>(false)
+  const [variant, setVariant] = React.useState<string[]>({'outlined', 'outlined'})
+  const handleClick = (action : string, isClick: boolean) =>{
+    if(action === "buy" && isClick){
+      setAction
+    }
+  }
+
   return (
     <>
       <Grid
@@ -49,7 +60,7 @@ export const HomeScene = () => {
             {IconSvg('rent')}
             <Typography>Түрээслэх</Typography>
           </Stack>
-          <Button startIcon={IconSvg('rentButton')}>Түрээслэх</Button>
+          <Button variant={variant} startIcon={IconSvg('rentButton')} onClick={() => handleClick("rent", !click)} >Түрээслэх</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />
@@ -76,7 +87,7 @@ export const HomeScene = () => {
             {IconSvg('buy')}
             <Typography>Худалдан авах</Typography>
           </Stack>
-          <Button startIcon={IconSvg('rentButton')}>Худалдан авах</Button>
+          <Button variant={variant} startIcon={IconSvg('rentButton')} onClick={() => handleClick("buy", !click)}>Худалдан авах</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />
