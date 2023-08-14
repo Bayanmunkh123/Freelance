@@ -14,7 +14,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Компаниуд',
       path: '/admin/users',
-      icon: 'mdi-shield',
+      icon: 'mdi-building',
       action: 'read',
       subject: 'Admin_Users',
       auth: true,
@@ -38,7 +38,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Байгууллага',
       path: '/admin/company',
-      icon: 'mdi-building',
+      icon: 'mdi-office-building-plus-outline',
       action: 'read',
       subject: 'Admin_Roles',
       auth: true,
@@ -46,7 +46,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Миний компани',
       path: '/admin/organization',
-      icon: 'mdi:building',
+      icon: 'mdi:office-building',
       action: 'read',
       subject: 'Admin_Roles',
       auth: true,
@@ -54,7 +54,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Product',
       path: '/admin/product',
-      icon: 'mdi:shield-outline',
+      icon: 'mdi:chart-ppf',
       action: 'read',
       subject: 'Admin_Product',
       auth: true,
