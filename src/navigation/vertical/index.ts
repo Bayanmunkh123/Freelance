@@ -12,7 +12,7 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: 'Компаниуд',
+      title: 'Байгууллага',
       path: '/admin/users',
       icon: 'mdi-building',
       action: 'read',
@@ -36,7 +36,7 @@ const navigation = (): VerticalNavItemsType => {
       auth: true,
     },
     {
-      title: 'Байгууллага',
+      title: 'Компаниуд',
       path: '/admin/company',
       icon: 'mdi-office-building-plus-outline',
       action: 'read',
