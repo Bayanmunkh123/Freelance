@@ -1,7 +1,8 @@
 export interface ListDataType {
+  id: string
   name: string;
   constStatus: string;
-  status: string;
+  productStatus: string;
   description: string;
   address1: string;
   roomNumber: number;
@@ -45,9 +46,10 @@ export interface ProductInputType {
 }
 export const ListData: ListDataType[] = [
   {
+    id: "kjds",
     name: 'Орон сууц',
     constStatus: 'Шинэ барилга',
-    status: 'Онцлох',
+    productStatus: 'Онцлох',
     address1: 'Цагаан7 хороолол Golden Art - Эрдэнэт, Монгол',
     description:
       'Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.',

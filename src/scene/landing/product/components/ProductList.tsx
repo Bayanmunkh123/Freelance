@@ -11,15 +11,19 @@ import IconButton from '@mui/material/IconButton'
 import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
-import { ConstructionStatusEnum, useProductsQuery } from 'src/generated'
+import { ConstructionStatusEnum, ProductStatusEnum, useProductsQuery } from 'src/generated'
 
 // ** Icon Imports
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
 import { Header, SubHeader } from '../../home/components/Header'
-
+interface InputType {
+  name: string;
+  type: string
+}
 const ProductList = () => {
+  //const {name, type} = props
   const { data } = useProductsQuery()
   function changeNot(): ListDataType[] {
     console.log(data)
@@ -58,9 +62,9 @@ const ProductList = () => {
       <SubHeader count={data?.products?.data?.length} />
       {data?.products?.data?.map((item, index: number) => (
         <Box
-          key={index}
+          key={item.id}
           sx={{ display: 'flex', flexDirection: 'row', maxWidth: 1200 }}
-          onClick={() => router.push('/service')}
+          onClick={() => router.push(`/product/detail?id=${item.id}`)}
         >
           <Box
             sx={{
@@ -68,9 +72,10 @@ const ProductList = () => {
               height: '36px',
               backgroundColor:
                 //item.status === 'Онцлох'
-                item?.constStatus === ConstructionStatusEnum.NEW
+                item?.productStatus === ProductStatusEnum.HIGHLIGTH
                   ? 'primary.main'
-                  : 'warning.main',
+                  : item?.productStatus === ProductStatusEnum.NEW ? 'warning.main':
+                  'transparent',
               padding: '2px 80px',
               borderRadius: '10px 10px 10px 0',
               color: 'common.white',
@@ -78,7 +83,7 @@ const ProductList = () => {
               marginTop: '24px',
             }}
           >
-            {'Онцлох'}
+            {item?.productStatus === ProductStatusEnum.NEW ? 'Шинэ' : item?.productStatus === ProductStatusEnum.HIGHLIGTH ? 'Онцлох' : ''}
           </Box>
           <Box
             sx={{
@@ -86,10 +91,10 @@ const ProductList = () => {
               width: '20px',
               height: '20px',
               backgroundColor:
-                item?.constStatus === ConstructionStatusEnum.NEW
+                item?.productStatus === ProductStatusEnum.HIGHLIGTH
                   ? 'primary.main'
-                  : item?.constStatus === ConstructionStatusEnum.OLD
-                  ? 'error.dark'
+                  : item?.productStatus === ProductStatusEnum.NEW
+                  ? 'warning.dark'
                   : 'transparent',
               borderRadius: '0 0 0 10px',
 
@@ -113,7 +118,7 @@ const ProductList = () => {
                 <Box>
                   <img
                     src={item.images}
-                    alt={'Орон сууц'}
+                    alt={'picture of estate'}
                     height={'320px'}
                     width={'100%'}
                   />

@@ -24,27 +24,27 @@ const CustomUncheckedIcon = <RadioButtonUncheckedIcon />
 export const RenderValues: RenderValueType[] = [
   {
     label: 'Орон сууц',
-    value: 'apartment',
+    value: 'Орон сууц',
   },
   {
     label: 'Оффис',
-    value: 'office',
+    value: 'Оффис',
   },
   {
     label: 'Газар',
-    value: 'place',
+    value: 'Газар',
   },
   {
     label: 'Дэлгүүр',
-    value: 'shop',
+    value: 'Дэлгүүр',
   },
   {
     label: 'Хувийн сууц',
-    value: 'house',
+    value: 'Хувийн сууц',
   },
   {
     label: 'Барилга',
-    value: 'building',
+    value: 'Барилга',
   },
   {
     label: 'Агуулах',
@@ -52,11 +52,11 @@ export const RenderValues: RenderValueType[] = [
   },
   {
     label: 'Нийтийн байр',
-    value: 'dormitory',
+    value: 'Нийтийн байр',
   },
   {
     label: 'Зогсоол',
-    value: 'parking',
+    value: 'Зогсоол',
   },
 ]
 const RendeNumbers: RenderValueType[] = [

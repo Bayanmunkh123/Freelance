@@ -1,10 +1,10 @@
-import { ProductStatusEnum, ConstructionStatusEnum } from 'src/generated'
+import { ProductStatusEnum, ConstructionStatusEnum, ProductsQuery } from 'src/generated'
 import * as React from 'react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Link from 'next/link'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import { Tooltip, Typography  } from '@mui/material'
+import { ListClassKey, Tooltip, Typography  } from '@mui/material'
 /**Icon import */
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -12,18 +12,23 @@ import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
 import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork'
-import FiberNewIcon from '@mui/icons-material/FiberNew';
+import FiberNewIcon from '@mui/icons-material/FiberNew'
+import { useProductsQuery } from 'src/generated'
+import { ListDataType } from 'src/scene/landing/product/utils/ListData'
 
 type ProductType = {
-  isSold: boolean
+  id: string
+  isFav: boolean
   name: string
-  location: string
+  city: string
+  district: string
   sqr: number
-  priceSqr: number
-  postDate: Date | string
+  priceSqr: number | null | undefined
+  releaseDate: Date 
   productStatus: ProductStatusEnum
 
 }
+
 interface CellType {
   row: ProductType
 }
@@ -41,13 +46,13 @@ const columns: GridColDef[] = [
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
-      const { isSold } = row
+      const { isFav } = row
       return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Tooltip title= {isSold ? 'Зарагдсан' : 'Зарагдаагүй'}>
+        <Tooltip title= {isFav ? 'Зарагдсан' : 'Зарагдаагүй'}>
           <IconButton size='small' sx={{ mr: 0.5 }} >
             {
-              isSold ? <CheckOutlinedIcon color='success' /> : <ClearOutlinedIcon color='error' />
+              isFav ? <CheckOutlinedIcon color='success' /> : <ClearOutlinedIcon color='error' />
             }
             
           </IconButton>
@@ -62,7 +67,7 @@ const columns: GridColDef[] = [
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
-      const { name, location } = row
+      const { name, city, district } = row
       return (
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography
@@ -73,7 +78,7 @@ const columns: GridColDef[] = [
               {name}
             </Typography>
             <Typography noWrap variant='caption'>
-              {location}
+              {city} {district}
             </Typography>
           </Box>
       )
@@ -95,11 +100,19 @@ const columns: GridColDef[] = [
     sortable: true
   },
   {
-    field: 'postDate',
+    field: 'releaseDate',
     headerName: 'Хугацаа',
     width: 150,
     editable: true,
-    sortable: true
+    sortable: true,
+    renderCell: ({ row }: CellType) => {
+      const { releaseDate } = row
+      return (
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography>{ releaseDate }</Typography>
+          </Box>
+      )
+    }
   },
   {
     field: 'productStatus',
@@ -129,36 +142,59 @@ const columns: GridColDef[] = [
     editable: false,
     field: 'actions',
     headerName: 'Үйлдэл',
-    renderCell: () => (
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    renderCell: ({ row }: CellType) => {
+      const { id } = row
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Tooltip title='Устгах'>
           <IconButton size='small' sx={{ mr: 0.5 }} >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title='Засах'>
-        <Link href='/admin/product/edit'>
-          <IconButton size='small'sx={{ mr: 0.5 }}  >
+        <Link href={`/admin/product/edit?id=${id}`}>
+          <IconButton size='small'sx={{ mr: 0.5 }} >
             <EditIcon />
           </IconButton>
           </Link>
         </Tooltip>
       </Box>
-    )
+      )
+    }
   }
 ]
+function getRows(data: ProductsQuery | undefined) {
+  const rows : ProductType[] = [];
+  data?.products?.data?.forEach((item) => {
+    rows.push({
+      name: item.name,
+      city: item.city,
+      district: item.district,
+      id: item.id,
+      sqr: item.sqr,
+      priceSqr: item.priceSqr,
+      releaseDate: item.releaseDate,
+      isFav: true,
+      productStatus: item.productStatus,
+    });
+  });
+  return rows;
+}
 
-const rows = [
-  { id: 1, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
-  { id: 2, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
-  { id: 3, isSold: false, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
-  { id: 4, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "HIGHLIGTH" },
-  { id: 5, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
-  { id: 6, isSold: false, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "DEFAULT" },
-  { id: 7, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
-]
+// const rows = [
+//   { id: 1, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
+//   { id: 2, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
+//   { id: 3, isSold: false, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
+//   { id: 4, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "HIGHLIGTH" },
+//   { id: 5, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
+//   { id: 6, isSold: false, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "DEFAULT" },
+//   { id: 7, isSold: true, name: 'Орон сууц', location: 'Улаанбаатар хот, Баянзүрх дүүрэг,  ', sqr: 350, priceSqr: 4000000, postDate: "22 Oct 2019", productStatus: "NEW" },
+// ]
+
 
 export const ProductScene = () => {
+ const { data } = useProductsQuery()
+  const rows = getRows(data)
   return (
     <Box sx={{ height: 600, width: '100%' }}>
       <DataGrid

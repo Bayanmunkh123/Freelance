@@ -15,7 +15,7 @@ import * as yup from 'yup'
 import { RenderValues } from '../../../landing/home/components/CheckerGroup'
 import { distNames } from '../../../landing/home/components/FilterBuy'
 import { TextField } from 'formik-mui'
-import PickersComponent from './DateInput'
+import PickersComponent from '../create/DateInput'
 import DatePicker from 'react-datepicker'
 import { useMutation } from '@apollo/client'
 import { PRODUCT_CREATE } from '../../../landing/home/utils/mutation'
@@ -210,7 +210,7 @@ function Thumb({ file }) {
 }
 
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
   const [onCreateProduct] = useMutation(PRODUCT_CREATE)
   const submitHandler = (data: ProductCreateInput) => {
     console.log('onSubmit === values', data)
@@ -218,7 +218,7 @@ const CreateProduct = () => {
     onCreateProduct({
       variables: {
         input: {
-          images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
+          images: '',
           name: data.name,
           city: data.city,
           district: data.district,
@@ -243,7 +243,7 @@ const CreateProduct = () => {
   return (
     <>
       <Typography variant="h6" fontWeight="bold">
-        Үндсэн мэдээлэл
+        Үндсэн мэдээлэл засах
       </Typography>
       <Formik
         initialValues={{
@@ -481,7 +481,7 @@ const CreateProduct = () => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Button type="submit">үүсгэх</Button>
+              <Button type="submit">Хадгалах</Button>
             </Stack>
           </Form>
         )}
@@ -489,4 +489,4 @@ const CreateProduct = () => {
     </>
   )
 }
-export default CreateProduct
+export default UpdateProduct

@@ -26,3 +26,26 @@ export const PRODUCT_LIST = gql`
     }
   }
 `
+export const PRODUCT_DETAIL = gql`
+  query Product($input: ProductWhereInput) {
+  product(input: $input) {
+    address1
+    city
+    constStatus
+    description
+    floorNumber
+    district
+    floors
+    id
+    images
+    name
+    organizationId
+    price
+    priceSqr
+    productStatus
+    releaseDate
+    roomNumber
+    sqr
+  }
+} 
+`
