@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 
 const ProductList: NextPage = () => {
 const router = useRouter()
-const {_query} = router.query
+const _query = router.query
 const _id = _query?.id as string      
 return <UpdateProduct id={_id} />}
 ProductList.acl = {

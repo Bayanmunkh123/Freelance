@@ -880,19 +880,19 @@ export type ProductUpdateMutationVariables = Exact<{
 
 export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
 
-export type ProductsLandingQueryVariables = Exact<{
+export type ProductsQueryVariables = Exact<{
   input?: InputMaybe<ProductWhereInput>;
 }>;
 
 
-export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
+export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
 
-export type ProductLandingQueryVariables = Exact<{
+export type ProductQueryVariables = Exact<{
   input: ProductUniqueWhereInput;
 }>;
 
 
-export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
 
 export type AuthWebMutationVariables = Exact<{
   input: ExternalWebAuthInput;
@@ -963,6 +963,20 @@ export type AccountEliminateMutationVariables = Exact<{
 
 
 export type AccountEliminateMutation = { __typename?: 'Mutation', accountEliminate?: { __typename?: 'AuthVerifyTokenType', accessToken?: string | null, refreshToken?: string | null, deviceId?: string | null } | null };
+
+export type ProductsLandingQueryVariables = Exact<{
+  input?: InputMaybe<ProductWhereInput>;
+}>;
+
+
+export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
+
+export type ProductLandingQueryVariables = Exact<{
+  input: ProductUniqueWhereInput;
+}>;
+
+
+export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
 
 
 export const MeAuthDocument = gql`
@@ -1181,8 +1195,8 @@ export function useProductUpdateMutation(baseOptions?: Apollo.MutationHookOption
 export type ProductUpdateMutationHookResult = ReturnType<typeof useProductUpdateMutation>;
 export type ProductUpdateMutationResult = Apollo.MutationResult<ProductUpdateMutation>;
 export type ProductUpdateMutationOptions = Apollo.BaseMutationOptions<ProductUpdateMutation, ProductUpdateMutationVariables>;
-export const ProductsLandingDocument = gql`
-    query productsLanding($input: ProductWhereInput) {
+export const ProductsDocument = gql`
+    query products($input: ProductWhereInput) {
   products(input: $input) {
     data {
       id
@@ -1208,34 +1222,34 @@ export const ProductsLandingDocument = gql`
     `;
 
 /**
- * __useProductsLandingQuery__
+ * __useProductsQuery__
  *
- * To run a query within a React component, call `useProductsLandingQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductsLandingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProductsLandingQuery({
+ * const { data, loading, error } = useProductsQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProductsLandingQuery(baseOptions?: Apollo.QueryHookOptions<ProductsLandingQuery, ProductsLandingQueryVariables>) {
+export function useProductsQuery(baseOptions?: Apollo.QueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProductsLandingQuery, ProductsLandingQueryVariables>(ProductsLandingDocument, options);
+        return Apollo.useQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
       }
-export function useProductsLandingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsLandingQuery, ProductsLandingQueryVariables>) {
+export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProductsLandingQuery, ProductsLandingQueryVariables>(ProductsLandingDocument, options);
+          return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
         }
-export type ProductsLandingQueryHookResult = ReturnType<typeof useProductsLandingQuery>;
-export type ProductsLandingLazyQueryHookResult = ReturnType<typeof useProductsLandingLazyQuery>;
-export type ProductsLandingQueryResult = Apollo.QueryResult<ProductsLandingQuery, ProductsLandingQueryVariables>;
-export const ProductLandingDocument = gql`
-    query productLanding($input: ProductUniqueWhereInput!) {
+export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
+export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
+export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const ProductDocument = gql`
+    query product($input: ProductUniqueWhereInput!) {
   product(input: $input) {
     id
     images
@@ -1259,32 +1273,32 @@ export const ProductLandingDocument = gql`
     `;
 
 /**
- * __useProductLandingQuery__
+ * __useProductQuery__
  *
- * To run a query within a React component, call `useProductLandingQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductLandingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProductLandingQuery({
+ * const { data, loading, error } = useProductQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProductLandingQuery(baseOptions: Apollo.QueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
+export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProductLandingQuery, ProductLandingQueryVariables>(ProductLandingDocument, options);
+        return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
       }
-export function useProductLandingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
+export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductQuery, ProductQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProductLandingQuery, ProductLandingQueryVariables>(ProductLandingDocument, options);
+          return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
         }
-export type ProductLandingQueryHookResult = ReturnType<typeof useProductLandingQuery>;
-export type ProductLandingLazyQueryHookResult = ReturnType<typeof useProductLandingLazyQuery>;
-export type ProductLandingQueryResult = Apollo.QueryResult<ProductLandingQuery, ProductLandingQueryVariables>;
+export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
+export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
+export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 export const AuthWebDocument = gql`
     mutation authWeb($input: ExternalWebAuthInput!) {
   authWeb(input: $input) {
@@ -1647,6 +1661,110 @@ export function useAccountEliminateMutation(baseOptions?: Apollo.MutationHookOpt
 export type AccountEliminateMutationHookResult = ReturnType<typeof useAccountEliminateMutation>;
 export type AccountEliminateMutationResult = Apollo.MutationResult<AccountEliminateMutation>;
 export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<AccountEliminateMutation, AccountEliminateMutationVariables>;
+export const ProductsLandingDocument = gql`
+    query productsLanding($input: ProductWhereInput) {
+  products(input: $input) {
+    data {
+      id
+      images
+      name
+      address1
+      city
+      district
+      floors
+      floorNumber
+      roomNumber
+      sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      productStatus
+      organizationId
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductsLandingQuery__
+ *
+ * To run a query within a React component, call `useProductsLandingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsLandingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductsLandingQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProductsLandingQuery(baseOptions?: Apollo.QueryHookOptions<ProductsLandingQuery, ProductsLandingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductsLandingQuery, ProductsLandingQueryVariables>(ProductsLandingDocument, options);
+      }
+export function useProductsLandingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsLandingQuery, ProductsLandingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductsLandingQuery, ProductsLandingQueryVariables>(ProductsLandingDocument, options);
+        }
+export type ProductsLandingQueryHookResult = ReturnType<typeof useProductsLandingQuery>;
+export type ProductsLandingLazyQueryHookResult = ReturnType<typeof useProductsLandingLazyQuery>;
+export type ProductsLandingQueryResult = Apollo.QueryResult<ProductsLandingQuery, ProductsLandingQueryVariables>;
+export const ProductLandingDocument = gql`
+    query productLanding($input: ProductUniqueWhereInput!) {
+  product(input: $input) {
+    id
+    images
+    name
+    address1
+    city
+    district
+    floors
+    floorNumber
+    roomNumber
+    sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    productStatus
+    organizationId
+  }
+}
+    `;
+
+/**
+ * __useProductLandingQuery__
+ *
+ * To run a query within a React component, call `useProductLandingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductLandingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductLandingQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProductLandingQuery(baseOptions: Apollo.QueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductLandingQuery, ProductLandingQueryVariables>(ProductLandingDocument, options);
+      }
+export function useProductLandingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductLandingQuery, ProductLandingQueryVariables>(ProductLandingDocument, options);
+        }
+export type ProductLandingQueryHookResult = ReturnType<typeof useProductLandingQuery>;
+export type ProductLandingLazyQueryHookResult = ReturnType<typeof useProductLandingLazyQuery>;
+export type ProductLandingQueryResult = Apollo.QueryResult<ProductLandingQuery, ProductLandingQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
