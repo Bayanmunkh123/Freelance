@@ -6,13 +6,13 @@ import Link from 'next/link'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ListClassKey, Tooltip, Typography  } from '@mui/material'
 /**Icon import */
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
-import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
-import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork'
-import FiberNewIcon from '@mui/icons-material/FiberNew'
+// import DeleteIcon from '@mui/icons-material/Delete'
+// import EditIcon from '@mui/icons-material/Edit'
+// import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
+// import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined'
+// import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
+// import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork'
+// import FiberNewIcon from '@mui/icons-material/FiberNew'
 import { useProductsQuery } from 'src/generated'
 import { ListDataType } from 'src/scene/landing/product/utils/ListData'
 
@@ -49,14 +49,14 @@ const columns: GridColDef[] = [
       const { isFav } = row
       return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Tooltip title= {isFav ? 'Зарагдсан' : 'Зарагдаагүй'}>
+        {/* <Tooltip title= {isFav ? 'Зарагдсан' : 'Зарагдаагүй'}>
           <IconButton size='small' sx={{ mr: 0.5 }} >
             {
               isFav ? <CheckOutlinedIcon color='success' /> : <ClearOutlinedIcon color='error' />
             }
             
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Box>
     )}
   },
@@ -124,13 +124,13 @@ const columns: GridColDef[] = [
       const { productStatus } = row
       return (
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Tooltip title= {productStatus === ProductStatusEnum.NEW ?  'Шинэ' : productStatus === ProductStatusEnum.HIGHLIGTH ? 'Онцлох' : 'Энгийн'}>
+            {/* <Tooltip title= {productStatus === ProductStatusEnum.NEW ?  'Шинэ' : productStatus === ProductStatusEnum.HIGHLIGTH ? 'Онцлох' : 'Энгийн'}>
               
                 <IconButton size='small' sx={{ mr: 0.5 }} >
                 {productStatus === ProductStatusEnum.NEW ?  <FiberNewIcon color='warning'/> : productStatus === ProductStatusEnum.HIGHLIGTH ? <StarOutlinedIcon color='error'/> : <MapsHomeWorkIcon color='primary'/>}
                 </IconButton>
               
-        </Tooltip>
+        </Tooltip> */}
           </Box>
       )
     }
@@ -151,13 +151,13 @@ const columns: GridColDef[] = [
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Засах'>
+        {/* <Tooltip title='Засах'>
         <Link href={`/admin/product/edit?id=${id}`}>
           <IconButton size='small'sx={{ mr: 0.5 }} >
             <EditIcon />
           </IconButton>
           </Link>
-        </Tooltip>
+        </Tooltip> */}
       </Box>
       )
     }

@@ -16,6 +16,9 @@ const SuggestCard = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           Ус сувгийн удирдах газар
         </Typography>
+        <Typography>
+          Байршил
+        </Typography>
       </CardContent>
     </Card>
 

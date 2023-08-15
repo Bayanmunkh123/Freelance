@@ -267,7 +267,7 @@ export const RoleListTable = () => {
   })
 
   const clearSearch = () => setSearchValue("")
-
+  
   const { data: rolesList } = useRolesQuery({
     fetchPolicy: "no-cache",
     onError: (error: unknown) => {
