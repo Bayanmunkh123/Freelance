@@ -16,7 +16,7 @@ interface myCompanyDataType {
 
 const data: myCompanyDataType = {
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt sed do eiusmod tempor incididunt ut labore et dolore magna aliquaLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ",
+    "Американ дэнжийн урд угсармалын 3 өрөө байр яаралтай хямд зарна. 3 давхартХуучнаар 38м2 одоогийн 68м2Обойгоо солиод ороход болно. 97-р сургууль, плеханов, 33-р сургууль, шилдэг, могте роса, орос 14-р сургуулиудтай маш ойрхон ",
   email: "myCompany@gmail.com",
   webUrl: "djlskjdkl.com",
   location: "Ulaanbaatar",
