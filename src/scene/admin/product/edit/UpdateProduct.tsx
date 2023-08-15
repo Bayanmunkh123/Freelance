@@ -10,12 +10,12 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { RenderValues } from '../../../landing/home/components/CheckerGroup'
+import { RenderValues } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from '../create/DateInput'
 import DatePicker from 'react-datepicker'
 import { useMutation, useQuery } from '@apollo/client'
-import { PRODUCT_UPDATE } from '../utils/mutation'
+import { PRODUCT_UPDATE } from '../utils/mutations'
 import { PRODUCT_DETAIL } from '../utils/queries'
 import { distNames } from 'src/@core/utils/initData'
 import { ProductInput } from 'src/generated'
@@ -58,11 +58,12 @@ import { mongolianProvinces } from 'src/@core/utils/initData'
 // }
 
 
-const UpdateProduct = (id: string) => {
+const UpdateProduct = (id: string | undefined  ) => {
 
   const {data} = useQuery(PRODUCT_DETAIL, {
-    variables: { id }
+    variables: {_id: id }
   })
+  console.log(data)
   const initialValues = {
     id: data?.product?.id,
     name: data?.product?.name,
@@ -92,7 +93,7 @@ const UpdateProduct = (id: string) => {
     console.log('onSubmit === values', data)
     onUpdateProduct({
       variables: {
-        updatePostId: data.id,
+        _id: data.id,
         input: {
           images: '',
           name: data.name,

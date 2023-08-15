@@ -175,7 +175,9 @@ export type Mutation = {
   authWeb?: Maybe<AuthVerifyTokenType>;
   createOrganization?: Maybe<Organization>;
   createOrganizationUser?: Maybe<OrganizationUser>;
+  createUser?: Maybe<User>;
   deleteOrganization?: Maybe<Scalars['Boolean']>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
   loginEmail?: Maybe<AuthVerifyTokenType>;
   loginPhone?: Maybe<AuthVerifyTokenType>;
   logout?: Maybe<Scalars['Boolean']>;
@@ -188,6 +190,7 @@ export type Mutation = {
   storageSignedUrlCreate?: Maybe<StorageWriteSignedUrl>;
   storageSignedUrlDelete?: Maybe<Scalars['Boolean']>;
   updateOrganization?: Maybe<Organization>;
+  updateUser?: Maybe<User>;
 };
 
 
@@ -258,8 +261,19 @@ export type MutationCreateOrganizationUserArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  input: UserCreateInput;
+};
+
+
 export type MutationDeleteOrganizationArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  orgRole: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 
@@ -321,6 +335,12 @@ export type MutationStorageSignedUrlDeleteArgs = {
 
 export type MutationUpdateOrganizationArgs = {
   input: OrganizationUpdateInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  id: Scalars['String'];
+  input: UserUpdateInput;
 };
 
 export type Organization = {
@@ -421,6 +441,7 @@ export type OrganizationUsersType = {
 export type OrganizationUsersWhereInput = {
   orgRole?: InputMaybe<OrganizationUserRoleEnum>;
   organizationId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type OrganizationsType = {
@@ -493,17 +514,19 @@ export enum ProductStatusEnum {
   NEW = 'NEW'
 }
 
-export type ProductWhereInput = {
+export type ProductUniqueWhereInput = {
   id: Scalars['ID'];
 };
 
-export type ProductsOrgWhereInput = {
-  organizationId: Scalars['String'];
-};
-
-export type ProductsWhereInput = {
+export type ProductWhereInput = {
   city: Scalars['String'];
   district: Scalars['String'];
+};
+
+export type Products = {
+  __typename?: 'Products';
+  count?: Maybe<Scalars['Int']>;
+  data?: Maybe<Array<Product>>;
 };
 
 export type Query = {
@@ -514,11 +537,12 @@ export type Query = {
   organizations?: Maybe<OrganizationsType>;
   product?: Maybe<Product>;
   products?: Maybe<Products>;
-  productsOrg?: Maybe<Products>;
   roles?: Maybe<RolesType>;
   sourceAddresses?: Maybe<Array<Maybe<SourceAddress>>>;
   sourceCategories?: Maybe<Array<Maybe<SourceCategory>>>;
   storageSignedUrl?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  users?: Maybe<Users>;
 };
 
 
@@ -533,17 +557,12 @@ export type QueryOrganizationUsersArgs = {
 
 
 export type QueryProductArgs = {
-  input?: InputMaybe<ProductWhereInput>;
+  input?: InputMaybe<ProductUniqueWhereInput>;
 };
 
 
 export type QueryProductsArgs = {
-  input?: InputMaybe<ProductsWhereInput>;
-};
-
-
-export type QueryProductsOrgArgs = {
-  input?: InputMaybe<ProductsOrgWhereInput>;
+  input?: InputMaybe<ProductWhereInput>;
 };
 
 
@@ -566,6 +585,16 @@ export type QuerySourceCategoriesArgs = {
 export type QueryStorageSignedUrlArgs = {
   id: Scalars['String'];
   size?: InputMaybe<FileSizeEnum>;
+};
+
+
+export type QueryUserArgs = {
+  input?: InputMaybe<UserWhereInput>;
+};
+
+
+export type QueryUsersArgs = {
+  input?: InputMaybe<UserWhereInput>;
 };
 
 export type RefreshToAccessTokenInput = {
@@ -677,7 +706,6 @@ export type User = {
   id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<StorageReadSignedUrl>;
-  organizationUsers?: Maybe<Array<OrganizationUser>>;
   phone?: Maybe<Scalars['String']>;
   profile?: Maybe<UserProfile>;
   role?: Maybe<UserRoleEnum>;
@@ -723,6 +751,15 @@ export type UserDevice = {
   sessions?: Maybe<Array<UserSession>>;
 };
 
+export type UserOrderInput = {
+  copyCard?: InputMaybe<Scalars['String']>;
+  copyPassport?: InputMaybe<Scalars['String']>;
+  copyVisa?: InputMaybe<Scalars['String']>;
+  descJob?: InputMaybe<Scalars['String']>;
+  descResidence?: InputMaybe<Scalars['String']>;
+  statement?: InputMaybe<Scalars['String']>;
+};
+
 export type UserProfile = {
   __typename?: 'UserProfile';
   User?: Maybe<User>;
@@ -766,10 +803,47 @@ export enum UserStatusEnum {
   INACTIVE = 'INACTIVE'
 }
 
-export type Products = {
-  __typename?: 'products';
+export type UserUpdateInput = {
+  address?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  dateOfBirth?: InputMaybe<Scalars['DateTime']>;
+  duration?: InputMaybe<Scalars['DateTime']>;
+  email: Scalars['String'];
+  firstName?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  income?: InputMaybe<Scalars['Int']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  orgRole: OrganizationUserRoleEnum;
+  organizationId: Scalars['String'];
+  registerNumber?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<UserStatusEnum>;
+  userName?: InputMaybe<Scalars['String']>;
+  visaCategory?: InputMaybe<Scalars['String']>;
+  workSector?: InputMaybe<Scalars['String']>;
+  workYear?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type UserWhereInput = {
+  role?: InputMaybe<UserRoleEnum>;
+  search?: InputMaybe<Scalars['String']>;
+};
+
+export type Users = {
+  __typename?: 'Users';
   count?: Maybe<Scalars['Int']>;
-  data?: Maybe<Array<Product>>;
+  data?: Maybe<Array<User>>;
+};
+
+export type UserOrder = {
+  __typename?: 'userOrder';
+  User?: Maybe<UserOrder>;
+  copyCard?: Maybe<Scalars['String']>;
+  copyPassport?: Maybe<Scalars['String']>;
+  copyVisa?: Maybe<Scalars['String']>;
+  descJob?: Maybe<Scalars['String']>;
+  descResidence?: Maybe<Scalars['String']>;
+  statement?: Maybe<Scalars['String']>;
 };
 
 export type MeAuthQueryVariables = Exact<{ [key: string]: never; }>;
@@ -791,12 +865,20 @@ export type RefreshAccessTokenMutationVariables = Exact<{
 
 export type RefreshAccessTokenMutation = { __typename?: 'Mutation', refreshAccessToken?: { __typename?: 'RefreshTokenType', accessToken?: string | null, refreshToken?: string | null, wsToken?: string | null } | null };
 
-export type ProductsOrgQueryVariables = Exact<{
-  input?: InputMaybe<ProductsOrgWhereInput>;
+export type ProductCreateMutationVariables = Exact<{
+  input: ProductInput;
 }>;
 
 
-export type ProductsOrgQuery = { __typename?: 'Query', productsOrg?: { __typename?: 'products', data?: Array<{ __typename?: 'Product', address1?: string | null, constStatus: ConstructionStatusEnum, city: string, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, productStatus: ProductStatusEnum, releaseDate?: any | null, roomNumber: number, sqr: number }> | null } | null };
+export type ProductCreateMutation = { __typename?: 'Mutation', productCreate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+
+export type ProductUpdateMutationVariables = Exact<{
+  input: ProductInput;
+  id: Scalars['String'];
+}>;
+
+
+export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
 
 export type AuthWebMutationVariables = Exact<{
   input: ExternalWebAuthInput;
@@ -869,11 +951,18 @@ export type AccountEliminateMutationVariables = Exact<{
 export type AccountEliminateMutation = { __typename?: 'Mutation', accountEliminate?: { __typename?: 'AuthVerifyTokenType', accessToken?: string | null, refreshToken?: string | null, deviceId?: string | null } | null };
 
 export type ProductsQueryVariables = Exact<{
-  input?: InputMaybe<ProductsWhereInput>;
+  input?: InputMaybe<ProductWhereInput>;
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'products', count?: number | null, data?: Array<{ __typename?: 'Product', address1?: string | null, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floors: number, floorNumber: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, productStatus: ProductStatusEnum, releaseDate?: any | null, roomNumber: number, sqr: number }> | null } | null };
+export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
+
+export type ProductQueryVariables = Exact<{
+  input?: InputMaybe<ProductUniqueWhereInput>;
+}>;
+
+
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
 
 
 export const MeAuthDocument = gql`
@@ -993,59 +1082,105 @@ export function useRefreshAccessTokenMutation(baseOptions?: Apollo.MutationHookO
 export type RefreshAccessTokenMutationHookResult = ReturnType<typeof useRefreshAccessTokenMutation>;
 export type RefreshAccessTokenMutationResult = Apollo.MutationResult<RefreshAccessTokenMutation>;
 export type RefreshAccessTokenMutationOptions = Apollo.BaseMutationOptions<RefreshAccessTokenMutation, RefreshAccessTokenMutationVariables>;
-export const ProductsOrgDocument = gql`
-    query ProductsOrg($input: ProductsOrgWhereInput) {
-  productsOrg(input: $input) {
-    data {
-      address1
-      constStatus
-      city
-      description
-      district
-      floorNumber
-      floors
-      id
-      images
-      name
-      organizationId
-      price
-      priceSqr
-      productStatus
-      releaseDate
-      roomNumber
-      sqr
-    }
+export const ProductCreateDocument = gql`
+    mutation productCreate($input: ProductInput!) {
+  productCreate(input: $input) {
+    id
+    images
+    name
+    address1
+    city
+    district
+    floors
+    floorNumber
+    roomNumber
+    sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    productStatus
+    organizationId
   }
 }
     `;
+export type ProductCreateMutationFn = Apollo.MutationFunction<ProductCreateMutation, ProductCreateMutationVariables>;
 
 /**
- * __useProductsOrgQuery__
+ * __useProductCreateMutation__
  *
- * To run a query within a React component, call `useProductsOrgQuery` and pass it any options that fit your needs.
- * When your component renders, `useProductsOrgQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useProductCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProductCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useProductsOrgQuery({
+ * const [productCreateMutation, { data, loading, error }] = useProductCreateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useProductsOrgQuery(baseOptions?: Apollo.QueryHookOptions<ProductsOrgQuery, ProductsOrgQueryVariables>) {
+export function useProductCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProductCreateMutation, ProductCreateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProductsOrgQuery, ProductsOrgQueryVariables>(ProductsOrgDocument, options);
+        return Apollo.useMutation<ProductCreateMutation, ProductCreateMutationVariables>(ProductCreateDocument, options);
       }
-export function useProductsOrgLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsOrgQuery, ProductsOrgQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProductsOrgQuery, ProductsOrgQueryVariables>(ProductsOrgDocument, options);
-        }
-export type ProductsOrgQueryHookResult = ReturnType<typeof useProductsOrgQuery>;
-export type ProductsOrgLazyQueryHookResult = ReturnType<typeof useProductsOrgLazyQuery>;
-export type ProductsOrgQueryResult = Apollo.QueryResult<ProductsOrgQuery, ProductsOrgQueryVariables>;
+export type ProductCreateMutationHookResult = ReturnType<typeof useProductCreateMutation>;
+export type ProductCreateMutationResult = Apollo.MutationResult<ProductCreateMutation>;
+export type ProductCreateMutationOptions = Apollo.BaseMutationOptions<ProductCreateMutation, ProductCreateMutationVariables>;
+export const ProductUpdateDocument = gql`
+    mutation productUpdate($input: ProductInput!, $id: String!) {
+  productUpdate(input: $input, _id: $id) {
+    id
+    images
+    name
+    address1
+    city
+    district
+    floors
+    floorNumber
+    roomNumber
+    sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    productStatus
+    organizationId
+  }
+}
+    `;
+export type ProductUpdateMutationFn = Apollo.MutationFunction<ProductUpdateMutation, ProductUpdateMutationVariables>;
+
+/**
+ * __useProductUpdateMutation__
+ *
+ * To run a mutation, you first call `useProductUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProductUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [productUpdateMutation, { data, loading, error }] = useProductUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProductUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProductUpdateMutation, ProductUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProductUpdateMutation, ProductUpdateMutationVariables>(ProductUpdateDocument, options);
+      }
+export type ProductUpdateMutationHookResult = ReturnType<typeof useProductUpdateMutation>;
+export type ProductUpdateMutationResult = Apollo.MutationResult<ProductUpdateMutation>;
+export type ProductUpdateMutationOptions = Apollo.BaseMutationOptions<ProductUpdateMutation, ProductUpdateMutationVariables>;
 export const AuthWebDocument = gql`
     mutation authWeb($input: ExternalWebAuthInput!) {
   authWeb(input: $input) {
@@ -1409,27 +1544,26 @@ export type AccountEliminateMutationHookResult = ReturnType<typeof useAccountEli
 export type AccountEliminateMutationResult = Apollo.MutationResult<AccountEliminateMutation>;
 export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<AccountEliminateMutation, AccountEliminateMutationVariables>;
 export const ProductsDocument = gql`
-    query Products($input: ProductsWhereInput) {
+    query products($input: ProductWhereInput) {
   products(input: $input) {
-    count
     data {
-      address1
-      city
-      constStatus
-      description
-      district
-      floors
-      floorNumber
       id
       images
       name
-      organizationId
-      price
-      priceSqr
-      productStatus
-      releaseDate
+      address1
+      city
+      district
+      floors
+      floorNumber
       roomNumber
       sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      productStatus
+      organizationId
     }
   }
 }
@@ -1462,6 +1596,57 @@ export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const ProductDocument = gql`
+    query product($input: ProductUniqueWhereInput) {
+  product(input: $input) {
+    id
+    images
+    name
+    address1
+    city
+    district
+    floors
+    floorNumber
+    roomNumber
+    sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    productStatus
+    organizationId
+  }
+}
+    `;
+
+/**
+ * __useProductQuery__
+ *
+ * To run a query within a React component, call `useProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProductQuery(baseOptions?: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
+      }
+export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductQuery, ProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
+        }
+export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
+export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
+export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {

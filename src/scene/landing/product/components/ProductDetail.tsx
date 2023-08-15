@@ -15,17 +15,16 @@ import { DetailedBox } from './DetailedBox'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { DetailHeader } from '../../home/components/Header'
-import { PRODUCT_DETAIL } from '../../home/utils/queries'
-import { useQuery } from '@apollo/client'
+import { useProductQuery, ProductUniqueWhereInput } from 'src/generated'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
-export const ProductDetail = (id : string ) => {
+export const ProductDetail = (id : ProductUniqueWhereInput ) => {
   console.log(id)
-  const { data } = useQuery(PRODUCT_DETAIL, {
-    variables: { id },
+  const { data } = useProductQuery({
+    variables: {input: id },
   });
   //console.log(data.product)
 

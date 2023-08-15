@@ -148,7 +148,7 @@ const columns: GridColDef[] = [
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Tooltip title='Устгах'>
           <IconButton size='small' sx={{ mr: 0.5 }} >
-            {/* <DeleteIcon /> */}
+            <DeleteIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title='Засах'>

@@ -86,7 +86,7 @@ export const Header = () => {
   )
 }
 interface Props {
-  count: number;
+  count: number | undefined;
 }
 export const SubHeader = (props: Props) => {
   const { count } = props
