@@ -1,7 +1,8 @@
 import * as React from 'react'
 import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
-
+import UserIcon from "src/layouts/components/UserIcon"
+import { IconButton, Tooltip } from "@mui/material"
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
@@ -32,6 +33,26 @@ const columns: GridColDef[] = [
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
+  {
+    field: 'actions',
+    headerName: 'Үйлдэл',
+    sortable: false,
+    width: 160,
+    renderCell: () =>(
+      <Box>
+        <Tooltip title="delete">
+          <IconButton>
+            <UserIcon icon="mdi:bin"/>
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="delete">
+          <IconButton>
+            <UserIcon icon="material-symbols:edit"/>
+          </IconButton>
+        </Tooltip>
+      </Box>
+    )
+  },
 ]
 
 const rows = [
@@ -51,6 +72,7 @@ const rows = [
 export const CompanyScene = () => {
   return (
     <Box sx={{ height: 400, width: '100%' }}>
+      <button style={{margin:'20px',background:'red',color:'white'}}>Delete</button>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -64,6 +86,7 @@ export const CompanyScene = () => {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
+        
       />
     </Box>
   )
