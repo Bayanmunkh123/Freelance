@@ -6,19 +6,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Chip from '@mui/material/Chip'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
+import { distNames } from 'src/@core/utils/initData'
 //import {Select} from 'formik-mui'
-
-const distNames = [
-  'Баянгол',
-  'Баянзүрх',
-  'Хан-Уул',
-  'Чингэлтэй',
-  'Сүхбаатар',
-  'Налайх',
-  'Багахангай',
-  'Сонгинохайрхан',
-  'Багануур',
-]
 
 const LocationSelect = () => {
   const [selection, setSelection] = React.useState<string[]>([])

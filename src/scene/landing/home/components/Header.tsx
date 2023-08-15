@@ -25,6 +25,7 @@ import RedoIcon from '@mui/icons-material/Redo'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
 import CloseIcon from '@mui/icons-material/Close'
+import { useRouter } from 'next/router'
 export const Header = () => {
   const [icon, setIcon] = React.useState<JSX.Element>(<KeyboardArrowDownIcon />)
   const [type, setType] = React.useState<string>('')
@@ -158,6 +159,7 @@ export const DetailHeader = () => {
     if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
     else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
   }
+  const router = useRouter()
   return (
     <Grid container justifyContent="space-between" rowGap="15px">
       <Stack direction="row" columnGap="10px">
@@ -172,6 +174,7 @@ export const DetailHeader = () => {
             border: `1px solid #DEDEDE`,
             borderRadius: '13px',
           }}
+          onClick={() => router.back()}
         >
           Буцах
         </Button>

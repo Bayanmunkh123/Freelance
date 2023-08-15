@@ -1,6 +1,7 @@
 import { Field } from 'formik'
 import { Button, Checkbox } from '@mui/material'
-
+import { RenderValues, RenderNumbers, RenderStatus } from 'src/@core/utils/initData'
+import { RenderValueType } from 'src/@core/utils/types'
 /**Icon imports*/
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -13,88 +14,10 @@ interface CheckerGroupType {
   isNumber: boolean;
   isStatus: boolean;
 }
-interface RenderValueType {
-  label: string | number;
-  value: string | number;
-}
 
 const CustomCheckIcon = <CheckCircleIcon />
 const CustomUncheckedIcon = <RadioButtonUncheckedIcon />
 
-export const RenderValues: RenderValueType[] = [
-  {
-    label: 'Орон сууц',
-    value: 'apartment',
-  },
-  {
-    label: 'Оффис',
-    value: 'office',
-  },
-  {
-    label: 'Газар',
-    value: 'place',
-  },
-  {
-    label: 'Дэлгүүр',
-    value: 'shop',
-  },
-  {
-    label: 'Хувийн сууц',
-    value: 'house',
-  },
-  {
-    label: 'Барилга',
-    value: 'building',
-  },
-  {
-    label: 'Агуулах',
-    value: 'warehouse',
-  },
-  {
-    label: 'Нийтийн байр',
-    value: 'dormitory',
-  },
-  {
-    label: 'Зогсоол',
-    value: 'parking',
-  },
-]
-const RendeNumbers: RenderValueType[] = [
-  {
-    label: 1,
-    value: 1,
-  },
-  {
-    label: 2,
-    value: 2,
-  },
-  {
-    label: 3,
-    value: 3,
-  },
-  {
-    label: 4,
-    value: 4,
-  },
-  {
-    label: '5+',
-    value: 5,
-  },
-]
-const RenderStatus: RenderValueType[] = [
-  {
-    label: 'Тун удахгүй',
-    value: 'soon',
-  },
-  {
-    label: 'Шинэ',
-    value: 'new',
-  },
-  {
-    label: 'Хуучин',
-    value: 'old',
-  },
-]
 export const CheckerGroup = (props: CheckerGroupType) => {
   // const [checked,setChecked]
   const { isStartIcon, isImg, isBuy, name, isNumber, isStatus } = props
@@ -103,7 +26,7 @@ export const CheckerGroup = (props: CheckerGroupType) => {
     : !isBuy && !isNumber && !isStatus
     ? RenderValues
     : isNumber
-    ? RendeNumbers
+    ? RenderNumbers
     : isStatus
     ? RenderStatus
     : null

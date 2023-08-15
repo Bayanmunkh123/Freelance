@@ -4,6 +4,14 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 const navigation = (): VerticalNavItemsType => {
   return [
     {
+      title: 'Product үүсгэх',
+      path: '/admin/product/create',
+      icon: 'bi:house-add-fill',
+      action: 'read',
+      subject: 'Admin_Product',
+      auth: true,
+    },
+    {
       title: 'Хянах самбар',
       path: '/admin/dashboard',
       icon: 'mdi:home-outline',
