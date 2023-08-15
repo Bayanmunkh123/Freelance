@@ -128,7 +128,7 @@ export const RegisterAccount = () =>{
   
     return (
         <form>
-        <CardContent sx={{ pt: 0 }}>
+        <CardContent  sx={{ pt: 0 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <ImgStyled src={imgSrc} alt='Profile Pic' />
             <div>

@@ -44,6 +44,7 @@ const ContentWrapper = styled("main")(({ theme }) => ({
     paddingLeft: theme.spacing(4),
     paddingRight: theme.spacing(4),
   },
+  justifyContent: 'center',
 }))
 
 const VerticalLayout = (props: LayoutProps) => {
@@ -123,6 +124,7 @@ const VerticalLayout = (props: LayoutProps) => {
               ...(contentHeightFixed && {
                 overflow: "hidden",
                 "& > :first-of-type": { height: "100%" },
+               
               }),
               ...(contentWidth === "boxed" && {
                 mx: "auto",

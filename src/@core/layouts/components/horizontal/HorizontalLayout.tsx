@@ -55,6 +55,8 @@ const ContentWrapper = styled("main")(({ theme }) => ({
   flexGrow: 1,
   width: "100%",
   padding: theme.spacing(6),
+  // display: "flex",
+  //  justifyContent:"center" ,
   transition: "padding .25s ease-in-out",
   [theme.breakpoints.down("sm")]: {
     paddingLeft: theme.spacing(4),
@@ -200,7 +202,7 @@ const HorizontalLayout = (props: LayoutProps) => {
         <ContentWrapper
           className="layout-page-content"
           sx={{
-            ...(contentHeightFixed && { display: "flex", overflow: "hidden" }),
+            ...(contentHeightFixed && { display: "flex", overflow: "hidden"}),
             ...(contentWidth === "boxed" && {
               mx: "auto",
               "@media (min-width:1440px)": { maxWidth: 1440 },

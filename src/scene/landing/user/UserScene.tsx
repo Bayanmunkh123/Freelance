@@ -3,45 +3,28 @@ import { useState, ElementType, ChangeEvent, ReactElement, SyntheticEvent, useEf
 
 // ** Next Import
 import { useRouter } from 'next/router'
+import Link from 'next/link';
+
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
-import Dialog from '@mui/material/Dialog'
-import Divider from '@mui/material/Divider'
-import Checkbox from '@mui/material/Checkbox'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import InputLabel from '@mui/material/InputLabel'
-import CardHeader from '@mui/material/CardHeader'
-import FormControl from '@mui/material/FormControl'
 import CardContent from '@mui/material/CardContent'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import Stack from '@mui/material/Stack'
 import Button, { ButtonProps } from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 import Tab from '@mui/material/Tab'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, Theme } from '@mui/material/styles'
-import CircularProgress from '@mui/material/CircularProgress'
 import { RegisterAccount } from './components/RegisterAccount'
 import  RegisterOrder  from './components/RegisterOrder'
 
-// ** Demo Tabs Imports
-import Index from 'src/pages/index'
-import Product from 'src/pages/product'
-
 // ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
-import { countries } from 'src/@fake-db/autocomplete'
-import Autocomplete from '@mui/material/Autocomplete'
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import React from 'react'
@@ -166,19 +149,6 @@ const UserScene = () => {
     setIsLoading(true)
     router.push(`/user${value.toLowerCase()}`).then(() => setIsLoading(false))
   }
-
-//   useEffect(() => {
-//     if (tab && tab !== activeTab) {
-//       setActiveTab(tab)
-//     }
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [tab])
-
-//   const tabContentList: { [key: string]: ReactElement } = {
-//     account: <Index tab={''}/>,
-//     order: <Product/>
-//   }
-
   const handleClose = () => setOpen(false)
 
   const handleSecondDialogClose = () => setSecondDialogOpen(false)
@@ -214,10 +184,10 @@ const UserScene = () => {
 
   return (
     
-    <Grid container spacing={6} alignItems="center" justifyContent="center" >
+    <Grid container spacing={6} xs={10} justifyContent="center">
       <TabContext value={activeTab}>
           <Grid container spacing={6} alignItems="center" justifyContent="center">
-            <Grid item xs={8}>
+            <Grid item xs={8} my="20px">
               <TabList
                 variant='scrollable'
                 scrollButtons='auto'
@@ -257,28 +227,22 @@ const UserScene = () => {
                   
               </TabList>
             </Grid>
-            <Card>
-  
-              
-  <CardContent>
-    <TabPanel value='account' sx={{ p: 0 }}>
-     <RegisterAccount />
-    </TabPanel>
-    <TabPanel value='order' sx={{ p: 0 }}>
-     <RegisterOrder />
-    </TabPanel>
-    <TabPanel value='main' sx={{ p: 0 }}>
-     <RegisterAccount />
-    </TabPanel>
-  </CardContent>
-
-</Card>
+            <Card >    
+              <CardContent>
+                <TabPanel value='account' sx={{ p: 0 }}>
+                <RegisterAccount />
+                </TabPanel>
+                <TabPanel value='order' sx={{ p: 0 }}>
+                <RegisterOrder />
+                </TabPanel>
+                <TabPanel value='main' sx={{ p: 0 }}>
+                <RegisterAccount />
+                </TabPanel>
+              </CardContent>
+            </Card>
           </Grid> 
-      {/* Account Details Card */}
-      
-     
-      </TabContext>
-    </Grid>
+        </TabContext>
+      </Grid>
   )
 }
 export default UserScene
