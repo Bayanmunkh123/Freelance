@@ -1,22 +1,27 @@
-import { Field } from 'formik'
-import { Button, Checkbox } from '@mui/material'
-import { RenderValues, RenderNumbers, RenderStatus } from 'src/@core/utils/initData'
-import { RenderValueType } from 'src/@core/utils/types'
-/**Icon imports*/
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
+import { Field } from "formik"
+import { Button, Checkbox } from "@mui/material"
+import {
+  RenderValues,
+  RenderNumbers,
+  RenderStatus,
+} from "src/@core/utils/initData"
+import { RenderValueType } from "src/@core/utils/types"
+
+// ** Icon Imports
+import Icon from "src/@core/components/icon"
 
 interface CheckerGroupType {
-  isImg: boolean;
-  isStartIcon: boolean;
-  isBuy: boolean;
-  name: string;
-  isNumber: boolean;
-  isStatus: boolean;
+  isImg: boolean
+  isStartIcon: boolean
+  isBuy: boolean
+  name: string
+  isNumber: boolean
+  isStatus: boolean
 }
 
-const CustomCheckIcon = <CheckCircleIcon />
-const CustomUncheckedIcon = <RadioButtonUncheckedIcon />
+const CustomCheckIcon = <Icon icon={"mdi:check-circle-outline"} />
+
+const CustomUncheckedIcon = <Icon icon={"mdi:radiobox-blank"} />
 
 export const CheckerGroup = (props: CheckerGroupType) => {
   // const [checked,setChecked]
@@ -36,10 +41,10 @@ export const CheckerGroup = (props: CheckerGroupType) => {
         <Button
           size="small"
           sx={{
-            border: '1px solid',
-            borderRadius: '15px',
+            border: "1px solid",
+            borderRadius: "15px",
             width: !isNumber ? 200 : 75,
-            justifyContent: !isStatus ? 'space-between' : 'none',
+            justifyContent: !isStatus ? "space-between" : "none",
           }}
           key={index}
         >
@@ -47,7 +52,7 @@ export const CheckerGroup = (props: CheckerGroupType) => {
             <img
               src="https://images.homes.com/listings/214/1007620603-872007331-original.jpg"
               width="40px"
-              style={{ borderRadius: '20px' }}
+              style={{ borderRadius: "20px" }}
             />
           ) : null}
           {isStartIcon ? null : item.label}

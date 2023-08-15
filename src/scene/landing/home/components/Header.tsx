@@ -25,6 +25,10 @@ import RedoIcon from '@mui/icons-material/Redo'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
 import CloseIcon from '@mui/icons-material/Close'
+
+// ** Icon Imports
+import Icon from "src/@core/components/icon"
+
 import { useRouter } from 'next/router'
 export const Header = () => {
   const [icon, setIcon] = React.useState<JSX.Element>(<KeyboardArrowDownIcon />)
