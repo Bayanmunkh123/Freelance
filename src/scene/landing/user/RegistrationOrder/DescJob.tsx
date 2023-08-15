@@ -106,7 +106,7 @@ const DescJob = () => {
   }))
   
   return (
-    <Grid container spacing={6} justifyContent="center">
+    <Grid container spacing={6} direction="column" justifyContent="center" alignContent={"center"} padding="50px" rowGap="50px">
       
             <Typography color='textSecondary'
         sx={{
@@ -133,9 +133,9 @@ const DescJob = () => {
               </div>     
             </Typography> 
 
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', minHeight: '100vh' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center'}}>
       
-        <Card>
+        <Card sx={{boxShadow: 'none', }}>
           <CardContent sx={{textAlign:'center'}}>
           <HeadingTypography variant='h5'>Ажлын газрын тодорхойлолт</HeadingTypography>
           <ImgStyled src={imgSrc} alt='Group Pic' />
@@ -166,7 +166,6 @@ const DescJob = () => {
               ) : null}
                 
                   <div style={{ marginTop: '100px'}}> {/* This div will push the button to the bottom */}
-                    <Button variant="contained">Дараах<ChevronRightIcon sx={{ margeRight: '0.2rem', display:'flex', alignItems:'center' }} /></Button>
                  </div>            
               </Fragment>
           </CardContent>

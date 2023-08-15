@@ -136,7 +136,7 @@ const CopyCard = () => {
 
                     <div style={{ display: 'flex', justifyContent: 'center'}}>
       
-        <Card sx={{boxShadow: 'none', }}>
+        <Card sx={{boxShadow: 'none' }}>
           <CardContent sx={{textAlign:'center'}}>
           <HeadingTypography variant='h5'>Иргэний үнэмлэхний хуулбар</HeadingTypography>
           <ImgStyled src={imgSrc} alt='Group Pic' />
