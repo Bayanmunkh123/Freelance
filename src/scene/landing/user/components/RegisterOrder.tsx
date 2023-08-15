@@ -18,9 +18,10 @@ import Card from "@mui/material/Card"
 import Grid from "@mui/material/Grid"
 import CardHeader from "@mui/material/CardHeader"
 import CardContent from "@mui/material/CardContent"
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
@@ -152,10 +153,10 @@ const handleBack = () => {
      
             <React.Fragment>
                     {getStepContent(activeStep)}
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                       {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 6, ml: 1 }}>
-                          Буцах
+                          <ChevronLeftIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Буцах
                         </Button>
                       )}
                       <Button
@@ -163,7 +164,7 @@ const handleBack = () => {
                         onClick={handleNext}
                         sx={{ mt: 6, ml: 1 }}
                       >
-                        {activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
+                        <ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />{activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
                         
                       </Button>
                      </Box>

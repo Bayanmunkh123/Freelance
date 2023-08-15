@@ -1,3 +1,4 @@
+import * as React from 'react'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -11,6 +12,8 @@ import { HomeButton } from './components/HomeButton'
 import IconSvg from 'src/layouts/components/IconSvg'
 
 export const HomeScene = () => {
+  const [action, setAction] = React.useState<string>()
+
   return (
     <>
       <Grid
@@ -49,7 +52,7 @@ export const HomeScene = () => {
             {IconSvg('rent')}
             <Typography>Түрээслэх</Typography>
           </Stack>
-          <Button startIcon={IconSvg('rentButton')}>Түрээслэх</Button>
+          <Button startIcon={IconSvg('rentButton')} onClick={() => setAction("rent")} >Түрээслэх</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />
@@ -76,7 +79,7 @@ export const HomeScene = () => {
             {IconSvg('buy')}
             <Typography>Худалдан авах</Typography>
           </Stack>
-          <Button startIcon={IconSvg('rentButton')}>Худалдан авах</Button>
+          <Button startIcon={IconSvg('rentButton')} onClick={() => setAction("buy")}>Худалдан авах</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />

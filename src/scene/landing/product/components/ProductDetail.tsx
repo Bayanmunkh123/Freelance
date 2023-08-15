@@ -15,12 +15,20 @@ import { DetailedBox } from './DetailedBox'
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { DetailHeader } from '../../home/components/Header'
+import { PRODUCT_DETAIL } from '../../home/utils/queries'
+import { useQuery } from '@apollo/client'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
-export const ProductDetail = () => {
+export const ProductDetail = (id : string ) => {
+  console.log(id)
+  const { data } = useQuery(PRODUCT_DETAIL, {
+    variables: { id },
+  });
+  //console.log(data.product)
+
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState('Дэлгэрэнгүй харах')
   const handleChange = (bool: boolean) => {
@@ -32,11 +40,11 @@ export const ProductDetail = () => {
       <DetailHeader />
       <Stack direction="column">
         <Typography variant="h6" fontWeight="bold">
-          {ListData[0].name}
+          {data?.product?.name}
         </Typography>
         <Stack direction="row" columnGap="20px" alignItems="center">
           <Typography variant="h6" fontWeight="bold">
-            {ListData[0].price}₮
+            {data?.product?.price}₮
           </Typography>
           <Typography
             sx={{
@@ -45,11 +53,11 @@ export const ProductDetail = () => {
               p: '8px 30px',
             }}
           >
-            {ListData[0].constStatus}
+            {data?.product?.constStatus}
           </Typography>
         </Stack>
         <Typography>
-          {ListData[0].address1.concat(ListData[0].district)}
+          {data?.product?.address1.concat(data?.product?.district)}
         </Typography>
       </Stack>
       <Grid container>
@@ -66,8 +74,8 @@ export const ProductDetail = () => {
           cols={2}
           rowHeight={164}
         >
-          {ListData[0].images.map((url) => (
-            <ImageListItem key={url}>
+          {ListData[0].images.map((url, index:number) => (
+            <ImageListItem key={index}>
               <img src={url} loading="lazy" />
             </ImageListItem>
           ))}
@@ -77,7 +85,7 @@ export const ProductDetail = () => {
       <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт өрөө- "
-          subTitle={`${ListData[0].roomNumber}`}
+          subTitle={`${data?.product?.roomNumber}`}
           icon="MeetingRoomOutlinedIcon"
         />
         <DetailedBox
@@ -87,7 +95,7 @@ export const ProductDetail = () => {
         />
         <DetailedBox
           title="Нийт метр квадрат- "
-          subTitle={`${ListData[0].sqr}`}
+          subTitle={`${data?.product?.sqr}`}
           icon="CompareArrowsIcon"
         />
         <DetailedBox
@@ -99,17 +107,17 @@ export const ProductDetail = () => {
       <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт давхар- "
-          subTitle={`${ListData[0].floors}`}
+          subTitle={`${data?.product?.floors}`}
           icon="BusinessIcon"
         />
         <DetailedBox
           title="Давхар- "
-          subTitle={`${ListData[0].floorNumber}`}
+          subTitle={`${data?.product?.floorNumber}`}
           icon="LayersIcon"
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${ListData[0].releaseDate.getFullYear()}`}
+          subTitle={`${data?.product?.releaseDate}`}
           icon="EventAvailableIcon"
         />
         <DetailedBox
@@ -128,7 +136,7 @@ export const ProductDetail = () => {
           </Grid>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{ListData[0].description}</Typography>
+          <Typography>{data?.product?.description}</Typography>
         </AccordionDetails>
       </Accordion>
       <Typography variant="h6" fontWeight="bold">
@@ -141,7 +149,7 @@ export const ProductDetail = () => {
       <Typography variant="h6" fontWeight="bold">
         Онцлог
       </Typography>
-      <Grid container columnGap="20px" rowGap="20px">
+      {/* <Grid container columnGap="20px" rowGap="20px">
         {ListData[0].highlights.map((item) => (
           <Button
             key={item}
@@ -168,7 +176,7 @@ export const ProductDetail = () => {
             {item}
           </Button>
         ))}
-      </Grid>
+      </Grid> */}
       <Button
         sx={{
           backgroundColor: 'primary.main',

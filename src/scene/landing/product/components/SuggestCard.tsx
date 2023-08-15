@@ -5,23 +5,23 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { ListData, ListDataType } from '../utils/ListData'
 import { useRouter } from 'next/router'
+import { useProductsQuery } from 'src/generated'
 
-function changeNot(): ListDataType[] {
-  const getRandomInt = (max: number) =>
-    Math.floor(Math.random() * Math.floor(max))
+// function changeNot(): ListDataType[] {
+//   const getRandomInt = (max: number) =>
+//     Math.floor(Math.random() * Math.floor(max))
 
-  return Array.from(new Array(3)).map(
-    () => ListData[getRandomInt(ListData.length)],
-  )
-}
+//   return Array.from(new Array(3)).map(
+//     () => ListData[getRandomInt(ListData.length)],
+//   )
+// }
 export const SuggestCard = () => {
-  const data = changeNot()
+  const {data} = useProductsQuery()
   const router = useRouter()
-
   return (
     <>
-      {data.map((item, index: number) => (
-        <Grid item key={index}>
+      {data?.products?.data?.map((item, index: number) => (
+        <Grid item key={index} sx={{minHeight: "320px"}}>
           <CardMedia
             sx={{
               height: 140,
@@ -55,7 +55,7 @@ export const SuggestCard = () => {
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
             }}
-            onClick={() => router.push('/product')}
+            onClick={() => router.push(`/product/detail?id=${item.id}`)}
           >
             Дэлгэрэнгүй
           </Button>
