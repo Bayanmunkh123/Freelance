@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
-import { ConstructionStatusEnum, ProductStatusEnum, useProductsQuery } from 'src/generated'
+import { ConstructionStatusEnum, ProductStatusEnum, useProductsLandingQuery } from 'src/generated'
 
 // ** Icon Imports
 import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
@@ -24,7 +24,7 @@ interface InputType {
 }
 const ProductList = () => {
   //const {name, type} = props
-  const { data } = useProductsQuery()
+  const { data } = useProductsLandingQuery()
   function changeNot(): ListDataType[] {
     console.log(data)
     const getRandomInt = (max: number) =>

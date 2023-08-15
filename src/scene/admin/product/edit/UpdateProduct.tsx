@@ -14,13 +14,10 @@ import { RenderValues } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from '../create/DateInput'
 import DatePicker from 'react-datepicker'
-import { useMutation, useQuery } from '@apollo/client'
-import { PRODUCT_UPDATE } from '../utils/mutations'
-import { PRODUCT_DETAIL } from '../utils/queries'
 import { distNames } from 'src/@core/utils/initData'
 import { ProductInput } from 'src/generated'
 import { mongolianProvinces } from 'src/@core/utils/initData'
-
+import { useProductUpdateMutation } from 'src/generated'
 
 
 // function Thumb({ file }) {
@@ -58,11 +55,12 @@ import { mongolianProvinces } from 'src/@core/utils/initData'
 // }
 
 
-const UpdateProduct = (id: string | undefined  ) => {
+const UpdateProduct = (id: string  ) => {
 
-  const {data} = useQuery(PRODUCT_DETAIL, {
-    variables: {_id: id }
+const { data } = useProductQuery({
+    variables: {input: { id } },
   })
+
   console.log(data)
   const initialValues = {
     id: data?.product?.id,
@@ -88,29 +86,28 @@ const UpdateProduct = (id: string | undefined  ) => {
     organizationId: data?.product?.organizationId,
     priceSqr: data?.product?.priceSqr,
   }
-  const [onUpdateProduct] = useMutation(PRODUCT_UPDATE)
-  const submitHandler = (data: ProductInput) => {
+  const [onUpdateProduct] = useProductUpdateMutation()
+  const submitHandler = (_values: ProductInput) => {
     console.log('onSubmit === values', data)
     onUpdateProduct({
       variables: {
-        _id: data.id,
+        id: id,
         input: {
           images: '',
-          name: data.name,
-          city: data.city,
-          district: data.district,
-          address1: data.address1,
-          sqr: data.sqr,
-          priceSqr: data.priceSqr,
-          releaseDate: data.releaseDate,
-          price: data.sqr * data?.priceSqr,
-          //uliral: number
-          floors: data.floors,
-          floorNumber: data.floorNumber,
-          roomNumber: data.roomNumber,
-          constStatus: data.constStatus,
-          productStatus: data.productStatus,
-          description: data.description,
+          name: _values.name,
+          city: _values.city,
+          district: _values.district,
+          address1: _values.address1,
+          sqr: _values.sqr,
+          priceSqr: _values.priceSqr,
+          releaseDate: _values.releaseDate,
+          price: 0,
+          floors: _values.floors,
+          floorNumber: _values.floorNumber,
+          roomNumber: _values.roomNumber,
+          constStatus: _values.constStatus,
+          productStatus: _values.productStatus,
+          description: _values.description,
           organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
         },
       },
@@ -144,8 +141,8 @@ const UpdateProduct = (id: string | undefined  ) => {
                 },
               }}
             >
-            <input id="file" name="file" type="file" onChange={(event) => {
-                    formikProps.setFieldValue("images", event.currentTarget.files[0]);
+            <input id="file" name="images" type="file" onChange={(event) => {
+                    formikProps.setFieldValue("images", event?.currentTarget?.files[0]);
                   }} className="form-control" />
                   {/* //<Thumb file={formikProps.values.images} /> */}
               

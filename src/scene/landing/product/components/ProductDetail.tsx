@@ -12,22 +12,18 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import { ListData } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
-import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
 import { DetailHeader } from '../../home/components/Header'
-import { useProductQuery, ProductUniqueWhereInput } from 'src/generated'
+import { useProductLandingQuery } from 'src/generated'
 
 // ** Icon Imports
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
-export const ProductDetail = (id : ProductUniqueWhereInput ) => {
+export const ProductDetail = (id: string ) => {
   console.log(id)
-  const { data } = useProductQuery({
-    variables: {input: id },
+  const { data } = useProductLandingQuery({
+    variables: {input: {id}},
   });
-  //console.log(data.product)
-
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState('Дэлгэрэнгүй харах')
   const handleChange = (bool: boolean) => {

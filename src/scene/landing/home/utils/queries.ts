@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client"
 
-export const PRODUCT_LIST = gql`
-  query products($input: ProductWhereInput) {
+export const PRODUCTS_LANDING = gql`
+  query productsLanding($input: ProductWhereInput) {
     products(input: $input) {
       data {
         id
@@ -25,8 +25,8 @@ export const PRODUCT_LIST = gql`
     }
   }
 `
-export const PRODUCT_DETAIL = gql`
-  query product($input: ProductUniqueWhereInput) {
+export const PRODUCT_LANDING = gql`
+  query productLanding($input: ProductUniqueWhereInput!) {
     product(input: $input) {
       id
       images
