@@ -1,3 +1,5 @@
+
+import * as React from 'react';
 // ** React Imports
 import { Fragment, useState } from 'react'
 
@@ -22,7 +24,12 @@ import Icon from 'src/@core/components/icon'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
-
+import CopyCard from '../RegistrationOrder/CopyCard'
+import CopyPassport from '../RegistrationOrder/CopyPassport'
+import CopyVisa from '../RegistrationOrder/CopyVisa'
+import DescJob from '../RegistrationOrder/DescJob'
+import DescResidence from '../RegistrationOrder/DescResidence'
+import Statement from '../RegistrationOrder/Statement'
 interface FileProp {
   name: string
   type: string
@@ -104,77 +111,65 @@ const RegisterOrder = () => {
     marginRight: theme.spacing(5),
     borderRadius: theme.shape.borderRadius
   }))
-  
+  const steps = [
+    'Иргэний үнэмлэхний хуулбар', 
+    'Оршин суугаа газрын тодорхойлолт', 
+    'Ажлын газрын тодорхойлолт', 
+    'Гадаадад байгаа бол визний хуулбар',
+    'Гадаадад байгаа бол гадаад паспортны хуулбар',
+    'Дансны хуулга' ];
+
+function getStepContent(step: number) {
+  switch (step) {
+    case 0:
+      return <CopyCard />;
+    case 1:
+      return <DescResidence />;
+    case 2:
+      return <DescJob />;
+    case 3:
+      return <CopyVisa />;
+    case 4:
+      return <CopyPassport />;
+    case 5:
+      return <Statement />;
+    default:
+      throw new Error('Unknown step');
+  }
+}
+
+const [activeStep, setActiveStep] = React.useState(0);
+
+const handleNext = () => {
+  setActiveStep(activeStep + 1);
+};
+
+const handleBack = () => {
+  setActiveStep(activeStep - 1);
+};
   return (
-    <Grid container spacing={6} justifyContent="center">
-      
-            <Typography color='textSecondary'
-        sx={{
-          '& a': {
-            color: 'primary.main',
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            marginTop: '5rem', 
+   
+     
+            <React.Fragment>
+                    {getStepContent(activeStep)}
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      {activeStep !== 0 && (
+                        <Button onClick={handleBack} sx={{ mt: 6, ml: 1 }}>
+                          Буцах
+                        </Button>
+                      )}
+                      <Button
+                        variant="contained"
+                        onClick={handleNext}
+                        sx={{ mt: 6, ml: 1 }}
+                      >
+                        {activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
+                        
+                      </Button>
+                     </Box>
+            </React.Fragment>
 
-          },
-        }}
-        >           
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', justifyContent: 'start' }}>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Иргэний үнэмлэхний хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Оршин суугаа газрын тодорхойлолт</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Ажлын газрын тодорхойлолт</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол визний хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.2rem', verticalAlign: 'middle' }} />Дансны хуулга</Typography>
-              </div>     
-            </Typography> 
-
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', minHeight: '100vh' }}>
-      
-        <Card>
-          <CardContent sx={{ textAlign: 'center'}}>
-          <HeadingTypography variant='h5'>Иргэний үнэмлэхний хуулбар</HeadingTypography>
-          <ImgStyled src={imgSrc} alt='Group Pic' />
-            <Fragment>
-              <div {...getRootProps({ className: 'dropzone' })}>
-                <input {...getInputProps()} />
-                  <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: ['center', 'center'] }}>
-                    <Typography>Баримт бичгүүдийн зургын чанар хангасан PDF файлаар хэрэглэгч та бүрэн оруулна уу. </Typography>
-                    <Typography color='textSecondary' sx={{ '& a': { color: 'primary.main', textDecoration: 'none' } }}>
-                      Файлыг чирж эсвэл{' '}
-                      <Link href='/' onClick={e => e.preventDefault()}>
-                        энд
-                      </Link>{' '}
-                      дарж оруулна уу
-                    </Typography>
-                  </Box>                    
-              </div >
-              {files.length ? (
-                <Fragment>
-                  <List>{fileList}</List>
-                  <div className='buttons'>
-                    <Button variant='contained'>Файл оруулах</Button>
-                    <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
-                      Бүгдийг нь устгах
-                    </Button>
-                  </div>
-                </Fragment>
-              ) : null}
-
-                  <div style={{ marginTop: '100px'}}> {/* This div will push the button to the bottom */}
-                    <Button variant="contained">Дараах<ChevronRightIcon sx={{ margeRight: '0.2rem', display:'flex', alignItems:'center' }} /></Button>
-                 </div>            
-              </Fragment>
-          </CardContent>
-        </Card>
-      
-      </div>
-    </Grid>
-    
+  
   )
 }
 

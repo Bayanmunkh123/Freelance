@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ListClassKey, Tooltip, Typography  } from '@mui/material'
 /**Icon import */
+<<<<<<< HEAD
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined'
@@ -15,6 +16,10 @@ import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork'
 import FiberNewIcon from '@mui/icons-material/FiberNew'
 import { useProductsQuery } from 'src/generated'
 import { ListDataType } from 'src/scene/landing/product/utils/ListData'
+=======
+// import DeleteIcon from '@mui/icons-material/Delete'
+// import EditIcon from '@mui/icons-material/Edit'
+>>>>>>> df6ba24899c7a24f2ef0832321720b79e1d92fa6
 
 type ProductType = {
   id: string
@@ -148,7 +153,7 @@ const columns: GridColDef[] = [
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Tooltip title='Устгах'>
           <IconButton size='small' sx={{ mr: 0.5 }} >
-            <DeleteIcon />
+            {/* <DeleteIcon /> */}
           </IconButton>
         </Tooltip>
         <Tooltip title='Засах'>

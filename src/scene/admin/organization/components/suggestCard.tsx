@@ -16,11 +16,6 @@ const SuggestCard = () => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           Ус сувгийн удирдах газар
         </Typography>
-        <Typography sx={{ mb: 2 }}>$249.40</Typography>
-        <Typography variant="body2">
-          3.1GHz 6-core 10th-generation Intel Core i5 processor, Turbo Boost up
-          to 4.5GHz
-        </Typography>
       </CardContent>
     </Card>
 
