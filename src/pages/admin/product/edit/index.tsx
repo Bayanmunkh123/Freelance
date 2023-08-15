@@ -2,8 +2,13 @@ import UpdateProduct from "src/scene/admin/product/edit/UpdateProduct"
 import React from 'react'
 import { NextPage } from 'next'
 import { RoleData } from 'src/config/acl'
+import { useRouter } from "next/router"
 
-const ProductList: NextPage = () => <UpdateProduct/>
+const ProductList: NextPage = () => {
+const router = useRouter()
+const {id} = router.query
+return (
+<UpdateProduct id={id}/>)}
 ProductList.acl = {
   action: 'read',
   subject: 'Admin_Product',

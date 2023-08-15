@@ -10,171 +10,15 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum, ProductStatusEnum } from 'src/generated'
-import * as yup from 'yup'
+import { ConstructionStatusEnum, ProductStatusEnum, ProductInput } from 'src/generated'
 import { RenderValues } from '../../../landing/home/components/CheckerGroup'
-import { distNames } from '../../../landing/home/components/FilterBuy'
+import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
 import DatePicker from 'react-datepicker'
 import { useMutation } from '@apollo/client'
 import { PRODUCT_CREATE } from '../../../landing/home/utils/mutation'
 
-export interface mongolianProvincesType {
-  id: number;
-  name: string;
-  child: string[];
-}
-
-export const mongolianProvinces: mongolianProvincesType[] = [
-  {
-    id: 1,
-    name: 'Улаанбаатар',
-    child: distNames,
-  },
-  {
-    id: 2,
-    name: 'Архангай',
-    child: [],
-  },
-  {
-    id: 3,
-    name: 'Баян-Өлгий',
-    child: [],
-  },
-  {
-    id: 4,
-    name: 'Баянхонгор',
-    child: [],
-  },
-  {
-    id: 5,
-    name: 'Булган',
-    child: [],
-  },
-  {
-    id: 6,
-    name: 'Говь-Алтай',
-    child: [],
-  },
-  {
-    id: 7,
-    name: 'Говьсүмбэр',
-    child: [],
-  },
-  {
-    id: 8,
-    name: 'Дархан-Уул',
-    child: [],
-  },
-  {
-    id: 9,
-    name: 'Дорноговь',
-    child: [],
-  },
-  {
-    id: 10,
-    name: 'Дорнод',
-    child: [],
-  },
-  {
-    id: 11,
-    name: 'Дундговь',
-    child: [],
-  },
-  {
-    id: 12,
-    name: 'Завхан',
-    child: [],
-  },
-  {
-    id: 13,
-    name: 'Орхон',
-    child: [],
-  },
-  {
-    id: 14,
-    name: 'Өвөрхангай',
-    child: [],
-  },
-  {
-    id: 15,
-    name: 'Өмнөговь',
-    child: [],
-  },
-  {
-    id: 16,
-    name: 'Сүхбаатар',
-    child: [],
-  },
-  {
-    id: 17,
-    name: 'Сэлэнгэ',
-    child: [],
-  },
-  {
-    id: 18,
-    name: 'Төв',
-    child: [],
-  },
-  {
-    id: 19,
-    name: 'Увс',
-    child: [],
-  },
-  {
-    id: 20,
-    name: 'Ховд',
-    child: [],
-  },
-  {
-    id: 21,
-    name: 'Хөвсгөл',
-    child: [],
-  },
-  {
-    id: 22,
-    name: 'Хэнтий',
-    child: [],
-  },
-]
-
-export interface ProductCreateInput {
-  images: string;
-  name: string;
-  city: string;
-  district: string;
-  address1: string;
-  sqr: number;
-  priceSqr: number;
-  releaseDate: Date | number;
-  price: number;
-  //uliral: number
-  floors: number;
-  floorNumber: number;
-  roomNumber: number;
-  constStatus: ConstructionStatusEnum;
-  productStatus: ProductStatusEnum;
-  description: string;
-  organizationId: string;
-}
-const validationCreateProductSchema = yup.object().shape({
-  images: yup.string().required(),
-  name: yup.string().required(),
-  city: yup.string(),
-  district: yup.string(),
-  address1: yup.string(),
-  sqr: yup.number(),
-  priceSqr: yup.number(),
-  releaseDate: yup.date(),
-  //uliral: yup.number(),
-  floors: yup.number(),
-  floorNumber: yup.number(),
-  roomNumber: yup.number(),
-  constStatus: yup.string(),
-  productStatus: yup.string(),
-  description: yup.string(),
-})
 function Thumb({ file }) {
   const [loading, setLoading] = React.useState(false);
   const [thumb, setThumb] = React.useState(undefined);
@@ -212,7 +56,7 @@ function Thumb({ file }) {
 
 const CreateProduct = () => {
   const [onCreateProduct] = useMutation(PRODUCT_CREATE)
-  const submitHandler = (data: ProductCreateInput) => {
+  const submitHandler = (data: ProductInput) => {
     console.log('onSubmit === values', data)
 
     onCreateProduct({
@@ -226,7 +70,7 @@ const CreateProduct = () => {
           sqr: data.sqr,
           priceSqr: data.priceSqr,
           releaseDate: data.releaseDate,
-          price: data.sqr * data.priceSqr,
+          price: data.sqr * data?.priceSqr,
           //uliral: number
           floors: data.floors,
           floorNumber: data.floorNumber,
@@ -259,14 +103,14 @@ const CreateProduct = () => {
           floors: 1,
           floorNumber: 1,
           roomNumber: 1,
-          constStatus: ConstructionStatusEnum.NEW,
+          constStatus: ConstructionStatusEnum.NEWBUILDING,
           productStatus: ProductStatusEnum.HIGHLIGTH,
           description: '',
           price: 0,
           organizationId: '',
         }}
         //validationSchema={validationCreateProductSchema}
-        onSubmit={(values: ProductCreateInput, formikHelpers) => {
+        onSubmit={(values: ProductInput, formikHelpers) => {
           console.log(values)
           submitHandler(values)
           formikHelpers.setSubmitting(false)

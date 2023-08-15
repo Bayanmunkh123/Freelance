@@ -18,26 +18,7 @@ import { Formik, Form, Field, useField } from 'formik'
 import * as yup from 'yup'
 import { CheckerGroup } from './CheckerGroup'
 
-const filterApartmentSchema = yup.object().shape({
-  location: yup.string(),
-  type: yup.string(),
-  price: yup.number(),
-  size: yup.number(),
-  roomNo: yup.number(),
-  status: yup.string(),
-})
-export const distNames = [
-  'Баянгол',
-  'Баянзүрх',
-  'Хан-Уул',
-  'Чингэлтэй',
-  'Сүхбаатар',
-  'Налайх',
-  'Багахангай',
-  'Сонгинохайрхан',
-  'Багануур',
-]
-
+import { distNames } from 'src/@core/utils/initData'
 export const CustomSlider = ({ ...props }) => {
   const [field, meta] = useField(props)
   return <Slider {...field} {...props} />

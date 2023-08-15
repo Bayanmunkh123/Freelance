@@ -10,213 +10,89 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum, ProductStatusEnum } from 'src/generated'
-import * as yup from 'yup'
 import { RenderValues } from '../../../landing/home/components/CheckerGroup'
-import { distNames } from '../../../landing/home/components/FilterBuy'
 import { TextField } from 'formik-mui'
 import PickersComponent from '../create/DateInput'
 import DatePicker from 'react-datepicker'
-import { useMutation } from '@apollo/client'
-import { PRODUCT_CREATE } from '../../../landing/home/utils/mutation'
-
-export interface mongolianProvincesType {
-  id: number;
-  name: string;
-  child: string[];
-}
-
-export const mongolianProvinces: mongolianProvincesType[] = [
-  {
-    id: 1,
-    name: 'Улаанбаатар',
-    child: distNames,
-  },
-  {
-    id: 2,
-    name: 'Архангай',
-    child: [],
-  },
-  {
-    id: 3,
-    name: 'Баян-Өлгий',
-    child: [],
-  },
-  {
-    id: 4,
-    name: 'Баянхонгор',
-    child: [],
-  },
-  {
-    id: 5,
-    name: 'Булган',
-    child: [],
-  },
-  {
-    id: 6,
-    name: 'Говь-Алтай',
-    child: [],
-  },
-  {
-    id: 7,
-    name: 'Говьсүмбэр',
-    child: [],
-  },
-  {
-    id: 8,
-    name: 'Дархан-Уул',
-    child: [],
-  },
-  {
-    id: 9,
-    name: 'Дорноговь',
-    child: [],
-  },
-  {
-    id: 10,
-    name: 'Дорнод',
-    child: [],
-  },
-  {
-    id: 11,
-    name: 'Дундговь',
-    child: [],
-  },
-  {
-    id: 12,
-    name: 'Завхан',
-    child: [],
-  },
-  {
-    id: 13,
-    name: 'Орхон',
-    child: [],
-  },
-  {
-    id: 14,
-    name: 'Өвөрхангай',
-    child: [],
-  },
-  {
-    id: 15,
-    name: 'Өмнөговь',
-    child: [],
-  },
-  {
-    id: 16,
-    name: 'Сүхбаатар',
-    child: [],
-  },
-  {
-    id: 17,
-    name: 'Сэлэнгэ',
-    child: [],
-  },
-  {
-    id: 18,
-    name: 'Төв',
-    child: [],
-  },
-  {
-    id: 19,
-    name: 'Увс',
-    child: [],
-  },
-  {
-    id: 20,
-    name: 'Ховд',
-    child: [],
-  },
-  {
-    id: 21,
-    name: 'Хөвсгөл',
-    child: [],
-  },
-  {
-    id: 22,
-    name: 'Хэнтий',
-    child: [],
-  },
-]
-
-export interface ProductCreateInput {
-  images: string;
-  name: string;
-  city: string;
-  district: string;
-  address1: string;
-  sqr: number;
-  priceSqr: number;
-  releaseDate: Date | number;
-  price: number;
-  //uliral: number
-  floors: number;
-  floorNumber: number;
-  roomNumber: number;
-  constStatus: ConstructionStatusEnum;
-  productStatus: ProductStatusEnum;
-  description: string;
-  organizationId: string;
-}
-const validationCreateProductSchema = yup.object().shape({
-  images: yup.string().required(),
-  name: yup.string().required(),
-  city: yup.string(),
-  district: yup.string(),
-  address1: yup.string(),
-  sqr: yup.number(),
-  priceSqr: yup.number(),
-  releaseDate: yup.date(),
-  //uliral: yup.number(),
-  floors: yup.number(),
-  floorNumber: yup.number(),
-  roomNumber: yup.number(),
-  constStatus: yup.string(),
-  productStatus: yup.string(),
-  description: yup.string(),
-})
-function Thumb({ file }) {
-  const [loading, setLoading] = React.useState(false);
-  const [thumb, setThumb] = React.useState(undefined);
-
-  React.useEffect(() => {
-    if (!file) return;
-
-    setLoading(true);
-
-    let reader = new FileReader();
-
-    reader.onloadend = () => {
-      setLoading(false);
-      setThumb(reader?.result);
-    };
-
-    reader.readAsDataURL(file);
-  }, [file]);
-
-  if (!file) return null;
-
-  if (loading) return <p>loading...</p>;
-
-  return (
-    <img
-      src={thumb}
-      alt={file.name}
-      className="img-thumbnail mt-2"
-      height={200}
-      width={200}
-    />
-  );
-}
+import { useMutation, useQuery } from '@apollo/client'
+import { PRODUCT_UPDATE } from '../utils/mutation'
+import { PRODUCT_DETAIL } from '../utils/queries'
+import { distNames } from 'src/@core/utils/initData'
+import { ProductInput } from 'src/generated'
+import { mongolianProvinces } from 'src/@core/utils/initData'
 
 
-const UpdateProduct = () => {
-  const [onCreateProduct] = useMutation(PRODUCT_CREATE)
-  const submitHandler = (data: ProductCreateInput) => {
+
+// function Thumb({ file }) {
+//   const [loading, setLoading] = React.useState(false);
+//   const [thumb, setThumb] = React.useState(undefined);
+
+//   React.useEffect(() => {
+//     if (!file) return;
+
+//     setLoading(true);
+
+//     let reader = new FileReader();
+
+//     reader.onloadend = () => {
+//       setLoading(false);
+//       setThumb(reader?.result);
+//     };
+
+//     reader.readAsDataURL(file);
+//   }, [file]);
+
+//   if (!file) return null;
+
+//   if (loading) return <p>loading...</p>;
+
+//   return (
+//     <img
+//       src={thumb}
+//       alt={file.name}
+//       className="img-thumbnail mt-2"
+//       height={200}
+//       width={200}
+//     />
+//   );
+// }
+
+
+const UpdateProduct = (id: string) => {
+
+  const {data} = useQuery(PRODUCT_DETAIL, {
+    variables: { id }
+  })
+  const initialValues = {
+    id: data?.product?.id,
+    name: data?.product?.name,
+    constStatus: data?.product?.constStatus,
+    productStatus: data?.product?.productStatus,
+    description: data?.product?.description,
+    address1: data?.product?.description,
+    roomNumber: data?.product?.roomNumber,
+    // bedNo: number;
+    // bathNo: number;
+    sqr: data?.product?.sqr,
+    price: data?.product?.price,
+    //isFav: data?.product?
+    images: data?.product?.images,
+    //parking: number;
+    releaseDate: data?.product?.releaseDate,
+    floors: data?.product?.floors,
+    floorNumber: data?.product?.floorNumber,
+    //highlights: 
+    city: data?.product?.city,
+    district: data?.product?.district,
+    organizationId: data?.product?.organizationId,
+    priceSqr: data?.product?.priceSqr,
+  }
+  const [onUpdateProduct] = useMutation(PRODUCT_UPDATE)
+  const submitHandler = (data: ProductInput) => {
     console.log('onSubmit === values', data)
-
-    onCreateProduct({
+    onUpdateProduct({
       variables: {
+        updatePostId: data.id,
         input: {
           images: '',
           name: data.name,
@@ -226,7 +102,7 @@ const UpdateProduct = () => {
           sqr: data.sqr,
           priceSqr: data.priceSqr,
           releaseDate: data.releaseDate,
-          price: data.sqr * data.priceSqr,
+          price: data.sqr * data?.priceSqr,
           //uliral: number
           floors: data.floors,
           floorNumber: data.floorNumber,
@@ -246,27 +122,11 @@ const UpdateProduct = () => {
         Үндсэн мэдээлэл засах
       </Typography>
       <Formik
-        initialValues={{
-          images: '',
-          name: '',
-          city: '',
-          district: '',
-          address1: '',
-          sqr: 0,
-          priceSqr: 0,
-          releaseDate: new Date(),
-          //uliral: 1,
-          floors: 1,
-          floorNumber: 1,
-          roomNumber: 1,
-          constStatus: ConstructionStatusEnum.NEW,
-          productStatus: ProductStatusEnum.HIGHLIGTH,
-          description: '',
-          price: 0,
-          organizationId: '',
-        }}
+        initialValues={
+          initialValues
+        }
         //validationSchema={validationCreateProductSchema}
-        onSubmit={(values: ProductCreateInput, formikHelpers) => {
+        onSubmit={(values: ProductInput, formikHelpers) => {
           console.log(values)
           submitHandler(values)
           formikHelpers.setSubmitting(false)
@@ -286,7 +146,7 @@ const UpdateProduct = () => {
             <input id="file" name="file" type="file" onChange={(event) => {
                     formikProps.setFieldValue("images", event.currentTarget.files[0]);
                   }} className="form-control" />
-                  <Thumb file={formikProps.values.images} />
+                  {/* //<Thumb file={formikProps.values.images} /> */}
               
               {/* <input
           type='file'

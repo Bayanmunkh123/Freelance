@@ -109,7 +109,7 @@ const columns: GridColDef[] = [
       const { releaseDate } = row
       return (
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography>{ releaseDate }</Typography>
+            <Typography>{releaseDate}</Typography>
           </Box>
       )
     }
