@@ -1,4 +1,4 @@
-import { Field } from "formik"
+import { Field, FieldInputProps } from "formik"
 import { Button, Checkbox } from "@mui/material"
 import {
   RenderValues,
@@ -9,6 +9,7 @@ import { RenderValueType } from "src/@core/utils/types"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
+import { FilterType } from "./FilterBuy"
 
 interface CheckerGroupType {
   isImg: boolean
