@@ -21,8 +21,11 @@ const SuggestCard = () => {
         </Typography>
       </CardContent>
     </Card>
-
   )
+
+  
+
+  
 }
 export default SuggestCard
 
