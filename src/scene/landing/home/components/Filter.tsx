@@ -1,13 +1,12 @@
-import * as React from 'react'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import { FilterDialog } from './FilterDialog'
+import * as React from "react"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import Typography from "@mui/material/Typography"
+import Grid from "@mui/material/Grid"
+import { FilterDialog } from "./FilterDialog"
 
-/** Icon imports */
-import SortIcon from '@mui/icons-material/Sort'
-import CloseIcon from '@mui/icons-material/Close'
+// ** Icon Imports
+import Icon from "src/@core/components/icon"
 
 export default function Filter() {
   const [open, setOpen] = React.useState(false)
@@ -22,12 +21,12 @@ export default function Filter() {
     <>
       <Button
         onClick={handleOpen}
-        startIcon={<SortIcon />}
+        startIcon={<Icon icon={"mdi:sort"} />}
         size="small"
         sx={{
           border: (theme) => `1px solid ${theme.palette.grey[400]}`,
-          borderRadius: '8px',
-          px: '15px',
+          borderRadius: "8px",
+          px: "15px",
         }}
       >
         Шүүлтүүр
@@ -36,7 +35,7 @@ export default function Filter() {
         open={open}
         //onClose={handleClose}
         scroll="paper"
-        sx={{ '& .MuiPaper-root': { maxWidth: '700px' } }}
+        sx={{ "& .MuiPaper-root": { maxWidth: "700px" } }}
       >
         <Grid container justifyContent="space-between" px="20px" my="20px">
           <Typography
@@ -45,12 +44,12 @@ export default function Filter() {
               ml: 2,
               lineHeight: 1,
               fontWeight: 700,
-              fontSize: '1.5rem !important',
+              fontSize: "1.5rem !important",
             }}
           >
             Бүх шүүлтүүр
           </Typography>
-          <CloseIcon onClick={handleClose} />
+          <Icon icon={"mdi:close"} onChange={handleClose} />
         </Grid>
         <FilterDialog />
       </Dialog>

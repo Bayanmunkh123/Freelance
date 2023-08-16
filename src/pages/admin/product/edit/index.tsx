@@ -5,12 +5,10 @@ import { RoleData } from 'src/config/acl'
 import { useRouter } from "next/router"
 
 const ProductList: NextPage = () => {
-  const router = useRouter();
-  const { _query } = router.query;
-  const _id = _query as string
-  console.log(_query)
-  return <UpdateProduct id={_id} />
-}
+const router = useRouter()
+const _query = router.query
+const _id = _query?.id as string      
+return <UpdateProduct id={_id} />}
 ProductList.acl = {
   action: 'read',
   subject: 'Admin_Product',
