@@ -7,7 +7,7 @@ export const OrganizationScene = () => {
   return (
     <Grid container>
       <SuggestCard />
-      <Typography>aaaaaaaaaaaaaaaaaaaaaaaaaaa</Typography>
+      <Typography padding={'10px'}>Нүүр</Typography>
       <MainInfo />
     </Grid>
   )

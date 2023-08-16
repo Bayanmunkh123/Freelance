@@ -1,38 +1,33 @@
-import * as React from 'react'
+import * as React from "react"
 
 // ** MUI Imports
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
-import ImageList from '@mui/material/ImageList'
-import Stack from '@mui/material/Stack'
-import ImageListItem from '@mui/material/ImageListItem'
-import Accordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import { ListData } from '../utils/ListData'
-import { DetailedBox } from './DetailedBox'
-import IconButton from '@mui/material/IconButton'
-import Grid from '@mui/material/Grid'
-import { DetailHeader } from '../../home/components/Header'
-import { PRODUCT_DETAIL } from '../../home/utils/queries'
-import { useQuery } from '@apollo/client'
+import Button from "@mui/material/Button"
+import Divider from "@mui/material/Divider"
+import Typography from "@mui/material/Typography"
+import ImageList from "@mui/material/ImageList"
+import Stack from "@mui/material/Stack"
+import ImageListItem from "@mui/material/ImageListItem"
+import Accordion from "@mui/material/Accordion"
+import AccordionSummary from "@mui/material/AccordionSummary"
+import AccordionDetails from "@mui/material/AccordionDetails"
+import { ListData } from "../utils/ListData"
+import { DetailedBox } from "./DetailedBox"
+import Grid from "@mui/material/Grid"
+import { DetailHeader } from "../../home/components/Header"
+import { useProductLandingQuery } from "src/generated"
 
 // ** Icon Imports
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
-export const ProductDetail = (id : string ) => {
+export const ProductDetail = ({ id }: { id: string }) => {
   console.log(id)
-  const { data } = useQuery(PRODUCT_DETAIL, {
-    variables: { id },
-  });
-  //console.log(data.product)
-
+  const { data } = useProductLandingQuery({
+    variables: { input: { id } },
+  })
   const [expanded, setExpanded] = React.useState(false)
-  const [label, setLabel] = React.useState('Дэлгэрэнгүй харах')
+  const [label, setLabel] = React.useState("Дэлгэрэнгүй харах")
   const handleChange = (bool: boolean) => {
-    bool ? setLabel('Хураах') : setLabel('Дэлгэрэнгүй харах')
+    bool ? setLabel("Хураах") : setLabel("Дэлгэрэнгүй харах")
     setExpanded(bool)
   }
   return (
@@ -49,39 +44,39 @@ export const ProductDetail = (id : string ) => {
           <Typography
             sx={{
               border: (theme) => `1px solid ${theme.palette.primary.main}`,
-              borderRadius: '8px',
-              p: '8px 30px',
+              borderRadius: "8px",
+              p: "8px 30px",
             }}
           >
             {data?.product?.constStatus}
           </Typography>
         </Stack>
         <Typography>
-          {data?.product?.address1.concat(data?.product?.district)}
+          {data?.product?.address1?.concat(data?.product?.district)}
         </Typography>
       </Stack>
       <Grid container>
         <img
           src={ListData[0].images[0]}
-          style={{ borderRadius: '10px', width: 500 }}
+          style={{ borderRadius: "10px", width: 500 }}
         />
         <ImageList
           sx={{
             width: 500,
             height: 450,
-            borderRadius: '10px',
+            borderRadius: "10px",
           }}
           cols={2}
           rowHeight={164}
         >
-          {ListData[0].images.map((url, index:number) => (
+          {ListData[0].images.map((url, index: number) => (
             <ImageListItem key={index}>
               <img src={url} loading="lazy" />
             </ImageListItem>
           ))}
         </ImageList>
       </Grid>
-      <Divider sx={{ width: '100%' }} />
+      <Divider sx={{ width: "100%" }} />
       <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт өрөө- "
@@ -179,10 +174,10 @@ export const ProductDetail = (id : string ) => {
       </Grid> */}
       <Button
         sx={{
-          backgroundColor: 'primary.main',
+          backgroundColor: "primary.main",
           color: (theme) => theme.palette.customColors.lightBg,
-          px: '30px',
-          left: '80%',
+          px: "30px",
+          left: "80%",
         }}
       >
         Худалдан авах

@@ -10,14 +10,12 @@ import {
   MenuItem,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum, ProductStatusEnum, ProductInput } from 'src/generated'
+import { ConstructionStatusEnum, ProductStatusEnum, ProductInput, useProductCreateMutation } from 'src/generated'
 import { RenderValues } from '../../../landing/home/components/CheckerGroup'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
 import DatePicker from 'react-datepicker'
-import { useMutation } from '@apollo/client'
-import { PRODUCT_CREATE } from '../../../landing/home/utils/mutation'
 
 function Thumb({ file }) {
   const [loading, setLoading] = React.useState(false);
@@ -55,7 +53,7 @@ function Thumb({ file }) {
 
 
 const CreateProduct = () => {
-  const [onCreateProduct] = useMutation(PRODUCT_CREATE)
+  const [onCreateProduct] = useProductCreateMutation()
   const submitHandler = (data: ProductInput) => {
     console.log('onSubmit === values', data)
 
@@ -281,7 +279,7 @@ const CreateProduct = () => {
                     <MenuItem key={'DEFAULT'} value={'DEFAULT'}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={'NEW'} value={'NEW'}>
+                    <MenuItem key={'NEWBUILDING'} value={'NEWBUILDING'}>
                       Шинэ
                     </MenuItem>
                     <MenuItem key={'SOON'} value={'SOON'}>

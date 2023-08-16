@@ -1,50 +1,50 @@
 import { gql } from "@apollo/client"
 
-export const PRODUCT_ORG = gql`
-  query ProductsOrg($input: ProductsOrgWhereInput) {
-    productsOrg(input: $input) {
+export const PRODUCTS = gql`
+  query products($input: ProductWhereInput) {
+    products(input: $input) {
       data {
-        address1
-        constStatus
-        city
-        description
-        district
-        floorNumber
-        floors
         id
         images
         name
-        organizationId
-        price
-        priceSqr
-        productStatus
-        releaseDate
+        address1
+        city
+        district
+        floors
+        floorNumber
         roomNumber
         sqr
+        priceSqr
+        price
+        description
+        releaseDate
+        constStatus
+        productStatus
+        organizationId
       }
     }
   }
 `
-export const PRODUCT_DETAIL = gql`
-  query Product($input: ProductWhereInput) {
+export const PRODUCT = gql`
+  query product($input: ProductUniqueWhereInput!) {
     product(input: $input) {
-      address1
-      city
-      constStatus
-      description
-      floorNumber
-      district
-      floors
       id
       images
       name
-      organizationId
-      price
-      priceSqr
-      productStatus
-      releaseDate
+      address1
+      city
+      district
+      floors
+      floorNumber
       roomNumber
       sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      productStatus
+      organizationId
     }
   }
 `
