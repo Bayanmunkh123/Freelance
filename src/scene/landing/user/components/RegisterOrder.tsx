@@ -148,12 +148,11 @@ const handleNext = () => {
 const handleBack = () => {
   setActiveStep(activeStep - 1);
 };
+
   return (
-   
-     
             <React.Fragment>
-                    {getStepContent(activeStep)}
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              {getStepContent(activeStep)}
+              <Box justifyContent={'center'} sx={{ display: 'flex', justifyContent: 'center',  marginTop: -40 }}>
                       {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 6, ml: 1 }}>
                           <ChevronLeftIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Буцах
@@ -167,10 +166,8 @@ const handleBack = () => {
                         <ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />{activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
                         
                       </Button>
-                     </Box>
+              </Box>
             </React.Fragment>
-
-  
   )
 }
 
