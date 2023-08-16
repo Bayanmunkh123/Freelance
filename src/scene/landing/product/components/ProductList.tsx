@@ -117,7 +117,7 @@ const ProductList = () => {
               >
                 <Box>
                   <img
-                    src={item.images}
+                    src={item.images || ''}
                     alt={'picture of estate'}
                     height={'320px'}
                     width={'100%'}

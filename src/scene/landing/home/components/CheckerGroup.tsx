@@ -1,7 +1,8 @@
-import { Field } from 'formik'
+import { Field, FieldInputProps } from 'formik'
 import { Button, Checkbox } from '@mui/material'
 import { RenderValues, RenderNumbers, RenderStatus } from 'src/@core/utils/initData'
 import { RenderValueType } from 'src/@core/utils/types'
+import { FilterType } from './FilterBuy'
 /**Icon imports*/
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -52,9 +53,8 @@ export const CheckerGroup = (props: CheckerGroupType) => {
           ) : null}
           {isStartIcon ? null : item.label}
           <Field name={name} size="small">
-            {({ field }) => (
+            {(field: FieldInputProps<FilterType>) => (
               <Checkbox
-                //checked={checked}
                 {...field}
                 value={item.value}
                 icon={CustomUncheckedIcon}

@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { ListData, ListDataType } from '../utils/ListData'
 import { useRouter } from 'next/router'
-import { useProductsQuery } from 'src/generated'
+import { useProductsLandingQuery } from 'src/generated'
 
 // function changeNot(): ListDataType[] {
 //   const getRandomInt = (max: number) =>
@@ -16,7 +16,7 @@ import { useProductsQuery } from 'src/generated'
 //   )
 // }
 export const SuggestCard = () => {
-  const {data} = useProductsQuery()
+  const {data} = useProductsLandingQuery()
   const router = useRouter()
   return (
     <>

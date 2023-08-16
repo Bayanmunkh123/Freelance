@@ -15,7 +15,7 @@ import { TextField } from 'formik-mui'
 import PickersComponent from '../create/DateInput'
 import DatePicker from 'react-datepicker'
 import { distNames } from 'src/@core/utils/initData'
-import { ProductInput } from 'src/generated'
+import { ProductInput, useProductQuery } from 'src/generated'
 import { mongolianProvinces } from 'src/@core/utils/initData'
 import { useProductUpdateMutation } from 'src/generated'
 
@@ -55,7 +55,7 @@ import { useProductUpdateMutation } from 'src/generated'
 // }
 
 
-const UpdateProduct = (id: string  ) => {
+const UpdateProduct = ({ id }: { id: string }) => {
 
 const { data } = useProductQuery({
     variables: {input: { id } },
@@ -63,7 +63,7 @@ const { data } = useProductQuery({
 
   console.log(data)
   const initialValues = {
-    id: data?.product?.id,
+    //id: data?.product?.id,
     name: data?.product?.name,
     constStatus: data?.product?.constStatus,
     productStatus: data?.product?.productStatus,
@@ -141,9 +141,18 @@ const { data } = useProductQuery({
                 },
               }}
             >
-            <input id="file" name="images" type="file" onChange={(event) => {
-                    formikProps.setFieldValue("images", event?.currentTarget?.files[0]);
-                  }} className="form-control" />
+           <input
+            id="file"
+            name="images"
+            type="file"
+            onChange={(event) => {
+              if (event?.currentTarget?.files) {
+                formikProps.setFieldValue("images", event.currentTarget.files[0]);
+              }
+            }}
+            className="form-control"
+          />
+
                   {/* //<Thumb file={formikProps.values.images} /> */}
               
               {/* <input
