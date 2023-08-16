@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react"
 import {
   Grid,
   Typography,
@@ -8,17 +8,16 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-} from '@mui/material'
-import { Formik, Form, Field } from 'formik'
-import { RenderValues } from 'src/@core/utils/initData'
-import { TextField } from 'formik-mui'
-import PickersComponent from '../create/DateInput'
-import DatePicker from 'react-datepicker'
-import { distNames } from 'src/@core/utils/initData'
-import { ProductInput, useProductQuery } from 'src/generated'
-import { mongolianProvinces } from 'src/@core/utils/initData'
-import { useProductUpdateMutation } from 'src/generated'
-
+} from "@mui/material"
+import { Formik, Form, Field } from "formik"
+import { RenderValues } from "src/@core/utils/initData"
+import { TextField } from "formik-mui"
+import PickersComponent from "../create/DateInput"
+import DatePicker from "react-datepicker"
+import { distNames } from "src/@core/utils/initData"
+import { ProductInput, useProductQuery } from "src/generated"
+import { mongolianProvinces } from "src/@core/utils/initData"
+import { useProductUpdateMutation } from "src/generated"
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -54,7 +53,6 @@ import { useProductUpdateMutation } from 'src/generated'
 //   );
 // }
 
-
 const UpdateProduct = ({ id }: { id: string }) => {
 
 const { data } = useProductQuery({
@@ -80,20 +78,20 @@ const { data } = useProductQuery({
     releaseDate: data?.product?.releaseDate,
     floors: data?.product?.floors,
     floorNumber: data?.product?.floorNumber,
-    //highlights: 
+    //highlights:
     city: data?.product?.city,
     district: data?.product?.district,
     organizationId: data?.product?.organizationId,
     priceSqr: data?.product?.priceSqr,
-  }
+  } as ProductInput
   const [onUpdateProduct] = useProductUpdateMutation()
   const submitHandler = (_values: ProductInput) => {
-    console.log('onSubmit === values', data)
+    console.log("onSubmit === values", data)
     onUpdateProduct({
       variables: {
         id: id,
         input: {
-          images: '',
+          images: "",
           name: _values.name,
           city: _values.city,
           district: _values.district,
@@ -108,7 +106,7 @@ const { data } = useProductQuery({
           constStatus: _values.constStatus,
           productStatus: _values.productStatus,
           description: _values.description,
-          organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
+          organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
         },
       },
     })
@@ -120,9 +118,7 @@ const { data } = useProductQuery({
         Үндсэн мэдээлэл засах
       </Typography>
       <Formik
-        initialValues={
-          initialValues
-        }
+        initialValues={initialValues}
         //validationSchema={validationCreateProductSchema}
         onSubmit={(values: ProductInput, formikHelpers) => {
           console.log(values)
@@ -136,8 +132,8 @@ const { data } = useProductQuery({
               direction="column"
               rowGap="20px"
               sx={{
-                '& .MuiGrid-root': {
-                  columnGap: '20px',
+                "& .MuiGrid-root": {
+                  columnGap: "20px",
                 },
               }}
             >
@@ -169,7 +165,7 @@ const { data } = useProductQuery({
                   label="Төслийн нэр"
                   labelId="name-select"
                   onChange={(event) => {
-                    formikProps.handleChange('name')(event.target.value)
+                    formikProps.handleChange("name")(event.target.value)
                   }}
                 >
                   {RenderValues?.map((name) => (
@@ -187,7 +183,7 @@ const { data } = useProductQuery({
                   label="Аймгийн нэр"
                   labelId="city-select"
                   onChange={(event) => {
-                    formikProps.handleChange('city')(event.target.value)
+                    formikProps.handleChange("city")(event.target.value)
                   }}
                 >
                   {mongolianProvinces?.map((name) => (
@@ -205,7 +201,7 @@ const { data } = useProductQuery({
                   label="Дүүрэг"
                   labelId="district-select"
                   onChange={(event) => {
-                    formikProps.handleChange('district')(event.target.value)
+                    formikProps.handleChange("district")(event.target.value)
                   }}
                 >
                   {distNames?.map((name) => (
@@ -250,7 +246,7 @@ const { data } = useProductQuery({
                 popperPlacement="bottom-start"
                 name="releaseDate"
                 onChange={(date: Date) =>
-                  formikProps.setFieldValue('releaseDate', date)
+                  formikProps.setFieldValue("releaseDate", date)
                 }
                 customInput={<PickersComponent label="Хугацаа сонгох" />}
               />
@@ -296,21 +292,21 @@ const { data } = useProductQuery({
                     label="Барилгын Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange('constStatus')(
+                      formikProps.handleChange("constStatus")(
                         event.target.value,
                       )
                     }}
                   >
-                    <MenuItem key={'DEFAULT'} value={'DEFAULT'}>
+                    <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={'NEW'} value={'NEW'}>
+                    <MenuItem key={"NEW"} value={"NEW"}>
                       Шинэ
                     </MenuItem>
-                    <MenuItem key={'SOON'} value={'SOON'}>
+                    <MenuItem key={"SOON"} value={"SOON"}>
                       Тун удахгүй
                     </MenuItem>
-                    <MenuItem key={'OLD'} value={'OLD'}>
+                    <MenuItem key={"OLD"} value={"OLD"}>
                       Хуучин
                     </MenuItem>
                   </Select>
@@ -323,18 +319,18 @@ const { data } = useProductQuery({
                     label="Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange('productStatus')(
+                      formikProps.handleChange("productStatus")(
                         event.target.value,
                       )
                     }}
                   >
-                    <MenuItem key={'DEFAULT'} value={'DEFAULT'}>
+                    <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={'NEW'} value={'NEW'}>
+                    <MenuItem key={"NEW"} value={"NEW"}>
                       Шинэ
                     </MenuItem>
-                    <MenuItem key={'HIGHLIGTH'} value={'HIGHLIGTH'}>
+                    <MenuItem key={"HIGHLIGTH"} value={"HIGHLIGTH"}>
                       Онцлох
                     </MenuItem>
                   </Select>

@@ -6,6 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material"
+
 interface myCompanyDataType {
   description: string
   email: string
@@ -26,22 +27,22 @@ export const MainInfo = () => {
   return (
     <Card>
       <Typography>Тухай</Typography>
-      <Typography>{data.description}</Typography>
+      <Typography>{data?.description}</Typography>
       <List>
         <ListItem>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary="И-мэйл" secondary={data.email} />
+          <ListItemIcon />
+          <ListItemText primary="И-мэйл" secondary={data?.email} />
         </ListItem>
         <ListItem>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary="Утасны дугаар" secondary={data.phoneNumber} />
+          <ListItemIcon />
+          <ListItemText primary="Утасны дугаар" secondary={data?.phoneNumber} />
         </ListItem>
         <ListItem>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary="Вэб хуудас" secondary={data.webUrl} />
+          <ListItemIcon />
+          <ListItemText primary="Вэб хуудас" secondary={data?.webUrl} />
         </ListItem>
         <ListItem>
-          <ListItemIcon></ListItemIcon>
+          <ListItemIcon />
           <ListItemText primary="Хаяг" secondary={data.location} />
         </ListItem>
       </List>
