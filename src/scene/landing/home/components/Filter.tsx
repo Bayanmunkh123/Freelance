@@ -49,7 +49,10 @@ export default function Filter() {
           >
             Бүх шүүлтүүр
           </Typography>
-          <Icon icon={"mdi:close"} onChange={handleClose} />
+          <Button onClick={handleClose}>
+            <Icon icon={"mdi:close"} />
+          </Button>
+          
         </Grid>
         <FilterDialog />
       </Dialog>

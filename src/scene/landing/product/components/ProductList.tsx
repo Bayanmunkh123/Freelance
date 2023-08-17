@@ -11,12 +11,10 @@ import IconButton from '@mui/material/IconButton'
 import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
-import { ConstructionStatusEnum, ProductStatusEnum, useProductsLandingQuery } from 'src/generated'
+import { ProductStatusEnum, useProductsLandingQuery } from 'src/generated'
 
 // ** Icon Imports
-import PinDropOutlinedIcon from '@mui/icons-material/PinDropOutlined'
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
+import Icon from 'src/@core/components/icon'
 import { Header, SubHeader } from '../../home/components/Header'
 interface InputType {
   name: string;
@@ -25,28 +23,23 @@ interface InputType {
 const ProductList = () => {
   //const {name, type} = props
   const { data } = useProductsLandingQuery()
-  function changeNot(): ListDataType[] {
-    console.log(data)
-    const getRandomInt = (max: number) =>
-      Math.floor(Math.random() * Math.floor(max))
+  
+  // function changeNot(): ListDataType[] {
+  //   const getRandomInt = (max: number) =>
+  //     Math.floor(Math.random() * Math.floor(max))
 
-    return Array.from(new Array(5)).map(
-      () => ListData[getRandomInt(ListData.length)],
-    )
-  }
-  const data1 = changeNot()
+  //   return Array.from(new Array(5)).map(
+  //     () => ListData[getRandomInt(ListData.length)],
+  //   )
+  // }
+  // const data1 = changeNot()
   const router = useRouter()
-  const [icon, setIcon] = React.useState<JSX.Element>(
-    <FavoriteBorderOutlinedIcon color="error" />,
-  )
+  const [icon, setIcon] = React.useState<string>( "material-symbols:favorite-outline")
   const [liked, setLiked] = React.useState<boolean>(false)
-  const getIcon = () => {
-    return icon
-  }
   const handleChange = () => {
     setLiked(!liked)
-    if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
-    else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
+    if (liked) setIcon("material-symbols:favorite")
+    else setIcon("material-symbols:favorite-outline")
   }
 
   return (
@@ -59,7 +52,7 @@ const ProductList = () => {
       }}
     >
       <Header />
-      <SubHeader count={data?.products?.data?.length} />
+      {data?.products?.data?.length ? <SubHeader count={data?.products?.data?.length} /> : <Typography>Хайлтын үр дүн байхгүй байна</Typography>}
       {data?.products?.data?.map((item, index: number) => (
         <Box
           key={item.id}
@@ -117,7 +110,7 @@ const ProductList = () => {
               >
                 <Box>
                   <img
-                    src={item.images || ''}
+                    src={item.images ? item.images : 'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800'}
                     alt={'picture of estate'}
                     height={'320px'}
                     width={'100%'}
@@ -142,7 +135,7 @@ const ProductList = () => {
                         marginBottom: 4,
                       }}
                     >
-                      <PinDropOutlinedIcon />
+                      <Icon icon="ic:outline-pin-drop" />
                       <Typography variant="body2">
                         {item.city} {item.district} {item.address1}
                       </Typography>
@@ -161,24 +154,24 @@ const ProductList = () => {
                       <DetailedBox
                         title={`${item.roomNumber}`}
                         subTitle="өрөө"
-                        icon="MeetingRoomOutlinedIcon"
+                        icon="material-symbols:meeting-room-outline"
                       />
                       <DetailedBox
                         title={'1'}
                         subTitle="унтлагын өрөө"
-                        icon="HotelIcon"
+                        icon="icon-park-solid:sleep-two"
                       />
                     </Grid>
                     <Grid item xs={12} sm={3}>
                       <DetailedBox
                         title={`${item.sqr}`}
                         subTitle="метр квадрат"
-                        icon="CompareArrowsIcon"
+                        icon="ic:baseline-compare-arrows"
                       />
                       <DetailedBox
                         title={'1'}
                         subTitle="угаалгын өрөө"
-                        icon="BathtubOutlinedIcon"
+                        icon="fa:bathtub"
                       />
                     </Grid>
                     <Grid
@@ -197,7 +190,7 @@ const ProductList = () => {
                         onClick={handleChange}
                         sx={{ border: `1px solid #DEDEDE}`, borderRadius: 100 }}
                       >
-                        {getIcon()}
+                        {<Icon icon={icon} />}
                       </IconButton>
                     </Grid>
                   </Grid>

@@ -20,18 +20,19 @@ import { CheckerGroup } from './CheckerGroup'
 
 import { distNames } from 'src/@core/utils/initData'
 import { ProductStatusEnum } from 'src/generated'
+import { filterApartmentSchema } from 'src/@core/utils/types'
 
 export interface FilterType{
   location: string,
   type: string,
-  price: number[],
-  size: number,
+  price: never[],
+  size: never[],
   roomNo: number,
   status: ProductStatusEnum,
 
 
 }
-interface CustomSliderProps {
+interface CustomSliderProps{
   name: string;
   min?: number;
   max?: number;
@@ -44,14 +45,14 @@ export const CustomSlider: React.FC<CustomSliderProps> = (props) => {
   const [field] = useField(props);
   return <Slider {...field} {...props} />;
 };
-interface CustomizedTextFieldProps {
+export interface CustomizedProps {
   form: FormikProps<FilterType>;
   field: FieldInputProps<FilterType>;
 }
-interface CustomizedSelectForFormikProps extends CustomizedTextFieldProps {
+interface CustomizedSelectProps extends CustomizedProps {
   children: React.ReactNode;
 }
-const CustomizedSelectForFormik: React.FC<CustomizedSelectForFormikProps>= ({ children, form, field }) => {
+const CustomizedSelect: React.FC<CustomizedSelectProps>= ({ children, form, field }) => {
   const { name, value } = field
   const { setFieldValue } = form
   const handleDelete = (deleteValue: string) => {
@@ -93,7 +94,7 @@ const CustomizedSelectForFormik: React.FC<CustomizedSelectForFormikProps>= ({ ch
 }
 
 
-const CustomizedTextField: React.FC<CustomizedTextFieldProps> = ({ form, field }) => {
+const CustomizedTextField: React.FC<CustomizedProps> = ({ form, field }) => {
   const { name, value } = field;
   const { setFieldValue } = form;
 
@@ -122,21 +123,21 @@ export const FilterBuy = () => {
         type: '',
         price: [],
         size: [],
-        roomNo: [],
-        status: '',
+        roomNo: 0,
+        status: ProductStatusEnum.DEFAULT,
       }}
-      //validationSchema={filterApartmentSchema}
+      validationSchema={filterApartmentSchema}
       onSubmit={(values, { resetForm }) => {
         console.log(values)
         resetForm()
         // router.push('/product');
       }}
     >
-      {(formik) => (
+      {(formikProps) => (
         <Form className="formBuy">
           <FormControl>
             <InputLabel id="demo-simple-select-label">Байршил</InputLabel>
-            <Field name="location" component={CustomizedSelectForFormik}>
+            <Field name="location" component={CustomizedSelect}>
               {distNames.map((name) => (
                 <MenuItem key={name} value={name}>
                   {name}
@@ -153,6 +154,7 @@ export const FilterBuy = () => {
               isStartIcon={false}
               isNumber={false}
               isStatus={false}
+              form={formikProps}
             />
           </Grid>
           <Typography>Үнэ</Typography>
@@ -216,6 +218,7 @@ export const FilterBuy = () => {
               isStartIcon={true}
               isNumber={true}
               isStatus={false}
+              form={formikProps}
             />
           </Grid>
           <Grid container columnGap="10px" rowGap="20px">
@@ -226,6 +229,7 @@ export const FilterBuy = () => {
               isStartIcon={true}
               isNumber={false}
               isStatus={true}
+              form={formikProps}
             />
           </Grid>
           <Grid container columnGap="10px">
@@ -235,7 +239,7 @@ export const FilterBuy = () => {
               color="primary"
               type="reset"
               onClick={() => {
-                formik.resetForm({})
+                formikProps.resetForm({})
               }}
             >
               Цэвэрлэх

@@ -1,3 +1,4 @@
+import { ConstructionStatusEnum, ProductStatusEnum } from "src/generated"
 import { mongolianProvincesType } from "./types"
 import { RenderValueType } from "./types"
 
@@ -153,7 +154,7 @@ export const RenderValues: RenderValueType[] = [
   },
   {
     label: "Агуулах",
-    value: "warehouse",
+    value: "Агуулах",
   },
   {
     label: "Нийтийн байр",
@@ -189,14 +190,18 @@ export const RenderNumbers: RenderValueType[] = [
 export const RenderStatus: RenderValueType[] = [
   {
     label: "Тун удахгүй",
-    value: "soon",
+    value: ConstructionStatusEnum.SOON,
   },
   {
     label: "Шинэ",
-    value: "new",
+    value: ConstructionStatusEnum.NEWBUILDING,
   },
   {
     label: "Хуучин",
-    value: "old",
+    value: ConstructionStatusEnum.OLD,
+  },
+  {
+    label: "Байхгүй",
+    value: ConstructionStatusEnum.DEFAULT,
   },
 ]

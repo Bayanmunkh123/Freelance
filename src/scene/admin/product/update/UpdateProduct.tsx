@@ -8,6 +8,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Box,
 } from "@mui/material"
 import { Formik, Form, Field } from "formik"
 import { RenderValues } from "src/@core/utils/initData"
@@ -18,6 +19,8 @@ import { distNames } from "src/@core/utils/initData"
 import { ProductInput, useProductQuery } from "src/generated"
 import { mongolianProvinces } from "src/@core/utils/initData"
 import { useProductUpdateMutation } from "src/generated"
+import { useRouter } from "next/router"
+import Icon from "src/@core/components/icon"
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -58,15 +61,13 @@ const UpdateProduct = ({ id }: { id: string }) => {
 const { data } = useProductQuery({
     variables: {input: { id } },
   })
-
-  console.log(data)
   const initialValues = {
-    //id: data?.product?.id,
+    id: data?.product?.id,
     name: data?.product?.name,
     constStatus: data?.product?.constStatus,
     productStatus: data?.product?.productStatus,
     description: data?.product?.description,
-    address1: data?.product?.description,
+    address1: data?.product?.address1,
     roomNumber: data?.product?.roomNumber,
     // bedNo: number;
     // bathNo: number;
@@ -75,7 +76,7 @@ const { data } = useProductQuery({
     //isFav: data?.product?
     images: data?.product?.images,
     //parking: number;
-    releaseDate: data?.product?.releaseDate,
+    releaseDate: new Date(),
     floors: data?.product?.floors,
     floorNumber: data?.product?.floorNumber,
     //highlights:
@@ -86,7 +87,7 @@ const { data } = useProductQuery({
   } as ProductInput
   const [onUpdateProduct] = useProductUpdateMutation()
   const submitHandler = (_values: ProductInput) => {
-    console.log("onSubmit === values", data)
+    console.log("onSubmit === values", _values)
     onUpdateProduct({
       variables: {
         id: id,
@@ -111,17 +112,12 @@ const { data } = useProductQuery({
       },
     })
   }
-
+const router = useRouter()
   return (
-    <>
-      <Typography variant="h6" fontWeight="bold">
-        Үндсэн мэдээлэл засах
-      </Typography>
+    <Box display="flex" justifyContent="center" >
       <Formik
         initialValues={initialValues}
-        //validationSchema={validationCreateProductSchema}
         onSubmit={(values: ProductInput, formikHelpers) => {
-          console.log(values)
           submitHandler(values)
           formikHelpers.setSubmitting(false)
         }}
@@ -131,12 +127,18 @@ const { data } = useProductQuery({
             <Stack
               direction="column"
               rowGap="20px"
+              width="1000px"
               sx={{
                 "& .MuiGrid-root": {
                   columnGap: "20px",
+                  rowGap: "20px"
                 },
               }}
             >
+              <Button variant="outlined" onClick={()=> router.back()} startIcon={<Icon icon={"mdi:arrow-left"} />} sx={{alignSelf: "flex-start"}}>Буцах</Button>
+              <Typography variant="h6" fontWeight="bold">
+        Үндсэн мэдээлэл засах
+      </Typography>
            <input
             id="file"
             name="images"
@@ -300,7 +302,7 @@ const { data } = useProductQuery({
                     <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={"NEW"} value={"NEW"}>
+                    <MenuItem key={"NEW"} value={"NEWBUILDING"}>
                       Шинэ
                     </MenuItem>
                     <MenuItem key={"SOON"} value={"SOON"}>
@@ -344,12 +346,12 @@ const { data } = useProductQuery({
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Button type="submit">Хадгалах</Button>
+              <Button type="submit" variant="contained" sx={{alignSelf: "flex-end"}}>Хадгалах</Button>
             </Stack>
           </Form>
         )}
       </Formik>
-    </>
+    </Box>
   )
 }
 export default UpdateProduct

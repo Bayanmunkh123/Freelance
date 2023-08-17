@@ -17,27 +17,18 @@ import {
   Chip,
 } from '@mui/material'
 
-//** Icon imports*/
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import RedoIcon from '@mui/icons-material/Redo'
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
-import CloseIcon from '@mui/icons-material/Close'
-
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 
 import { useRouter } from 'next/router'
 export const Header = () => {
-  const [icon, setIcon] = React.useState<JSX.Element>(<KeyboardArrowDownIcon />)
+  const [icon, setIcon] = React.useState<JSX.Element>(<Icon icon={"mdi:arrow-down"} />)
   const [type, setType] = React.useState<string>('')
   const [open, setOpen] = React.useState(false)
 
   const handleChange = (event: SelectChangeEvent<typeof type>) => {
     setType(event.target.value)
-    setIcon(<CloseIcon />)
+    setIcon(<Icon icon="material-symbols:close" />)
   }
 
   const handleClose = () => {
@@ -137,7 +128,7 @@ export const SubHeader = (props: Props) => {
           value={value}
           label="Эрэмбэ"
           onChange={handleChange}
-          IconComponent={UnfoldMoreIcon}
+          //IconComponent={<Icon icon="ci:unfold-more"/>}
         >
           <MenuItem value="">
             <em>None</em>
@@ -151,17 +142,12 @@ export const SubHeader = (props: Props) => {
   )
 }
 export const DetailHeader = () => {
-  const [icon, setIcon] = React.useState<JSX.Element>(
-    <FavoriteBorderOutlinedIcon color="error" />,
-  )
+  const [icon, setIcon] = React.useState<string>( "material-symbols:favorite-outline")
   const [liked, setLiked] = React.useState<boolean>(false)
-  const getIcon = () => {
-    return icon
-  }
   const handleChange = () => {
     setLiked(!liked)
-    if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
-    else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
+    if (liked) setIcon("material-symbols:favorite")
+    else setIcon("material-symbols:favorite-outline")
   }
   const router = useRouter()
   return (
@@ -169,9 +155,7 @@ export const DetailHeader = () => {
       <Stack direction="row" columnGap="10px">
         <Button
           startIcon={
-            <ArrowBackIcon
-              sx={{ color: (theme) => theme.palette.primary.main }}
-            />
+            <Icon icon={"mdi:arrow-left"} />
           }
           sx={{
             color: (theme) => theme.palette.grey[600],
@@ -202,9 +186,9 @@ export const DetailHeader = () => {
         }}
       >
         <IconButton sx={{ color: (theme) => theme.palette.primary.main }}>
-          <RedoIcon />
+          <Icon icon="mdi:redo" />
         </IconButton>
-        <IconButton onClick={handleChange}>{getIcon()}</IconButton>
+        <IconButton onClick={handleChange}><Icon icon={icon} color='red' /></IconButton>
       </Stack>
     </Grid>
   )

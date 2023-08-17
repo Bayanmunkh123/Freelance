@@ -67,14 +67,14 @@ export interface mongolianProvincesType {
 }
 
 export const filterApartmentSchema = yup.object().shape({
-  location: yup.string(),
-  type: yup.string(),
-  price: yup.number(),
-  size: yup.number(),
-  roomNo: yup.number(),
-  status: yup.string(),
+  location: yup.string().required(),
+  type: yup.string().required(),
+  price: yup.number().required(),
+  size: yup.number().required(),
+  roomNo: yup.number().required(),
+  status: yup.string().required(),
 })
 export interface RenderValueType {
-  label: string | number
-  value: string | number
+  label: string | number | ConstructionStatusEnum
+  value: string | number | ConstructionStatusEnum
 }

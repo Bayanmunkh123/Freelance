@@ -8,10 +8,11 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Box,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
 import { ConstructionStatusEnum, ProductStatusEnum, ProductInput, useProductCreateMutation } from 'src/generated'
-import { RenderValues } from '../../../landing/home/components/CheckerGroup'
+import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
@@ -83,10 +84,7 @@ const CreateProduct = () => {
   }
 
   return (
-    <>
-      <Typography variant="h6" fontWeight="bold">
-        Үндсэн мэдээлэл
-      </Typography>
+    <Box display="flex" justifyContent="center"  >
       <Formik
         initialValues={{
           images: '',
@@ -109,7 +107,6 @@ const CreateProduct = () => {
         }}
         //validationSchema={validationCreateProductSchema}
         onSubmit={(values: ProductInput, formikHelpers) => {
-          console.log(values)
           submitHandler(values)
           formikHelpers.setSubmitting(false)
         }}
@@ -119,12 +116,15 @@ const CreateProduct = () => {
             <Stack
               direction="column"
               rowGap="20px"
+              width="1000px"
               sx={{
                 '& .MuiGrid-root': {
-                  columnGap: '20px',
+                  rowGap: '20px',
+                  columnGap: '20px'
                 },
               }}
             >
+            <Typography variant="h6" fontWeight="bold">Үндсэн мэдээлэл</Typography>
              <input
             id="file"
             name="images"
@@ -324,12 +324,12 @@ const CreateProduct = () => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Button type="submit">үүсгэх</Button>
+              <Button type="submit" variant='contained' sx={{alignSelf: 'flex-end'}}>үүсгэх</Button>
             </Stack>
           </Form>
         )}
       </Formik>
-    </>
+    </Box>
   )
 }
 export default CreateProduct

@@ -21,7 +21,7 @@ export const SuggestCard = () => {
   return (
     <>
       {data?.products?.data?.map((item, index: number) => (
-        <Grid item key={index} sx={{minHeight: "320px"}}>
+        <Grid item key={index} sx={{ width: "360px"}}>
           <CardMedia
             sx={{
               height: 140,
@@ -37,6 +37,7 @@ export const SuggestCard = () => {
             sx={{
               p: (theme) => `${theme.spacing(4, 5)} !important`,
               maxWidth: 360,
+              height: 140
             }}
           >
             <Typography variant="h6" sx={{ mb: 2 }}>

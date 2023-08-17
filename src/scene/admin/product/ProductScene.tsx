@@ -1,6 +1,5 @@
 import {
   ProductStatusEnum,
-  ConstructionStatusEnum,
   ProductsQuery,
 } from "src/generated"
 import * as React from "react"
@@ -8,12 +7,13 @@ import Box from "@mui/material/Box"
 import IconButton from "@mui/material/IconButton"
 import Link from "next/link"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import { ListClassKey, Tooltip, Typography } from "@mui/material"
+import { Tooltip, Typography } from "@mui/material"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 
 import { useProductsQuery } from "src/generated"
+import { color } from "@mui/system"
 
 type ProductType = {
   id: string
@@ -62,7 +62,7 @@ const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Үл хөдлөх",
-    width: 250,
+    width: 200,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
@@ -91,7 +91,6 @@ const columns: GridColDef[] = [
   {
     field: "priceSqr",
     headerName: "Үнэ",
-    type: "number",
     width: 150,
     editable: true,
     sortable: true,
@@ -106,14 +105,14 @@ const columns: GridColDef[] = [
   {
     field: "releaseDate",
     headerName: "Хугацаа",
-    width: 150,
+    width: 200,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
       const { releaseDate } = row
       return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography>{releaseDate ? releaseDate: ""}</Typography>
+          <Typography>{releaseDate ? releaseDate : ""}</Typography>
         </Box>
       )
     },
@@ -139,11 +138,11 @@ const columns: GridColDef[] = [
           >
             <IconButton size="small" sx={{ mr: 0.5 }}>
               {productStatus === ProductStatusEnum.NEW ? (
-                <Icon icon={"mdi:new-box"} color="warning" />
+                <Icon icon={"mdi:new-box"} color="red" />
               ) : productStatus === ProductStatusEnum.HIGHLIGTH ? (
-                <Icon icon={"mdi:star-outline"} color="error" />
+                <Icon icon={"mdi:star-outline"} color="#72E128" />
               ) : (
-                <Icon icon={"mdi:home-city-outline"} color="primary" />
+                <Icon icon={"mdi:home-city-outline"} color="#0361C9" />
               )}
             </IconButton>
           </Tooltip>
