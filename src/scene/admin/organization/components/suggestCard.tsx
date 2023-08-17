@@ -9,7 +9,7 @@ const SuggestCard = () => {
   return (
     <Card sx={{width: 1000}}>
       <CardMedia
-        sx={{ height: 150 }}
+        sx={{ height: 170 }}
         image={"https://kmcmaggroup.com/ImageGen.ashx?image=/media/2071/the-differences-between-grade-a-and-grade-b-buildings.jpg&Compression=70"}
       />
       <CardContent sx={{ p: (theme) => `${theme.spacing(4, 5)} !important` }}>

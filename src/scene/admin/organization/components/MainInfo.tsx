@@ -30,11 +30,11 @@ export const MainInfo = () => {
     <Card >
       <Typography>Тухай</Typography>
       <Typography padding={'10px'} >{data?.description}</Typography>
-      <List>
+      <List sx={{'& .MuiListItemText-root':{pl: '10px'}}}>
 
-        <ListItem>
+        <ListItem >
         <Icon icon="mdi:email" fontSize={20} />
-          <ListItemText primary="И-мэйл" secondary={data?.email} />
+          <ListItemText primary="И-мэйл" secondary={data?.email}  />
         </ListItem>
         <ListItem>
         <Icon icon="mdi:phone" fontSize={20} />
