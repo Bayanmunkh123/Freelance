@@ -268,32 +268,32 @@ export const RoleListTable = () => {
 
   const clearSearch = () => setSearchValue("")
   
-  const { data: rolesList } = useRolesQuery({
-    fetchPolicy: "no-cache",
-    onError: (error: unknown) => {
-      alert(error)
-    },
-  })
+  // const { data: rolesList } = useRolesQuery({
+  //   fetchPolicy: "no-cache",
+  //   onError: (error: unknown) => {
+  //     alert(error)
+  //   },
+  // })
 
-  const {
-    data,
-    loading: organizationUserLoading,
-    refetch,
-  } = useOrganizationUsersQuery({
-    // fetchPolicy: "no-cache",
-    variables: {
-      input: {
-        // ...variables,
-        orgRole: "EDITOR" as OrganizationUserRoleEnum,
-      },
-    },
-    onCompleted: (data) => {
-      console.log(data)
-    },
-    onError: (error: unknown) => {
-      alert(error)
-    },
-  })
+  // const {
+  //   data,
+  //   loading: organizationUserLoading,
+  //   refetch,
+  // } = useOrganizationUsersQuery({
+  //   // fetchPolicy: "no-cache",
+  //   variables: {
+  //     input: {
+  //       // ...variables,
+  //       orgRole: "EDITOR" as OrganizationUserRoleEnum,
+  //     },
+  //   },
+  //   onCompleted: (data) => {
+  //     console.log(data)
+  //   },
+  //   onError: (error: unknown) => {
+  //     alert(error)
+  //   },
+  // })
 
   const handleFilter = (val: string) => {
     // onSearch("orgRole", val)

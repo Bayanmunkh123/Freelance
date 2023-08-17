@@ -69,10 +69,11 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: "Хэрэглэгч",
+      path: "/admin/orgusers",
       icon: "mdi:account-outline",
-      path: "/pages/index",
-      subject: "User",
-      auth: false,
+      action: "read",
+      subject: "Admin_Users",
+      auth: true,
     },
   ]
 }
