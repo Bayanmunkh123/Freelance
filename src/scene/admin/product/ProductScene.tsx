@@ -1,5 +1,5 @@
 import {
-  ProductStatusEnum,
+  BannerStatusEnum,
   ProductsQuery,
 } from "src/generated"
 import * as React from "react"
@@ -13,7 +13,6 @@ import { Tooltip, Typography } from "@mui/material"
 import Icon from "src/@core/components/icon"
 
 import { useProductsQuery } from "src/generated"
-import { color } from "@mui/system"
 
 type ProductType = {
   id: string
@@ -24,7 +23,7 @@ type ProductType = {
   sqr: number
   priceSqr: number | null | undefined
   releaseDate: Date
-  productStatus: ProductStatusEnum
+  productStatus: BannerStatusEnum
 }
 
 interface CellType {
@@ -129,17 +128,17 @@ const columns: GridColDef[] = [
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Tooltip
             title={
-              productStatus === ProductStatusEnum.NEW
+              productStatus === BannerStatusEnum.NEW
                 ? "Шинэ"
-                : productStatus === ProductStatusEnum.HIGHLIGTH
+                : productStatus === BannerStatusEnum.HIGHLIGTH
                 ? "Онцлох"
                 : "Энгийн"
             }
           >
             <IconButton size="small" sx={{ mr: 0.5 }}>
-              {productStatus === ProductStatusEnum.NEW ? (
+              {productStatus === BannerStatusEnum.NEW ? (
                 <Icon icon={"mdi:new-box"} color="red" />
-              ) : productStatus === ProductStatusEnum.HIGHLIGTH ? (
+              ) : productStatus === BannerStatusEnum.HIGHLIGTH ? (
                 <Icon icon={"mdi:star-outline"} color="#72E128" />
               ) : (
                 <Icon icon={"mdi:home-city-outline"} color="#0361C9" />
@@ -190,7 +189,7 @@ function getRows(data: ProductsQuery | undefined) {
       priceSqr: item.priceSqr,
       releaseDate: item.releaseDate,
       isFav: true,
-      productStatus: item.productStatus,
+      productStatus: item.bannerStatus,
     })
   })
   return rows

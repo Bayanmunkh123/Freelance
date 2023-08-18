@@ -10,7 +10,7 @@ import ImageListItem from "@mui/material/ImageListItem"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
-import { ListData } from "../utils/ListData"
+import { ListData } from "src/@core/utils/initData"
 import { DetailedBox } from "./DetailedBox"
 import Grid from "@mui/material/Grid"
 import { DetailHeader } from "../../home/components/Header"
@@ -18,6 +18,7 @@ import { ConstructionStatusEnum, useProductLandingQuery } from "src/generated"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
+import { IconButton } from "@mui/material"
 
 export const ProductDetail = ({ id }: { id: string }) => {
   console.log(id)
@@ -88,7 +89,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
         />
         <DetailedBox
           title="Угаалгын өрөө- "
-          subTitle={`${ListData[0].bathNo}`}
+          subTitle={`${data?.product?.ProductRooms?.bathNumber}`}
           icon="fa:bathtub"
         />
         <DetailedBox
@@ -98,7 +99,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
         />
         <DetailedBox
           title="Унтлагын өрөө- "
-          subTitle={`${ListData[0].bedNo}`}
+          subTitle={`${data?.product?.ProductRooms?.bedNumber}`}
           icon="icon-park-solid:sleep-two"
         />
       </Grid>
@@ -147,7 +148,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
       <Typography variant="h6" fontWeight="bold">
         Онцлог
       </Typography>
-      {/* <Grid container columnGap="20px" rowGap="20px">
+      <Grid container columnGap="20px" rowGap="20px">
         {ListData[0].highlights.map((item) => (
           <Button
             key={item}
@@ -169,12 +170,12 @@ export const ProductDetail = ({ id }: { id: string }) => {
             }}
           >
             <IconButton>
-              <CheckCircleIcon />
+              <Icon icon={"mdi:check-circle"} />
             </IconButton>
             {item}
           </Button>
         ))}
-      </Grid> */}
+      </Grid>
       <Button
         sx={{
           backgroundColor: "primary.main",

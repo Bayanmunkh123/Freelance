@@ -11,12 +11,15 @@ import {
   Box,
 } from '@mui/material'
 import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum, ProductStatusEnum, ProductInput, useProductCreateMutation } from 'src/generated'
+import { ConstructionStatusEnum, BannerStatusEnum, ProductInput, useProductCreateMutation } from 'src/generated'
 import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
-import DatePicker from 'react-datepicker'
+import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
+
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -54,6 +57,7 @@ import DatePicker from 'react-datepicker'
 
 
 const CreateProduct = () => {
+  //const popperPlacement: ReactDatePickerProps['popperPlacement'] 
   const [onCreateProduct] = useProductCreateMutation()
   const submitHandler = (data: ProductInput) => {
     console.log('onSubmit === values', data)
@@ -75,7 +79,7 @@ const CreateProduct = () => {
           floorNumber: data.floorNumber,
           roomNumber: data.roomNumber,
           constStatus: data.constStatus,
-          productStatus: data.productStatus,
+          bannerStatus: data.bannerStatus,
           description: data.description,
           organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
         },
@@ -100,7 +104,7 @@ const CreateProduct = () => {
           floorNumber: 1,
           roomNumber: 1,
           constStatus: ConstructionStatusEnum.NEWBUILDING,
-          productStatus: ProductStatusEnum.HIGHLIGTH,
+          productStatus: BannerStatusEnum.HIGHLIGTH,
           description: '',
           price: 0,
           organizationId: '',
@@ -220,7 +224,7 @@ const CreateProduct = () => {
                   size="medium"
                 />
               </Grid>
-              <DatePicker
+              <DatePickerWrapper><DatePicker
                 selected={formikProps.values.releaseDate}
                 id="basic-input"
                 popperPlacement="bottom-start"
@@ -229,7 +233,8 @@ const CreateProduct = () => {
                   formikProps.setFieldValue('releaseDate', date)
                 }
                 customInput={<PickersComponent label="Хугацаа сонгох" />}
-              />
+              /></DatePickerWrapper>
+              
               <Grid container>
                 <Typography>Нийт давхарын тоо</Typography>
                 <Typography>Давхарын тоо</Typography>
@@ -294,7 +299,7 @@ const CreateProduct = () => {
                 <FormControl>
                   <InputLabel id="select-status">Статус</InputLabel>
                   <Select
-                    value={formikProps.values.productStatus}
+                    value={formikProps.values.bannerStatus}
                     id="select-status"
                     label="Статус"
                     labelId="status-select"

@@ -21,6 +21,8 @@ import { mongolianProvinces } from "src/@core/utils/initData"
 import { useProductUpdateMutation } from "src/generated"
 import { useRouter } from "next/router"
 import Icon from "src/@core/components/icon"
+import DatePickerWrapper from "src/@core/styles/libs/react-datepicker"
+import formatISO from "date-fns/formatISO"
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -58,14 +60,16 @@ import Icon from "src/@core/components/icon"
 
 const UpdateProduct = ({ id }: { id: string }) => {
 
-const { data } = useProductQuery({
-    variables: {input: { id } },
+  const { data } = useProductQuery({
+      variables: {input: { id } },
   })
+  const parsedDate = new Date(data?.product?.releaseDate)
+
   const initialValues = {
     id: data?.product?.id,
     name: data?.product?.name,
     constStatus: data?.product?.constStatus,
-    productStatus: data?.product?.productStatus,
+    bannerStatus: data?.product?.bannerStatus,
     description: data?.product?.description,
     address1: data?.product?.address1,
     roomNumber: data?.product?.roomNumber,
@@ -87,30 +91,30 @@ const { data } = useProductQuery({
   } as ProductInput
   const [onUpdateProduct] = useProductUpdateMutation()
   const submitHandler = (_values: ProductInput) => {
-    console.log("onSubmit === values", _values)
-    onUpdateProduct({
-      variables: {
-        id: id,
-        input: {
-          images: "",
-          name: _values.name,
-          city: _values.city,
-          district: _values.district,
-          address1: _values.address1,
-          sqr: _values.sqr,
-          priceSqr: _values.priceSqr,
-          releaseDate: _values.releaseDate,
-          price: 0,
-          floors: _values.floors,
-          floorNumber: _values.floorNumber,
-          roomNumber: _values.roomNumber,
-          constStatus: _values.constStatus,
-          productStatus: _values.productStatus,
-          description: _values.description,
-          organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
-        },
-      },
-    })
+    console.log("onSubmit === values", _values.releaseDate)
+    // onUpdateProduct({
+    //   variables: {
+    //     id: id,
+    //     input: {
+    //       images: "",
+    //       name: _values.name,
+    //       city: _values.city,
+    //       district: _values.district,
+    //       address1: _values.address1,
+    //       sqr: _values.sqr,
+    //       priceSqr: _values.priceSqr,
+    //       releaseDate: _values.releaseDate,
+    //       price: 0,
+    //       floors: _values.floors,
+    //       floorNumber: _values.floorNumber,
+    //       roomNumber: _values.roomNumber,
+    //       constStatus: _values.constStatus,
+    //       productStatus: _values.productStatus,
+    //       description: _values.description,
+    //       organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
+    //     },
+    //   },
+    // })
   }
 const router = useRouter()
   return (
@@ -242,16 +246,16 @@ const router = useRouter()
                   size="medium"
                 />
               </Grid>
-              <DatePicker
+              <DatePickerWrapper><DatePicker
                 selected={formikProps.values.releaseDate}
                 id="basic-input"
                 popperPlacement="bottom-start"
                 name="releaseDate"
                 onChange={(date: Date) =>
-                  formikProps.setFieldValue("releaseDate", date)
+                  formikProps.setFieldValue('releaseDate', date)
                 }
                 customInput={<PickersComponent label="Хугацаа сонгох" />}
-              />
+              /></DatePickerWrapper>
               <Grid container>
                 <Typography>Нийт давхарын тоо</Typography>
                 <Typography>Давхарын тоо</Typography>
@@ -316,7 +320,7 @@ const router = useRouter()
                 <FormControl>
                   <InputLabel id="select-status">Статус</InputLabel>
                   <Select
-                    value={formikProps.values.productStatus}
+                    value={formikProps.values.bannerStatus}
                     id="select-status"
                     label="Статус"
                     labelId="status-select"

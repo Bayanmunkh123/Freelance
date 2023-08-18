@@ -82,5 +82,4 @@ export const CheckerGroup: React.FC<CheckerGroupType> = (props) => {
   );
 };
 
-export { RenderValues };
 

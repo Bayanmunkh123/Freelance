@@ -8,22 +8,35 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import CardContent from '@mui/material/CardContent'
 import IconButton from '@mui/material/IconButton'
-import { ListData, ListDataType } from '../utils/ListData'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
-import { ProductStatusEnum, useProductsLandingQuery } from 'src/generated'
+import { BannerStatusEnum, ConstructionStatusEnum, useProductsLandingQuery } from 'src/generated'
+import { FilterType } from '../../home/components/FilterBuy' 
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { Header, SubHeader } from '../../home/components/Header'
-interface InputType {
-  name: string;
-  type: string
-}
+
 const ProductList = () => {
-  //const {name, type} = props
-  const { data } = useProductsLandingQuery()
-  
+  const initialValues: FilterType = {
+        city: 'Улаанбаатар',
+        district: null,
+        //type: '',
+        maxPrice: null,
+        minPrice: null,
+        maxSqr: null,
+        minSqr:null,
+        roomNumber: null,
+        constStatus: ConstructionStatusEnum.DEFAULT,
+        organizationId: null,
+  }
+  const [filterValues, setFilterValues] = React.useState<FilterType>(initialValues)
+   const handleFilterFill = (value: FilterType ) =>{
+    setFilterValues(value)
+  }
+  console.log(filterValues)
+  const { data } = useProductsLandingQuery({variables: {where: filterValues}})
+  console.log(data)
   // function changeNot(): ListDataType[] {
   //   const getRandomInt = (max: number) =>
   //     Math.floor(Math.random() * Math.floor(max))
@@ -41,7 +54,6 @@ const ProductList = () => {
     if (liked) setIcon("material-symbols:favorite")
     else setIcon("material-symbols:favorite-outline")
   }
-
   return (
     <Card
       sx={{
@@ -51,7 +63,8 @@ const ProductList = () => {
         rowGap: '20px',
       }}
     >
-      <Header />
+      <Header filterValues={filterValues} handleFilterFill={handleFilterFill}/>
+
       {data?.products?.data?.length ? <SubHeader count={data?.products?.data?.length} /> : <Typography>Хайлтын үр дүн байхгүй байна</Typography>}
       {data?.products?.data?.map((item, index: number) => (
         <Box
@@ -65,9 +78,9 @@ const ProductList = () => {
               height: '36px',
               backgroundColor:
                 //item.status === 'Онцлох'
-                item?.productStatus === ProductStatusEnum.HIGHLIGTH
+                item?.bannerStatus === BannerStatusEnum.HIGHLIGTH
                   ? 'primary.main'
-                  : item?.productStatus === ProductStatusEnum.NEW ? 'warning.main':
+                  : item?.bannerStatus === BannerStatusEnum.NEW ? 'warning.main':
                   'transparent',
               padding: '2px 80px',
               borderRadius: '10px 10px 10px 0',
@@ -76,7 +89,7 @@ const ProductList = () => {
               marginTop: '24px',
             }}
           >
-            {item?.productStatus === ProductStatusEnum.NEW ? 'Шинэ' : item?.productStatus === ProductStatusEnum.HIGHLIGTH ? 'Онцлох' : ''}
+            {item?.bannerStatus === BannerStatusEnum.NEW ? 'Шинэ' : item?.bannerStatus === BannerStatusEnum.HIGHLIGTH ? 'Онцлох' : ''}
           </Box>
           <Box
             sx={{
@@ -84,9 +97,9 @@ const ProductList = () => {
               width: '20px',
               height: '20px',
               backgroundColor:
-                item?.productStatus === ProductStatusEnum.HIGHLIGTH
+                item?.bannerStatus === BannerStatusEnum.HIGHLIGTH
                   ? 'primary.main'
-                  : item?.productStatus === ProductStatusEnum.NEW
+                  : item?.bannerStatus === BannerStatusEnum.NEW
                   ? 'warning.dark'
                   : 'transparent',
               borderRadius: '0 0 0 10px',
@@ -152,12 +165,12 @@ const ProductList = () => {
                   >
                     <Grid item xs={12} sm={3}>
                       <DetailedBox
-                        title={`${item.roomNumber}`}
+                        title={`${item?.roomNumber}`}
                         subTitle="өрөө"
                         icon="material-symbols:meeting-room-outline"
                       />
                       <DetailedBox
-                        title={'1'}
+                        title={`${item?.ProductRooms?.bedNumber}`}
                         subTitle="унтлагын өрөө"
                         icon="icon-park-solid:sleep-two"
                       />
@@ -169,7 +182,7 @@ const ProductList = () => {
                         icon="ic:baseline-compare-arrows"
                       />
                       <DetailedBox
-                        title={'1'}
+                        title={`${item?.ProductRooms?.bathNumber}`}
                         subTitle="угаалгын өрөө"
                         icon="fa:bathtub"
                       />
