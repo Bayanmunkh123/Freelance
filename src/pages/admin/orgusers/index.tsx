@@ -1,9 +1,9 @@
 import React from 'react'
 import { NextPage } from 'next'
-import { UserScene } from 'src/scene/admin/user/list/UserScene'
+import { UsersScene } from 'src/scene/admin/orgusers/user'
 import { RoleData } from 'src/config/acl'
 
-const UserList: NextPage = () => <UserScene />
+const UserList: NextPage = () => <UsersScene />
 
 UserList.acl = {
   action: 'read',

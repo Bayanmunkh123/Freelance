@@ -3,9 +3,11 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
 } from "@mui/material"
+
+import Icon from "src/@core/components/icon"
+
 
 interface myCompanyDataType {
   description: string
@@ -25,26 +27,28 @@ const data: myCompanyDataType = {
 }
 export const MainInfo = () => {
   return (
-    <Card>
+    <Card >
       <Typography>Тухай</Typography>
-      <Typography>{data?.description}</Typography>
-      <List>
-        <ListItem>
-          <ListItemIcon />
-          <ListItemText primary="И-мэйл" secondary={data?.email} />
+      <Typography padding={'10px'} >{data?.description}</Typography>
+      <List sx={{'& .MuiListItemText-root':{pl: '10px'}}}>
+
+        <ListItem >
+        <Icon icon="mdi:email" fontSize={20} />
+          <ListItemText primary="И-мэйл" secondary={data?.email}  />
         </ListItem>
         <ListItem>
-          <ListItemIcon />
+        <Icon icon="mdi:phone" fontSize={20} />
           <ListItemText primary="Утасны дугаар" secondary={data?.phoneNumber} />
         </ListItem>
         <ListItem>
-          <ListItemIcon />
+        <Icon icon="mdi:page-layout-body" fontSize={20} />
           <ListItemText primary="Вэб хуудас" secondary={data?.webUrl} />
         </ListItem>
         <ListItem>
-          <ListItemIcon />
+        <Icon icon="mdi:location" fontSize={20} />
           <ListItemText primary="Хаяг" secondary={data.location} />
         </ListItem>
+        
       </List>
     </Card>
   )
