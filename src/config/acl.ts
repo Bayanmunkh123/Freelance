@@ -1,7 +1,7 @@
 import { AbilityBuilder, PureAbility } from "@casl/ability"
 import { AuthUserType } from "src/generated"
 import { adminRolesPermission } from "src/pages/admin/roles"
-import { adminUsersPermission } from "src/pages/admin/users"
+import { adminUsersPermission } from "src/pages/admin/orgusers"
 import { adminRequestPermission } from "src/pages/admin/request"
 import { adminCompanyPermission } from "src/pages/admin/company"
 import { adminOrganizationPermission } from "src/pages/admin/organization"
@@ -32,7 +32,7 @@ export type OrgRoles =
 
 export enum SubjectsEnum {
   All = "all",
-  User = "User",
+  Users = "Users",
   Role = "Role",
   Request = "Request",
   Company = "Company",

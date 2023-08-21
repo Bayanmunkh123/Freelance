@@ -1,43 +1,49 @@
 import React from 'react'
-import Checkbox from '@mui/material/Checkbox'
-import Stack from '@mui/material/Stack'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FilterButton from './Filter'
-import FormGroup from '@mui/material/FormGroup'
-import Button from '@mui/material/Button'
-import LocationSelect from './LocationSelect'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
+import { LocationSelect } from './LocationSelect'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { FilterBuy } from './FilterBuy'
+import { FilterRent } from './FilterRent'
 import {
   MenuItem,
   InputLabel,
   FormControl,
   IconButton,
   Chip,
+  Dialog,
+  DialogContent,
+  Typography,
+  Grid,
+  Tab,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Stack,
+  Checkbox
 } from '@mui/material'
-
-//** Icon imports*/
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import RedoIcon from '@mui/icons-material/Redo'
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined'
-import CloseIcon from '@mui/icons-material/Close'
+import { useRouter } from 'next/router'
+import { FilterType } from './FilterBuy'
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 
-import { useRouter } from 'next/router'
-export const Header = () => {
-  const [icon, setIcon] = React.useState<JSX.Element>(<KeyboardArrowDownIcon />)
+export type FilterInputProps = {
+  filterValues: FilterType 
+  handleFilterFill: (values: FilterType) => void
+}
+
+export const Header = (props : FilterInputProps) => {
+  
+  const [icon, setIcon] = React.useState<JSX.Element>(<Icon icon={"mdi:arrow-down"} />)
   const [type, setType] = React.useState<string>('')
   const [open, setOpen] = React.useState(false)
+  const [openSelection, setOpenSelection] = React.useState(false)
+  const [actionType, setActiontype] = React.useState('buy')
+  const {filterValues, handleFilterFill} = props
 
   const handleChange = (event: SelectChangeEvent<typeof type>) => {
     setType(event.target.value)
-    setIcon(<CloseIcon />)
+    setIcon(<Icon icon="material-symbols:close" />)
   }
 
   const handleClose = () => {
@@ -46,6 +52,13 @@ export const Header = () => {
 
   const handleOpen = () => {
     setOpen(true)
+  }
+  const handleOpenSelection = () => {
+    setOpenSelection(true)
+  }
+
+  const handleCloseSelection = () => {
+    setOpenSelection(false)
   }
   return (
     <Grid container justifyContent="space-between" px="50px" rowGap="15px">
@@ -58,8 +71,8 @@ export const Header = () => {
         <InputLabel id="demo-controlled-open-select-label">Төрөл</InputLabel>
         <Select
           open={open}
-          onClose={handleClose}
-          onOpen={handleOpen}
+          onClose={handleCloseSelection}
+          onOpen={handleOpenSelection}
           value={type}
           label="Төрөл"
           onChange={handleChange}
@@ -85,13 +98,80 @@ export const Header = () => {
           <MenuItem value={'building'}>Барилга</MenuItem>
         </Select>
       </FormControl>
-      <FilterButton />
+      <Button
+        onClick={handleOpen}
+        startIcon={<Icon icon={"mdi:sort"} />}
+        size="small"
+        sx={{
+          border: (theme) => `1px solid ${theme.palette.grey[400]}`,
+          borderRadius: "8px",
+          px: "15px",
+        }}
+      >
+        Шүүлтүүр
+      </Button>
+      <Dialog
+        open={open}
+        //onClose={handleClose}
+        scroll="paper"
+        sx={{ "& .MuiPaper-root": { maxWidth: "700px" } }}
+      >
+        <Grid container justifyContent="space-between" px="20px" my="20px">
+          <Typography
+            variant="h6"
+            sx={{
+              ml: 2,
+              lineHeight: 1,
+              fontWeight: 700,
+              fontSize: "1.5rem !important",
+            }}
+          >
+            Бүх шүүлтүүр
+          </Typography>
+          <Button onClick={handleClose}>
+            <Icon icon={"mdi:close"} />
+          </Button>
+          
+        </Grid>
+        <DialogContent>
+      <TabContext value={actionType}>
+        <Grid sx={{ mb: '20px' }}>
+          <TabList
+            onChange={(_event, type) => {
+              console.log(type)
+              setActiontype(type)
+            }}
+            aria-label="filter product"
+          >
+            <Tab label="Худалдан авах" value="buy" />
+            <Tab label="Түрээслэх" value="rent" />
+          </TabList>
+        </Grid>
+        <TabPanel
+          value="buy"
+          sx={{
+            '& .formBuy': {
+              display: 'flex',
+              flexDirection: 'column',
+              rowGap: 4,
+            },
+          }}
+        >
+          <FilterBuy filterValues={filterValues} handleFilterFill={handleFilterFill} setOpen={setOpen} />
+        </TabPanel>
+        <TabPanel value="rent">
+          <FilterRent />
+        </TabPanel>
+      </TabContext>
+    </DialogContent>
+      </Dialog>
     </Grid>
   )
 }
 interface Props {
   count: number | undefined;
 }
+
 export const SubHeader = (props: Props) => {
   const { count } = props
   const [value, setValue] = React.useState<string>('')
@@ -137,7 +217,7 @@ export const SubHeader = (props: Props) => {
           value={value}
           label="Эрэмбэ"
           onChange={handleChange}
-          IconComponent={UnfoldMoreIcon}
+          //IconComponent={<Icon icon="ci:unfold-more"/>}
         >
           <MenuItem value="">
             <em>None</em>
@@ -151,17 +231,12 @@ export const SubHeader = (props: Props) => {
   )
 }
 export const DetailHeader = () => {
-  const [icon, setIcon] = React.useState<JSX.Element>(
-    <FavoriteBorderOutlinedIcon color="error" />,
-  )
+  const [icon, setIcon] = React.useState<string>( "material-symbols:favorite-outline")
   const [liked, setLiked] = React.useState<boolean>(false)
-  const getIcon = () => {
-    return icon
-  }
   const handleChange = () => {
     setLiked(!liked)
-    if (liked) setIcon(<FavoriteOutlinedIcon color="error" />)
-    else setIcon(<FavoriteBorderOutlinedIcon color="error" />)
+    if (liked) setIcon("material-symbols:favorite")
+    else setIcon("material-symbols:favorite-outline")
   }
   const router = useRouter()
   return (
@@ -169,9 +244,7 @@ export const DetailHeader = () => {
       <Stack direction="row" columnGap="10px">
         <Button
           startIcon={
-            <ArrowBackIcon
-              sx={{ color: (theme) => theme.palette.primary.main }}
-            />
+            <Icon icon={"mdi:arrow-left"} />
           }
           sx={{
             color: (theme) => theme.palette.grey[600],
@@ -202,9 +275,9 @@ export const DetailHeader = () => {
         }}
       >
         <IconButton sx={{ color: (theme) => theme.palette.primary.main }}>
-          <RedoIcon />
+          <Icon icon="mdi:redo" />
         </IconButton>
-        <IconButton onClick={handleChange}>{getIcon()}</IconButton>
+        <IconButton onClick={handleChange}><Icon icon={icon} color='red' /></IconButton>
       </Stack>
     </Grid>
   )

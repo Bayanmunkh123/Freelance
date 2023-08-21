@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel'
 import { distNames } from 'src/@core/utils/initData'
 //import {Select} from 'formik-mui'
 
-const LocationSelect = () => {
+export const LocationSelect = () => {
   const [selection, setSelection] = React.useState<string[]>([])
 
   const handleChange = (event: SelectChangeEvent<typeof selection>) => {
@@ -58,5 +58,3 @@ const LocationSelect = () => {
     </FormControl>
   )
 }
-
-export default LocationSelect

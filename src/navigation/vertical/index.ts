@@ -4,19 +4,19 @@ import { VerticalNavItemsType } from "src/@core/layouts/types"
 const navigation = (): VerticalNavItemsType => {
   return [
     {
-      title: 'Product үүсгэх',
-      path: '/admin/product/create',
-      icon: 'bi:house-add-fill',
-      action: 'read',
-      subject: 'Admin_Product',
+      title: "Product үүсгэх",
+      path: "/admin/product/register",
+      icon: "bi:house-add-fill",
+      action: "read",
+      subject: "Admin_Product",
       auth: true,
     },
     {
-      title: 'Хянах самбар',
-      path: '/admin/dashboard',
-      icon: 'mdi:home-outline',
-      action: 'read',
-      subject: 'Admin_Dashboard',
+      title: "Хянах самбар",
+      path: "/admin/dashboard",
+      icon: "mdi:home-outline",
+      action: "read",
+      subject: "Admin_Dashboard",
       auth: true,
     },
     {
@@ -69,10 +69,11 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: "Хэрэглэгч",
+      path: "/admin/orgusers",
       icon: "mdi:account-outline",
-      path: "/pages/index",
-      subject: "User",
-      auth: false,
+      action: "read",
+      subject: "Admin_Users",
+      auth: true,
     },
   ]
 }
