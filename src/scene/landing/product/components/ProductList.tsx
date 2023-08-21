@@ -27,7 +27,7 @@ const ProductList = () => {
         maxSqr: null,
         minSqr:null,
         roomNumber: null,
-        constStatus: ConstructionStatusEnum.DEFAULT,
+        constStatus: null,
         organizationId: null,
   }
   const [filterValues, setFilterValues] = React.useState<FilterType>(initialValues)

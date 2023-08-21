@@ -10,8 +10,8 @@ import {
   MenuItem,
   Box,
 } from '@mui/material'
-import { Formik, Form, Field } from 'formik'
-import { ConstructionStatusEnum, BannerStatusEnum, ProductInput, useProductCreateMutation } from 'src/generated'
+import { Formik, Form, Field, FormikProps } from 'formik'
+import { ConstructionStatusEnum, BannerStatusEnum, ProductInput, useProductCreateMutation,ProductRoom } from 'src/generated'
 import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
@@ -19,7 +19,10 @@ import PickersComponent from './DateInput'
 import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
-
+export interface Props{
+  setType: (type :string) => void;
+  formikProps: FormikProps<ProductInput>
+}
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -56,40 +59,41 @@ import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 // }
 
 
-const CreateProduct = () => {
+export const RegisterBasic = (props :Props) => {
+  const {setType,formikProps} = props
   //const popperPlacement: ReactDatePickerProps['popperPlacement'] 
-  const [onCreateProduct] = useProductCreateMutation()
-  const submitHandler = (data: ProductInput) => {
-    console.log('onSubmit === values', data)
+  // const [onCreateProduct] = useProductCreateMutation()
+  // const submitHandler = (data: ProductInput) => {
+  //   console.log('onSubmit === values', data)
 
-    onCreateProduct({
-      variables: {
-        input: {
-          images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
-          name: data.name,
-          city: data.city,
-          district: data.district,
-          address1: data.address1,
-          sqr: data.sqr,
-          priceSqr: data.priceSqr,
-          releaseDate: data.releaseDate,
-          price: 0,
-          //uliral: number
-          floors: data.floors,
-          floorNumber: data.floorNumber,
-          roomNumber: data.roomNumber,
-          constStatus: data.constStatus,
-          bannerStatus: data.bannerStatus,
-          description: data.description,
-          organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
-        },
-      },
-    })
-  }
+  //   onCreateProduct({
+  //     variables: {
+  //       input: {
+  //         images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
+  //         name: data.name,
+  //         city: data.city,
+  //         district: data.district,
+  //         address1: data.address1,
+  //         sqr: data.sqr,
+  //         priceSqr: data.priceSqr,
+  //         releaseDate: data.releaseDate,
+  //         price: 0,
+  //         //uliral: number
+  //         floors: data.floors,
+  //         floorNumber: data.floorNumber,
+  //         roomNumber: data.roomNumber,
+  //         constStatus: data.constStatus,
+  //         bannerStatus: data.bannerStatus,
+  //         description: data.description,
+  //         organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
+  //       },
+  //     },
+  //   })
+  // }
 
   return (
     <Box display="flex" justifyContent="center"  >
-      <Formik
+      {/* <Formik
         initialValues={{
           images: '',
           name: '',
@@ -104,18 +108,19 @@ const CreateProduct = () => {
           floorNumber: 1,
           roomNumber: 1,
           constStatus: ConstructionStatusEnum.NEWBUILDING,
-          productStatus: BannerStatusEnum.HIGHLIGTH,
+          bannerStatus: BannerStatusEnum.HIGHLIGTH,
           description: '',
           price: 0,
           organizationId: '',
+          ProductRooms: '',
         }}
         //validationSchema={validationCreateProductSchema}
         onSubmit={(values: ProductInput, formikHelpers) => {
           submitHandler(values)
           formikHelpers.setSubmitting(false)
         }}
-      >
-        {(formikProps) => (
+      > */}
+       
           <Form>
             <Stack
               direction="column"
@@ -141,7 +146,9 @@ const CreateProduct = () => {
             className="form-control"
           />
                   {/* <Thumb file={formikProps.values.images} /> */}
+                  <Typography fontWeight="bold" >Төслийн Нэр</Typography>
               <FormControl>
+                
                 <InputLabel id="select-name">Төслийн Нэр</InputLabel>
                 <Select
                   value={formikProps.values.name}
@@ -159,12 +166,13 @@ const CreateProduct = () => {
                   ))}
                 </Select>
               </FormControl>
+              <Typography fontWeight="bold">Аймаг</Typography>
               <FormControl>
-                <InputLabel id="select-city">Аймаг</InputLabel>
+                <InputLabel id="select-city">Аймаг эсвэл хотын нэр</InputLabel>
                 <Select
                   value={formikProps.values.city}
                   id="select-city"
-                  label="Аймгийн нэр"
+                  label="Аймаг эсвэл хотын нэр"
                   labelId="city-select"
                   onChange={(event) => {
                     formikProps.handleChange('city')(event.target.value)
@@ -177,25 +185,26 @@ const CreateProduct = () => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
-                <InputLabel id="select-district">Дүүрэг</InputLabel>
-                <Select
-                  value={formikProps.values.district}
-                  id="select-district"
-                  label="Дүүрэг"
-                  labelId="district-select"
-                  onChange={(event) => {
-                    formikProps.handleChange('district')(event.target.value)
-                  }}
-                >
-                  {distNames?.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Typography>Дэлгэрэнгүй байршил</Typography>
+              {formikProps.values.city === "Улаанбаатар" ? 
+              <><Typography fontWeight="bold">Дүүрэг</Typography><FormControl>
+                  <InputLabel id="select-district">Дүүрэг эсвэл сумын нэр</InputLabel>
+                  <Select
+                    value={formikProps.values.district}
+                    id="select-district"
+                    label="Дүүрэг эсвэл сумын нэр"
+                    labelId="district-select"
+                    onChange={(event) => {
+                      formikProps.handleChange('district')(event.target.value)
+                    } }
+                  >
+                    {distNames?.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl></> : null}
+              <Typography fontWeight="bold">Дэлгэрэнгүй байршил</Typography>
               <Field
                 component={TextField}
                 name="address1"
@@ -204,26 +213,32 @@ const CreateProduct = () => {
                 size="big"
               />
               <Grid container>
-                <Typography>Хэмжээ</Typography>
-                <Typography>Метр квадрат үнэ</Typography>
+                
+                
               </Grid>
-              <Grid container>
-                <Field
-                  component={TextField}
-                  name="sqr"
-                  type="number"
-                  label="Метр квадрат"
-                  size="medium"
-                />
-
-                <Field
-                  component={TextField}
-                  name="priceSqr"
-                  type="number"
-                  label="Метр квадрат үнэ"
-                  size="medium"
-                />
+              <Grid container mt="-20px">
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                  <Typography fontWeight="bold">Хэмжээ</Typography>
+                  <Field
+                    component={TextField}
+                    name="sqr"
+                    type="number"
+                    label="Метр квадрат"
+                    size="medium"
+                  />
+                </Box>
+                
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                  <Typography fontWeight="bold">Метр квадрат үнэ</Typography>
+                  <Field
+                    component={TextField}
+                    name="priceSqr"
+                    type="number"
+                    label="Метр квадрат үнэ"
+                    size="medium"
+                  /></Box>
               </Grid>
+              <Typography fontWeight="bold">Ашиглалтанд орох хугацаа</Typography>
               <DatePickerWrapper><DatePicker
                 selected={formikProps.values.releaseDate}
                 id="basic-input"
@@ -236,28 +251,36 @@ const CreateProduct = () => {
               /></DatePickerWrapper>
               
               <Grid container>
-                <Typography>Нийт давхарын тоо</Typography>
-                <Typography>Давхарын тоо</Typography>
+               
+                
               </Grid>
-              <Grid container>
-                <Field
+              <Grid container mt="-20px">
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                   <Typography fontWeight="bold">Нийт давхарын тоо</Typography>
+                  <Field
                   component={TextField}
                   name="floors"
                   type="number"
                   label="Давхарын тоо"
                   size="medium"
                 />
-
-                <Field
+                </Box>
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                   <Typography fontWeight="bold">Давхарын тоо</Typography>
+                   <Field
                   component={TextField}
                   name="floorNumber"
                   type="number"
                   label="Давхарын тоо"
                   size="medium"
                 />
+                </Box>
+                
+
+               
               </Grid>
 
-              <Typography>Өрөөний тоо</Typography>
+              <Typography fontWeight="bold">Өрөөний тоо</Typography>
               <Field
                 component={TextField}
                 name="roomNumber"
@@ -266,7 +289,7 @@ const CreateProduct = () => {
                 size="medium"
               />
               <Grid container>
-                <Typography>Статус</Typography>
+                <Typography fontWeight="bold">Статус</Typography>
               </Grid>
               <Grid container>
                 <FormControl>
@@ -304,7 +327,7 @@ const CreateProduct = () => {
                     label="Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange('productStatus')(
+                      formikProps.handleChange('bannerStatus')(
                         event.target.value,
                       )
                     }}
@@ -321,7 +344,7 @@ const CreateProduct = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Typography>Дэлгэрэнгүй мэдээлэл</Typography>
+              <Typography fontWeight="bold">Дэлгэрэнгүй мэдээлэл</Typography>
               <Field
                 component={TextField}
                 name="description"
@@ -329,12 +352,10 @@ const CreateProduct = () => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Button type="submit" variant='contained' sx={{alignSelf: 'flex-end'}}>үүсгэх</Button>
+              
             </Stack>
           </Form>
-        )}
-      </Formik>
+      {/* </Formik> */}
     </Box>
   )
 }
-export default CreateProduct

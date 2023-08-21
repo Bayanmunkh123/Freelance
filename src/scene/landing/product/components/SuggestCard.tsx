@@ -3,7 +3,6 @@ import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { ListData, ListDataType } from '../utils/ListData'
 import { useRouter } from 'next/router'
 import { useProductsLandingQuery } from 'src/generated'
 

@@ -13,7 +13,7 @@ import {
 import { Formik, Form, Field } from "formik"
 import { RenderValues } from "src/@core/utils/initData"
 import { TextField } from "formik-mui"
-import PickersComponent from "../create/DateInput"
+import PickersComponent from "../create/components/DateInput"
 import DatePicker from "react-datepicker"
 import { distNames } from "src/@core/utils/initData"
 import { ProductInput, useProductQuery } from "src/generated"
@@ -64,6 +64,21 @@ const UpdateProduct = ({ id }: { id: string }) => {
       variables: {input: { id } },
   })
   const parsedDate = new Date(data?.product?.releaseDate)
+  //console.log(data?.product?.releaseDate)
+// Format the date into the desired format
+
+const formattedDate = parsedDate.toLocaleString("en-GB", {
+  weekday: 'short', // Short weekday name
+  year: 'numeric',
+  month: 'short', // Short month name
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  timeZoneName: 'short', // Short time zone name
+})
+
+console.log(formattedDate);
 
   const initialValues = {
     id: data?.product?.id,
@@ -80,7 +95,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
     //isFav: data?.product?
     images: data?.product?.images,
     //parking: number;
-    releaseDate: new Date(),
+    releaseDate: data?.product?.releaseDate,
     floors: data?.product?.floors,
     floorNumber: data?.product?.floorNumber,
     //highlights:
@@ -89,32 +104,33 @@ const UpdateProduct = ({ id }: { id: string }) => {
     organizationId: data?.product?.organizationId,
     priceSqr: data?.product?.priceSqr,
   } as ProductInput
+  console.log("should get value", initialValues?.releaseDate)
   const [onUpdateProduct] = useProductUpdateMutation()
   const submitHandler = (_values: ProductInput) => {
     console.log("onSubmit === values", _values.releaseDate)
-    // onUpdateProduct({
-    //   variables: {
-    //     id: id,
-    //     input: {
-    //       images: "",
-    //       name: _values.name,
-    //       city: _values.city,
-    //       district: _values.district,
-    //       address1: _values.address1,
-    //       sqr: _values.sqr,
-    //       priceSqr: _values.priceSqr,
-    //       releaseDate: _values.releaseDate,
-    //       price: 0,
-    //       floors: _values.floors,
-    //       floorNumber: _values.floorNumber,
-    //       roomNumber: _values.roomNumber,
-    //       constStatus: _values.constStatus,
-    //       productStatus: _values.productStatus,
-    //       description: _values.description,
-    //       organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
-    //     },
-    //   },
-    // })
+    onUpdateProduct({
+      variables: {
+        id: id,
+        input: {
+          images: "",
+          name: _values.name,
+          city: _values.city,
+          district: _values.district,
+          address1: _values.address1,
+          sqr: _values.sqr,
+          priceSqr: _values.priceSqr,
+          releaseDate: _values.releaseDate,
+          price: 0,
+          floors: _values.floors,
+          floorNumber: _values.floorNumber,
+          roomNumber: _values.roomNumber,
+          constStatus: _values.constStatus,
+          bannerStatus: _values.bannerStatus,
+          description: _values.description,
+          organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
+        },
+      },
+    })
   }
 const router = useRouter()
   return (
@@ -247,7 +263,7 @@ const router = useRouter()
                 />
               </Grid>
               <DatePickerWrapper><DatePicker
-                selected={formikProps.values.releaseDate}
+                selected={formikProps.values.releaseDate ? new Date(formikProps.values.releaseDate) : null}
                 id="basic-input"
                 popperPlacement="bottom-start"
                 name="releaseDate"
@@ -325,7 +341,7 @@ const router = useRouter()
                     label="Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange("productStatus")(
+                      formikProps.handleChange("bannerStatus")(
                         event.target.value,
                       )
                     }}

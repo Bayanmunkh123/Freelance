@@ -108,10 +108,11 @@ const columns: GridColDef[] = [
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
-      const { releaseDate } = row
+      const { releaseDate } = row;
+      const date = new Date(releaseDate).toISOString().split('T')[0];
       return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography>{releaseDate ? releaseDate : ""}</Typography>
+          <Typography>{date}</Typography>
         </Box>
       )
     },
