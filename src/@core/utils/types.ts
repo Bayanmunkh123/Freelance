@@ -1,3 +1,6 @@
+import { ConstructionStatusEnum, ProductStatusEnum } from "src/generated"
+import * as yup from "yup"
+
 interface MonthYear {
   year: number
   month: number
@@ -18,4 +21,60 @@ export type PaymentTypes = {
   restrictNumeric(elem: HTMLInputElement): HTMLInputElement
   formatCardNumber(elem: HTMLInputElement): HTMLInputElement
   formatCardExpiry(elem: HTMLInputElement): HTMLInputElement
+}
+
+// export interface ProductInput {
+//   id: string
+//   images: string
+//   name: string
+//   city: string
+//   district: string
+//   address1: string
+//   sqr: number
+//   priceSqr: number
+//   releaseDate: Date | number
+//   price: number
+//   //uliral: number
+//   floors: number
+//   floorNumber: number
+//   roomNumber: number
+//   constStatus: ConstructionStatusEnum
+//   productStatus: ProductStatusEnum
+//   description: string
+//   organizationId: string
+// }
+export const validationCreateProductSchema = yup.object().shape({
+  images: yup.string().required(),
+  name: yup.string().required(),
+  city: yup.string(),
+  district: yup.string(),
+  address1: yup.string(),
+  sqr: yup.number(),
+  priceSqr: yup.number(),
+  releaseDate: yup.date(),
+  //uliral: yup.number(),
+  floors: yup.number(),
+  floorNumber: yup.number(),
+  roomNumber: yup.number(),
+  constStatus: yup.string(),
+  productStatus: yup.string(),
+  description: yup.string(),
+})
+export interface mongolianProvincesType {
+  id: number
+  name: string
+  child: string[]
+}
+
+export const filterApartmentSchema = yup.object().shape({
+  location: yup.string(),
+  type: yup.string(),
+  price: yup.number(),
+  size: yup.number(),
+  roomNo: yup.number(),
+  status: yup.string(),
+})
+export interface RenderValueType {
+  label: string | number
+  value: string | number
 }

@@ -1,12 +1,24 @@
 import { AbilityBuilder, PureAbility } from "@casl/ability"
 import { AuthUserType } from "src/generated"
-import { adminJobsPermission } from "src/pages/admin/jobs"
 import { adminRolesPermission } from "src/pages/admin/roles"
 import { adminUsersPermission } from "src/pages/admin/users"
+import { adminRequestPermission } from "src/pages/admin/request"
+import { adminCompanyPermission } from "src/pages/admin/company"
+import { adminOrganizationPermission } from "src/pages/admin/organization"
+import { adminDashboardPermission } from "src/pages/admin/dashboard"
+import { adminProductPermission } from "src/pages/admin/product"
 
 export type Actions = "manage" | "create" | "read" | "update" | "delete"
 
-export type Subjects = "all" | "Admin_Roles" | "Admin_Jobs" | "Admin_Users"
+export type Subjects =
+  | "all"
+  | "Admin_Roles"
+  | "Admin_Dashboard"
+  | "Admin_Users"
+  | "Admin_Request"
+  | "Admin_Company"
+  | "Admin_Organization"
+  | "Admin_Product"
 
 export type Roles = "ADMIN" | "EDITOR" | "MEMBER"
 
@@ -17,12 +29,15 @@ export type OrgRoles =
   | "SALES"
   | "SUPPORT"
   | "VIEWER"
+
 export enum SubjectsEnum {
   All = "all",
   User = "User",
   Role = "Role",
+  Request = "Request",
   Company = "Company",
-  Job = "Job",
+  Dashboard = "Dashboard",
+  Product = "Product"
 }
 
 export enum ActionsEnum {
@@ -57,9 +72,13 @@ export type ACLObj = {
 }
 const rolesData: RoleData = {
   // Admin
-  ...adminJobsPermission,
+  ...adminDashboardPermission,
   ...adminRolesPermission,
   ...adminUsersPermission,
+  ...adminRequestPermission,
+  ...adminCompanyPermission,
+  ...adminOrganizationPermission,
+  ...adminProductPermission,
 
   // Landing
 
@@ -202,5 +221,4 @@ export const defaultACLObj: ACLObj = {
   action: "read",
   subject: "all",
 }
-
 export default defineRulesFor

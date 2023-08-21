@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useMemo } from 'react'
 import {
   ApolloClient,
   HttpLink,
@@ -6,26 +6,26 @@ import {
   from,
   fromPromise,
   split,
-} from "@apollo/client"
+} from '@apollo/client'
 
-import { onError } from "@apollo/client/link/error"
+import { onError } from '@apollo/client/link/error'
 
-import merge from "deepmerge"
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions"
-import { createClient } from "graphql-ws"
-import { getMainDefinition } from "@apollo/client/utilities"
-import { config } from "src/config"
-import { setContext } from "@apollo/client/link/context"
-import { localCache } from "./localCache"
-import { getNewAccessToken, removeItemToken } from "./tokenHandler"
+import merge from 'deepmerge'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { createClient } from 'graphql-ws'
+import { getMainDefinition } from '@apollo/client/utilities'
+import { config } from 'src/config'
+import { setContext } from '@apollo/client/link/context'
+import { localCache } from './localCache'
+import { getNewAccessToken, removeItemToken } from './tokenHandler'
 
 const httpLink = new HttpLink({
   uri: `${config.BACKEND_URL}/graphql`,
-  credentials: "include",
+  credentials: 'include',
 })
 
 const wsLink =
-  typeof window !== "undefined"
+  typeof window !== 'undefined'
     ? new GraphQLWsLink(
         createClient({
           url: `${config.BACKEND_WS_URL}/graphql`,
@@ -39,14 +39,14 @@ const wsLink =
     : null
 
 const splitLink =
-  typeof window !== "undefined" && wsLink != null
+  typeof window !== 'undefined' && wsLink != null
     ? split(
         ({ query }) => {
           const definition = getMainDefinition(query)
 
           return (
-            definition.kind === "OperationDefinition" &&
-            definition.operation === "subscription"
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
           )
         },
         wsLink,
@@ -86,7 +86,7 @@ const errorLink = onError((errors) => {
     //   ),
     // )
     for (const error of graphQLErrors) {
-      console.log("[GraphQL error]: error", error)
+      console.log('[GraphQL error]: error', error)
       if (!error.extensions.code) {
         graphQLErrors.forEach(({ message, locations, path }) =>
           console.log(
@@ -95,21 +95,21 @@ const errorLink = onError((errors) => {
         )
       }
       switch (error.extensions.code) {
-        case "ACCESS_TOKEN_EXPIRED": {
-          if (operation.operationName === "refreshAccessToken") return
+        case 'ACCESS_TOKEN_EXPIRED': {
+          if (operation.operationName === 'refreshAccessToken') return
           const refreshTokenPromise = new Promise((resolve, reject) => {
             getNewAccessToken(apolloClient)
               .then((accessToken) => resolve(accessToken))
               .catch((e) => {
                 // logout()
-                console.log("getNewAccessToken catch error", e)
+                console.log('getNewAccessToken catch error', e)
                 reject(e)
               })
           })
           return fromPromise(refreshTokenPromise)
             .filter((value) => Boolean(value))
             .flatMap((accessToken) => {
-              console.log("fromPromise === accessToken", accessToken)
+              console.log('fromPromise === accessToken', accessToken)
               const oldHeaders = operation.getContext().headers
               operation.setContext({
                 headers: {
@@ -120,21 +120,21 @@ const errorLink = onError((errors) => {
               return forward(operation)
             })
         }
-        case "ACCESS_TOKEN_INVALID": {
-          if (operation.operationName === "refreshAccessToken") return
+        case 'ACCESS_TOKEN_INVALID': {
+          if (operation.operationName === 'refreshAccessToken') return
           const refreshTokenPromise = new Promise((resolve, reject) => {
             getNewAccessToken(apolloClient)
               .then((accessToken) => resolve(accessToken))
               .catch((e) => {
                 // logout()
-                console.log("getNewAccessToken catch error", e)
+                console.log('getNewAccessToken catch error', e)
                 reject(e)
               })
           })
           return fromPromise(refreshTokenPromise)
             .filter((value) => Boolean(value))
             .flatMap((accessToken) => {
-              console.log("fromPromise === accessToken", accessToken)
+              console.log('fromPromise === accessToken', accessToken)
               const oldHeaders = operation.getContext().headers
               operation.setContext({
                 headers: {
@@ -145,19 +145,19 @@ const errorLink = onError((errors) => {
               return forward(operation)
             })
         }
-        case "ACCESS_TOKEN_MISSING": {
+        case 'ACCESS_TOKEN_MISSING': {
           removeItemToken(null)
           return forward(operation)
         }
-        case "REFRESH_TOKEN_EXPIRED": {
+        case 'REFRESH_TOKEN_EXPIRED': {
           removeItemToken(null)
           return forward(operation)
         }
-        case "REFRESH_TOKEN_INVALID": {
+        case 'REFRESH_TOKEN_INVALID': {
           removeItemToken(null)
           return forward(operation)
         }
-        case "REFRESH_TOKEN_MISSING":
+        case 'REFRESH_TOKEN_MISSING':
           removeItemToken(null)
           return forward(operation)
         default:
@@ -184,7 +184,7 @@ const errorLink = onError((errors) => {
 // }
 
 const client = new ApolloClient({
-  ssrMode: typeof window === "undefined",
+  ssrMode: typeof window === 'undefined',
   link: from([authLink, errorLink, httpLink]),
   cache: localCache,
 })
@@ -206,7 +206,7 @@ export function initializeApollo(initialState = null) {
   }
 
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === "undefined") return _apolloClient
+  if (typeof window === 'undefined') return _apolloClient
 
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient

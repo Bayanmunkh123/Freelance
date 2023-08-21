@@ -15,7 +15,7 @@ const DefaultPalette = (mode: Palette["mode"], skin: Skin): Palette => {
     } else if (skin === "bordered" && mode === "dark") {
       return "#30334E"
     } else if (mode === "light") {
-      return "#F7F7F9"
+      return "#FFFFFF"
     } else return "#282A42"
   }
 
@@ -25,8 +25,8 @@ const DefaultPalette = (mode: Palette["mode"], skin: Skin): Palette => {
       main: mainColor,
       light: lightColor,
       darkBg: "#282A42",
-      lightBg: "#F7F7F9",
-      bodyBg: mode === "light" ? "#F7F7F9" : "#282A42", // Same as palette.background.default but doesn't consider bordered skin
+      lightBg: "#FFFFFF",
+      bodyBg: mode === "light" ? "#FFFFFF" : "#282A42", // Same as palette.background.default but doesn't consider bordered skin
       trackBg: mode === "light" ? "#F2F2F4" : "#41435C",
       avatarBg: mode === "light" ? "#F1F1F3" : "#3F425C",
       tooltipBg: mode === "light" ? "#262732" : "#464A65",
@@ -38,9 +38,9 @@ const DefaultPalette = (mode: Palette["mode"], skin: Skin): Palette => {
       white: whiteColor,
     },
     primary: {
-      light: "#37b7f2", // '#787EFF',
-      main: "#05a6ef", //'#666CFF',
-      dark: "#0374a7", //'#5A5FE0',
+      light: "#ECF9F6", // '#787EFF',
+      main: "#42C3A7", //'#666CFF',
+      dark: "#2E8874", //'#5A5FE0',
       contrastText: whiteColor,
     },
     secondary: {

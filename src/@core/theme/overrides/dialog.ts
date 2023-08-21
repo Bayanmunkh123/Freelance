@@ -1,4 +1,5 @@
 // ** Type Imports
+import { width } from "@mui/system"
 import { OwnerStateThemeType } from "./"
 import { Skin } from "src/@core/layouts/types"
 
@@ -7,6 +8,7 @@ const Dialog = (skin: Skin) => {
     MuiDialog: {
       styleOverrides: {
         paper: ({ theme }: OwnerStateThemeType) => ({
+          maxWidth: '700px',
           boxShadow: theme.shadows[skin === "bordered" ? 0 : 10],
           ...(skin === "bordered" && {
             border: `1px solid ${theme.palette.divider}`,

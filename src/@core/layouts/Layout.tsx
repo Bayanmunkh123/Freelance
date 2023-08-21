@@ -11,7 +11,8 @@ import BlankLayout from "./BlankLayout"
 
 const Layout = (props: LayoutProps) => {
   // ** Props
-  const { hidden, children, settings, saveSettings } = props
+  const { children, settings, saveSettings } = props
+  const hidden = true
 
   // ** Ref
   const isCollapsed = useRef(settings.navCollapsed)

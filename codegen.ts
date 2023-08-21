@@ -34,7 +34,10 @@ const config: CodegenConfig = {
     },
   },
   hooks: {
-    afterAllFileWrite: ["prettier --write", "eslint --fix"],
+    afterAllFileWrite: [
+      // "prettier --write",
+      // "eslint --fix"
+    ],
   },
 }
 

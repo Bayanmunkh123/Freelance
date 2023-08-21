@@ -93,13 +93,14 @@ const LoginEmail = (props: LoginEmailProps) => {
         values: LoginEmailInput & { remember: boolean },
         formikHelpers,
       ) => {
+        //console.log(values)
         handleSubmit(values)
         formikHelpers.setSubmitting(false)
       }}
     >
       {() => (
         <Form noValidate autoComplete="off">
-          <Stack spacing={6}>
+          <Stack  spacing={6}>
             <Field
               component={TextField}
               name="email"
@@ -128,7 +129,7 @@ const LoginEmail = (props: LoginEmailProps) => {
               label="Remember Me"
               name="remember"
               control={<Checkbox />}
-              sx={{ "& .MuiFormControlLabel-label": { color: "text.primary" } }}
+                  sx={{ "& .MuiFormControlLabel-label": { color: "text.primary" } }}
             />
             <Typography
               variant="body2"
@@ -187,5 +188,4 @@ const LoginEmail = (props: LoginEmailProps) => {
     </Formik>
   )
 }
-
 export default LoginEmail

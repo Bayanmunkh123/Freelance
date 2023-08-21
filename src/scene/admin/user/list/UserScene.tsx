@@ -33,7 +33,7 @@ import { OrgRoles } from "src/utils/constants"
 
 // const userRoleObj: UserRoleType = {
 //   admin: { icon: 'mdi:laptop', color: 'error.main' },
-//   owner: { icon: 'mdi:cog-outline', color: 'warning.main' },
+//   Эзэн: { icon: 'mdi:cog-outline', color: 'warning.main' },
 //   editor: { icon: 'mdi:pencil-outline', color: 'info.main' },
 //   finance: { icon: 'mdi:chart-donut', color: 'success.main' },
 //   sales: { icon: 'mdi:account-outline', color: 'primary.main' },
@@ -73,7 +73,7 @@ const renderClient = (row: OrganizationUser) => {
         sx={{ mr: 3, width: 34, height: 34, fontSize: "1rem" }}
       >
         {getInitials(
-          row?.user?.profile?.firstName
+          row?.user?.profile?.firstName 
             ? row?.user?.profile?.firstName
             : "John Doe",
         )}
@@ -105,7 +105,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
       </IconButton>
       <Menu
         keepMounted
-        anchorEl={anchorEl}
+        anchorEl={anchorEl} 
         open={rowOptionsOpen}
         onClose={handleRowOptionsClose}
         anchorOrigin={{
@@ -144,8 +144,8 @@ const columns: GridColDef[] = [
   {
     flex: 0.2,
     minWidth: 230,
-    field: "userName",
-    headerName: "UserName",
+    field: "Хэрэглэгч",
+    headerName: "Хэрэглэгч",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -196,9 +196,9 @@ const columns: GridColDef[] = [
   },
   {
     flex: 0.15,
-    field: "role",
+    field: "Үүрэг",
     minWidth: 150,
-    headerName: "Role",
+    headerName: "Үүрэг",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center", "& svg": { mr: 3 } }}>

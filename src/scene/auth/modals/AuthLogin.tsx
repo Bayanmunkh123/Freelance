@@ -37,6 +37,7 @@ export const AuthLogin = (props: AuthLoginProps) => {
           <Box sx={{ mb: "24px" }}>
             <TabList
               onChange={(_event, _type) => {
+                console.log(_type)
                 setType(_type)
               }}
               aria-label="lab API tabs example"
