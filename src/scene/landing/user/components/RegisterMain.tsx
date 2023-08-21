@@ -6,16 +6,11 @@ import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import CardHeader from '@mui/material/CardHeader'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -167,56 +162,37 @@ export const RegisterMain = () => {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
-              <Box
-                sx={{
-                  gap: 5,
-                  display: 'flex'
-                  
-                  
-                }}
-              >
-                <Button type='submit' variant='contained' size='large'>
+            <Grid item xs={5}>
+              
+                <Button variant='contained' sx={{mr:3}}>
                   Хадгалах
                 </Button>
-                </Box>
-                <Box 
-                    sx={{
-                    display:'flex',
-                    
-                    '& a': { color: 'primary.main', textDecoration: 'none' },
-                    
-                    marginLeft: '20%',
-                    
-                  }}
-                >
                 <Button
                     type="reset"
                     variant="outlined"
                     color="secondary"
                     onClick={() => setFormData(initialData)}
+                    
                     >
                     Шинэчлэх
                 </Button>
-               
-                </Box>
-              
-
-              <Box  sx={{display:'flex', flexDirection:'column', marginTop:'-3%',alignItems:'flex-start',gap:3}}>
+                
+                <Link href="/pages/changepassword">
                 <Button
                 variant="outlined"
-                style={{ color: 'grey', borderColor: 'grey'}}
+                sx={{color:'grey', borderColor:'GrayText',mt:5,display:'flex',textDecoration:'none'}}
                 >
                     Нууц үг солих
                 </Button>
-                <Box >
+                </Link>
+                
                 <Button
                  variant="outlined"
-                 style={{ color: 'grey', borderColor: 'grey' }}>
+                 sx={{ color: 'grey', borderColor:'GrayText',mt:3 }}>
                     Нууц үг сэргээх
                 </Button>
-                </Box>
-              </Box>
+                
+              
             </Grid>
           </Grid>
         </form>
