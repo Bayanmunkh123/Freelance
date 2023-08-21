@@ -110,6 +110,12 @@ export type AuthVerifyTokenType = {
   resetToken?: Maybe<Scalars['String']>;
 };
 
+export enum BannerStatusEnum {
+  DEFAULT = 'DEFAULT',
+  HIGHLIGTH = 'HIGHLIGTH',
+  NEW = 'NEW'
+}
+
 export enum ConstructionStatusEnum {
   DEFAULT = 'DEFAULT',
   NEWBUILDING = 'NEWBUILDING',
@@ -173,6 +179,7 @@ export type Mutation = {
   authPhoneVerifyTokenSender?: Maybe<Scalars['Boolean']>;
   authProvider?: Maybe<AuthVerifyTokenType>;
   authWeb?: Maybe<AuthVerifyTokenType>;
+  createOrganization?: Maybe<Organization>;
   createOrganizationUser?: Maybe<OrganizationUser>;
   deleteOrganization?: Maybe<Scalars['Boolean']>;
   loginEmail?: Maybe<AuthVerifyTokenType>;
@@ -183,12 +190,14 @@ export type Mutation = {
   organizationUpdate?: Maybe<Organization>;
   productCreate?: Maybe<Product>;
   productDelete?: Maybe<Scalars['Boolean']>;
+  productStatusUpdate?: Maybe<Scalars['Boolean']>;
   productUpdate?: Maybe<Product>;
   refreshAccessToken?: Maybe<RefreshTokenType>;
   registerEmail?: Maybe<Scalars['Boolean']>;
   registerPhone?: Maybe<Scalars['Boolean']>;
   storageSignedUrlCreate?: Maybe<StorageWriteSignedUrl>;
   storageSignedUrlDelete?: Maybe<Scalars['Boolean']>;
+  updateOrganization?: Maybe<Organization>;
   userCreate?: Maybe<User>;
   userDelete?: Maybe<Scalars['Boolean']>;
   userUpdate?: Maybe<User>;
@@ -252,6 +261,11 @@ export type MutationAuthWebArgs = {
 };
 
 
+export type MutationCreateOrganizationArgs = {
+  input: OrganizationCreateInput;
+};
+
+
 export type MutationCreateOrganizationUserArgs = {
   input: OrganizationUserCreateInput;
 };
@@ -302,6 +316,12 @@ export type MutationProductDeleteArgs = {
 };
 
 
+export type MutationProductStatusUpdateArgs = {
+  _id: Scalars['String'];
+  input: ProductStatusChange;
+};
+
+
 export type MutationProductUpdateArgs = {
   _id: Scalars['String'];
   input: ProductInput;
@@ -333,6 +353,11 @@ export type MutationStorageSignedUrlDeleteArgs = {
 };
 
 
+export type MutationUpdateOrganizationArgs = {
+  input: OrganizationUpdateInput;
+};
+
+
 export type MutationUserCreateArgs = {
   input: UserCreateInput;
 };
@@ -352,28 +377,28 @@ export type MutationUserUpdateArgs = {
 export type Organization = {
   __typename?: 'Organization';
   accesses: Scalars['Int'];
-  companyRegister: Scalars['String'];
+  companyid: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   logo?: Maybe<Scalars['String']>;
   members?: Maybe<Array<OrganizationUser>>;
   name: Scalars['String'];
+  productivity: Scalars['Int'];
   products?: Maybe<Array<Product>>;
-  rating?: Maybe<Scalars['String']>;
   status?: Maybe<OrganizationStatusEnum>;
-  totalSales: Scalars['Int'];
+  totalsales: Scalars['Int'];
   type?: Maybe<OrganizationTypeEnum>;
   updatedAt: Scalars['DateTime'];
 };
 
 export type OrganizationCreateInput = {
   accesses: Scalars['Int'];
-  companyRegister: Scalars['String'];
+  companyid: Scalars['String'];
   logo?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   productivity: Scalars['Int'];
   rating?: InputMaybe<Scalars['String']>;
-  totalSales: Scalars['Int'];
+  totalsales: Scalars['Int'];
   type: OrganizationTypeEnum;
 };
 
@@ -398,14 +423,14 @@ export enum OrganizationTypeEnum {
 
 export type OrganizationUpdateInput = {
   accesses: Scalars['Int'];
-  companyRegister: Scalars['String'];
+  companyid: Scalars['String'];
   id: Scalars['ID'];
   logo?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   productivity: Scalars['Int'];
   rating?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<OrganizationStatusEnum>;
-  totalSales: Scalars['Int'];
+  totalsales: Scalars['Int'];
   type?: InputMaybe<OrganizationTypeEnum>;
 };
 
@@ -462,7 +487,7 @@ export type OrganizationsType = {
 };
 
 export type OrganizationsWhereInput = {
-  type?: InputMaybe<OrganizationTypeEnum>;
+  type: OrganizationTypeEnum;
 };
 
 export type Permission = {
@@ -481,7 +506,9 @@ export type PermissionsType = {
 
 export type Product = {
   __typename?: 'Product';
+  ProductRooms?: Maybe<ProductRoom>;
   address1?: Maybe<Scalars['String']>;
+  bannerStatus: BannerStatusEnum;
   city: Scalars['String'];
   constStatus: ConstructionStatusEnum;
   description?: Maybe<Scalars['String']>;
@@ -494,7 +521,6 @@ export type Product = {
   organizationId: Scalars['String'];
   price?: Maybe<Scalars['Int']>;
   priceSqr?: Maybe<Scalars['Int']>;
-  productStatus: ProductStatusEnum;
   releaseDate?: Maybe<Scalars['DateTime']>;
   roomNumber: Scalars['Int'];
   sqr: Scalars['Float'];
@@ -502,6 +528,11 @@ export type Product = {
 
 export type ProductInput = {
   address1?: InputMaybe<Scalars['String']>;
+  bannerStatus: BannerStatusEnum;
+  bathNumber?: InputMaybe<Scalars['Int']>;
+  bathRoom?: InputMaybe<Scalars['String']>;
+  bedNumber?: InputMaybe<Scalars['Int']>;
+  bedRoom?: InputMaybe<Scalars['String']>;
   city: Scalars['String'];
   constStatus: ConstructionStatusEnum;
   description?: InputMaybe<Scalars['String']>;
@@ -509,20 +540,40 @@ export type ProductInput = {
   floorNumber: Scalars['Int'];
   floors: Scalars['Int'];
   images?: InputMaybe<Scalars['String']>;
+  kitchenNumber?: InputMaybe<Scalars['Int']>;
+  kitchenRoom?: InputMaybe<Scalars['String']>;
+  livingNumber?: InputMaybe<Scalars['Int']>;
+  livingRoom?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   organizationId: Scalars['String'];
   price?: InputMaybe<Scalars['Int']>;
   priceSqr?: InputMaybe<Scalars['Int']>;
-  productStatus: ProductStatusEnum;
   releaseDate?: InputMaybe<Scalars['DateTime']>;
   roomNumber: Scalars['Int'];
   sqr: Scalars['Float'];
+  viewWindow?: InputMaybe<Scalars['String']>;
+};
+
+export type ProductRoom = {
+  __typename?: 'ProductRoom';
+  bathNumber?: Maybe<Scalars['Int']>;
+  bathRoom?: Maybe<Scalars['String']>;
+  bedNumber?: Maybe<Scalars['Int']>;
+  bedRoom?: Maybe<Scalars['String']>;
+  kitchenNumber?: Maybe<Scalars['Int']>;
+  kitchenRoom?: Maybe<Scalars['String']>;
+  livingNumber?: Maybe<Scalars['Int']>;
+  livingRoom?: Maybe<Scalars['String']>;
+  viewWindow?: Maybe<Scalars['String']>;
+};
+
+export type ProductStatusChange = {
+  productStatus: ProductStatusEnum;
 };
 
 export enum ProductStatusEnum {
-  DEFAULT = 'DEFAULT',
-  HIGHLIGTH = 'HIGHLIGTH',
-  NEW = 'NEW'
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE'
 }
 
 export type ProductUniqueWhereInput = {
@@ -530,8 +581,16 @@ export type ProductUniqueWhereInput = {
 };
 
 export type ProductWhereInput = {
-  city: Scalars['String'];
-  district: Scalars['String'];
+  bedNumber?: InputMaybe<Scalars['Int']>;
+  city?: InputMaybe<Scalars['String']>;
+  constStatus?: InputMaybe<ConstructionStatusEnum>;
+  district?: InputMaybe<Scalars['String']>;
+  maxPrice?: InputMaybe<Scalars['Float']>;
+  maxSqr?: InputMaybe<Scalars['Int']>;
+  minPrice?: InputMaybe<Scalars['Float']>;
+  minSqr?: InputMaybe<Scalars['Int']>;
+  organizationId?: InputMaybe<Scalars['String']>;
+  roomNumber?: InputMaybe<Scalars['Int']>;
 };
 
 export type Products = {
@@ -573,7 +632,7 @@ export type QueryProductArgs = {
 
 
 export type QueryProductsArgs = {
-  input?: InputMaybe<ProductWhereInput>;
+  where?: InputMaybe<ProductWhereInput>;
 };
 
 
@@ -888,7 +947,7 @@ export type ProductCreateMutationVariables = Exact<{
 }>;
 
 
-export type ProductCreateMutation = { __typename?: 'Mutation', productCreate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+export type ProductCreateMutation = { __typename?: 'Mutation', productCreate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
 
 export type ProductUpdateMutationVariables = Exact<{
   input: ProductInput;
@@ -896,21 +955,28 @@ export type ProductUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
+
+export type ProductDeleteMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ProductDeleteMutation = { __typename?: 'Mutation', productDelete?: boolean | null };
 
 export type ProductsQueryVariables = Exact<{
-  input?: InputMaybe<ProductWhereInput>;
+  where?: InputMaybe<ProductWhereInput>;
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
+export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, images?: string | null, id: string, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null }> | null } | null };
 
 export type ProductQueryVariables = Exact<{
-  input: ProductUniqueWhereInput;
+  input?: InputMaybe<ProductUniqueWhereInput>;
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
 
 export type AuthWebMutationVariables = Exact<{
   input: ExternalWebAuthInput;
@@ -983,18 +1049,18 @@ export type AccountEliminateMutationVariables = Exact<{
 export type AccountEliminateMutation = { __typename?: 'Mutation', accountEliminate?: { __typename?: 'AuthVerifyTokenType', accessToken?: string | null, refreshToken?: string | null, deviceId?: string | null } | null };
 
 export type ProductsLandingQueryVariables = Exact<{
-  input?: InputMaybe<ProductWhereInput>;
+  where?: InputMaybe<ProductWhereInput>;
 }>;
 
 
-export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string }> | null } | null };
+export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, images?: string | null, id: string, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null }> | null } | null };
 
 export type ProductLandingQueryVariables = Exact<{
-  input: ProductUniqueWhereInput;
+  input?: InputMaybe<ProductUniqueWhereInput>;
 }>;
 
 
-export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
 
 
 export const MeAuthDocument = gql`
@@ -1177,6 +1243,17 @@ export type OrganizationUsersQueryResult = Apollo.QueryResult<OrganizationUsersQ
 export const ProductCreateDocument = gql`
     mutation productCreate($input: ProductInput!) {
   productCreate(input: $input) {
+    ProductRooms {
+      bathNumber
+      bedNumber
+      livingNumber
+      bedRoom
+      bathRoom
+      livingRoom
+      viewWindow
+      kitchenNumber
+      kitchenRoom
+    }
     id
     images
     name
@@ -1192,7 +1269,7 @@ export const ProductCreateDocument = gql`
     description
     releaseDate
     constStatus
-    productStatus
+    bannerStatus
     organizationId
   }
 }
@@ -1226,23 +1303,34 @@ export type ProductCreateMutationOptions = Apollo.BaseMutationOptions<ProductCre
 export const ProductUpdateDocument = gql`
     mutation productUpdate($input: ProductInput!, $id: String!) {
   productUpdate(input: $input, _id: $id) {
+    ProductRooms {
+      bathNumber
+      bathRoom
+      bedNumber
+      bedRoom
+      kitchenNumber
+      kitchenRoom
+      livingNumber
+      livingRoom
+      viewWindow
+    }
+    address1
+    bannerStatus
+    city
+    constStatus
+    description
+    district
+    floorNumber
+    floors
     id
     images
     name
-    address1
-    city
-    district
-    floors
-    floorNumber
+    organizationId
+    price
+    priceSqr
+    releaseDate
     roomNumber
     sqr
-    priceSqr
-    price
-    description
-    releaseDate
-    constStatus
-    productStatus
-    organizationId
   }
 }
     `;
@@ -1273,27 +1361,69 @@ export function useProductUpdateMutation(baseOptions?: Apollo.MutationHookOption
 export type ProductUpdateMutationHookResult = ReturnType<typeof useProductUpdateMutation>;
 export type ProductUpdateMutationResult = Apollo.MutationResult<ProductUpdateMutation>;
 export type ProductUpdateMutationOptions = Apollo.BaseMutationOptions<ProductUpdateMutation, ProductUpdateMutationVariables>;
+export const ProductDeleteDocument = gql`
+    mutation productDelete($id: String!) {
+  productDelete(_id: $id)
+}
+    `;
+export type ProductDeleteMutationFn = Apollo.MutationFunction<ProductDeleteMutation, ProductDeleteMutationVariables>;
+
+/**
+ * __useProductDeleteMutation__
+ *
+ * To run a mutation, you first call `useProductDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProductDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [productDeleteMutation, { data, loading, error }] = useProductDeleteMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProductDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProductDeleteMutation, ProductDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProductDeleteMutation, ProductDeleteMutationVariables>(ProductDeleteDocument, options);
+      }
+export type ProductDeleteMutationHookResult = ReturnType<typeof useProductDeleteMutation>;
+export type ProductDeleteMutationResult = Apollo.MutationResult<ProductDeleteMutation>;
+export type ProductDeleteMutationOptions = Apollo.BaseMutationOptions<ProductDeleteMutation, ProductDeleteMutationVariables>;
 export const ProductsDocument = gql`
-    query products($input: ProductWhereInput) {
-  products(input: $input) {
+    query products($where: ProductWhereInput) {
+  products(where: $where) {
     data {
-      id
-      images
-      name
+      ProductRooms {
+        bathNumber
+        bathRoom
+        bedNumber
+        bedRoom
+        kitchenNumber
+        kitchenRoom
+        livingNumber
+        livingRoom
+        viewWindow
+      }
       address1
+      bannerStatus
       city
+      constStatus
+      description
       district
-      floors
       floorNumber
+      floors
+      images
+      id
+      name
+      organizationId
+      price
+      priceSqr
+      releaseDate
       roomNumber
       sqr
-      priceSqr
-      price
-      description
-      releaseDate
-      constStatus
-      productStatus
-      organizationId
     }
   }
 }
@@ -1311,7 +1441,7 @@ export const ProductsDocument = gql`
  * @example
  * const { data, loading, error } = useProductsQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -1327,25 +1457,36 @@ export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
 export const ProductDocument = gql`
-    query product($input: ProductUniqueWhereInput!) {
+    query product($input: ProductUniqueWhereInput) {
   product(input: $input) {
+    ProductRooms {
+      bathNumber
+      bathRoom
+      bedNumber
+      bedRoom
+      kitchenNumber
+      kitchenRoom
+      livingNumber
+      livingRoom
+      viewWindow
+    }
+    address1
+    bannerStatus
+    city
+    constStatus
+    description
+    district
+    floorNumber
+    floors
     id
     images
     name
-    address1
-    city
-    district
-    floors
-    floorNumber
+    organizationId
+    price
+    priceSqr
+    releaseDate
     roomNumber
     sqr
-    priceSqr
-    price
-    description
-    releaseDate
-    constStatus
-    productStatus
-    organizationId
   }
 }
     `;
@@ -1366,7 +1507,7 @@ export const ProductDocument = gql`
  *   },
  * });
  */
-export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
+export function useProductQuery(baseOptions?: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
       }
@@ -1740,26 +1881,37 @@ export type AccountEliminateMutationHookResult = ReturnType<typeof useAccountEli
 export type AccountEliminateMutationResult = Apollo.MutationResult<AccountEliminateMutation>;
 export type AccountEliminateMutationOptions = Apollo.BaseMutationOptions<AccountEliminateMutation, AccountEliminateMutationVariables>;
 export const ProductsLandingDocument = gql`
-    query productsLanding($input: ProductWhereInput) {
-  products(input: $input) {
+    query productsLanding($where: ProductWhereInput) {
+  products(where: $where) {
     data {
-      id
-      images
-      name
+      ProductRooms {
+        bathNumber
+        bathRoom
+        bedNumber
+        bedRoom
+        kitchenNumber
+        kitchenRoom
+        livingNumber
+        livingRoom
+        viewWindow
+      }
       address1
+      bannerStatus
       city
+      constStatus
+      description
       district
-      floors
       floorNumber
+      floors
+      images
+      id
+      name
+      organizationId
+      price
+      priceSqr
+      releaseDate
       roomNumber
       sqr
-      priceSqr
-      price
-      description
-      releaseDate
-      constStatus
-      productStatus
-      organizationId
     }
   }
 }
@@ -1777,7 +1929,7 @@ export const ProductsLandingDocument = gql`
  * @example
  * const { data, loading, error } = useProductsLandingQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -1793,25 +1945,36 @@ export type ProductsLandingQueryHookResult = ReturnType<typeof useProductsLandin
 export type ProductsLandingLazyQueryHookResult = ReturnType<typeof useProductsLandingLazyQuery>;
 export type ProductsLandingQueryResult = Apollo.QueryResult<ProductsLandingQuery, ProductsLandingQueryVariables>;
 export const ProductLandingDocument = gql`
-    query productLanding($input: ProductUniqueWhereInput!) {
+    query productLanding($input: ProductUniqueWhereInput) {
   product(input: $input) {
+    ProductRooms {
+      bathNumber
+      bathRoom
+      bedNumber
+      bedRoom
+      kitchenNumber
+      kitchenRoom
+      livingNumber
+      livingRoom
+      viewWindow
+    }
+    address1
+    bannerStatus
+    city
+    constStatus
+    description
+    district
+    floorNumber
+    floors
     id
     images
     name
-    address1
-    city
-    district
-    floors
-    floorNumber
+    organizationId
+    price
+    priceSqr
+    releaseDate
     roomNumber
     sqr
-    priceSqr
-    price
-    description
-    releaseDate
-    constStatus
-    productStatus
-    organizationId
   }
 }
     `;
@@ -1832,7 +1995,7 @@ export const ProductLandingDocument = gql`
  *   },
  * });
  */
-export function useProductLandingQuery(baseOptions: Apollo.QueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
+export function useProductLandingQuery(baseOptions?: Apollo.QueryHookOptions<ProductLandingQuery, ProductLandingQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProductLandingQuery, ProductLandingQueryVariables>(ProductLandingDocument, options);
       }

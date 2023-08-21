@@ -10,6 +10,7 @@ export const handleAuthDialog = async (props: Props) => {
   const { apolloClient, router } = props
   await apolloClient.cache.reset()
   const returnUrl = router.query.returnUrl
-  const redirectURL = returnUrl && returnUrl !== "/" ? returnUrl : "/admin/home"
+  const redirectURL =
+    returnUrl && returnUrl !== "/" ? returnUrl : "/admin/product"
   router.replace(redirectURL as string).then(() => window.location.reload)
 }

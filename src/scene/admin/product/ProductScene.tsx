@@ -1,6 +1,5 @@
 import {
-  ProductStatusEnum,
-  ConstructionStatusEnum,
+  BannerStatusEnum,
   ProductsQuery,
 } from "src/generated"
 import * as React from "react"
@@ -8,7 +7,7 @@ import Box from "@mui/material/Box"
 import IconButton from "@mui/material/IconButton"
 import Link from "next/link"
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import { ListClassKey, Tooltip, Typography } from "@mui/material"
+import { Tooltip, Typography } from "@mui/material"
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
@@ -24,7 +23,7 @@ type ProductType = {
   sqr: number
   priceSqr: number | null | undefined
   releaseDate: Date
-  productStatus: ProductStatusEnum
+  productStatus: BannerStatusEnum
 }
 
 interface CellType {
@@ -62,7 +61,7 @@ const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Үл хөдлөх",
-    width: 250,
+    width: 200,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
@@ -91,7 +90,6 @@ const columns: GridColDef[] = [
   {
     field: "priceSqr",
     headerName: "Үнэ",
-    type: "number",
     width: 150,
     editable: true,
     sortable: true,
@@ -106,14 +104,15 @@ const columns: GridColDef[] = [
   {
     field: "releaseDate",
     headerName: "Хугацаа",
-    width: 150,
+    width: 200,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
-      const { releaseDate } = row
+      const { releaseDate } = row;
+      const date = new Date(releaseDate).toISOString().split('T')[0];
       return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Typography>{releaseDate ? releaseDate: ""}</Typography>
+          <Typography>{date}</Typography>
         </Box>
       )
     },
@@ -130,20 +129,20 @@ const columns: GridColDef[] = [
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Tooltip
             title={
-              productStatus === ProductStatusEnum.NEW
+              productStatus === BannerStatusEnum.NEW
                 ? "Шинэ"
-                : productStatus === ProductStatusEnum.HIGHLIGTH
+                : productStatus === BannerStatusEnum.HIGHLIGTH
                 ? "Онцлох"
                 : "Энгийн"
             }
           >
             <IconButton size="small" sx={{ mr: 0.5 }}>
-              {productStatus === ProductStatusEnum.NEW ? (
-                <Icon icon={"mdi:new-box"} color="warning" />
-              ) : productStatus === ProductStatusEnum.HIGHLIGTH ? (
-                <Icon icon={"mdi:star-outline"} color="error" />
+              {productStatus === BannerStatusEnum.NEW ? (
+                <Icon icon={"mdi:new-box"} color="red" />
+              ) : productStatus === BannerStatusEnum.HIGHLIGTH ? (
+                <Icon icon={"mdi:star-outline"} color="#72E128" />
               ) : (
-                <Icon icon={"mdi:home-city-outline"} color="primary" />
+                <Icon icon={"mdi:home-city-outline"} color="#0361C9" />
               )}
             </IconButton>
           </Tooltip>
@@ -191,7 +190,7 @@ function getRows(data: ProductsQuery | undefined) {
       priceSqr: item.priceSqr,
       releaseDate: item.releaseDate,
       isFav: true,
-      productStatus: item.productStatus,
+      productStatus: item.bannerStatus,
     })
   })
   return rows

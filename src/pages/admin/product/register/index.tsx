@@ -1,9 +1,9 @@
-import CreateProduct from "src/scene/admin/product/create/CreateProduct"
+import {RegisterProduct} from "src/scene/admin/product/create/RegisterProduct"
 import React from 'react'
 import { NextPage } from 'next'
 import { RoleData } from 'src/config/acl'
 
-const ProductList: NextPage = () => <CreateProduct />
+const ProductList: NextPage = () => <RegisterProduct />
 
 ProductList.acl = {
   action: 'read',

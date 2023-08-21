@@ -8,16 +8,21 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Box,
 } from "@mui/material"
 import { Formik, Form, Field } from "formik"
 import { RenderValues } from "src/@core/utils/initData"
 import { TextField } from "formik-mui"
-import PickersComponent from "../create/DateInput"
+import PickersComponent from "../create/components/DateInput"
 import DatePicker from "react-datepicker"
 import { distNames } from "src/@core/utils/initData"
 import { ProductInput, useProductQuery } from "src/generated"
 import { mongolianProvinces } from "src/@core/utils/initData"
 import { useProductUpdateMutation } from "src/generated"
+import { useRouter } from "next/router"
+import Icon from "src/@core/components/icon"
+import DatePickerWrapper from "src/@core/styles/libs/react-datepicker"
+import formatISO from "date-fns/formatISO"
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -54,18 +59,34 @@ import { useProductUpdateMutation } from "src/generated"
 // }
 
 const UpdateProduct = ({ id }: { id: string }) => {
-  const { data } = useProductQuery({
-    variables: { input: { id } },
-  })
 
-  console.log(data)
+  const { data } = useProductQuery({
+      variables: {input: { id } },
+  })
+  const parsedDate = new Date(data?.product?.releaseDate)
+  //console.log(data?.product?.releaseDate)
+// Format the date into the desired format
+
+const formattedDate = parsedDate.toLocaleString("en-GB", {
+  weekday: 'short', // Short weekday name
+  year: 'numeric',
+  month: 'short', // Short month name
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  timeZoneName: 'short', // Short time zone name
+})
+
+console.log(formattedDate);
+
   const initialValues = {
-    //id: data?.product?.id,
+    id: data?.product?.id,
     name: data?.product?.name,
     constStatus: data?.product?.constStatus,
-    productStatus: data?.product?.productStatus,
+    bannerStatus: data?.product?.bannerStatus,
     description: data?.product?.description,
-    address1: data?.product?.description,
+    address1: data?.product?.address1,
     roomNumber: data?.product?.roomNumber,
     // bedNo: number;
     // bathNo: number;
@@ -83,9 +104,10 @@ const UpdateProduct = ({ id }: { id: string }) => {
     organizationId: data?.product?.organizationId,
     priceSqr: data?.product?.priceSqr,
   } as ProductInput
+  console.log("should get value", initialValues?.releaseDate)
   const [onUpdateProduct] = useProductUpdateMutation()
   const submitHandler = (_values: ProductInput) => {
-    console.log("onSubmit === values", data)
+    console.log("onSubmit === values", _values.releaseDate)
     onUpdateProduct({
       variables: {
         id: id,
@@ -103,24 +125,19 @@ const UpdateProduct = ({ id }: { id: string }) => {
           floorNumber: _values.floorNumber,
           roomNumber: _values.roomNumber,
           constStatus: _values.constStatus,
-          productStatus: _values.productStatus,
+          bannerStatus: _values.bannerStatus,
           description: _values.description,
           organizationId: "879094b3-f68e-4bda-8139-b5ebf599e84b",
         },
       },
     })
   }
-
+const router = useRouter()
   return (
-    <>
-      <Typography variant="h6" fontWeight="bold">
-        Үндсэн мэдээлэл засах
-      </Typography>
+    <Box display="flex" justifyContent="center" >
       <Formik
         initialValues={initialValues}
-        //validationSchema={validationCreateProductSchema}
         onSubmit={(values: ProductInput, formikHelpers) => {
-          console.log(values)
           submitHandler(values)
           formikHelpers.setSubmitting(false)
         }}
@@ -130,27 +147,32 @@ const UpdateProduct = ({ id }: { id: string }) => {
             <Stack
               direction="column"
               rowGap="20px"
+              width="1000px"
               sx={{
                 "& .MuiGrid-root": {
                   columnGap: "20px",
+                  rowGap: "20px"
                 },
               }}
             >
-              <input
-                id="file"
-                name="images"
-                type="file"
-                onChange={(event) => {
-                  if(event?.currentTarget?.files)
-                  formikProps.setFieldValue(
-                    "images",
-                    event?.currentTarget?.files[0],
-                  )
-                }}
-                className="form-control"
-              />
-              {/* //<Thumb file={formikProps.values.images} /> */}
+              <Button variant="outlined" onClick={()=> router.back()} startIcon={<Icon icon={"mdi:arrow-left"} />} sx={{alignSelf: "flex-start"}}>Буцах</Button>
+              <Typography variant="h6" fontWeight="bold">
+        Үндсэн мэдээлэл засах
+      </Typography>
+           <input
+            id="file"
+            name="images"
+            type="file"
+            onChange={(event) => {
+              if (event?.currentTarget?.files) {
+                formikProps.setFieldValue("images", event.currentTarget.files[0]);
+              }
+            }}
+            className="form-control"
+          />
 
+                  {/* //<Thumb file={formikProps.values.images} /> */}
+              
               {/* <input
           type='file'
           name='images'
@@ -240,16 +262,16 @@ const UpdateProduct = ({ id }: { id: string }) => {
                   size="medium"
                 />
               </Grid>
-              <DatePicker
-                selected={formikProps.values.releaseDate}
+              <DatePickerWrapper><DatePicker
+                selected={formikProps.values.releaseDate ? new Date(formikProps.values.releaseDate) : null}
                 id="basic-input"
                 popperPlacement="bottom-start"
                 name="releaseDate"
                 onChange={(date: Date) =>
-                  formikProps.setFieldValue("releaseDate", date)
+                  formikProps.setFieldValue('releaseDate', date)
                 }
                 customInput={<PickersComponent label="Хугацаа сонгох" />}
-              />
+              /></DatePickerWrapper>
               <Grid container>
                 <Typography>Нийт давхарын тоо</Typography>
                 <Typography>Давхарын тоо</Typography>
@@ -300,7 +322,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
                     <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={"NEW"} value={"NEW"}>
+                    <MenuItem key={"NEW"} value={"NEWBUILDING"}>
                       Шинэ
                     </MenuItem>
                     <MenuItem key={"SOON"} value={"SOON"}>
@@ -314,12 +336,12 @@ const UpdateProduct = ({ id }: { id: string }) => {
                 <FormControl>
                   <InputLabel id="select-status">Статус</InputLabel>
                   <Select
-                    value={formikProps.values.productStatus}
+                    value={formikProps.values.bannerStatus}
                     id="select-status"
                     label="Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange("productStatus")(
+                      formikProps.handleChange("bannerStatus")(
                         event.target.value,
                       )
                     }}
@@ -344,12 +366,12 @@ const UpdateProduct = ({ id }: { id: string }) => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Button type="submit">Хадгалах</Button>
+              <Button type="submit" variant="contained" sx={{alignSelf: "flex-end"}}>Хадгалах</Button>
             </Stack>
           </Form>
         )}
       </Formik>
-    </>
+    </Box>
   )
 }
 export default UpdateProduct

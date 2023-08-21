@@ -10,20 +10,21 @@ import ImageListItem from "@mui/material/ImageListItem"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
-import { ListData } from "../utils/ListData"
+import { ListData } from "src/@core/utils/initData"
 import { DetailedBox } from "./DetailedBox"
 import Grid from "@mui/material/Grid"
 import { DetailHeader } from "../../home/components/Header"
-import { useProductLandingQuery } from "src/generated"
+import { ConstructionStatusEnum, useProductLandingQuery } from "src/generated"
 
 // ** Icon Imports
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import Icon from "src/@core/components/icon"
+import { IconButton } from "@mui/material"
 
 export const ProductDetail = ({ id }: { id: string }) => {
   console.log(id)
   const { data } = useProductLandingQuery({
-    variables: { input: { id } },
-  })
+    variables: {input: {id}},
+  });
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState("Дэлгэрэнгүй харах")
   const handleChange = (bool: boolean) => {
@@ -41,6 +42,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
           <Typography variant="h6" fontWeight="bold">
             {data?.product?.price}₮
           </Typography>
+           {data?.product?.constStatus !== ConstructionStatusEnum.DEFAULT ?
           <Typography
             sx={{
               border: (theme) => `1px solid ${theme.palette.primary.main}`,
@@ -48,8 +50,8 @@ export const ProductDetail = ({ id }: { id: string }) => {
               p: "8px 30px",
             }}
           >
-            {data?.product?.constStatus}
-          </Typography>
+        {data?.product?.constStatus === ConstructionStatusEnum.NEWBUILDING ? 'Шинэ' : data?.product?.constStatus === ConstructionStatusEnum.OLD ? 'Хуучин' : data?.product?.constStatus === ConstructionStatusEnum.SOON ? 'Тун удахгүй' : ' '}
+          </Typography> : null}
         </Stack>
         <Typography>
           {data?.product?.address1 && data?.product?.district
@@ -83,48 +85,48 @@ export const ProductDetail = ({ id }: { id: string }) => {
         <DetailedBox
           title="Нийт өрөө- "
           subTitle={`${data?.product?.roomNumber}`}
-          icon="MeetingRoomOutlinedIcon"
+          icon="material-symbols:meeting-room-outline"
         />
         <DetailedBox
           title="Угаалгын өрөө- "
-          subTitle={`${ListData[0].bathNo}`}
-          icon="BathtubOutlinedIcon"
+          subTitle={`${data?.product?.ProductRooms?.bathNumber}`}
+          icon="fa:bathtub"
         />
         <DetailedBox
           title="Нийт метр квадрат- "
           subTitle={`${data?.product?.sqr}`}
-          icon="CompareArrowsIcon"
+          icon="ic:baseline-compare-arrows"
         />
         <DetailedBox
-          title="Угаалгын өрөө- "
-          subTitle={`${ListData[0].bathNo}`}
-          icon="BathtubOutlinedIcon"
+          title="Унтлагын өрөө- "
+          subTitle={`${data?.product?.ProductRooms?.bedNumber}`}
+          icon="icon-park-solid:sleep-two"
         />
       </Grid>
       <Grid container columnGap="20px">
         <DetailedBox
           title="Нийт давхар- "
           subTitle={`${data?.product?.floors}`}
-          icon="BusinessIcon"
+          icon="mdi:building"
         />
         <DetailedBox
           title="Давхар- "
           subTitle={`${data?.product?.floorNumber}`}
-          icon="LayersIcon"
+          icon="fa6-solid:layer-group"
         />
         <DetailedBox
           title="Баригдсан он- "
           subTitle={`${data?.product?.releaseDate}`}
-          icon="EventAvailableIcon"
+          icon="ph:calendar-check-fill"
         />
         <DetailedBox
           title="Зогсоол- "
           subTitle={`${ListData[0].parking}`}
-          icon="DirectionsCarIcon"
+          icon="material-symbols:directions-car"
         />
       </Grid>
-      <Accordion expanded={expanded} onChange={() => handleChange(!expanded)}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <Accordion expanded={expanded} onChange={() => handleChange(!expanded)} sx={{width: '100%'}}>
+        <AccordionSummary expandIcon={<Icon icon="ep:arrow-down-bold" />}>
           <Grid container justifyContent="space-between">
             <Typography variant="h6" fontWeight="bold">
               Дэлгэрэнгүй мэдээлэл
@@ -146,7 +148,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
       <Typography variant="h6" fontWeight="bold">
         Онцлог
       </Typography>
-      {/* <Grid container columnGap="20px" rowGap="20px">
+      <Grid container columnGap="20px" rowGap="20px">
         {ListData[0].highlights.map((item) => (
           <Button
             key={item}
@@ -168,12 +170,12 @@ export const ProductDetail = ({ id }: { id: string }) => {
             }}
           >
             <IconButton>
-              <CheckCircleIcon />
+              <Icon icon={"mdi:check-circle"} />
             </IconButton>
             {item}
           </Button>
         ))}
-      </Grid> */}
+      </Grid>
       <Button
         sx={{
           backgroundColor: "primary.main",
