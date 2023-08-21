@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const LANDING_USER = gql`
-query landingUser($input: UserWhereInput) {
-    user(input: $input) {
+query landingUser($where: UserWhereUniqueInput) {
+    user(where: $where) {
       id
       userId
       userName

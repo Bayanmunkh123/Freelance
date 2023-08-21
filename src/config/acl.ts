@@ -2,7 +2,6 @@ import { AbilityBuilder, PureAbility } from "@casl/ability"
 import { AuthUserType } from "src/generated"
 import { adminRolesPermission } from "src/pages/admin/roles"
 import { adminUsersPermission } from "src/pages/admin/orgusers"
-import { adminRequestPermission } from "src/pages/admin/request"
 import { adminCompanyPermission } from "src/pages/admin/company"
 import { adminOrganizationPermission } from "src/pages/admin/organization"
 import { adminDashboardPermission } from "src/pages/admin/dashboard"
@@ -75,7 +74,6 @@ const rolesData: RoleData = {
   ...adminDashboardPermission,
   ...adminRolesPermission,
   ...adminUsersPermission,
-  ...adminRequestPermission,
   ...adminCompanyPermission,
   ...adminOrganizationPermission,
   ...adminProductPermission,

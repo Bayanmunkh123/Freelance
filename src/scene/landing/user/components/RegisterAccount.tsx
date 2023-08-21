@@ -1,9 +1,5 @@
 // ** React Imports
-import {
-  useState,
-  ElementType,
-  ChangeEvent,
-} from "react"
+import { useState, ElementType, ChangeEvent } from "react"
 
 // ** Next Import
 import { useRouter } from "next/router"
@@ -56,8 +52,6 @@ interface CountryType {
   phone: string
 }
 
-
-
 const ImgStyled = styled("img")(({ theme }) => ({
   width: 120,
   height: 120,
@@ -74,9 +68,9 @@ const ButtonStyled = styled(Button)<
   },
 }))
 
-export const RegisterAccount = ({userId}: {userId: string}) => {
+export const RegisterAccount = ({ userId }: { userId: string }) => {
   const { data } = useLandingUserQuery({
-    variables: { input:{ userId} }
+    variables: { where: { id: userId } },
   })
   console.log(data)
   const initialData: Data = {
@@ -121,9 +115,9 @@ export const RegisterAccount = ({userId}: {userId: string}) => {
   const handleFormChange = (field: keyof Data, value: Data[keyof Data]) => {
     setFormData({ ...formData, [field]: value })
   }
-  
+
   return (
-    <form >
+    <form>
       <CardContent sx={{ pt: 0 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <ImgStyled src={imgSrc} alt="Profile Pic" />

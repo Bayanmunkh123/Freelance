@@ -20,7 +20,7 @@ import {
   OrganizationUser,
   OrganizationUserRoleEnum,
   useOrganizationUsersQuery,
-  useRolesQuery,
+  // useRolesQuery,
 } from "src/generated"
 import { useOnSearch } from "src/hooks/useOnSearch"
 import { useOrganizationUserVariables } from "../../../utils/useOrganizationUserVariables"
@@ -297,7 +297,7 @@ export const RoleListTable = () => {
 
   const handleFilter = (val: string) => {
     // onSearch("orgRole", val)
-    refetch()
+    // refetch()
     setValue(val)
   }
   // const handleFilter = useCallback((val: string) => {
@@ -319,16 +319,17 @@ export const RoleListTable = () => {
           <RoleTableHeader
             searchValue={searchValue}
             setSearchValue={setSearchValue}
-            roleList={rolesList as string}
+            roleList={"dd" as string}
             handleFilter={handleFilter}
             toggle={toggleAddUserDrawer}
             handleRoleChange={handleRoleChange}
             clearSearch={clearSearch}
           />
           <DataGrid
-            loading={organizationUserLoading}
+            // loading={organizationUserLoading}
             autoHeight
-            rows={data?.organizationUsers?.data || []}
+            // rows={data?.organizationUsers?.data || []}
+            rows={[]}
             columns={columns}
             checkboxSelection
             disableRowSelectionOnClick

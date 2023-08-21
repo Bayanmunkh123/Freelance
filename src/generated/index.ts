@@ -608,7 +608,6 @@ export type Query = {
   sourceCategories?: Maybe<Array<Maybe<SourceCategory>>>;
   storageSignedUrl?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
-  userOrder?: Maybe<UserOrder>;
   users?: Maybe<Users>;
 };
 
@@ -656,17 +655,12 @@ export type QueryStorageSignedUrlArgs = {
 
 
 export type QueryUserArgs = {
-  input?: InputMaybe<UserWhereInput>;
-};
-
-
-export type QueryUserOrderArgs = {
-  input?: InputMaybe<UserWhereInput>;
+  where?: InputMaybe<UserWhereUniqueInput>;
 };
 
 
 export type QueryUsersArgs = {
-  input?: InputMaybe<UserWhereInput>;
+  where?: InputMaybe<UserWhereInput>;
 };
 
 export type RefreshToAccessTokenInput = {
@@ -911,8 +905,11 @@ export type UserUpdateInput = {
 };
 
 export type UserWhereInput = {
-  id: Scalars['ID'];
   search?: InputMaybe<Scalars['String']>;
+};
+
+export type UserWhereUniqueInput = {
+  id: Scalars['ID'];
 };
 
 export type Users = {
@@ -1068,7 +1065,7 @@ export type ProductLandingQueryVariables = Exact<{
 export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
 
 export type LandingUserQueryVariables = Exact<{
-  input?: InputMaybe<UserWhereInput>;
+  where?: InputMaybe<UserWhereUniqueInput>;
 }>;
 
 
@@ -2019,8 +2016,8 @@ export type ProductLandingQueryHookResult = ReturnType<typeof useProductLandingQ
 export type ProductLandingLazyQueryHookResult = ReturnType<typeof useProductLandingLazyQuery>;
 export type ProductLandingQueryResult = Apollo.QueryResult<ProductLandingQuery, ProductLandingQueryVariables>;
 export const LandingUserDocument = gql`
-    query landingUser($input: UserWhereInput) {
-  user(input: $input) {
+    query landingUser($where: UserWhereUniqueInput) {
+  user(where: $where) {
     id
     userId
     userName
@@ -2136,7 +2133,7 @@ export const LandingUserDocument = gql`
  * @example
  * const { data, loading, error } = useLandingUserQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      where: // value for 'where'
  *   },
  * });
  */

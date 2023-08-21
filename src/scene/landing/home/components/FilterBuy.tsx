@@ -31,7 +31,7 @@ export interface FilterType{
   maxSqr: number | null,
   minSqr: number | null,
   roomNumber: number | null,
-  constStatus: ConstructionStatusEnum,
+  constStatus: ConstructionStatusEnum | null,
   organizationId: string | null,
 }
 interface CustomSliderProps{
