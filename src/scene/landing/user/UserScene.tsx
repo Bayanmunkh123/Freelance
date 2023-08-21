@@ -12,15 +12,15 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Button, { ButtonProps } from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import MuiTabList, { TabListProps } from '@mui/lab/TabList'
 import Tab from '@mui/material/Tab'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, Theme } from '@mui/material/styles'
-import { RegisterAccount } from './components/RegisterAccount'
-import  RegisterOrder  from './components/RegisterOrder'
+import {RegisterAccount} from './components/RegisterAccount'
+import RegisterOrder  from './components/RegisterOrder'
+import RegisterMain from './components/RegisterMain'
 
 // ** Third Party Imports
 import { useForm, Controller } from 'react-hook-form'
@@ -28,6 +28,7 @@ import { useForm, Controller } from 'react-hook-form'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import React from 'react'
+import { positions } from '@mui/system';
 
 
 interface Data {
@@ -184,9 +185,9 @@ const UserScene = () => {
 
   return (
     
-    <Grid container spacing={6} xs={10} justifyContent="center">
+    <Grid item xs={8} container spacing={6}  justifyContent={"center"} alignItems={"center"} >
       <TabContext value={activeTab}>
-          <Grid container spacing={6} alignItems="center" justifyContent="center">
+          <Grid container spacing={6} alignItems={"center"} justifyContent={"center"} >
             <Grid item xs={8} my="20px">
               <TabList
                 variant='scrollable'
@@ -228,7 +229,7 @@ const UserScene = () => {
               </TabList>
             </Grid>
             <Card >    
-              <CardContent>
+              <CardContent >
                 <TabPanel value='account' sx={{ p: 0 }}>
                 <RegisterAccount />
                 </TabPanel>
@@ -236,7 +237,7 @@ const UserScene = () => {
                 <RegisterOrder />
                 </TabPanel>
                 <TabPanel value='main' sx={{ p: 0 }}>
-                <RegisterAccount />
+                <RegisterMain />
                 </TabPanel>
               </CardContent>
             </Card>

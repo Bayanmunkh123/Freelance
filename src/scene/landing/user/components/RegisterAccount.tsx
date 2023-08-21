@@ -3,9 +3,6 @@ import {
   useState,
   ElementType,
   ChangeEvent,
-  ReactElement,
-  SyntheticEvent,
-  useEffect,
 } from "react"
 
 // ** Next Import
@@ -14,47 +11,41 @@ import { useRouter } from "next/router"
 // ** MUI Imports
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
-import Card from "@mui/material/Card"
-import Dialog from "@mui/material/Dialog"
 import Divider from "@mui/material/Divider"
-import Checkbox from "@mui/material/Checkbox"
 import MenuItem from "@mui/material/MenuItem"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import InputLabel from "@mui/material/InputLabel"
-import CardHeader from "@mui/material/CardHeader"
 import FormControl from "@mui/material/FormControl"
 import CardContent from "@mui/material/CardContent"
-import Stack from "@mui/material/Stack"
 import Button, { ButtonProps } from "@mui/material/Button"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
+import Select from "@mui/material/Select"
 import { styled } from "@mui/material/styles"
 
 // ** Third Party Imports
 import { useForm, Controller } from "react-hook-form"
 import { countries } from "src/@fake-db/autocomplete"
 import Autocomplete from "@mui/material/Autocomplete"
+import { useMutation } from "@apollo/client"
+import { UserWhereInput, useLandingUserQuery } from "src/generated"
+import { UPDATE_USER } from "../utils/mutations"
+import { UserUpdateInput } from "src/generated"
+
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 import React from "react"
 
 interface Data {
-  email: string
   state: string
   address: string
   country: string
-  lastName: string
-  currency: string
-  language: string
   timezone: string
   registerId: number | string
-  organization: string
   number: number
-  zipCode: number | string
   firstLetter: string
   secondLetter: string
   workSector: string
-  duration: Date
+  duration: number | string
   income: number | string
   visaCategory: number | string
   workYear: number
@@ -65,27 +56,7 @@ interface CountryType {
   phone: string
 }
 
-const initialData: Data = {
-  email: "",
-  state: "",
-  address: "",
-  country: "",
-  lastName: "",
-  currency: "",
-  language: "",
-  timezone: "",
-  registerId: "",
-  organization: "",
-  number: 0,
-  zipCode: "",
-  firstLetter: "",
-  secondLetter: "",
-  workSector: "",
-  duration: new Date(0),
-  income: "",
-  visaCategory: "",
-  workYear: 0,
-}
+
 
 const ImgStyled = styled("img")(({ theme }) => ({
   width: 120,
@@ -103,7 +74,26 @@ const ButtonStyled = styled(Button)<
   },
 }))
 
-export const RegisterAccount = () => {
+export const RegisterAccount = ({userId}: {userId: string}) => {
+  const { data } = useLandingUserQuery({
+    variables: { input:{ userId} }
+  })
+  console.log(data)
+  const initialData: Data = {
+    state: "",
+    address: "",
+    country: "",
+    timezone: "",
+    registerId: "",
+    number: 0,
+    firstLetter: "",
+    secondLetter: "",
+    workSector: "",
+    duration: "",
+    income: "",
+    visaCategory: "",
+    workYear: 0,
+  }
   const [inputValue, setInputValue] = useState<string>("")
   const [formData, setFormData] = useState<Data>(initialData)
   const [imgSrc, setImgSrc] = useState<string>("/images/avatars/1.png")
@@ -131,9 +121,9 @@ export const RegisterAccount = () => {
   const handleFormChange = (field: keyof Data, value: Data[keyof Data]) => {
     setFormData({ ...formData, [field]: value })
   }
-
+  
   return (
-    <form>
+    <form >
       <CardContent sx={{ pt: 0 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <ImgStyled src={imgSrc} alt="Profile Pic" />

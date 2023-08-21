@@ -3,25 +3,16 @@ import * as React from 'react';
 // ** React Imports
 import { Fragment, useState } from 'react'
 
-// ** Next Import
-import Link from 'next/link'
-
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import List from '@mui/material/List'
 import Button from '@mui/material/Button'
 import ListItem from '@mui/material/ListItem'
 import { styled } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 import Typography, { TypographyProps } from '@mui/material/Typography'
-import Card from "@mui/material/Card"
-import Grid from "@mui/material/Grid"
-import CardHeader from "@mui/material/CardHeader"
-import CardContent from "@mui/material/CardContent"
+
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
@@ -148,15 +139,14 @@ const handleNext = () => {
 const handleBack = () => {
   setActiveStep(activeStep - 1);
 };
+
   return (
-   
-     
             <React.Fragment>
-                    {getStepContent(activeStep)}
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              {getStepContent(activeStep)}
+              <Box justifyContent={'center'} sx={{ display: 'flex', justifyContent: 'center',  marginTop: -40 }}>
                       {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 6, ml: 1 }}>
-                          <ChevronLeftIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Буцах
+                          <Icon icon="material-symbols:chevron-left" />Буцах
                         </Button>
                       )}
                       <Button
@@ -164,13 +154,11 @@ const handleBack = () => {
                         onClick={handleNext}
                         sx={{ mt: 6, ml: 1 }}
                       >
-                        <ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />{activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
+                        <Icon icon="material-symbols:chevron-right"/>{activeStep === steps.length - 1 ? 'Дуусгах' : 'Дараах'}
                         
                       </Button>
-                     </Box>
+              </Box>
             </React.Fragment>
-
-  
   )
 }
 

@@ -101,6 +101,7 @@ export type AuthUserType = {
 
 export type AuthVerifyTokenType = {
   __typename?: 'AuthVerifyTokenType';
+  ID?: Maybe<Scalars['String']>;
   accessToken?: Maybe<Scalars['String']>;
   deviceId?: Maybe<Scalars['String']>;
   devices?: Maybe<Array<Maybe<UserDevice>>>;
@@ -180,14 +181,14 @@ export type Mutation = {
   authProvider?: Maybe<AuthVerifyTokenType>;
   authWeb?: Maybe<AuthVerifyTokenType>;
   createOrganization?: Maybe<Organization>;
+  createOrganization?: Maybe<Organization>;
   createOrganizationUser?: Maybe<OrganizationUser>;
+  createUser?: Maybe<User>;
   deleteOrganization?: Maybe<Scalars['Boolean']>;
+  deleteUser?: Maybe<Scalars['Boolean']>;
   loginEmail?: Maybe<AuthVerifyTokenType>;
   loginPhone?: Maybe<AuthVerifyTokenType>;
   logout?: Maybe<Scalars['Boolean']>;
-  organizationCreate?: Maybe<Organization>;
-  organizationStatusUpdate?: Maybe<Organization>;
-  organizationUpdate?: Maybe<Organization>;
   productCreate?: Maybe<Product>;
   productDelete?: Maybe<Scalars['Boolean']>;
   productStatusUpdate?: Maybe<Scalars['Boolean']>;
@@ -198,9 +199,8 @@ export type Mutation = {
   storageSignedUrlCreate?: Maybe<StorageWriteSignedUrl>;
   storageSignedUrlDelete?: Maybe<Scalars['Boolean']>;
   updateOrganization?: Maybe<Organization>;
-  userCreate?: Maybe<User>;
-  userDelete?: Maybe<Scalars['Boolean']>;
-  userUpdate?: Maybe<User>;
+  updateUser?: Maybe<User>;
+  userStatusChange?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -266,13 +266,29 @@ export type MutationCreateOrganizationArgs = {
 };
 
 
+export type MutationCreateOrganizationArgs = {
+  input: OrganizationCreateInput;
+};
+
+
 export type MutationCreateOrganizationUserArgs = {
   input: OrganizationUserCreateInput;
 };
 
 
+export type MutationCreateUserArgs = {
+  input: UserCreateInput;
+};
+
+
 export type MutationDeleteOrganizationArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  orgRole: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 
@@ -288,21 +304,6 @@ export type MutationLoginPhoneArgs = {
 
 export type MutationLogoutArgs = {
   deviceId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type MutationOrganizationCreateArgs = {
-  input: OrganizationCreateInput;
-};
-
-
-export type MutationOrganizationStatusUpdateArgs = {
-  input: OrganizationStatusUpdateInput;
-};
-
-
-export type MutationOrganizationUpdateArgs = {
-  input: OrganizationUpdateInput;
 };
 
 
@@ -358,25 +359,27 @@ export type MutationUpdateOrganizationArgs = {
 };
 
 
-export type MutationUserCreateArgs = {
-  input: UserCreateInput;
-};
-
-
-export type MutationUserDeleteArgs = {
-  orgRole: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-
-export type MutationUserUpdateArgs = {
+export type MutationUpdateUserArgs = {
   id: Scalars['String'];
   input: UserUpdateInput;
+};
+
+
+export type MutationUserStatusChangeArgs = {
+  id: Scalars['String'];
+  input: UserStatusChange;
+};
+
+
+export type MutationUserStatusChangeArgs = {
+  id: Scalars['String'];
+  input: UserStatusChange;
 };
 
 export type Organization = {
   __typename?: 'Organization';
   accesses: Scalars['Int'];
+  companyid: Scalars['String'];
   companyid: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
@@ -384,8 +387,10 @@ export type Organization = {
   members?: Maybe<Array<OrganizationUser>>;
   name: Scalars['String'];
   productivity: Scalars['Int'];
+  productivity: Scalars['Int'];
   products?: Maybe<Array<Product>>;
   status?: Maybe<OrganizationStatusEnum>;
+  totalsales: Scalars['Int'];
   totalsales: Scalars['Int'];
   type?: Maybe<OrganizationTypeEnum>;
   updatedAt: Scalars['DateTime'];
@@ -394,10 +399,12 @@ export type Organization = {
 export type OrganizationCreateInput = {
   accesses: Scalars['Int'];
   companyid: Scalars['String'];
+  companyid: Scalars['String'];
   logo?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   productivity: Scalars['Int'];
   rating?: InputMaybe<Scalars['String']>;
+  totalsales: Scalars['Int'];
   totalsales: Scalars['Int'];
   type: OrganizationTypeEnum;
 };
@@ -424,12 +431,14 @@ export enum OrganizationTypeEnum {
 export type OrganizationUpdateInput = {
   accesses: Scalars['Int'];
   companyid: Scalars['String'];
+  companyid: Scalars['String'];
   id: Scalars['ID'];
   logo?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   productivity: Scalars['Int'];
   rating?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<OrganizationStatusEnum>;
+  totalsales: Scalars['Int'];
   totalsales: Scalars['Int'];
   type?: InputMaybe<OrganizationTypeEnum>;
 };
@@ -487,6 +496,7 @@ export type OrganizationsType = {
 };
 
 export type OrganizationsWhereInput = {
+  type: OrganizationTypeEnum;
   type: OrganizationTypeEnum;
 };
 
@@ -581,16 +591,9 @@ export type ProductUniqueWhereInput = {
 };
 
 export type ProductWhereInput = {
-  bedNumber?: InputMaybe<Scalars['Int']>;
-  city?: InputMaybe<Scalars['String']>;
-  constStatus?: InputMaybe<ConstructionStatusEnum>;
-  district?: InputMaybe<Scalars['String']>;
-  maxPrice?: InputMaybe<Scalars['Float']>;
-  maxSqr?: InputMaybe<Scalars['Int']>;
-  minPrice?: InputMaybe<Scalars['Float']>;
-  minSqr?: InputMaybe<Scalars['Int']>;
-  organizationId?: InputMaybe<Scalars['String']>;
-  roomNumber?: InputMaybe<Scalars['Int']>;
+  city: Scalars['String'];
+  district: Scalars['String'];
+  organizationId: Scalars['String'];
 };
 
 export type Products = {
@@ -821,6 +824,16 @@ export type UserDevice = {
   sessions?: Maybe<Array<UserSession>>;
 };
 
+export type UserOrder = {
+  __typename?: 'UserOrder';
+  copyCard?: Maybe<Scalars['String']>;
+  copyPassport?: Maybe<Scalars['String']>;
+  copyVisa?: Maybe<Scalars['String']>;
+  descJob?: Maybe<Scalars['String']>;
+  descResidence?: Maybe<Scalars['String']>;
+  statement?: Maybe<Scalars['String']>;
+};
+
 export type UserOrderInput = {
   copyCard?: InputMaybe<Scalars['String']>;
   copyPassport?: InputMaybe<Scalars['String']>;
@@ -828,6 +841,7 @@ export type UserOrderInput = {
   descJob?: InputMaybe<Scalars['String']>;
   descResidence?: InputMaybe<Scalars['String']>;
   statement?: InputMaybe<Scalars['String']>;
+  userId: Scalars['String'];
 };
 
 export type UserProfile = {
@@ -868,6 +882,11 @@ export type UserSession = {
   userId: Scalars['String'];
 };
 
+export type UserStatusChange = {
+  id: Scalars['ID'];
+  status?: InputMaybe<UserStatusEnum>;
+};
+
 export enum UserStatusEnum {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE'
@@ -876,15 +895,13 @@ export enum UserStatusEnum {
 export type UserUpdateInput = {
   address?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
-  dateOfBirth?: InputMaybe<Scalars['DateTime']>;
   duration?: InputMaybe<Scalars['DateTime']>;
   email: Scalars['String'];
   firstName?: InputMaybe<Scalars['String']>;
-  gender?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<Scalars['String']>;
   income?: InputMaybe<Scalars['Int']>;
   lastName?: InputMaybe<Scalars['String']>;
-  orgRole: OrganizationUserRoleEnum;
+  orgRole?: InputMaybe<OrganizationUserRoleEnum>;
   organizationId: Scalars['String'];
   registerNumber?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<UserStatusEnum>;
@@ -895,7 +912,7 @@ export type UserUpdateInput = {
 };
 
 export type UserWhereInput = {
-  role?: InputMaybe<UserRoleEnum>;
+  id: Scalars['ID'];
   search?: InputMaybe<Scalars['String']>;
 };
 
@@ -903,17 +920,6 @@ export type Users = {
   __typename?: 'Users';
   count?: Maybe<Scalars['Int']>;
   data?: Maybe<Array<User>>;
-};
-
-export type UserOrder = {
-  __typename?: 'userOrder';
-  User?: Maybe<UserOrder>;
-  copyCard?: Maybe<Scalars['String']>;
-  copyPassport?: Maybe<Scalars['String']>;
-  copyVisa?: Maybe<Scalars['String']>;
-  descJob?: Maybe<Scalars['String']>;
-  descResidence?: Maybe<Scalars['String']>;
-  statement?: Maybe<Scalars['String']>;
 };
 
 export type MeAuthQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1060,7 +1066,14 @@ export type ProductLandingQueryVariables = Exact<{
 }>;
 
 
-export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber: number, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
+export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber: number, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, productStatus: ProductStatusEnum, organizationId: string } | null };
+
+export type LandingUserQueryVariables = Exact<{
+  input?: InputMaybe<UserWhereInput>;
+}>;
+
+
+export type LandingUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, userId?: string | null, userName?: string | null, role?: UserRoleEnum | null, status?: UserStatusEnum | null, email?: string | null, phone?: string | null, countryCode?: string | null, createdAt: any, updatedAt: any, image?: string | null, accounts?: Array<{ __typename?: 'UserAccount', id: string, userId?: string | null, userUid?: string | null, providerName?: string | null, providerType?: AccountProviderTypeEnum | null, providerId?: string | null, providerAccountId?: string | null, refreshToken?: string | null, accessToken?: string | null, accessTokenExpires?: any | null, signedIn: any, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, userId?: string | null, userName?: string | null, role?: UserRoleEnum | null, status?: UserStatusEnum | null, email?: string | null, phone?: string | null, countryCode?: string | null, createdAt: any, updatedAt: any, image?: string | null } | null }> | null, devices?: Array<{ __typename?: 'UserDevice', id: string, deviceName: string, deviceOs: string, deviceType: string }> | null, sessions?: Array<{ __typename?: 'UserSession', id: string, userId: string, fcmToken?: string | null, isActive: boolean, expires: string, createdAt: any, updatedAt: any, device?: { __typename?: 'UserDevice', id: string, deviceName: string, deviceOs: string, deviceType: string } | null }> | null, profile?: { __typename?: 'UserProfile', id: string, userId: string, firstName?: string | null, lastName?: string | null, registerNumber?: string | null, gender?: string | null, dateOfBirth?: any | null, image?: string | null, address?: string | null, country?: string | null, duration?: any | null, workSector?: string | null, workYear?: any | null, visaCategory?: string | null, income?: number | null, User?: { __typename?: 'User', id: string, userId?: string | null, userName?: string | null, role?: UserRoleEnum | null, status?: UserStatusEnum | null, email?: string | null, phone?: string | null, countryCode?: string | null, createdAt: any, updatedAt: any, image?: string | null } | null } | null, imageUrl?: { __typename?: 'StorageReadSignedUrl', id: string, name: string, image: string, THUMB: string, SMALL: string, MEDIUM: string, NATIVE: string } | null } | null };
 
 
 export const MeAuthDocument = gql`
@@ -2006,6 +2019,139 @@ export function useProductLandingLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type ProductLandingQueryHookResult = ReturnType<typeof useProductLandingQuery>;
 export type ProductLandingLazyQueryHookResult = ReturnType<typeof useProductLandingLazyQuery>;
 export type ProductLandingQueryResult = Apollo.QueryResult<ProductLandingQuery, ProductLandingQueryVariables>;
+export const LandingUserDocument = gql`
+    query landingUser($input: UserWhereInput) {
+  user(input: $input) {
+    id
+    userId
+    userName
+    role
+    status
+    email
+    phone
+    countryCode
+    createdAt
+    updatedAt
+    image
+    accounts {
+      id
+      userId
+      userUid
+      providerName
+      providerType
+      providerId
+      providerAccountId
+      user {
+        id
+        userId
+        userName
+        role
+        status
+        email
+        phone
+        countryCode
+        createdAt
+        updatedAt
+        image
+      }
+      refreshToken
+      accessToken
+      accessTokenExpires
+      signedIn
+      createdAt
+      updatedAt
+    }
+    devices {
+      id
+      deviceName
+      deviceOs
+      deviceType
+    }
+    sessions {
+      id
+      userId
+      fcmToken
+      isActive
+      expires
+      createdAt
+      updatedAt
+      device {
+        id
+        deviceName
+        deviceOs
+        deviceType
+      }
+    }
+    profile {
+      id
+      userId
+      firstName
+      lastName
+      registerNumber
+      gender
+      dateOfBirth
+      image
+      address
+      country
+      duration
+      workSector
+      workYear
+      visaCategory
+      income
+      User {
+        id
+        userId
+        userName
+        role
+        status
+        email
+        phone
+        countryCode
+        createdAt
+        updatedAt
+        image
+      }
+    }
+    imageUrl {
+      id
+      name
+      image
+      THUMB
+      SMALL
+      MEDIUM
+      NATIVE
+    }
+  }
+}
+    `;
+
+/**
+ * __useLandingUserQuery__
+ *
+ * To run a query within a React component, call `useLandingUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLandingUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLandingUserQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLandingUserQuery(baseOptions?: Apollo.QueryHookOptions<LandingUserQuery, LandingUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LandingUserQuery, LandingUserQueryVariables>(LandingUserDocument, options);
+      }
+export function useLandingUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LandingUserQuery, LandingUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LandingUserQuery, LandingUserQueryVariables>(LandingUserDocument, options);
+        }
+export type LandingUserQueryHookResult = ReturnType<typeof useLandingUserQuery>;
+export type LandingUserLazyQueryHookResult = ReturnType<typeof useLandingUserLazyQuery>;
+export type LandingUserQueryResult = Apollo.QueryResult<LandingUserQuery, LandingUserQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
