@@ -52,7 +52,6 @@ import { useProductUpdateMutation } from "src/generated"
 //     />
 //   );
 // }
-
 const UpdateProduct = ({ id }: { id: string }) => {
   const { data } = useProductQuery({
     variables: { input: { id } },
@@ -60,7 +59,7 @@ const UpdateProduct = ({ id }: { id: string }) => {
 
   console.log(data)
   const initialValues = {
-    id: data?.product?.id,
+    //id: data?.product?.id,
     name: data?.product?.name,
     constStatus: data?.product?.constStatus,
     productStatus: data?.product?.productStatus,
@@ -136,21 +135,19 @@ const UpdateProduct = ({ id }: { id: string }) => {
                 },
               }}
             >
-              <input
-                id="file"
-                name="images"
-                type="file"
-                onChange={(event) => {
-                  if(event?.currentTarget?.files)
-                  formikProps.setFieldValue(
-                    "images",
-                    event?.currentTarget?.files[0],
-                  )
-                }}
-                className="form-control"
-              />
-              {/* //<Thumb file={formikProps.values.images} /> */}
+           <input
+            id="file"
+            name="images"
+            type="file"
+            onChange={(event) => {
+              if (event?.currentTarget?.files) {
+                formikProps.setFieldValue("images", event.currentTarget.files[0]);
+              }
+            }}
+            className="form-control"
+          />
 
+                  {/* //<Thumb file={formikProps.values.images} /> */}
               {/* <input
           type='file'
           name='images'

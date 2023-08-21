@@ -17,39 +17,39 @@ import { TextField } from 'formik-mui'
 import PickersComponent from './DateInput'
 import DatePicker from 'react-datepicker'
 
-function Thumb({ file }) {
-  const [loading, setLoading] = React.useState(false);
-  const [thumb, setThumb] = React.useState(undefined);
+// function Thumb({ file }) {
+//   const [loading, setLoading] = React.useState(false);
+//   const [thumb, setThumb] = React.useState(undefined);
 
-  React.useEffect(() => {
-    if (!file) return;
+//   React.useEffect(() => {
+//     if (!file) return;
 
-    setLoading(true);
+//     setLoading(true);
 
-    let reader = new FileReader();
+//     let reader = new FileReader();
 
-    reader.onloadend = () => {
-      setLoading(false);
-      setThumb(reader?.result);
-    };
+//     reader.onloadend = () => {
+//       setLoading(false);
+//       setThumb(reader?.result);
+//     };
 
-    reader.readAsDataURL(file);
-  }, [file]);
+//     reader.readAsDataURL(file);
+//   }, [file]);
 
-  if (!file) return null;
+//   if (!file) return null;
 
-  if (loading) return <p>loading...</p>;
+//   if (loading) return <p>loading...</p>;
 
-  return (
-    <img
-      src={thumb}
-      alt={file.name}
-      className="img-thumbnail mt-2"
-      height={200}
-      width={200}
-    />
-  );
-}
+//   return (
+//     <img
+//       src={thumb}
+//       alt={file.name}
+//       className="img-thumbnail mt-2"
+//       height={200}
+//       width={200}
+//     />
+//   );
+// }
 
 
 const CreateProduct = () => {
@@ -68,7 +68,7 @@ const CreateProduct = () => {
           sqr: data.sqr,
           priceSqr: data.priceSqr,
           releaseDate: data.releaseDate,
-          price: data.sqr * data?.priceSqr,
+          price: 0,
           //uliral: number
           floors: data.floors,
           floorNumber: data.floorNumber,
@@ -125,17 +125,18 @@ const CreateProduct = () => {
                 },
               }}
             >
-            <input id="file" name="file" type="file" onChange={(event) => {
-                    formikProps.setFieldValue("images", event.currentTarget.files[0]);
-                  }} className="form-control" />
-                  <Thumb file={formikProps.values.images} />
-              
-              {/* <input
-          type='file'
-          name='images'
-          //accept='image/*'
-          onChange={formikProps.handleChange}
-        /> */}
+             <input
+            id="file"
+            name="images"
+            type="file"
+            onChange={(event) => {
+              if (event?.currentTarget?.files) {
+                formikProps.setFieldValue("images", event.currentTarget.files[0]);
+              }
+            }}
+            className="form-control"
+          />
+                  {/* <Thumb file={formikProps.values.images} /> */}
               <FormControl>
                 <InputLabel id="select-name">Төслийн Нэр</InputLabel>
                 <Select

@@ -13,22 +13,52 @@ import {
   Chip,
   TextField,
 } from '@mui/material'
-import { Formik, Form, Field, useField } from 'formik'
+import { Formik, Form, Field, useField, FormikProps, FieldInputProps } from 'formik'
 // import { TextField } from 'formik-mui'
 import * as yup from 'yup'
 import { CheckerGroup } from './CheckerGroup'
 
 import { distNames } from 'src/@core/utils/initData'
-export const CustomSlider = ({ ...props }) => {
-  const [field, meta] = useField(props)
-  return <Slider {...field} {...props} />
+import { ProductStatusEnum } from 'src/generated'
+
+export interface FilterType{
+  location: string,
+  type: string,
+  price: number[],
+  size: number,
+  roomNo: number,
+  status: ProductStatusEnum,
+
+
 }
-const CustomizedSelectForFormik = ({ children, form, field }) => {
+interface CustomSliderProps {
+  name: string;
+  min?: number;
+  max?: number;
+  valueLabelDisplay?:string;
+  label?: string;
+  step?: number;
+}
+
+export const CustomSlider: React.FC<CustomSliderProps> = (props) => {
+  const [field] = useField(props);
+  return <Slider {...field} {...props} />;
+};
+interface CustomizedTextFieldProps {
+  form: FormikProps<FilterType>;
+  field: FieldInputProps<FilterType>;
+}
+interface CustomizedSelectForFormikProps extends CustomizedTextFieldProps {
+  children: React.ReactNode;
+}
+const CustomizedSelectForFormik: React.FC<CustomizedSelectForFormikProps>= ({ children, form, field }) => {
   const { name, value } = field
   const { setFieldValue } = form
   const handleDelete = (deleteValue: string) => {
-    const updatedValue = value?.filter((el: string) => el !== deleteValue)
-    setFieldValue(name, updatedValue)
+    if (Array.isArray(value)) {
+      const updatedValue = value.filter((el: string) => el !== deleteValue);
+      setFieldValue(name, updatedValue);
+    }
   }
 
   return (
@@ -42,16 +72,18 @@ const CustomizedSelectForFormik = ({ children, form, field }) => {
       }}
       renderValue={(selected) => (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          {selected.map((value: string) => (
+         {Array.isArray(selected) &&
+            selected.map((value: string) => (
             <Chip
               key={value}
               label={value}
               onMouseDown={(event) => {
-                event.stopPropagation()
+                event.stopPropagation();
               }}
               onDelete={() => handleDelete(value)}
             />
-          ))}
+  ))}
+
         </Box>
       )}
     >
@@ -59,9 +91,11 @@ const CustomizedSelectForFormik = ({ children, form, field }) => {
     </Select>
   )
 }
-const CustomizedTextField = ({ form, field }) => {
-  const { name, value } = field
-  const { setFieldValue } = form
+
+
+const CustomizedTextField: React.FC<CustomizedTextFieldProps> = ({ form, field }) => {
+  const { name, value } = field;
+  const { setFieldValue } = form;
 
   return (
     <TextField
@@ -69,11 +103,13 @@ const CustomizedTextField = ({ form, field }) => {
       value={value}
       size="small"
       onChange={(e) => {
-        setFieldValue(name, e.target.value)
+        setFieldValue(name, e.target.value);
       }}
     />
-  )
+  );
 }
+
+
 
 export const FilterBuy = () => {
   // const [priceRange, setPriceRange] = React.useState<number[]>([

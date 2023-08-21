@@ -14,9 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import Card from "@mui/material/Card"
 import Grid from "@mui/material/Grid"
-import CardHeader from "@mui/material/CardHeader"
 import CardContent from "@mui/material/CardContent"
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
@@ -124,12 +122,12 @@ const DescJob = () => {
         }}
         >           
               <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', justifyContent: 'start', color: 'primary.main' }}>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Иргэний үнэмлэхний хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Оршин суугаа газрын тодорхойлолт</Typography>
-                <Typography sx={{color: 'primary.main', textDecoration: 'none'}}><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Ажлын газрын тодорхойлолт</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол визний хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
-                <Typography><ChevronRightIcon sx={{ marginRight: '0.1rem', verticalAlign: 'middle' }} />Дансны хуулга</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right"/>Иргэний үнэмлэхний хуулбар</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right"/>Оршин суугаа газрын тодорхойлолт</Typography>
+                <Typography sx={{color: 'primary.main', textDecoration: 'none'}}><Icon icon="material-symbols:chevron-right"/>Ажлын газрын тодорхойлолт</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right"/>Гадаадад байгаа бол визний хуулбар</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right"/>Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right"/>Дансны хуулга</Typography>
               </div>     
             </Typography> 
 

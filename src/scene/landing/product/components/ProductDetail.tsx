@@ -20,9 +20,9 @@ import { useProductLandingQuery } from "src/generated"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 export const ProductDetail = ({ id }: { id: string }) => {
-  console.log(id)
+  
   const { data } = useProductLandingQuery({
-    variables: { input: { id } },
+    variables: {input: {id}},
   })
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState("Дэлгэрэнгүй харах")
@@ -52,7 +52,9 @@ export const ProductDetail = ({ id }: { id: string }) => {
           </Typography>
         </Stack>
         <Typography>
-          {data?.product?.address1?.concat(data?.product?.district)}
+          {data?.product?.address1 && data?.product?.district
+            ? data.product.address1.concat(data.product.district)
+            : null}
         </Typography>
       </Stack>
       <Grid container>

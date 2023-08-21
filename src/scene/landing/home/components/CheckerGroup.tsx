@@ -57,9 +57,8 @@ export const CheckerGroup = (props: CheckerGroupType) => {
           ) : null}
           {isStartIcon ? null : item.label}
           <Field name={name} size="small">
-            {({ field }) => (
+            {(field: FieldInputProps<FilterType>) => (
               <Checkbox
-                //checked={checked}
                 {...field}
                 value={item.value}
                 icon={CustomUncheckedIcon}
