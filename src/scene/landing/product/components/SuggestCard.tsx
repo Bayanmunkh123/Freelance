@@ -3,9 +3,8 @@ import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { ListData, ListDataType } from '../utils/ListData'
 import { useRouter } from 'next/router'
-import { useProductsQuery } from 'src/generated'
+import { useProductsLandingQuery } from 'src/generated'
 
 // function changeNot(): ListDataType[] {
 //   const getRandomInt = (max: number) =>
@@ -16,12 +15,12 @@ import { useProductsQuery } from 'src/generated'
 //   )
 // }
 export const SuggestCard = () => {
-  const {data} = useProductsQuery()
+  const {data} = useProductsLandingQuery()
   const router = useRouter()
   return (
     <>
       {data?.products?.data?.map((item, index: number) => (
-        <Grid item key={index} sx={{minHeight: "320px"}}>
+        <Grid item key={index} sx={{ width: "360px"}}>
           <CardMedia
             sx={{
               height: 140,
@@ -37,6 +36,7 @@ export const SuggestCard = () => {
             sx={{
               p: (theme) => `${theme.spacing(4, 5)} !important`,
               maxWidth: 360,
+              height: 140
             }}
           >
             <Typography variant="h6" sx={{ mb: 2 }}>

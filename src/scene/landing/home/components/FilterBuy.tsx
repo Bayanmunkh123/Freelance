@@ -13,55 +13,104 @@ import {
   Chip,
   TextField,
 } from '@mui/material'
-import { Formik, Form, Field, useField } from 'formik'
+import { Formik, Form, Field, useField, FormikProps, FieldInputProps } from 'formik'
 // import { TextField } from 'formik-mui'
-import * as yup from 'yup'
 import { CheckerGroup } from './CheckerGroup'
+import { FilterInputProps } from './Header'
 
 import { distNames } from 'src/@core/utils/initData'
-export const CustomSlider = ({ ...props }) => {
-  const [field, meta] = useField(props)
-  return <Slider {...field} {...props} />
+import { ConstructionStatusEnum } from 'src/generated'
+// import { filterApartmentSchema } from 'src/@core/utils/types'
+
+export interface FilterType{
+  city: string,
+  district: string | null,
+  //type: string,
+  maxPrice: number | null,
+  minPrice: number | null,
+  maxSqr: number | null,
+  minSqr: number | null,
+  roomNumber: number | null,
+  constStatus: ConstructionStatusEnum,
+  organizationId: string | null,
 }
-const CustomizedSelectForFormik = ({ children, form, field }) => {
+interface CustomSliderProps{
+  name: string;
+  min?: number;
+  max?: number;
+  valueLabelDisplay?:string;
+  label?: string;
+  step?: number;
+}
+
+export const CustomSlider: React.FC<CustomSliderProps> = (props) => {
+  const [field] = useField(props);
+  return <Slider {...field} {...props} />;
+};
+export interface CustomizedProps {
+  form: FormikProps<FilterType>;
+  field: FieldInputProps<FilterType>;
+}
+interface CustomizedSelectProps extends CustomizedProps {
+  children: React.ReactNode;
+}
+export const CustomizedSelect: React.FC<CustomizedSelectProps>= ({ children, form, field }) => {
   const { name, value } = field
+  const _value = value as unknown as string
   const { setFieldValue } = form
-  const handleDelete = (deleteValue: string) => {
-    const updatedValue = value?.filter((el: string) => el !== deleteValue)
-    setFieldValue(name, updatedValue)
+  const handleDelete = () => {
+    // if (Array.isArray(value)) {
+    //   const updatedValue = value.filter((el: string) => el !== deleteValue);
+    //   setFieldValue(name, updatedValue);
+    // }
+    setFieldValue(name, null )
   }
 
   return (
     <Select
-      multiple
+      // multiple
       name={name}
-      value={value || []}
+      value={_value}
       onChange={(e) => {
         setFieldValue(name, e.target.value)
         console.log(e.target.value)
       }}
-      renderValue={(selected) => (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-          {selected.map((value: string) => (
-            <Chip
-              key={value}
-              label={value}
+      renderValue={(selected: string) => (
+  //       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+  //        {Array.isArray(selected) &&
+  //           selected.map((value: string) => (
+  //           <Chip
+  //             key={value}
+  //             label={value}
+  //             onMouseDown={(event) => {
+  //               event.stopPropagation();
+  //             }}
+  //             onDelete={() => handleDelete(value)}
+  //           />
+  // ))}
+
+  //       </Box>
+  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+  <Chip
+              //key={selected}
+              label={selected}
               onMouseDown={(event) => {
-                event.stopPropagation()
+                event.stopPropagation();
               }}
-              onDelete={() => handleDelete(value)}
+              onDelete={() => handleDelete()}
             />
-          ))}
-        </Box>
+    </Box>
       )}
     >
       {children}
     </Select>
   )
 }
-const CustomizedTextField = ({ form, field }) => {
-  const { name, value } = field
-  const { setFieldValue } = form
+
+
+const CustomizedTextField: React.FC<CustomizedProps> = ({ form, field }) => {
+  const { name, value } = field;
+  const { setFieldValue } = form;
 
   return (
     <TextField
@@ -69,38 +118,35 @@ const CustomizedTextField = ({ form, field }) => {
       value={value}
       size="small"
       onChange={(e) => {
-        setFieldValue(name, e.target.value)
+        setFieldValue(name, e.target.value);
       }}
     />
-  )
+  );
+}
+export interface Props extends FilterInputProps{
+  setOpen: (bool : boolean) => void
 }
 
-export const FilterBuy = () => {
-  // const [priceRange, setPriceRange] = React.useState<number[]>([
-  //   20000000, 500000000,
-  // ])
+
+export const FilterBuy = (props: Props) => {
+  const { filterValues, handleFilterFill, setOpen } = props
   return (
     <Formik
-      initialValues={{
-        location: '',
-        type: '',
-        price: [],
-        size: [],
-        roomNo: [],
-        status: '',
-      }}
+      initialValues={filterValues}
       //validationSchema={filterApartmentSchema}
-      onSubmit={(values, { resetForm }) => {
+      onSubmit={(values: FilterType , { resetForm }) => {
         console.log(values)
+        handleFilterFill(values)
+        setOpen(false)
         resetForm()
         // router.push('/product');
       }}
     >
-      {(formik) => (
+      {(formikProps) => (
         <Form className="formBuy">
           <FormControl>
             <InputLabel id="demo-simple-select-label">Байршил</InputLabel>
-            <Field name="location" component={CustomizedSelectForFormik}>
+            <Field name="district" component={CustomizedSelect}>
               {distNames.map((name) => (
                 <MenuItem key={name} value={name}>
                   {name}
@@ -109,7 +155,7 @@ export const FilterBuy = () => {
             </Field>
           </FormControl>
           <Typography>Төрөл</Typography>
-          <Grid container columnGap="10px" rowGap="20px">
+          {/* <Grid container columnGap="10px" rowGap="20px">
             <CheckerGroup
               isBuy={true}
               name="type"
@@ -117,22 +163,23 @@ export const FilterBuy = () => {
               isStartIcon={false}
               isNumber={false}
               isStatus={false}
+              form={formikProps}
             />
-          </Grid>
+          </Grid> */}
           <Typography>Үнэ</Typography>
           <Grid container columnGap="20px">
             <Stack>
               <Typography>Доод үнэ</Typography>
               <CustomSlider
-                name="price[0]"
+                name="minPrice"
                 valueLabelDisplay="auto"
-                max={500000000}
-                min={20000000}
-                step={1000000}
+                max={500000}
+                min={0}
+                step={10}
                 label="Доод үнэ"
               />
               <Field
-                name="price[0]"
+                name="minPrice"
                 type="number"
                 //value={priceRange[0]}
                 component={CustomizedTextField}
@@ -141,15 +188,15 @@ export const FilterBuy = () => {
             <Stack>
               <Typography>Доод үнэ</Typography>
               <CustomSlider
-                name="price[1]"
+                name="maxPrice"
                 valueLabelDisplay="auto"
-                max={500000000}
-                min={20000000}
-                step={1000000}
+                max={5000000}
+                min={0}
+                step={10}
                 label="Дээд үнэ"
               />
               <Field
-                name="price[1]"
+                name="maxPrice"
                 type="number"
                 //value={priceRange[1]}
                 component={CustomizedTextField}
@@ -161,13 +208,13 @@ export const FilterBuy = () => {
           <Grid container columnGap="10px" rowGap="20px">
             <Field
               component={CustomizedTextField}
-              name="size[0]"
+              name="minSize"
               type="number"
               label="Бага"
             />
             <Field
               component={CustomizedTextField}
-              name="size[1]"
+              name="maxSize"
               type="number"
               label="Их"
             />
@@ -175,21 +222,23 @@ export const FilterBuy = () => {
           <Grid container columnGap="10px" rowGap="20px">
             <CheckerGroup
               isBuy={false}
-              name="roomNo"
+              name="roomNumber"
               isImg={false}
               isStartIcon={true}
               isNumber={true}
               isStatus={false}
+              form={formikProps}
             />
           </Grid>
           <Grid container columnGap="10px" rowGap="20px">
             <CheckerGroup
               isBuy={false}
-              name="status"
+              name="constStatus"
               isImg={false}
               isStartIcon={true}
               isNumber={false}
               isStatus={true}
+              form={formikProps}
             />
           </Grid>
           <Grid container columnGap="10px">
@@ -199,7 +248,7 @@ export const FilterBuy = () => {
               color="primary"
               type="reset"
               onClick={() => {
-                formik.resetForm({})
+                formikProps.resetForm({})
               }}
             >
               Цэвэрлэх
