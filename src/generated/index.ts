@@ -179,6 +179,7 @@ export type Mutation = {
   loginPhone?: Maybe<AuthVerifyTokenType>;
   logout?: Maybe<Scalars['Boolean']>;
   organizationCreate?: Maybe<Organization>;
+  organizationStatusUpdate?: Maybe<Organization>;
   organizationUpdate?: Maybe<Organization>;
   productCreate?: Maybe<Product>;
   productDelete?: Maybe<Scalars['Boolean']>;
@@ -281,6 +282,11 @@ export type MutationOrganizationCreateArgs = {
 };
 
 
+export type MutationOrganizationStatusUpdateArgs = {
+  input: OrganizationStatusUpdateInput;
+};
+
+
 export type MutationOrganizationUpdateArgs = {
   input: OrganizationUpdateInput;
 };
@@ -378,6 +384,11 @@ export enum OrganizationStatusEnum {
   REQUESTED = 'REQUESTED'
 }
 
+export type OrganizationStatusUpdateInput = {
+  id: Scalars['ID'];
+  status?: InputMaybe<OrganizationStatusEnum>;
+};
+
 export enum OrganizationTypeEnum {
   AGENT = 'AGENT',
   COMPANY = 'COMPANY',
@@ -441,7 +452,7 @@ export type OrganizationUsersType = {
 export type OrganizationUsersWhereInput = {
   orgRole?: InputMaybe<OrganizationUserRoleEnum>;
   organizationId: Scalars['String'];
-  userId: Scalars['String'];
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type OrganizationsType = {
@@ -865,6 +876,13 @@ export type RefreshAccessTokenMutationVariables = Exact<{
 
 export type RefreshAccessTokenMutation = { __typename?: 'Mutation', refreshAccessToken?: { __typename?: 'RefreshTokenType', accessToken?: string | null, refreshToken?: string | null, wsToken?: string | null } | null };
 
+export type OrganizationUsersQueryVariables = Exact<{
+  input?: InputMaybe<OrganizationUsersWhereInput>;
+}>;
+
+
+export type OrganizationUsersQuery = { __typename?: 'Query', organizationUsers?: { __typename?: 'OrganizationUsersType', count?: number | null, data?: Array<{ __typename?: 'OrganizationUser', id: string, orgRole?: OrganizationUserRoleEnum | null, userId: string, organizationId: string, assignedAt: any, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, userId?: string | null, userName?: string | null, role?: UserRoleEnum | null, status?: UserStatusEnum | null, email?: string | null, phone?: string | null, countryCode?: string | null, createdAt: any, updatedAt: any, image?: string | null } | null, organization?: { __typename?: 'Organization', id: string } | null }> | null } | null };
+
 export type ProductCreateMutationVariables = Exact<{
   input: ProductInput;
 }>;
@@ -1096,6 +1114,66 @@ export function useRefreshAccessTokenMutation(baseOptions?: Apollo.MutationHookO
 export type RefreshAccessTokenMutationHookResult = ReturnType<typeof useRefreshAccessTokenMutation>;
 export type RefreshAccessTokenMutationResult = Apollo.MutationResult<RefreshAccessTokenMutation>;
 export type RefreshAccessTokenMutationOptions = Apollo.BaseMutationOptions<RefreshAccessTokenMutation, RefreshAccessTokenMutationVariables>;
+export const OrganizationUsersDocument = gql`
+    query OrganizationUsers($input: OrganizationUsersWhereInput) {
+  organizationUsers(input: $input) {
+    count
+    data {
+      id
+      orgRole
+      userId
+      organizationId
+      user {
+        id
+        userId
+        userName
+        role
+        status
+        email
+        phone
+        countryCode
+        createdAt
+        updatedAt
+        image
+      }
+      organization {
+        id
+      }
+      assignedAt
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrganizationUsersQuery__
+ *
+ * To run a query within a React component, call `useOrganizationUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationUsersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOrganizationUsersQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationUsersQuery, OrganizationUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrganizationUsersQuery, OrganizationUsersQueryVariables>(OrganizationUsersDocument, options);
+      }
+export function useOrganizationUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationUsersQuery, OrganizationUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrganizationUsersQuery, OrganizationUsersQueryVariables>(OrganizationUsersDocument, options);
+        }
+export type OrganizationUsersQueryHookResult = ReturnType<typeof useOrganizationUsersQuery>;
+export type OrganizationUsersLazyQueryHookResult = ReturnType<typeof useOrganizationUsersLazyQuery>;
+export type OrganizationUsersQueryResult = Apollo.QueryResult<OrganizationUsersQuery, OrganizationUsersQueryVariables>;
 export const ProductCreateDocument = gql`
     mutation productCreate($input: ProductInput!) {
   productCreate(input: $input) {

@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 import UserIcon from "src/layouts/components/UserIcon"
 import { IconButton, Tooltip } from "@mui/material"
+import { useOrganizationUsersQuery } from 'src/generated'
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
@@ -12,7 +13,7 @@ const columns: GridColDef[] = [
     editable: true,
   },
   {
-    field: 'lastName',
+    field: 'assignedAt',
     headerName: 'Регистерийн дугаар',
     width: 200,
     editable: true,
@@ -66,7 +67,7 @@ const columns: GridColDef[] = [
 ]
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 1, assignedAt: 'Snow', firstName: 'Jon', age: 35 },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
@@ -80,6 +81,8 @@ const rows = [
 ]
 
 export const UsersScene = () => {
+  const {data} = useOrganizationUsersQuery()
+  console.log("data",data)
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <button style={{margin:'20px',background:'red',color:'white'}}>Delete</button>
