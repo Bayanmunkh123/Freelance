@@ -177,7 +177,7 @@ export const RegisterMain = () => {
                     Шинэчлэх
                 </Button>
                 
-                <Link href="/pages/changepassword">
+                <Link href="/landing/user/changePassword" style={{textDecoration: 'none'}}>
                 <Button
                 variant="outlined"
                 sx={{color:'grey', borderColor:'GrayText',mt:5,display:'flex',textDecoration:'none'}}
@@ -185,13 +185,13 @@ export const RegisterMain = () => {
                     Нууц үг солих
                 </Button>
                 </Link>
-                
+                <Link href="/landing/user/forgotPassword" style={{textDecoration: 'none'}}>
                 <Button
                  variant="outlined"
                  sx={{ color: 'grey', borderColor:'GrayText',mt:3 }}>
                     Нууц үг сэргээх
                 </Button>
-                
+                </Link>
               
             </Grid>
           </Grid>

@@ -124,7 +124,7 @@ const CopyCard = () => {
         >           
               <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', justifyContent: 'start', color: 'primary.main' }}>
                 <Typography  sx={{color: 'primary.main', textDecoration: 'none'}}><Icon icon="material-symbols:chevron-right" />Иргэний үнэмлэхний хуулбар</Typography>
-                <Typography><Icon icon="material-symbols:chevron-right"  />Оршин суугаа газрын тодорхойлолт</Typography>
+                <Typography><Icon icon="material-symbols:chevron-right" style={{display:'flex'}}/>Оршин суугаа газрын тодорхойлолт</Typography>
                 <Typography><Icon icon="material-symbols:chevron-right" />Ажлын газрын тодорхойлолт</Typography>
                 <Typography><Icon icon="material-symbols:chevron-right" />Гадаадад байгаа бол визний хуулбар</Typography>
                 <Typography><Icon icon="material-symbols:chevron-right" />Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>

@@ -185,10 +185,11 @@ const UserScene = () => {
 
   return (
     
-    <Grid item xs={8} container spacing={6}  justifyContent={"center"} alignItems={"center"} >
+    <Grid item xs={8} container spacing={6}  justifyContent={"center"} alignItems={"center"} sx={{width: '100%', maxWidth: '50%', margin:'auto', marginBottom:'30%'}}>
+    
       <TabContext value={activeTab}>
           <Grid container spacing={6} alignItems={"center"} justifyContent={"center"} >
-            <Grid item xs={8} my="20px">
+            <Grid item xs={12} my="20px" md='auto'>
               <TabList
                 variant='scrollable'
                 scrollButtons='auto'
@@ -196,6 +197,7 @@ const UserScene = () => {
                     setActiveTab(type)
                     console.log(type)
                 }}
+                
                 aria-label='customized tabs example'
               >
                 <Tab
@@ -231,7 +233,7 @@ const UserScene = () => {
             <Card >    
               <CardContent >
                 <TabPanel value='account' sx={{ p: 0 }}>
-                <RegisterAccount />
+                <RegisterAccount userId={''} />
                 </TabPanel>
                 <TabPanel value='order' sx={{ p: 0 }}>
                 <RegisterOrder />

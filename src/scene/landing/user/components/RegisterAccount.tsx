@@ -117,7 +117,9 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
   }
 
   return (
+    <Grid sx={{width: '100%', maxWidth: '100%', margin: '0'}}>
     <form>
+      
       <CardContent sx={{ pt: 0 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <ImgStyled src={imgSrc} alt="Profile Pic" />
@@ -465,6 +467,8 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
           </Grid>
         </Grid>
       </CardContent>
+      
     </form>
+    </Grid>
   )
 }
