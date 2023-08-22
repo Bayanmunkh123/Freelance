@@ -98,7 +98,6 @@ export const HomeScene = () => {
       </Typography>
       <Grid container spacing={4} justifyContent="center" sx={{ mt: '20px' }}>
         <SuggestCard />
-        <SuggestCard />
       </Grid>
     </>
   )

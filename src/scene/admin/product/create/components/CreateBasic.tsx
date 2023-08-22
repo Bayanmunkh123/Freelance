@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import {
   Grid,
@@ -15,14 +16,10 @@ import { ConstructionStatusEnum, BannerStatusEnum, ProductInput, useProductCreat
 import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
-import PickersComponent from './DateInput'
+import { PickersComponent } from 'src/@core/components/product'
 import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-
-export interface Props{
-  setType: (type :string) => void;
-  formikProps: FormikProps<ProductInput>
-}
+import { ProductActionProps } from 'src/@core/utils/types'
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -59,68 +56,10 @@ export interface Props{
 // }
 
 
-export const RegisterBasic = (props :Props) => {
+export const RegisterBasic = (props :ProductActionProps) => {
   const {setType,formikProps} = props
-  //const popperPlacement: ReactDatePickerProps['popperPlacement'] 
-  // const [onCreateProduct] = useProductCreateMutation()
-  // const submitHandler = (data: ProductInput) => {
-  //   console.log('onSubmit === values', data)
-
-  //   onCreateProduct({
-  //     variables: {
-  //       input: {
-  //         images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //         name: data.name,
-  //         city: data.city,
-  //         district: data.district,
-  //         address1: data.address1,
-  //         sqr: data.sqr,
-  //         priceSqr: data.priceSqr,
-  //         releaseDate: data.releaseDate,
-  //         price: 0,
-  //         //uliral: number
-  //         floors: data.floors,
-  //         floorNumber: data.floorNumber,
-  //         roomNumber: data.roomNumber,
-  //         constStatus: data.constStatus,
-  //         bannerStatus: data.bannerStatus,
-  //         description: data.description,
-  //         organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
-  //       },
-  //     },
-  //   })
-  // }
-
   return (
-    <Box display="flex" justifyContent="center"  >
-      {/* <Formik
-        initialValues={{
-          images: '',
-          name: '',
-          city: '',
-          district: '',
-          address1: '',
-          sqr: 0,
-          priceSqr: 0,
-          releaseDate: new Date(),
-          //uliral: 1,
-          floors: 1,
-          floorNumber: 1,
-          roomNumber: 1,
-          constStatus: ConstructionStatusEnum.NEWBUILDING,
-          bannerStatus: BannerStatusEnum.HIGHLIGTH,
-          description: '',
-          price: 0,
-          organizationId: '',
-          ProductRooms: '',
-        }}
-        //validationSchema={validationCreateProductSchema}
-        onSubmit={(values: ProductInput, formikHelpers) => {
-          submitHandler(values)
-          formikHelpers.setSubmitting(false)
-        }}
-      > */}
-       
+    <Box >
           <Form>
             <Stack
               direction="column"
@@ -352,7 +291,22 @@ export const RegisterBasic = (props :Props) => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              
+               <Stack direction="row" columnGap="20px" justifyContent="flex-end">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ alignSelf: "flex-end" }}
+                  >
+                    Үүсгэх
+                  </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ alignSelf: "flex-end" }}
+                      onClick={() => setType("room")}
+                    >
+                      Өрөөний мэдээлэл оруулах
+                    </Button>
+                </Stack>
             </Stack>
           </Form>
       {/* </Formik> */}

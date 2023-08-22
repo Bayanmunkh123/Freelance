@@ -2,15 +2,14 @@ import { TabContext, TabList, TabPanel } from "@mui/lab"
 import { Box, Button, Stack, Tab } from "@mui/material"
 import { Fragment, useState } from "react"
 import Icon from "src/@core/components/icon"
-import { RegisterBasic } from "./components/RegisterBasic"
+import { RegisterBasic } from "./components/CreateBasic"
 import { Formik } from "formik"
 import { BannerStatusEnum, ConstructionStatusEnum, ProductInput, useProductCreateMutation } from "src/generated"
+import { RegisterRoom } from "./components/CreateRoom"
 
-export const RegisterProduct = () =>{
+export const CreateProduct = () =>{
     const [onCreateProduct] = useProductCreateMutation()
   const submitHandler = (data: ProductInput) => {
-    console.log('onSubmit === values', data)
-
     onCreateProduct({
       variables: {
         input: {
@@ -23,7 +22,6 @@ export const RegisterProduct = () =>{
           priceSqr: data.priceSqr,
           releaseDate: data.releaseDate,
           price: 0,
-          //uliral: number
           floors: data.floors,
           floorNumber: data.floorNumber,
           roomNumber: data.roomNumber,
@@ -31,6 +29,15 @@ export const RegisterProduct = () =>{
           bannerStatus: data.bannerStatus,
           description: data.description,
           organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
+          bathNumber: data.bathNumber,
+          bathRoom:'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmF0aHJvb218ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60',
+          bedNumber: data.bedNumber,
+          bedRoom: 'https://media.architecturaldigest.com/photos/5eac81ca18c600bbd587e15f/master/w_1600%2Cc_limit/Nune_4th_Street_01.jpg',
+          kitchenNumber: data.kitchenNumber,
+          kitchenRoom: 'https://hips.hearstapps.com/hmg-prod/images/hbx100120birgittepearce-006-copy-1600802952.jpg?crop=0.4444444444444444xw:1xh;center,top&resize=640:*',
+          livingNumber: data.livingNumber,
+          livingRoom: 'https://hips.hearstapps.com/hmg-prod/images/hbx100120birgittepearce-006-copy-1600802952.jpg?crop=0.4444444444444444xw:1xh;center,top&resize=640:*',
+          viewWindow: 'https://hips.hearstapps.com/hmg-prod/images/hbx100120birgittepearce-006-copy-1600802952.jpg?crop=0.4444444444444444xw:1xh;center,top&resize=640:*',
         },
       },
     })
@@ -78,7 +85,6 @@ export const RegisterProduct = () =>{
           sqr: 0,
           priceSqr: 0,
           releaseDate: new Date(),
-          //uliral: 1,
           floors: 1,
           floorNumber: 1,
           roomNumber: 1,
@@ -103,20 +109,13 @@ export const RegisterProduct = () =>{
           formikHelpers.setSubmitting(false)
         }}
       >{(formikProps) => (
-        <>
-        <TabPanel value="basic">
-            <RegisterBasic setType={setType} formikProps={formikProps}/>
-          </TabPanel>
-          <TabPanel value="room">
-            
-          </TabPanel>
-          <Stack direction="row" columnGap="20px" justifyContent="flex-end">
-              <Button type="submit" variant='contained' sx={{alignSelf: 'flex-end'}}>Үүсгэх</Button>
-              {type === "room" ?  null : <Button  variant='contained' sx={{alignSelf: 'flex-end'}} onClick={()=> setType("room")}>Өрөөний мэдээлэл оруулах</Button> }
-              
-          </Stack>
-          </>
-          )}
+    <><TabPanel value="basic">
+                <RegisterBasic setType={setType} formikProps={formikProps} />
+              </TabPanel><TabPanel value="room">
+                  <RegisterRoom setType={setType} formikProps={formikProps} />
+                </TabPanel>
+               </>
+  )}
       </Formik>
           
         </TabContext>
@@ -124,3 +123,5 @@ export const RegisterProduct = () =>{
         </Fragment>
     )
 }
+
+

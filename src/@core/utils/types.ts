@@ -1,4 +1,9 @@
-import { ConstructionStatusEnum, ProductStatusEnum } from "src/generated"
+import { FormikProps } from "formik"
+import {
+  ConstructionStatusEnum,
+  ProductInput,
+  ProductStatusEnum,
+} from "src/generated"
 import * as yup from "yup"
 
 interface MonthYear {
@@ -22,27 +27,11 @@ export type PaymentTypes = {
   formatCardNumber(elem: HTMLInputElement): HTMLInputElement
   formatCardExpiry(elem: HTMLInputElement): HTMLInputElement
 }
+export interface ProductActionProps {
+  setType: (type: string) => void
+  formikProps: FormikProps<ProductInput>
+}
 
-// export interface ProductInput {
-//   id: string
-//   images: string
-//   name: string
-//   city: string
-//   district: string
-//   address1: string
-//   sqr: number
-//   priceSqr: number
-//   releaseDate: Date | number
-//   price: number
-//   //uliral: number
-//   floors: number
-//   floorNumber: number
-//   roomNumber: number
-//   constStatus: ConstructionStatusEnum
-//   productStatus: ProductStatusEnum
-//   description: string
-//   organizationId: string
-// }
 export const validationCreateProductSchema = yup.object().shape({
   images: yup.string().required(),
   name: yup.string().required(),

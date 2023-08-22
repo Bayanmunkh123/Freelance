@@ -167,7 +167,7 @@ const columns: GridColDef[] = [
             </IconButton>
           </Tooltip>
           <Tooltip title="Засах">
-            <Link href={`/admin/product/edit?id=${id}`}>
+            <Link href={`/admin/product/update?id=${id}`}>
               <IconButton size="small" sx={{ mr: 0.5 }}>
                 <Icon icon={"mdi:home-edit-outline"} />
               </IconButton>
