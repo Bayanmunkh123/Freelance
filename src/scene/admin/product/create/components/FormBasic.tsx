@@ -16,9 +16,8 @@ import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
 import { PickersComponent } from 'src/@core/components/product'
-import DatePicker from 'react-datepicker'
+import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-import { useRouter } from 'next/router'
 import { ProductActionProps } from 'src/@core/utils/types'
 
 // function Thumb({ file }) {
@@ -56,9 +55,8 @@ import { ProductActionProps } from 'src/@core/utils/types'
 // }
 
 
-export const UpdateBasic = (props :ProductActionProps) => {
-  const router = useRouter()
-  const {setType,formikProps} = props
+export const FormBasic = (props :ProductActionProps) => {
+  const {actionType, setType,formikProps} = props
   return (
     <Box >
           <Form>
@@ -67,17 +65,14 @@ export const UpdateBasic = (props :ProductActionProps) => {
               rowGap="20px"
               width="1000px"
               sx={{
-                "& .MuiGrid-root": {
-                  columnGap: "20px",
-                  rowGap: "20px"
+                '& .MuiGrid-root': {
+                  rowGap: '20px',
+                  columnGap: '20px'
                 },
               }}
             >
-              
-              <Typography variant="h6" fontWeight="bold">
-        Үндсэн мэдээлэл засах
-      </Typography>
-           <input
+            <Typography variant="h6" fontWeight="bold">Үндсэн мэдээлэл {actionType === "update" ? "засах" : " "}</Typography>
+             <input
             id="file"
             name="images"
             type="file"
@@ -88,16 +83,10 @@ export const UpdateBasic = (props :ProductActionProps) => {
             }}
             className="form-control"
           />
-
-                  {/* //<Thumb file={formikProps.values.images} /> */}
-              
-              {/* <input
-          type='file'
-          name='images'
-          //accept='image/*'
-          onChange={formikProps.handleChange}
-        /> */}
+                  {/* <Thumb file={formikProps.values.images} /> */}
+                  <Typography fontWeight="bold" >Төслийн Нэр</Typography>
               <FormControl>
+                
                 <InputLabel id="select-name">Төслийн Нэр</InputLabel>
                 <Select
                   value={formikProps.values.name}
@@ -105,7 +94,7 @@ export const UpdateBasic = (props :ProductActionProps) => {
                   label="Төслийн нэр"
                   labelId="name-select"
                   onChange={(event) => {
-                    formikProps.handleChange("name")(event.target.value)
+                    formikProps.handleChange('name')(event.target.value)
                   }}
                 >
                   {RenderValues?.map((name) => (
@@ -115,15 +104,16 @@ export const UpdateBasic = (props :ProductActionProps) => {
                   ))}
                 </Select>
               </FormControl>
+              <Typography fontWeight="bold">Аймаг</Typography>
               <FormControl>
-                <InputLabel id="select-city">Аймаг</InputLabel>
+                <InputLabel id="select-city">Аймаг эсвэл хотын нэр</InputLabel>
                 <Select
                   value={formikProps.values.city}
                   id="select-city"
-                  label="Аймгийн нэр"
+                  label="Аймаг эсвэл хотын нэр"
                   labelId="city-select"
                   onChange={(event) => {
-                    formikProps.handleChange("city")(event.target.value)
+                    formikProps.handleChange('city')(event.target.value)
                   }}
                 >
                   {mongolianProvinces?.map((name) => (
@@ -133,25 +123,26 @@ export const UpdateBasic = (props :ProductActionProps) => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl>
-                <InputLabel id="select-district">Дүүрэг</InputLabel>
-                <Select
-                  value={formikProps.values.district}
-                  id="select-district"
-                  label="Дүүрэг"
-                  labelId="district-select"
-                  onChange={(event) => {
-                    formikProps.handleChange("district")(event.target.value)
-                  }}
-                >
-                  {distNames?.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Typography>Дэлгэрэнгүй байршил</Typography>
+              {formikProps.values.city === "Улаанбаатар" ? 
+              <><Typography fontWeight="bold">Дүүрэг</Typography><FormControl>
+                  <InputLabel id="select-district">Дүүрэг эсвэл сумын нэр</InputLabel>
+                  <Select
+                    value={formikProps.values.district}
+                    id="select-district"
+                    label="Дүүрэг эсвэл сумын нэр"
+                    labelId="district-select"
+                    onChange={(event) => {
+                      formikProps.handleChange('district')(event.target.value)
+                    } }
+                  >
+                    {distNames?.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl></> : null}
+              <Typography fontWeight="bold">Дэлгэрэнгүй байршил</Typography>
               <Field
                 component={TextField}
                 name="address1"
@@ -160,26 +151,32 @@ export const UpdateBasic = (props :ProductActionProps) => {
                 size="big"
               />
               <Grid container>
-                <Typography>Хэмжээ</Typography>
-                <Typography>Метр квадрат үнэ</Typography>
+                
+                
               </Grid>
-              <Grid container>
-                <Field
-                  component={TextField}
-                  name="sqr"
-                  type="number"
-                  label="Метр квадрат"
-                  size="medium"
-                />
-
-                <Field
-                  component={TextField}
-                  name="priceSqr"
-                  type="number"
-                  label="Метр квадрат үнэ"
-                  size="medium"
-                />
+              <Grid container mt="-20px">
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                  <Typography fontWeight="bold">Хэмжээ</Typography>
+                  <Field
+                    component={TextField}
+                    name="sqr"
+                    type="number"
+                    label="Метр квадрат"
+                    size="medium"
+                  />
+                </Box>
+                
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                  <Typography fontWeight="bold">Метр квадрат үнэ</Typography>
+                  <Field
+                    component={TextField}
+                    name="priceSqr"
+                    type="number"
+                    label="Метр квадрат үнэ"
+                    size="medium"
+                  /></Box>
               </Grid>
+              <Typography fontWeight="bold">Ашиглалтанд орох хугацаа</Typography>
               <DatePickerWrapper><DatePicker
                 selected={formikProps.values.releaseDate ? new Date(formikProps.values.releaseDate) : null}
                 id="basic-input"
@@ -190,29 +187,38 @@ export const UpdateBasic = (props :ProductActionProps) => {
                 }
                 customInput={<PickersComponent label="Хугацаа сонгох" />}
               /></DatePickerWrapper>
+              
               <Grid container>
-                <Typography>Нийт давхарын тоо</Typography>
-                <Typography>Давхарын тоо</Typography>
+               
+                
               </Grid>
-              <Grid container>
-                <Field
+              <Grid container mt="-20px">
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                   <Typography fontWeight="bold">Нийт давхарын тоо</Typography>
+                  <Field
                   component={TextField}
                   name="floors"
                   type="number"
                   label="Давхарын тоо"
                   size="medium"
                 />
-
-                <Field
+                </Box>
+                <Box sx={{display: "flex", flexDirection: "column" , rowGap: "20px"}}>
+                   <Typography fontWeight="bold">Давхарын тоо</Typography>
+                   <Field
                   component={TextField}
                   name="floorNumber"
                   type="number"
                   label="Давхарын тоо"
                   size="medium"
                 />
+                </Box>
+                
+
+               
               </Grid>
 
-              <Typography>Өрөөний тоо</Typography>
+              <Typography fontWeight="bold">Өрөөний тоо</Typography>
               <Field
                 component={TextField}
                 name="roomNumber"
@@ -221,7 +227,7 @@ export const UpdateBasic = (props :ProductActionProps) => {
                 size="medium"
               />
               <Grid container>
-                <Typography>Статус</Typography>
+                <Typography fontWeight="bold">Статус</Typography>
               </Grid>
               <Grid container>
                 <FormControl>
@@ -232,21 +238,21 @@ export const UpdateBasic = (props :ProductActionProps) => {
                     label="Барилгын Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange("constStatus")(
+                      formikProps.handleChange('constStatus')(
                         event.target.value,
                       )
                     }}
                   >
-                    <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
+                    <MenuItem key={'DEFAULT'} value={'DEFAULT'}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={"NEW"} value={"NEWBUILDING"}>
+                    <MenuItem key={'NEWBUILDING'} value={'NEWBUILDING'}>
                       Шинэ
                     </MenuItem>
-                    <MenuItem key={"SOON"} value={"SOON"}>
+                    <MenuItem key={'SOON'} value={'SOON'}>
                       Тун удахгүй
                     </MenuItem>
-                    <MenuItem key={"OLD"} value={"OLD"}>
+                    <MenuItem key={'OLD'} value={'OLD'}>
                       Хуучин
                     </MenuItem>
                   </Select>
@@ -259,24 +265,24 @@ export const UpdateBasic = (props :ProductActionProps) => {
                     label="Статус"
                     labelId="status-select"
                     onChange={(event) => {
-                      formikProps.handleChange("bannerStatus")(
+                      formikProps.handleChange('bannerStatus')(
                         event.target.value,
                       )
                     }}
                   >
-                    <MenuItem key={"DEFAULT"} value={"DEFAULT"}>
+                    <MenuItem key={'DEFAULT'} value={'DEFAULT'}>
                       Байхгүй
                     </MenuItem>
-                    <MenuItem key={"NEW"} value={"NEW"}>
+                    <MenuItem key={'NEW'} value={'NEW'}>
                       Шинэ
                     </MenuItem>
-                    <MenuItem key={"HIGHLIGTH"} value={"HIGHLIGTH"}>
+                    <MenuItem key={'HIGHLIGTH'} value={'HIGHLIGTH'}>
                       Онцлох
                     </MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
-              <Typography>Дэлгэрэнгүй мэдээлэл</Typography>
+              <Typography fontWeight="bold">Дэлгэрэнгүй мэдээлэл</Typography>
               <Field
                 component={TextField}
                 name="description"
@@ -284,17 +290,22 @@ export const UpdateBasic = (props :ProductActionProps) => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              <Stack direction="row" columnGap="20px" justifyContent="flex-end">
-                  <Button type="submit" variant="contained" sx={{alignSelf: "flex-end"}}>Хадгалах</Button>
+               <Stack direction="row" columnGap="20px" justifyContent="flex-end">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ alignSelf: "flex-end" }}
+                  >
+                    {actionType === "update" ? "Хадгалах" : "Үүсгэх"}
+                  </Button>
                     <Button
                       variant="contained"
                       sx={{ alignSelf: "flex-end" }}
                       onClick={() => setType("room")}
                     >
-                      Өрөөний мэдээлэл засах
+                      Нэмэлт мэдээлэл {actionType === "update" ? "засах" : "оруулах"}
                     </Button>
-                </Stack>     
-              
+                </Stack>
             </Stack>
           </Form>
       {/* </Formik> */}

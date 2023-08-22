@@ -28,6 +28,7 @@ export type PaymentTypes = {
   formatCardExpiry(elem: HTMLInputElement): HTMLInputElement
 }
 export interface ProductActionProps {
+  actionType: string
   setType: (type: string) => void
   formikProps: FormikProps<ProductInput>
 }

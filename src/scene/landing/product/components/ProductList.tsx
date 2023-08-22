@@ -34,9 +34,7 @@ const ProductList = () => {
    const handleFilterFill = (value: FilterType ) =>{
     setFilterValues(value)
   }
-  console.log(filterValues)
   const { data } = useProductsLandingQuery({variables: {where: filterValues}})
-  console.log(data)
   // function changeNot(): ListDataType[] {
   //   const getRandomInt = (max: number) =>
   //     Math.floor(Math.random() * Math.floor(max))

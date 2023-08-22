@@ -21,7 +21,6 @@ import Icon from "src/@core/components/icon"
 import { IconButton } from "@mui/material"
 
 export const ProductDetail = ({ id }: { id: string }) => {
-  console.log(id)
   const { data } = useProductLandingQuery({
     variables: {input: {id}},
   });
@@ -31,6 +30,8 @@ export const ProductDetail = ({ id }: { id: string }) => {
     bool ? setLabel("Хураах") : setLabel("Дэлгэрэнгүй харах")
     setExpanded(bool)
   }
+  const date = data?.product?.releaseDate
+  const parsedDate = date ?  new Date(date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
   return (
     <Grid container spacing={2} maxWidth={1300} px="50px" rowGap="15px">
       <DetailHeader />
@@ -55,13 +56,14 @@ export const ProductDetail = ({ id }: { id: string }) => {
         </Stack>
         <Typography>
           {data?.product?.address1 && data?.product?.district
-            ? data.product.address1.concat(data.product.district)
+            ? data.product.address1.concat(" ").concat( data.product.district).concat(" дүүрэг")
             : null}
         </Typography>
       </Stack>
       <Grid container>
         <img
-          src={ListData[0].images[0]}
+          src={data?.product?.images ? data?.product?.images : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
+            }
           style={{ borderRadius: "10px", width: 500 }}
         />
         <ImageList
@@ -73,11 +75,18 @@ export const ProductDetail = ({ id }: { id: string }) => {
           cols={2}
           rowHeight={164}
         >
-          {ListData[0].images.map((url, index: number) => (
-            <ImageListItem key={index}>
-              <img src={url} loading="lazy" />
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.bathRoom ? data?.product?.ProductRooms?.bathRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
             </ImageListItem>
-          ))}
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.bedRoom ? data?.product?.ProductRooms?.bedRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.kitchenRoom ? data?.product?.ProductRooms?.kitchenRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.livingRoom ? data?.product?.ProductRooms?.livingRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
         </ImageList>
       </Grid>
       <Divider sx={{ width: "100%" }} />
@@ -116,7 +125,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${data?.product?.releaseDate}`}
+          subTitle={`${parsedDate}`}
           icon="ph:calendar-check-fill"
         />
         <DetailedBox

@@ -959,12 +959,13 @@ export type ProductUpdateMutationVariables = Exact<{
 
 export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
 
-export type ProductDeleteMutationVariables = Exact<{
+export type ProductStatusUpdateMutationVariables = Exact<{
   id: Scalars['String'];
+  input: ProductStatusChange;
 }>;
 
 
-export type ProductDeleteMutation = { __typename?: 'Mutation', productDelete?: boolean | null };
+export type ProductStatusUpdateMutation = { __typename?: 'Mutation', productStatusUpdate?: boolean | null };
 
 export type ProductsQueryVariables = Exact<{
   where?: InputMaybe<ProductWhereInput>;
@@ -1370,37 +1371,38 @@ export function useProductUpdateMutation(baseOptions?: Apollo.MutationHookOption
 export type ProductUpdateMutationHookResult = ReturnType<typeof useProductUpdateMutation>;
 export type ProductUpdateMutationResult = Apollo.MutationResult<ProductUpdateMutation>;
 export type ProductUpdateMutationOptions = Apollo.BaseMutationOptions<ProductUpdateMutation, ProductUpdateMutationVariables>;
-export const ProductDeleteDocument = gql`
-    mutation productDelete($id: String!) {
-  productDelete(_id: $id)
+export const ProductStatusUpdateDocument = gql`
+    mutation productStatusUpdate($id: String!, $input: ProductStatusChange!) {
+  productStatusUpdate(_id: $id, input: $input)
 }
     `;
-export type ProductDeleteMutationFn = Apollo.MutationFunction<ProductDeleteMutation, ProductDeleteMutationVariables>;
+export type ProductStatusUpdateMutationFn = Apollo.MutationFunction<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>;
 
 /**
- * __useProductDeleteMutation__
+ * __useProductStatusUpdateMutation__
  *
- * To run a mutation, you first call `useProductDeleteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProductDeleteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProductStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProductStatusUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [productDeleteMutation, { data, loading, error }] = useProductDeleteMutation({
+ * const [productStatusUpdateMutation, { data, loading, error }] = useProductStatusUpdateMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useProductDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProductDeleteMutation, ProductDeleteMutationVariables>) {
+export function useProductStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProductDeleteMutation, ProductDeleteMutationVariables>(ProductDeleteDocument, options);
+        return Apollo.useMutation<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>(ProductStatusUpdateDocument, options);
       }
-export type ProductDeleteMutationHookResult = ReturnType<typeof useProductDeleteMutation>;
-export type ProductDeleteMutationResult = Apollo.MutationResult<ProductDeleteMutation>;
-export type ProductDeleteMutationOptions = Apollo.BaseMutationOptions<ProductDeleteMutation, ProductDeleteMutationVariables>;
+export type ProductStatusUpdateMutationHookResult = ReturnType<typeof useProductStatusUpdateMutation>;
+export type ProductStatusUpdateMutationResult = Apollo.MutationResult<ProductStatusUpdateMutation>;
+export type ProductStatusUpdateMutationOptions = Apollo.BaseMutationOptions<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>;
 export const ProductsDocument = gql`
     query products($where: ProductWhereInput) {
   products(where: $where) {

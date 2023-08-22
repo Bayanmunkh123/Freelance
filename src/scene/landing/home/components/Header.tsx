@@ -138,7 +138,6 @@ export const Header = (props : FilterInputProps) => {
         <Grid sx={{ mb: '20px' }}>
           <TabList
             onChange={(_event, type) => {
-              console.log(type)
               setActiontype(type)
             }}
             aria-label="filter product"

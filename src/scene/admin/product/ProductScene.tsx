@@ -1,6 +1,8 @@
 import {
   BannerStatusEnum,
+  ProductStatusEnum,
   ProductsQuery,
+  useProductStatusUpdateMutation,
 } from "src/generated"
 import * as React from "react"
 import Box from "@mui/material/Box"
@@ -159,11 +161,31 @@ const columns: GridColDef[] = [
     headerName: "Үйлдэл",
     renderCell: ({ row }: CellType) => {
       const { id } = row
+      const [onDeleteProduct] = useProductStatusUpdateMutation({
+        onCompleted: () =>{
+          alert("Амжилттай устлаа")
+        },
+        onError: (error)=>{
+          console.log(error)
+        } 
+      })
+      const handleDelete = (id: string) =>{
+        onDeleteProduct({
+          variables:{
+            id: id,
+            input: {
+              productStatus: ProductStatusEnum.INACTIVE
+            }
+          },
+        })
+      }
+    
+
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip title="Устгах">
-            <IconButton size="small" sx={{ mr: 0.5 }}>
-              <Icon icon={"mdi:delete-outline"} />
+            <IconButton size="small" sx={{ mr: 0.5 }} onClick={() => handleDelete(id)}>
+              <Icon icon={"mdi:delete-outline"}/>
             </IconButton>
           </Tooltip>
           <Tooltip title="Засах">
@@ -207,7 +229,18 @@ function getRows(data: ProductsQuery | undefined) {
 // ]
 
 export const ProductScene = () => {
-  const { data } = useProductsQuery()
+  const { data, refetch } = useProductsQuery()
+  
+  React.useEffect(() => {
+    const fetchData = () => {
+      refetch()
+    };
+    fetchData();
+    const intervalId = setInterval(fetchData, 100)
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
   const rows = getRows(data)
   return (
     <Box sx={{ height: 600, width: "100%" }}>

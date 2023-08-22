@@ -3,8 +3,8 @@ import { ProductActionProps } from "src/@core/utils/types";
 import { Box,  Button,  Grid,  Stack,  Typography } from "@mui/material";
 import { TextField } from "formik-mui";
 
-export const UpdateRoom = (props: ProductActionProps) =>{
-    const {setType, formikProps} = props
+export const FormRoom = (props: ProductActionProps) =>{
+    const {actionType, setType, formikProps} = props
     return (
       <Box >
         <Form>
@@ -130,7 +130,7 @@ export const UpdateRoom = (props: ProductActionProps) =>{
                     variant="contained"
                     sx={{ alignSelf: "flex-end" }}
                   >
-                    Хадгалах
+                    {actionType === "update" ? "Хадгалах" : "Үүсгэх"}
                   </Button>
                 </Stack>
               

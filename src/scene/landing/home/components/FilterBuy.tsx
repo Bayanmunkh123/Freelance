@@ -73,7 +73,6 @@ export const CustomizedSelect: React.FC<CustomizedSelectProps>= ({ children, for
       value={_value}
       onChange={(e) => {
         setFieldValue(name, e.target.value)
-        console.log(e.target.value)
       }}
       renderValue={(selected: string) => (
   //       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -135,7 +134,6 @@ export const FilterBuy = (props: Props) => {
       initialValues={filterValues}
       //validationSchema={filterApartmentSchema}
       onSubmit={(values: FilterType , { resetForm }) => {
-        console.log(values)
         handleFilterFill(values)
         setOpen(false)
         resetForm()

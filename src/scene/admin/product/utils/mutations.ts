@@ -67,8 +67,8 @@ export const PRODUCT_UPDATE = gql`
     }
   }
 `
-export const PRODUCT_DELETE = gql`
-  mutation productDelete($id: String!) {
-    productDelete(_id: $id)
+export const PRODUCTSTATUS_UPDATE = gql`
+  mutation productStatusUpdate($id: String!, $input: ProductStatusChange!) {
+    productStatusUpdate(_id: $id, input: $input)
   }
 `
