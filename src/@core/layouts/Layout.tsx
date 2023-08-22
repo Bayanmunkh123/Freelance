@@ -41,9 +41,9 @@ const Layout = (props: LayoutProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hidden])
 
-  if (settings.layout === "horizontal" && props.horizontalLayoutProps) {
-    return <HorizontalLayout {...props}>{children}</HorizontalLayout>
-  }
+  // if (settings.layout === "horizontal" && props.horizontalLayoutProps) {
+  //   return <HorizontalLayout {...props}>{children}</HorizontalLayout>
+  // }
   if (props?.verticalLayoutProps)
     return <VerticalLayout {...props}>{children}</VerticalLayout>
 
