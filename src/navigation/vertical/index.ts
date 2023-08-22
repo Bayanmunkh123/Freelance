@@ -19,14 +19,7 @@ const navigation = (): VerticalNavItemsType => {
       subject: "Admin_Dashboard",
       auth: true,
     },
-    {
-      title: "Байгууллага",
-      path: "/admin/users",
-      icon: "mdi-building",
-      action: "read",
-      subject: "Admin_Users",
-      auth: true,
-    },
+
     {
       title: "Гишүүд",
       path: "/admin/roles",
@@ -35,14 +28,7 @@ const navigation = (): VerticalNavItemsType => {
       subject: "Admin_Roles",
       auth: true,
     },
-    {
-      title: "Санал хүсэлт",
-      path: "/admin/request",
-      icon: "mdi-wechat",
-      action: "read",
-      subject: "Admin_Roles",
-      auth: true,
-    },
+    
     {
       title: "Компаниуд",
       path: "/admin/company",
