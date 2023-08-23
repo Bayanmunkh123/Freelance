@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 import UserIcon from "src/layouts/components/UserIcon"
 import { IconButton, Tooltip } from "@mui/material"
+import {useOrganizationsQuery } from 'src/generated'
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 90 },
   {
@@ -70,6 +71,8 @@ const rows = [
 ]
 
 export const CompanyScene = () => {
+  const data = useOrganizationsQuery()
+  console.log(data?.organizations)
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <button style={{margin:'20px',background:'red',color:'white'}}>Delete</button>
