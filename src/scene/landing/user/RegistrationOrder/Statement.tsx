@@ -121,14 +121,34 @@ const Statement = () => {
           },
         }}
         >           
-              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', justifyContent: 'start', color: 'primary.main' }}>
-                <Typography><Icon icon="material-symbols:chevron-right"/>Иргэний үнэмлэхний хуулбар</Typography>
-                <Typography><Icon icon="material-symbols:chevron-right"/>Оршин суугаа газрын тодорхойлолт</Typography>
-                <Typography><Icon icon="material-symbols:chevron-right"/>Ажлын газрын тодорхойлолт</Typography>
-                <Typography><Icon icon="material-symbols:chevron-right"/>Гадаадад байгаа бол визний хуулбар</Typography>
-                <Typography><Icon icon="material-symbols:chevron-right"/>Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
-                <Typography sx={{color: 'primary.main', textDecoration: 'none'}}><Icon icon="material-symbols:chevron-right"/>Дансны хуулга</Typography>
-              </div>     
+             <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', color: 'primary.main' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography>
+                  Иргэний үнэмлэхний хуулбар
+                </Typography>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography>Оршин суугаа газрын тодорхойлолт</Typography>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography>Ажлын газрын тодорхойлолт</Typography>
+              </div>              
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography>Гадаадад байгаа бол визний хуулбар</Typography>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography>Гадаадад байгаа бол гадаад паспортны хуулбар</Typography>
+              </div>        
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Icon icon="material-symbols:chevron-right" />
+                <Typography sx={{ color: 'primary.main', textDecoration: 'none' }}>Дансны хуулга</Typography>
+              </div>       
+            </div>     
             </Typography> 
 
                     <div style={{ display: 'flex', justifyContent: 'center'}}>

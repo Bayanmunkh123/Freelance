@@ -117,6 +117,7 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
   }
 
   return (
+
     <Grid sx={{width: '100%', maxWidth: '100%', margin: '0'}}>
     <form>
       
@@ -255,12 +256,10 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
             <TextField
               fullWidth
               label="Регистрийн дугаар"
-              placeholder=""
               value={formData.registerId}
               onChange={(e) => handleFormChange("registerId", e.target.value)}
             />
-          </Grid>
-
+            </Grid>
           {/* Оршин суугаа улс */}
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
@@ -269,6 +268,8 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
                 id="autocomplete-country-select"
                 options={countries as CountryType[]}
                 getOptionLabel={(option) => option.label || ""}
+                value={countries.find((country) => country.label === formData.country) || null}
+                onChange={(event, value) => handleFormChange("country", value?.label || "")}
                 renderOption={(props, option) => (
                   <Box
                     component="li"
@@ -288,6 +289,7 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
+
                     label="Оршин суугаа улс"
                     inputProps={{
                       ...params.inputProps,
@@ -311,27 +313,20 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
 
           {/* Ажиллаж буй салбар */}
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
-              <InputLabel>Ажиллаж буй салбар</InputLabel>
-              <Select
-                label="workSector"
-                value={formData.workSector}
-                onChange={(e) => handleFormChange("workSector", e.target.value)}
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value=""></MenuItem>
-                <MenuItem value=""></MenuItem>
-                <MenuItem value=""></MenuItem>
-                <MenuItem value=""></MenuItem>
-              </Select>
-            </FormControl>
+            <TextField
+              fullWidth sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1, borderColor: "#yourBorderColor", borderWidth: 2 } }}
+              label="Ажиллаж буй салбар"
+              value={formData.workSector}
+              onChange={(e) => handleFormChange("workSector", e.target.value)}
+            />
           </Grid>
 
           {/* Оршин суугаа хугацаа */}
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
+            <FormControl fullWidth >
               <InputLabel>Оршин суугаа хугацаа</InputLabel>
               <Select
+                
                 label="duration"
                 value={formData.duration}
                 onChange={(e) => handleFormChange("duration", e.target.value)}
@@ -460,9 +455,11 @@ export const RegisterAccount = ({ userId }: { userId: string }) => {
               type="reset"
               variant="outlined"
               color="secondary"
-              onClick={() => setFormData(initialData)}
+              onClick={() => {
+                setFormData(initialData);
+            }}            
             >
-              Шинэчлэх
+              Устгах
             </Button>
           </Grid>
         </Grid>
