@@ -24,6 +24,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
   const { data } = useProductLandingQuery({
     variables: {input: {id}},
   });
+  console.log(data)
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState("Дэлгэрэнгүй харах")
   const handleChange = (bool: boolean) => {
@@ -60,7 +61,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
             : null}
         </Typography>
       </Stack>
-      <Grid container>
+      <Grid container justifyContent='center'>
         <img
           src={data?.product?.images ? data?.product?.images : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
             }
@@ -102,17 +103,27 @@ export const ProductDetail = ({ id }: { id: string }) => {
           icon="fa:bathtub"
         />
         <DetailedBox
-          title="Нийт метр квадрат- "
-          subTitle={`${data?.product?.sqr}`}
-          icon="ic:baseline-compare-arrows"
-        />
-        <DetailedBox
           title="Унтлагын өрөө- "
           subTitle={`${data?.product?.ProductRooms?.bedNumber}`}
           icon="icon-park-solid:sleep-two"
         />
+        <DetailedBox
+          title="Гал тогооны өрөө- "
+          subTitle={`${data?.product?.ProductRooms?.kitchenNumber}`}
+          icon="fa6-solid:kitchen-set"
+        />
+        <DetailedBox
+          title="Зочны өрөө- "
+          subTitle={`${data?.product?.ProductRooms?.livingNumber}`}
+          icon="mdi:living-room-outline"
+        />
       </Grid>
       <Grid container columnGap="20px">
+        <DetailedBox
+          title="Нийт метр квадрат- "
+          subTitle={`${data?.product?.sqr}`}
+          icon="ic:baseline-compare-arrows"
+        />
         <DetailedBox
           title="Нийт давхар- "
           subTitle={`${data?.product?.floors}`}
@@ -190,7 +201,8 @@ export const ProductDetail = ({ id }: { id: string }) => {
           backgroundColor: "primary.main",
           color: (theme) => theme.palette.customColors.lightBg,
           px: "30px",
-          left: "80%",
+          //alignSelf: 'flex-end'
+          //left: "80%",
         }}
       >
         Худалдан авах

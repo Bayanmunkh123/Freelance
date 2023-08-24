@@ -70,3 +70,28 @@ export const PRODUCT = gql`
     }
   }
 `
+export const USERFAVORITE_LIST = gql`
+  query userFavoriteList {
+    userFavoriteList {
+      data {
+        id
+        images
+        name
+        address1
+        city
+        district
+        floors
+        floorNumber
+        roomNumber
+        sqr
+        priceSqr
+        price
+        description
+        releaseDate
+        constStatus
+        bannerStatus
+        organizationId
+      }
+    }
+  }
+`

@@ -1,4 +1,4 @@
-import { FormikProps } from "formik"
+import { FieldInputProps, FormikProps } from "formik"
 import {
   ConstructionStatusEnum,
   ProductInput,
@@ -67,4 +67,48 @@ export const filterApartmentSchema = yup.object().shape({
 export interface RenderValueType {
   label: string | number | ConstructionStatusEnum
   value: string | number | ConstructionStatusEnum
+}
+export interface FilterType {
+  city: string
+  district: string | null
+  //type: string,
+  maxPrice: number | null
+  minPrice: number | null
+  maxSqr: number | null
+  minSqr: number | null
+  roomNumber: number | null
+  constStatus: ConstructionStatusEnum | null
+  organizationId: string | null
+}
+export interface CheckerGroupType {
+  isImg: boolean
+  isStartIcon: boolean
+  isBuy: boolean
+  name: string
+  isNumber: boolean
+  isStatus: boolean
+  form: FormikProps<FilterType>
+}
+export interface CustomSliderProps {
+  name: string
+  min?: number
+  max?: number
+  valueLabelDisplay?: "on" | "auto" | "off"
+  label?: string
+  step?: number
+}
+export interface CustomizedFilterProps {
+  form: FormikProps<FilterType>
+  field: FieldInputProps<FilterType>
+}
+export type CustomFilterInputProps = {
+  actionType: string | null
+  filterValues: FilterType
+  handleFilterFill: (values: FilterType) => void
+}
+export interface CustomizedSelectProps extends CustomizedFilterProps {
+  children: React.ReactNode
+}
+export interface FilterProps extends CustomFilterInputProps {
+  setOpen: (bool: boolean) => void
 }

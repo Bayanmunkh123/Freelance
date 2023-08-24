@@ -1,5 +1,6 @@
 import {
   BannerStatusEnum,
+  ConstructionStatusEnum,
   ProductStatusEnum,
   ProductsQuery,
   useProductStatusUpdateMutation,
@@ -16,54 +17,36 @@ import Icon from "src/@core/components/icon"
 
 import { useProductsQuery } from "src/generated"
 
-type ProductType = {
+type OrganizationProductType = {
   id: string
-  isFav: boolean
+  no: number
+  //isFav: boolean
   name: string
   city: string
   district: string
   sqr: number
   priceSqr: number | null | undefined
   releaseDate: Date
-  productStatus: BannerStatusEnum
+  bannerStatus: BannerStatusEnum
+  constStatus: ConstructionStatusEnum
+  floors: number
+  floorNumber: number
 }
 
 interface CellType {
-  row: ProductType
+  row: OrganizationProductType
 }
 
 const columns: GridColDef[] = [
   {
-    field: "id",
-    headerName: "ID",
+    field: "no",
+    headerName: "№",
     width: 50,
-  },
-  {
-    field: "isSold",
-    headerName: "Төлөв",
-    width: 70,
-    editable: true,
-    sortable: true,
-    renderCell: ({ row }: CellType) => {
-      const { isFav } = row
-      return (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* <Tooltip title= {isFav ? 'Зарагдсан' : 'Зарагдаагүй'}>
-          <IconButton size='small' sx={{ mr: 0.5 }} >
-            {
-              isFav ? <CheckOutlinedIcon color='success' /> : <ClearOutlinedIcon color='error' />
-            }
-            
-          </IconButton>
-        </Tooltip> */}
-        </Box>
-      )
-    },
   },
   {
     field: "name",
     headerName: "Үл хөдлөх",
-    width: 200,
+    width: 250,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
@@ -91,7 +74,7 @@ const columns: GridColDef[] = [
   },
   {
     field: "priceSqr",
-    headerName: "Үнэ",
+    headerName: "Mетр кв үнэ",
     width: 150,
     editable: true,
     sortable: true,
@@ -104,9 +87,36 @@ const columns: GridColDef[] = [
     sortable: true,
   },
   {
+    field: "floors",
+    headerName: "Нийт давхар",
+    width: 100,
+    editable: true,
+    sortable: true,
+  },
+  {
+    field: "floorNumber",
+    headerName: "Давхарын тоо",
+    width: 100,
+    editable: true,
+    sortable: true,
+  },
+  {
+    field: "constStatus",
+    headerName: "Статус",
+    width: 110,
+    editable: true,
+    sortable: true,
+    renderCell: ({ row }: CellType) =>{
+      const { constStatus } = row
+      return(
+        <Typography>{constStatus === ConstructionStatusEnum.NEWBUILDING ? 'Шинэ' :  constStatus === ConstructionStatusEnum.SOON ? 'Тун удахгүй' : constStatus === ConstructionStatusEnum.OLD ? 'Хуучин' : ' '}</Typography>
+      )
+    }
+  },
+  {
     field: "releaseDate",
     headerName: "Хугацаа",
-    width: 200,
+    width: 150,
     editable: true,
     sortable: true,
     renderCell: ({ row }: CellType) => {
@@ -120,28 +130,28 @@ const columns: GridColDef[] = [
     },
   },
   {
-    field: "productStatus",
-    headerName: "Төлөв",
+    field: "bannerStatus",
+    headerName: "Төрөл",
     sortable: true,
     editable: true,
     width: 70,
     renderCell: ({ row }: CellType) => {
-      const { productStatus } = row
+      const { bannerStatus } = row
       return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Tooltip
             title={
-              productStatus === BannerStatusEnum.NEW
+              bannerStatus === BannerStatusEnum.NEW
                 ? "Шинэ"
-                : productStatus === BannerStatusEnum.HIGHLIGTH
+                : bannerStatus === BannerStatusEnum.HIGHLIGTH
                 ? "Онцлох"
                 : "Энгийн"
             }
           >
             <IconButton size="small" sx={{ mr: 0.5 }}>
-              {productStatus === BannerStatusEnum.NEW ? (
+              {bannerStatus === BannerStatusEnum.NEW ? (
                 <Icon icon={"mdi:new-box"} color="red" />
-              ) : productStatus === BannerStatusEnum.HIGHLIGTH ? (
+              ) : bannerStatus === BannerStatusEnum.HIGHLIGTH ? (
                 <Icon icon={"mdi:star-outline"} color="#72E128" />
               ) : (
                 <Icon icon={"mdi:home-city-outline"} color="#0361C9" />
@@ -201,8 +211,8 @@ const columns: GridColDef[] = [
   },
 ]
 function getRows(data: ProductsQuery | undefined) {
-  const rows: ProductType[] = []
-  data?.products?.data?.forEach((item) => {
+  const rows: OrganizationProductType[] = []
+  data?.products?.data?.forEach((item, index: number) => {
     rows.push({
       name: item.name,
       city: item.city,
@@ -211,8 +221,12 @@ function getRows(data: ProductsQuery | undefined) {
       sqr: item.sqr,
       priceSqr: item.priceSqr,
       releaseDate: item.releaseDate,
-      isFav: true,
-      productStatus: item.bannerStatus,
+      //isFav: true,
+      bannerStatus: item.bannerStatus,
+      no: index+1,
+      constStatus: item.constStatus,
+      floors: item.floors,
+      floorNumber: item.floorNumber
     })
   })
   return rows

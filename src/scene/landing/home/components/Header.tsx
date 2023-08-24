@@ -22,17 +22,14 @@ import {
   Checkbox
 } from '@mui/material'
 import { useRouter } from 'next/router'
-import { FilterType } from './FilterBuy'
+import { FilterType, CustomFilterInputProps } from 'src/@core/utils/types'
 
 // ** Icon Imports
 import Icon from "src/@core/components/icon"
 
-export type FilterInputProps = {
-  filterValues: FilterType 
-  handleFilterFill: (values: FilterType) => void
-}
 
-export const Header = (props : FilterInputProps) => {
+
+export const Header = (props : CustomFilterInputProps) => {
   
   const [icon, setIcon] = React.useState<JSX.Element>(<Icon icon={"mdi:arrow-down"} />)
   const [type, setType] = React.useState<string>('')
@@ -61,13 +58,13 @@ export const Header = (props : FilterInputProps) => {
     setOpenSelection(false)
   }
   return (
-    <Grid container justifyContent="space-between" px="50px" rowGap="15px">
+    <Grid container justifyContent="space-between" p="20px 100px 0 100px" rowGap="15px">
       <FormGroup row>
-        <FormControlLabel control={<Checkbox />} label="Худалдан авах" />
+        <FormControlLabel control={<Checkbox />} label="Худалдан авах" checked />
         <FormControlLabel control={<Checkbox />} label="Түрээслэх" />
       </FormGroup>
       <LocationSelect />
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
         <InputLabel id="demo-controlled-open-select-label">Төрөл</InputLabel>
         <Select
           open={open}
@@ -97,7 +94,7 @@ export const Header = (props : FilterInputProps) => {
           <MenuItem value={'house'}>Хувийн сууц</MenuItem>
           <MenuItem value={'building'}>Барилга</MenuItem>
         </Select>
-      </FormControl>
+      </FormControl> */}
       <Button
         onClick={handleOpen}
         startIcon={<Icon icon={"mdi:sort"} />}
@@ -156,7 +153,7 @@ export const Header = (props : FilterInputProps) => {
             },
           }}
         >
-          <FilterBuy filterValues={filterValues} handleFilterFill={handleFilterFill} setOpen={setOpen} />
+          <FilterBuy filterValues={filterValues} handleFilterFill={handleFilterFill} setOpen={setOpen} actionType={''}  />
         </TabPanel>
         <TabPanel value="rent">
           <FilterRent />
@@ -189,7 +186,7 @@ export const SubHeader = (props: Props) => {
   }
 
   return (
-    <Grid container justifyContent="space-between" px="50px" rowGap="15px" >
+    <Grid container justifyContent="space-between" px="100px" rowGap="15px" >
       <Stack direction="row" columnGap="10px">
         <Typography
           variant="h6"
