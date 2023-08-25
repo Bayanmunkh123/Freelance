@@ -14,6 +14,7 @@ export const UpdateProduct = ({ id }: { id: string }) => {
 
   const initialValues = {
     name: data?.product?.name,
+    actionType: data?.product?.actionType,
     constStatus: data?.product?.constStatus,
     bannerStatus: data?.product?.bannerStatus,
     description: data?.product?.description,

@@ -19,6 +19,7 @@ import { PickersComponent } from 'src/@core/components/product'
 import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { ProductActionProps } from 'src/@core/utils/types'
+import { ActionTypeEnum } from 'src/generated'
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -57,6 +58,7 @@ import { ProductActionProps } from 'src/@core/utils/types'
 
 export const FormBasic = (props :ProductActionProps) => {
   const {actionType, setType,formikProps} = props
+  const RenderValuesPurchase = RenderValues.slice(0,6)
   return (
     <Box >
           <Form>
@@ -84,24 +86,51 @@ export const FormBasic = (props :ProductActionProps) => {
             className="form-control"
           />
                   {/* <Thumb file={formikProps.values.images} /> */}
-                  <Typography fontWeight="bold" >Төслийн Нэр</Typography>
+              <Typography fontWeight="bold" >Үйлчилгээний төрөл</Typography>
               <FormControl>
                 
-                <InputLabel id="select-name">Төслийн Нэр</InputLabel>
+                <InputLabel id="select-actionType">Төрөл</InputLabel>
+                <Select
+                  value={formikProps.values.actionType}
+                  id="select-actionType"
+                  label="Төрөл"
+                  labelId="actionType-select"
+                  onChange={(event) => {
+                    formikProps.handleChange('actionType')(event.target.value)
+                  }}
+                >
+                    <MenuItem key={ActionTypeEnum.PURCHASE} value={ActionTypeEnum.PURCHASE}>
+                      Худалдаж авах
+                    </MenuItem>
+                    <MenuItem key={ActionTypeEnum.RENT} value={ActionTypeEnum.RENT}>
+                      Түрээслэх
+                    </MenuItem>
+                </Select>
+              </FormControl>
+              <Typography fontWeight="bold" >{formikProps.values.actionType === ActionTypeEnum.RENT ? 'Түрээслэх төрөл' : 'Худалдаж авах төрөл'}</Typography>
+              <FormControl>
+                
+                <InputLabel id="select-name">Төрөл</InputLabel>
                 <Select
                   value={formikProps.values.name}
                   id="select-name"
-                  label="Төслийн нэр"
+                  label="Төрөл"
                   labelId="name-select"
                   onChange={(event) => {
                     formikProps.handleChange('name')(event.target.value)
                   }}
                 >
-                  {RenderValues?.map((name) => (
+                  {formikProps.values.actionType === ActionTypeEnum.RENT ? 
+                    (RenderValues?.map((name) => (
                     <MenuItem key={name.value} value={name.value}>
                       {name.label}
                     </MenuItem>
-                  ))}
+                    ))) : (RenderValuesPurchase?.map((name) => (
+                    <MenuItem key={name.value} value={name.value}>
+                      {name.label}
+                    </MenuItem>
+                    )))  }
+                  
                 </Select>
               </FormControl>
               <Typography fontWeight="bold">Аймаг</Typography>

@@ -41,6 +41,7 @@ export const FormInitial = (props: ProductFormType) =>{
         variables: {
             input: {
             images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
+            actionType: _value.actionType,
             name: _value.name,
             city: _value.city,
             district: _value.district,
@@ -76,6 +77,7 @@ export const FormInitial = (props: ProductFormType) =>{
             id: id ? id : "",
             input: {
             images: "",
+            actionType: _values.actionType,
             name: _values.name,
             city: _values.city,
             district: _values.district,

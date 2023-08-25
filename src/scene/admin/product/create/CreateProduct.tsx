@@ -1,9 +1,10 @@
-import { BannerStatusEnum, ConstructionStatusEnum, ProductInput, useProductCreateMutation } from "src/generated"
+import { ActionTypeEnum, BannerStatusEnum, ConstructionStatusEnum, ProductInput } from "src/generated"
 import { FormInitial } from "./components/FormInitial"
 
 export const CreateProduct = () =>{
   const initialValues = {
     images: '',
+    actionType: ActionTypeEnum.PURCHASE,
     name: '',
     city: '',
     district: '',
