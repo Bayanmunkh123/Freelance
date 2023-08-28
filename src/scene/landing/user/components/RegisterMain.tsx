@@ -108,7 +108,7 @@ export const RegisterMain = () => {
                 label='Имэйл'
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12}> 
               <FormControl fullWidth>
                 <InputLabel htmlFor='form-layouts-basic-password'>Нууц үг</InputLabel>
                 <OutlinedInput

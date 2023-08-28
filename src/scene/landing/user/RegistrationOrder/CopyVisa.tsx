@@ -176,8 +176,8 @@ const CopyVisa = () => {
                   <List>{fileList}</List>
                   <div className='buttons'>
                     <Button variant='contained'>Файл оруулах</Button>
-                    <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
-                      Бүгдийг нь устгах
+                    <Button color='error' variant='outlined' style={{marginLeft:'1%'}} onClick={handleRemoveAllFiles}>
+                      Файл устгах
                     </Button>
                   </div>
                 </Fragment>

@@ -126,6 +126,7 @@ export const ForgotPassword = () => {
             <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 5.25 }}>
               Имэйл рүү код явуулах
             </Button>
+            
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Typography
                 component={Link}
@@ -139,7 +140,7 @@ export const ForgotPassword = () => {
                   justifyContent: 'center'
                 }}
               >
-                <Icon icon='mdi:chevron-left' fontSize='2rem' />
+                <Icon icon='mdi:chevron-left' fontSize='1.5rem' style={{margin:'auto'}} />
                 <span>Буцах</span>
               </Typography>
             </Box>
