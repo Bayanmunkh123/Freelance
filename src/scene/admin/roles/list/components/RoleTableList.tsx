@@ -156,7 +156,7 @@ const columns: GridColDef[] = [
     flex: 0.2,
     minWidth: 230,
     field: "userName",
-    headerName: "UserName",
+    headerName: "Компаний нэр",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -196,7 +196,7 @@ const columns: GridColDef[] = [
     flex: 0.15,
     field: "role",
     minWidth: 150,
-    headerName: "Role",
+    headerName: "Үүрэг",
     renderCell: ({ row }: CellType) => {
       return (
         <Box sx={{ display: "flex", alignItems: "center", "& svg": { mr: 3 } }}>
@@ -247,7 +247,7 @@ const columns: GridColDef[] = [
     minWidth: 90,
     sortable: false,
     field: "actions",
-    headerName: "Actions",
+    headerName: "Үйлдэл",
     renderCell: ({ row }: CellType) => (
       <RowOptions id={row?.id ? row?.id : 0} />
     ),

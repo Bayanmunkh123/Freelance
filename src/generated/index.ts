@@ -969,6 +969,16 @@ export type OrganizationUsersQueryVariables = Exact<{
 
 export type OrganizationUsersQuery = { __typename?: 'Query', organizationUsers?: { __typename?: 'OrganizationUsersType', count?: number | null, data?: Array<{ __typename?: 'OrganizationUser', id: string, orgRole?: OrganizationUserRoleEnum | null, userId: string, organizationId: string, assignedAt: any, createdAt: any, updatedAt: any, user?: { __typename?: 'User', id: string, userId?: string | null, userName?: string | null, role?: UserRoleEnum | null, status?: UserStatusEnum | null, email?: string | null, phone?: string | null, countryCode?: string | null, createdAt: any, updatedAt: any, image?: string | null } | null, organization?: { __typename?: 'Organization', id: string } | null }> | null } | null };
 
+export type OrganizationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrganizationQuery = { __typename?: 'Query', organization?: { __typename?: 'Organization', id: string, name: string, logo?: string | null, rating?: string | null, companyRegister: string, totalSales: number, accesses: number, type?: OrganizationTypeEnum | null, status?: OrganizationStatusEnum | null, createdAt: any, updatedAt: any, members?: Array<{ __typename?: 'OrganizationUser', userId: string }> | null } | null };
+
+export type OrganizationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrganizationsQuery = { __typename?: 'Query', organizations?: { __typename?: 'OrganizationsType', count?: number | null, data?: Array<{ __typename?: 'Organization', id: string, name: string, logo?: string | null, rating?: string | null, companyRegister: string, totalSales: number, accesses: number, type?: OrganizationTypeEnum | null, status?: OrganizationStatusEnum | null, createdAt: any, updatedAt: any, members?: Array<{ __typename?: 'OrganizationUser', userId: string }> | null, products?: Array<{ __typename?: 'Product', id: string }> | null }> | null } | null };
+
 export type ProductCreateMutationVariables = Exact<{
   input: ProductInput;
 }>;
@@ -1280,6 +1290,106 @@ export function useOrganizationUsersLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type OrganizationUsersQueryHookResult = ReturnType<typeof useOrganizationUsersQuery>;
 export type OrganizationUsersLazyQueryHookResult = ReturnType<typeof useOrganizationUsersLazyQuery>;
 export type OrganizationUsersQueryResult = Apollo.QueryResult<OrganizationUsersQuery, OrganizationUsersQueryVariables>;
+export const OrganizationDocument = gql`
+    query organization {
+  organization {
+    id
+    name
+    logo
+    rating
+    companyRegister
+    totalSales
+    accesses
+    type
+    status
+    members {
+      userId
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useOrganizationQuery__
+ *
+ * To run a query within a React component, call `useOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrganizationQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationQuery, OrganizationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrganizationQuery, OrganizationQueryVariables>(OrganizationDocument, options);
+      }
+export function useOrganizationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationQuery, OrganizationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrganizationQuery, OrganizationQueryVariables>(OrganizationDocument, options);
+        }
+export type OrganizationQueryHookResult = ReturnType<typeof useOrganizationQuery>;
+export type OrganizationLazyQueryHookResult = ReturnType<typeof useOrganizationLazyQuery>;
+export type OrganizationQueryResult = Apollo.QueryResult<OrganizationQuery, OrganizationQueryVariables>;
+export const OrganizationsDocument = gql`
+    query Organizations {
+  organizations {
+    count
+    data {
+      id
+      name
+      logo
+      rating
+      companyRegister
+      totalSales
+      accesses
+      type
+      status
+      createdAt
+      updatedAt
+      members {
+        userId
+      }
+      products {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrganizationsQuery__
+ *
+ * To run a query within a React component, call `useOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrganizationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrganizationsQuery(baseOptions?: Apollo.QueryHookOptions<OrganizationsQuery, OrganizationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrganizationsQuery, OrganizationsQueryVariables>(OrganizationsDocument, options);
+      }
+export function useOrganizationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrganizationsQuery, OrganizationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrganizationsQuery, OrganizationsQueryVariables>(OrganizationsDocument, options);
+        }
+export type OrganizationsQueryHookResult = ReturnType<typeof useOrganizationsQuery>;
+export type OrganizationsLazyQueryHookResult = ReturnType<typeof useOrganizationsLazyQuery>;
+export type OrganizationsQueryResult = Apollo.QueryResult<OrganizationsQuery, OrganizationsQueryVariables>;
 export const ProductCreateDocument = gql`
     mutation productCreate($input: ProductInput!) {
   productCreate(input: $input) {
