@@ -44,6 +44,8 @@ export const RegisterMain = () => {
     const handleFormChange = (field: keyof Data | 'password', value: Data[keyof Data]) => {
         if (field === 'password') {
             setValues({ ...values, password: value as string }); // Assuming password is a string
+            setConfirmPassValues({ ...confirmPassValues, password: '' }); // Reset confirm password field
+
         } else {
             setFormData({ ...formData, [field]: value });
         }
@@ -106,7 +108,7 @@ export const RegisterMain = () => {
                 label='Имэйл'
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12}> 
               <FormControl fullWidth>
                 <InputLabel htmlFor='form-layouts-basic-password'>Нууц үг</InputLabel>
                 <OutlinedInput
@@ -134,7 +136,7 @@ export const RegisterMain = () => {
                 </FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12}  sx={{marginTop:'-1.5%'}}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='form-layouts-confirm-password'>Нууц үг давтах</InputLabel>
                 <OutlinedInput
@@ -171,13 +173,16 @@ export const RegisterMain = () => {
                     type="reset"
                     variant="outlined"
                     color="secondary"
-                    onClick={() => setFormData(initialData)}
-                    
+                    onClick={() => {
+                      setFormData(initialData);
+                      setValues({ ...values, password: '' }); // Reset password field
+                      setConfirmPassValues({ ...confirmPassValues, password: '' }); // Reset confirm password field
+                  }}                      
                     >
-                    Шинэчлэх
+                    Устгах
                 </Button>
                 
-                <Link href="/pages/changepassword">
+                <Link href="/landing/user/changePassword" style={{textDecoration: 'none'}}>
                 <Button
                 variant="outlined"
                 sx={{color:'grey', borderColor:'GrayText',mt:5,display:'flex',textDecoration:'none'}}
@@ -185,14 +190,13 @@ export const RegisterMain = () => {
                     Нууц үг солих
                 </Button>
                 </Link>
-                
+                <Link href="/landing/user/forgotPassword" style={{textDecoration: 'none'}}>
                 <Button
                  variant="outlined"
                  sx={{ color: 'grey', borderColor:'GrayText',mt:3 }}>
                     Нууц үг сэргээх
                 </Button>
-                
-              
+                </Link>
             </Grid>
           </Grid>
         </form>

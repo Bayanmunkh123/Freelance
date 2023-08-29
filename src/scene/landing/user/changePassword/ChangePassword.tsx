@@ -8,13 +8,13 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import InputAdornment from '@mui/material/InputAdornment'
 import FormHelperText from '@mui/material/FormHelperText'
+import {useRouter} from 'next/router'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -68,6 +68,7 @@ export const ChangePassword = () => {
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, resolver: yupResolver(schema) })
+  
 
   const handleClickShowCurrentPassword = () => {
     setValues({ ...values, showCurrentPassword: !values.showCurrentPassword })
@@ -80,6 +81,7 @@ export const ChangePassword = () => {
   const handleClickShowConfirmNewPassword = () => {
     setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
   }
+  const router = useRouter()
 
   const onPasswordFormSubmit = () => {
     toast.success('Password Changed Successfully')
@@ -87,15 +89,19 @@ export const ChangePassword = () => {
   }
 
   return (
+    <Grid sx={{width: '100%', maxWidth: '50%', margin:'auto', marginBottom:'30%'}}>
     <Card>
-      <CardHeader title='Change Password' />
+    <Button  type='button' sx={{mt:3}} onClick={() => router.push('/landing/user')}>
+    <Icon icon="material-symbols:chevron-left" /> Буцах
+    </Button>
+      <CardHeader title='Нууц үг солих' sx={{ textAlign: 'center' }} />
       <CardContent>
         <form onSubmit={handleSubmit(onPasswordFormSubmit)}>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={6} alignItems={'center'} justifyContent={'center'} >
+            <Grid item xs={12} sm={10} >
               <FormControl fullWidth>
                 <InputLabel htmlFor='input-current-password' error={Boolean(errors.currentPassword)}>
-                  Current Password
+                  Одоогийн нууц үг
                 </InputLabel>
                 <Controller
                   name='currentPassword'
@@ -129,11 +135,11 @@ export const ChangePassword = () => {
               </FormControl>
             </Grid>
           </Grid>
-          <Grid container spacing={6} sx={{ mt: 0 }}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={6} alignItems={'center'} justifyContent={'center'} sx={{ mt:1}}>
+            <Grid item xs={12} sm={10} sx={{display:'flex',flexDirection:'column'}}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='input-new-password' error={Boolean(errors.newPassword)}>
-                  New Password
+                  Шинэ нууц үг
                 </InputLabel>
                 <Controller
                   name='newPassword'
@@ -166,10 +172,10 @@ export const ChangePassword = () => {
                 )}
               </FormControl>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={10} alignItems={'center'} justifyContent={'center'} sx={{ mt:1}}>
               <FormControl fullWidth>
                 <InputLabel htmlFor='input-confirm-new-password' error={Boolean(errors.confirmNewPassword)}>
-                  Confirm New Password
+                  Шинэ нууц үг дахин оруулах
                 </InputLabel>
                 <Controller
                   name='confirmNewPassword'
@@ -202,26 +208,20 @@ export const ChangePassword = () => {
                 )}
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
-              <Typography sx={{ fontWeight: 600, color: 'text.secondary' }}>Password Requirements:</Typography>
-              <Box component='ul' sx={{ pl: 4, mb: 0, '& li': { mb: 1, color: 'text.secondary' } }}>
-                <li>Minimum 8 characters long - the more, the better</li>
-                <li>At least one lowercase & one uppercase character</li>
-                <li>At least one number, symbol, or whitespace character</li>
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
+            
+            <Grid item xs={12}  alignItems={'center'} justifyContent={'center'} sx={{ mt:1, display:'flex'}}>
               <Button variant='contained' type='submit' sx={{ mr: 3 }}>
-                Save Changes
+                Хадгалах
               </Button>
               <Button type='reset' variant='outlined' color='secondary' onClick={() => reset()}>
-                Reset
+                Арилгах
               </Button>
             </Grid>
           </Grid>
         </form>
       </CardContent>
     </Card>
+    </Grid>
   )
 }
 
