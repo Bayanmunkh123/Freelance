@@ -1,4 +1,4 @@
-import UpdateProduct from "src/scene/admin/product/update/UpdateProduct"
+import {UpdateProduct} from "src/scene/admin/product/update/UpdateProduct"
 import React from 'react'
 import { NextPage } from 'next'
 import { RoleData } from 'src/config/acl'

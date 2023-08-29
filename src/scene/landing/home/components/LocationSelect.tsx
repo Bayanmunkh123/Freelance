@@ -21,7 +21,6 @@ export const LocationSelect = () => {
 
   const handleDelete = (deleteValue: string) => {
     setSelection(() => selection.filter((value) => value !== deleteValue))
-    console.log(selection)
   }
 
   return (

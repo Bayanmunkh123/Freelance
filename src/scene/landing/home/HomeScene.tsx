@@ -13,7 +13,10 @@ import IconSvg from 'src/layouts/components/IconSvg'
 
 export const HomeScene = () => {
   const [action, setAction] = React.useState<string>()
-
+  const handleClick = (value: string) =>{
+    setAction(value)
+    console.log(value)
+  }
   return (
     <>
       <Grid
@@ -26,6 +29,10 @@ export const HomeScene = () => {
             border: `2px solid #E2E7EC`,
             borderRadius: '10px',
             boxShadow: (theme) => `0 0 0 2px ${theme.palette.background.paper}`,
+            color: theme => theme.palette.customColors.lightBg,
+            fontWeight: 700,
+            fontSize: "20px",
+            marginTop: "20px"
           },
           '& .MuiBox-root': {
             display: 'flex',
@@ -38,12 +45,12 @@ export const HomeScene = () => {
             '& .MuiTypography-root': {
               position: 'absolute',
               top: '50px',
-            },
+            }
           },
         }}
       >
         <Stack direction="column" rowGap="20px">
-          <Stack
+          {/* <Stack
             direction="row"
             alignItems="center"
             columnGap="20px"
@@ -51,8 +58,8 @@ export const HomeScene = () => {
           >
             {IconSvg('rent')}
             <Typography>Түрээслэх</Typography>
-          </Stack>
-          <Button startIcon={IconSvg('rentButton')} onClick={() => setAction("rent")} >Түрээслэх</Button>
+          </Stack> */}
+          <Button  variant='contained' startIcon={IconSvg('rent')} onClick={() => handleClick("rent")} >Түрээслэх</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />
@@ -70,7 +77,7 @@ export const HomeScene = () => {
           </Box>
         </Stack>
         <Stack direction="column" rowGap="20px">
-          <Stack
+          {/* <Stack
             direction="row"
             alignItems="center"
             columnGap="20px"
@@ -78,8 +85,8 @@ export const HomeScene = () => {
           >
             {IconSvg('buy')}
             <Typography>Худалдан авах</Typography>
-          </Stack>
-          <Button startIcon={IconSvg('rentButton')} onClick={() => setAction("buy")}>Худалдан авах</Button>
+          </Stack> */}
+          <Button variant='contained' startIcon={IconSvg('buy')} onClick={() => handleClick("buy")} >Худалдан авах</Button>
           <Box>
             <HomeButton name="shop" title="Дэлгүүр" />
             <HomeButton name="office" title="Оффис" />
@@ -97,7 +104,6 @@ export const HomeScene = () => {
         Санал болгох
       </Typography>
       <Grid container spacing={4} justifyContent="center" sx={{ mt: '20px' }}>
-        <SuggestCard />
         <SuggestCard />
       </Grid>
     </>

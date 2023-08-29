@@ -21,16 +21,18 @@ import Icon from "src/@core/components/icon"
 import { IconButton } from "@mui/material"
 
 export const ProductDetail = ({ id }: { id: string }) => {
-  console.log(id)
   const { data } = useProductLandingQuery({
     variables: {input: {id}},
   });
+  console.log(data)
   const [expanded, setExpanded] = React.useState(false)
   const [label, setLabel] = React.useState("Дэлгэрэнгүй харах")
   const handleChange = (bool: boolean) => {
     bool ? setLabel("Хураах") : setLabel("Дэлгэрэнгүй харах")
     setExpanded(bool)
   }
+  const date = data?.product?.releaseDate
+  const parsedDate = date ?  new Date(date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
   return (
     <Grid container spacing={2} maxWidth={1300} px="50px" rowGap="15px">
       <DetailHeader />
@@ -55,13 +57,14 @@ export const ProductDetail = ({ id }: { id: string }) => {
         </Stack>
         <Typography>
           {data?.product?.address1 && data?.product?.district
-            ? data.product.address1.concat(data.product.district)
+            ? data.product.address1.concat(" ").concat( data.product.district).concat(" дүүрэг")
             : null}
         </Typography>
       </Stack>
-      <Grid container>
+      <Grid container justifyContent='center'>
         <img
-          src={ListData[0].images[0]}
+          src={data?.product?.images ? data?.product?.images : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
+            }
           style={{ borderRadius: "10px", width: 500 }}
         />
         <ImageList
@@ -73,11 +76,18 @@ export const ProductDetail = ({ id }: { id: string }) => {
           cols={2}
           rowHeight={164}
         >
-          {ListData[0].images.map((url, index: number) => (
-            <ImageListItem key={index}>
-              <img src={url} loading="lazy" />
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.bathRoom ? data?.product?.ProductRooms?.bathRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
             </ImageListItem>
-          ))}
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.bedRoom ? data?.product?.ProductRooms?.bedRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.kitchenRoom ? data?.product?.ProductRooms?.kitchenRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
+            <ImageListItem >
+              <img src={data?.product?.ProductRooms?.livingRoom ? data?.product?.ProductRooms?.livingRoom : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'} loading="lazy" />
+            </ImageListItem>
         </ImageList>
       </Grid>
       <Divider sx={{ width: "100%" }} />
@@ -93,17 +103,27 @@ export const ProductDetail = ({ id }: { id: string }) => {
           icon="fa:bathtub"
         />
         <DetailedBox
-          title="Нийт метр квадрат- "
-          subTitle={`${data?.product?.sqr}`}
-          icon="ic:baseline-compare-arrows"
-        />
-        <DetailedBox
           title="Унтлагын өрөө- "
           subTitle={`${data?.product?.ProductRooms?.bedNumber}`}
           icon="icon-park-solid:sleep-two"
         />
+        <DetailedBox
+          title="Гал тогооны өрөө- "
+          subTitle={`${data?.product?.ProductRooms?.kitchenNumber}`}
+          icon="fa6-solid:kitchen-set"
+        />
+        <DetailedBox
+          title="Зочны өрөө- "
+          subTitle={`${data?.product?.ProductRooms?.livingNumber}`}
+          icon="mdi:living-room-outline"
+        />
       </Grid>
       <Grid container columnGap="20px">
+        <DetailedBox
+          title="Нийт метр квадрат- "
+          subTitle={`${data?.product?.sqr}`}
+          icon="ic:baseline-compare-arrows"
+        />
         <DetailedBox
           title="Нийт давхар- "
           subTitle={`${data?.product?.floors}`}
@@ -116,7 +136,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
         />
         <DetailedBox
           title="Баригдсан он- "
-          subTitle={`${data?.product?.releaseDate}`}
+          subTitle={`${parsedDate}`}
           icon="ph:calendar-check-fill"
         />
         <DetailedBox
@@ -181,7 +201,8 @@ export const ProductDetail = ({ id }: { id: string }) => {
           backgroundColor: "primary.main",
           color: (theme) => theme.palette.customColors.lightBg,
           px: "30px",
-          left: "80%",
+          //alignSelf: 'flex-end'
+          //left: "80%",
         }}
       >
         Худалдан авах

@@ -1,20 +1,12 @@
 import { Field, Form } from "formik";
-import { Props } from "./RegisterBasic"
-import { Box, FormControl, Grid, InputLabel, Stack,  Typography } from "@mui/material";
+import { ProductActionProps } from "src/@core/utils/types";
+import { Box,  Button,  Grid,  Stack,  Typography } from "@mui/material";
 import { TextField } from "formik-mui";
-// bathNumber: 1,
-//           bathRoom:'',
-//           bedNumber: 1,
-//           bedRoom: '',
-//           kitchenNumber: 1,
-//           kitchenRoom: '',
-//           livingNumber: 1,
-//           livingRoom: '',
-//           viewWindow: '',
-export const RegisterRoom = (props: Props) =>{
-    const {formikProps} = props
+
+export const FormRoom = (props: ProductActionProps) =>{
+    const {actionType, setType, formikProps} = props
     return (
-      <Box display="flex" justifyContent="center"  >
+      <Box >
         <Form>
             <Stack
               direction="column"
@@ -23,7 +15,8 @@ export const RegisterRoom = (props: Props) =>{
               sx={{
                 '& .MuiGrid-root': {
                   rowGap: '20px',
-                  columnGap: '20px'
+                  columnGap: '20px',
+                  alignItems: 'center',
                 },
               }}
             >
@@ -53,20 +46,20 @@ export const RegisterRoom = (props: Props) =>{
                 <Grid container>
                     <input
                             id="file"
-                            name="bathRoom"
+                            name="bedRoom"
                             type="file"
                             onChange={(event) => {
                             if (event?.currentTarget?.files) {
-                                formikProps.setFieldValue("bathRoom", event.currentTarget.files[0]);
+                                formikProps.setFieldValue("bedRoom", event.currentTarget.files[0]);
                             }
                             }}
                             className="form-control"
                         />
                         <Field
                             component={TextField}
-                            name="bathNumber"
+                            name="bedNumber"
                             type="number"
-                            label="Угаалгын өрөөны тоо"
+                            label="Унтлагын өрөөны тоо"
                             size="big"
                         />
                 </Grid>
@@ -74,55 +67,72 @@ export const RegisterRoom = (props: Props) =>{
                 <Grid container>
                     <input
                             id="file"
-                            name="bathRoom"
+                            name="kitchenRoom"
                             type="file"
                             onChange={(event) => {
                             if (event?.currentTarget?.files) {
-                                formikProps.setFieldValue("bathRoom", event.currentTarget.files[0]);
+                                formikProps.setFieldValue("kitchenRoom", event.currentTarget.files[0]);
                             }
                             }}
                             className="form-control"
                         />
                         <Field
                             component={TextField}
-                            name="bathNumber"
+                            name="kitchenNumber"
                             type="number"
-                            label="Угаалгын өрөөны тоо"
+                            label="Гал тогооны өрөөны тоо"
                             size="big"
                         />
                 </Grid>
-                <Typography fontWeight="bold">Угаалгын өрөө</Typography>
+                <Typography fontWeight="bold">Зочны өрөө</Typography>
                 <Grid container>
                     <input
                             id="file"
-                            name="bathRoom"
+                            name="livingRoom"
                             type="file"
                             onChange={(event) => {
                             if (event?.currentTarget?.files) {
-                                formikProps.setFieldValue("bathRoom", event.currentTarget.files[0]);
+                                formikProps.setFieldValue("livingRoom", event.currentTarget.files[0]);
                             }
                             }}
                             className="form-control"
                         />
                         <Field
                             component={TextField}
-                            name="bathNumber"
+                            name="livingNumber"
                             type="number"
-                            label="Угаалгын өрөөны тоо"
+                            label="Зочны өрөөны тоо"
                             size="big"
                         />
                 </Grid>
+                <Typography fontWeight="bold">Цонхны харагдах байдал</Typography>
                 <input
                             id="file"
-                            name="bathRoom"
+                            name="viewWindow"
                             type="file"
                             onChange={(event) => {
                             if (event?.currentTarget?.files) {
-                                formikProps.setFieldValue("bathRoom", event.currentTarget.files[0]);
+                                formikProps.setFieldValue("viewWindow", event.currentTarget.files[0]);
                             }
                             }}
                             className="form-control"
                         />
+                 <Stack direction="row" columnGap="20px" justifyContent="flex-end">
+                    <Button
+                      variant="contained"
+                      sx={{ alignSelf: "flex-end" }}
+                      onClick={() => setType("basic")}
+                    >
+                      Өмнөх
+                    </Button>
+                  <Button
+                    type="submit" 
+                    variant="contained"
+                    sx={{ alignSelf: "flex-end" }}
+                  >
+                    {actionType === "update" ? "Хадгалах" : "Үүсгэх"}
+                  </Button>
+                </Stack>
               
             </Stack>
         </Form>

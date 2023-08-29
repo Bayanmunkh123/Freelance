@@ -1,4 +1,9 @@
-import { ConstructionStatusEnum, ProductStatusEnum } from "src/generated"
+import { FieldInputProps, FormikProps } from "formik"
+import {
+  ConstructionStatusEnum,
+  ProductInput,
+  ProductStatusEnum,
+} from "src/generated"
 import * as yup from "yup"
 
 interface MonthYear {
@@ -22,27 +27,12 @@ export type PaymentTypes = {
   formatCardNumber(elem: HTMLInputElement): HTMLInputElement
   formatCardExpiry(elem: HTMLInputElement): HTMLInputElement
 }
+export interface ProductActionProps {
+  actionType: string
+  setType: (type: string) => void
+  formikProps: FormikProps<ProductInput>
+}
 
-// export interface ProductInput {
-//   id: string
-//   images: string
-//   name: string
-//   city: string
-//   district: string
-//   address1: string
-//   sqr: number
-//   priceSqr: number
-//   releaseDate: Date | number
-//   price: number
-//   //uliral: number
-//   floors: number
-//   floorNumber: number
-//   roomNumber: number
-//   constStatus: ConstructionStatusEnum
-//   productStatus: ProductStatusEnum
-//   description: string
-//   organizationId: string
-// }
 export const validationCreateProductSchema = yup.object().shape({
   images: yup.string().required(),
   name: yup.string().required(),
@@ -77,4 +67,48 @@ export const filterApartmentSchema = yup.object().shape({
 export interface RenderValueType {
   label: string | number | ConstructionStatusEnum
   value: string | number | ConstructionStatusEnum
+}
+export interface FilterType {
+  city: string
+  district: string | null
+  //type: string,
+  maxPrice: number | null
+  minPrice: number | null
+  maxSqr: number | null
+  minSqr: number | null
+  roomNumber: number | null
+  constStatus: ConstructionStatusEnum | null
+  organizationId: string | null
+}
+export interface CheckerGroupType {
+  isImg: boolean
+  isStartIcon: boolean
+  isBuy: boolean
+  name: string
+  isNumber: boolean
+  isStatus: boolean
+  form: FormikProps<FilterType>
+}
+export interface CustomSliderProps {
+  name: string
+  min?: number
+  max?: number
+  valueLabelDisplay?: "on" | "auto" | "off"
+  label?: string
+  step?: number
+}
+export interface CustomizedFilterProps {
+  form: FormikProps<FilterType>
+  field: FieldInputProps<FilterType>
+}
+export type CustomFilterInputProps = {
+  actionType: string | null
+  filterValues: FilterType
+  handleFilterFill: (values: FilterType) => void
+}
+export interface CustomizedSelectProps extends CustomizedFilterProps {
+  children: React.ReactNode
+}
+export interface FilterProps extends CustomFilterInputProps {
+  setOpen: (bool: boolean) => void
 }
