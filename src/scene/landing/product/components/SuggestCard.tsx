@@ -28,8 +28,7 @@ export const SuggestCard = () => {
               borderTopRightRadius: 10,
               boxShadow: (theme) => theme.shadows[5],
             }}
-            image={
-              'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
+            image={item.images ? item.images : 'https://images.homes.com/listings/214/1007620603-872007331-original.jpg'
             }
           />
           <CardContent

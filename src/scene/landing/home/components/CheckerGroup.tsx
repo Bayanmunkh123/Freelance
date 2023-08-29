@@ -8,17 +8,9 @@ import {
 } from 'src/@core/utils/initData';
 import { RenderValueType } from 'src/@core/utils/types';
 import Icon from 'src/@core/components/icon';
-import { CustomizedProps, FilterType } from './FilterBuy';
+import { FilterType, CheckerGroupType } from 'src/@core/utils/types';
 
-export interface CheckerGroupType {
-  isImg: boolean;
-  isStartIcon: boolean;
-  isBuy: boolean;
-  name: string;
-  isNumber: boolean;
-  isStatus: boolean;
-  form: FormikProps<FilterType>; 
-}
+
 
 const CustomCheckIcon = <Icon icon={'mdi:check-circle'} color='#42C3A7' />;
 

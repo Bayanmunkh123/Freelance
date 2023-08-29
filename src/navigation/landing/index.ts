@@ -24,27 +24,27 @@ const navigation = (): HorizontalNavItemsType => {
       subject: "NavLink",
       auth: true,
     },
-    {
-      title: "Product",
-      path: "/product",
-      action: "read",
-      subject: "Product",
-      auth: false,
-    },
-    {
-      title: "Service",
-      path: "/service",
-      action: "read",
-      subject: "Service",
-      auth: false,
-    },
-    {
-      title: "About",
-      path: "/about-us",
-      action: "read",
-      subject: "About",
-      auth: false,
-    },
+    // {
+    //   title: "Product",
+    //   path: "/product",
+    //   action: "read",
+    //   subject: "Product",
+    //   auth: false,
+    // },
+    // {
+    //   title: "Service",
+    //   path: "/service",
+    //   action: "read",
+    //   subject: "Service",
+    //   auth: false,
+    // },
+    // {
+    //   title: "About",
+    //   path: "/about-us",
+    //   action: "read",
+    //   subject: "About",
+    //   auth: false,
+    // },
   ]
 }
 

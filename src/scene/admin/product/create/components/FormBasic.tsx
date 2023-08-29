@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import {
   Grid,
@@ -10,19 +11,15 @@ import {
   MenuItem,
   Box,
 } from '@mui/material'
-import { Formik, Form, Field, FormikProps } from 'formik'
-import { ConstructionStatusEnum, BannerStatusEnum, ProductInput, useProductCreateMutation,ProductRoom } from 'src/generated'
+import { Form, Field } from 'formik'
 import { RenderValues } from 'src/@core/utils/initData'
 import { distNames, mongolianProvinces } from 'src/@core/utils/initData'
 import { TextField } from 'formik-mui'
-import PickersComponent from './DateInput'
+import { PickersComponent } from 'src/@core/components/product'
 import DatePicker, {ReactDatePickerProps} from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-
-export interface Props{
-  setType: (type :string) => void;
-  formikProps: FormikProps<ProductInput>
-}
+import { ProductActionProps } from 'src/@core/utils/types'
+import { ActionTypeEnum } from 'src/generated'
 
 // function Thumb({ file }) {
 //   const [loading, setLoading] = React.useState(false);
@@ -59,68 +56,11 @@ export interface Props{
 // }
 
 
-export const RegisterBasic = (props :Props) => {
-  const {setType,formikProps} = props
-  //const popperPlacement: ReactDatePickerProps['popperPlacement'] 
-  // const [onCreateProduct] = useProductCreateMutation()
-  // const submitHandler = (data: ProductInput) => {
-  //   console.log('onSubmit === values', data)
-
-  //   onCreateProduct({
-  //     variables: {
-  //       input: {
-  //         images: "https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800",
-  //         name: data.name,
-  //         city: data.city,
-  //         district: data.district,
-  //         address1: data.address1,
-  //         sqr: data.sqr,
-  //         priceSqr: data.priceSqr,
-  //         releaseDate: data.releaseDate,
-  //         price: 0,
-  //         //uliral: number
-  //         floors: data.floors,
-  //         floorNumber: data.floorNumber,
-  //         roomNumber: data.roomNumber,
-  //         constStatus: data.constStatus,
-  //         bannerStatus: data.bannerStatus,
-  //         description: data.description,
-  //         organizationId: '879094b3-f68e-4bda-8139-b5ebf599e84b',
-  //       },
-  //     },
-  //   })
-  // }
-
+export const FormBasic = (props :ProductActionProps) => {
+  const {actionType, setType,formikProps} = props
+  const RenderValuesPurchase = RenderValues.slice(0,6)
   return (
-    <Box display="flex" justifyContent="center"  >
-      {/* <Formik
-        initialValues={{
-          images: '',
-          name: '',
-          city: '',
-          district: '',
-          address1: '',
-          sqr: 0,
-          priceSqr: 0,
-          releaseDate: new Date(),
-          //uliral: 1,
-          floors: 1,
-          floorNumber: 1,
-          roomNumber: 1,
-          constStatus: ConstructionStatusEnum.NEWBUILDING,
-          bannerStatus: BannerStatusEnum.HIGHLIGTH,
-          description: '',
-          price: 0,
-          organizationId: '',
-          ProductRooms: '',
-        }}
-        //validationSchema={validationCreateProductSchema}
-        onSubmit={(values: ProductInput, formikHelpers) => {
-          submitHandler(values)
-          formikHelpers.setSubmitting(false)
-        }}
-      > */}
-       
+    <Box >
           <Form>
             <Stack
               direction="column"
@@ -133,7 +73,7 @@ export const RegisterBasic = (props :Props) => {
                 },
               }}
             >
-            <Typography variant="h6" fontWeight="bold">Үндсэн мэдээлэл</Typography>
+            <Typography variant="h6" fontWeight="bold">Үндсэн мэдээлэл {actionType === "update" ? "засах" : " "}</Typography>
              <input
             id="file"
             name="images"
@@ -146,24 +86,51 @@ export const RegisterBasic = (props :Props) => {
             className="form-control"
           />
                   {/* <Thumb file={formikProps.values.images} /> */}
-                  <Typography fontWeight="bold" >Төслийн Нэр</Typography>
+              <Typography fontWeight="bold" >Үйлчилгээний төрөл</Typography>
               <FormControl>
                 
-                <InputLabel id="select-name">Төслийн Нэр</InputLabel>
+                <InputLabel id="select-actionType">Төрөл</InputLabel>
+                <Select
+                  value={formikProps.values.actionType}
+                  id="select-actionType"
+                  label="Төрөл"
+                  labelId="actionType-select"
+                  onChange={(event) => {
+                    formikProps.handleChange('actionType')(event.target.value)
+                  }}
+                >
+                    <MenuItem key={ActionTypeEnum.PURCHASE} value={ActionTypeEnum.PURCHASE}>
+                      Худалдаж авах
+                    </MenuItem>
+                    <MenuItem key={ActionTypeEnum.RENT} value={ActionTypeEnum.RENT}>
+                      Түрээслэх
+                    </MenuItem>
+                </Select>
+              </FormControl>
+              <Typography fontWeight="bold" >{formikProps.values.actionType === ActionTypeEnum.RENT ? 'Түрээслэх төрөл' : 'Худалдаж авах төрөл'}</Typography>
+              <FormControl>
+                
+                <InputLabel id="select-name">Төрөл</InputLabel>
                 <Select
                   value={formikProps.values.name}
                   id="select-name"
-                  label="Төслийн нэр"
+                  label="Төрөл"
                   labelId="name-select"
                   onChange={(event) => {
                     formikProps.handleChange('name')(event.target.value)
                   }}
                 >
-                  {RenderValues?.map((name) => (
+                  {formikProps.values.actionType === ActionTypeEnum.RENT ? 
+                    (RenderValues?.map((name) => (
                     <MenuItem key={name.value} value={name.value}>
                       {name.label}
                     </MenuItem>
-                  ))}
+                    ))) : (RenderValuesPurchase?.map((name) => (
+                    <MenuItem key={name.value} value={name.value}>
+                      {name.label}
+                    </MenuItem>
+                    )))  }
+                  
                 </Select>
               </FormControl>
               <Typography fontWeight="bold">Аймаг</Typography>
@@ -240,7 +207,7 @@ export const RegisterBasic = (props :Props) => {
               </Grid>
               <Typography fontWeight="bold">Ашиглалтанд орох хугацаа</Typography>
               <DatePickerWrapper><DatePicker
-                selected={formikProps.values.releaseDate}
+                selected={formikProps.values.releaseDate ? new Date(formikProps.values.releaseDate) : null}
                 id="basic-input"
                 popperPlacement="bottom-start"
                 name="releaseDate"
@@ -352,7 +319,22 @@ export const RegisterBasic = (props :Props) => {
                 label="Дэлгэрэнгүй мэдээлэл"
                 size="big"
               />
-              
+               <Stack direction="row" columnGap="20px" justifyContent="flex-end">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ alignSelf: "flex-end" }}
+                  >
+                    {actionType === "update" ? "Хадгалах" : "Үүсгэх"}
+                  </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ alignSelf: "flex-end" }}
+                      onClick={() => setType("room")}
+                    >
+                      Нэмэлт мэдээлэл {actionType === "update" ? "засах" : "оруулах"}
+                    </Button>
+                </Stack>
             </Stack>
           </Form>
       {/* </Formik> */}
