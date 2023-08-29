@@ -33,6 +33,11 @@ export enum AccountProviderTypeEnum {
   TWITTER = 'TWITTER'
 }
 
+export enum ActionTypeEnum {
+  PURCHASE = 'PURCHASE',
+  RENT = 'RENT'
+}
+
 export type AddressMain = {
   __typename?: 'AddressMain';
   address1: Scalars['String'];
@@ -169,6 +174,7 @@ export type LoginPhoneInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  UserFavoriteDelete?: Maybe<Scalars['Boolean']>;
   accountEliminate?: Maybe<AuthVerifyTokenType>;
   authEmailForgetPassword?: Maybe<Scalars['Boolean']>;
   authEmailResetPassword?: Maybe<AuthVerifyTokenType>;
@@ -199,8 +205,14 @@ export type Mutation = {
   storageSignedUrlDelete?: Maybe<Scalars['Boolean']>;
   userCreate?: Maybe<User>;
   userDelete?: Maybe<Scalars['Boolean']>;
+  userFavoriteCreate?: Maybe<Scalars['Boolean']>;
   userStatusChange?: Maybe<Scalars['Boolean']>;
   userUpdate?: Maybe<User>;
+};
+
+
+export type MutationUserFavoriteDeleteArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -359,6 +371,11 @@ export type MutationUserDeleteArgs = {
 };
 
 
+export type MutationUserFavoriteCreateArgs = {
+  input: UserProductInput;
+};
+
+
 export type MutationUserStatusChangeArgs = {
   id: Scalars['String'];
   input: UserStatusChange;
@@ -503,6 +520,7 @@ export type PermissionsType = {
 export type Product = {
   __typename?: 'Product';
   ProductRooms?: Maybe<ProductRoom>;
+  actionType: ActionTypeEnum;
   address1?: Maybe<Scalars['String']>;
   bannerStatus: BannerStatusEnum;
   city: Scalars['String'];
@@ -523,6 +541,7 @@ export type Product = {
 };
 
 export type ProductInput = {
+  actionType: ActionTypeEnum;
   address1?: InputMaybe<Scalars['String']>;
   bannerStatus: BannerStatusEnum;
   bathNumber?: InputMaybe<Scalars['Int']>;
@@ -577,6 +596,7 @@ export type ProductUniqueWhereInput = {
 };
 
 export type ProductWhereInput = {
+  actionType?: InputMaybe<ActionTypeEnum>;
   bedNumber?: InputMaybe<Scalars['Int']>;
   city?: InputMaybe<Scalars['String']>;
   constStatus?: InputMaybe<ConstructionStatusEnum>;
@@ -608,6 +628,7 @@ export type Query = {
   sourceCategories?: Maybe<Array<Maybe<SourceCategory>>>;
   storageSignedUrl?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  userFavoriteList?: Maybe<Products>;
   users?: Maybe<Users>;
 };
 
@@ -837,6 +858,10 @@ export type UserOrderInput = {
   userId: Scalars['String'];
 };
 
+export type UserProductInput = {
+  id: Scalars['ID'];
+};
+
 export type UserProfile = {
   __typename?: 'UserProfile';
   User?: Maybe<User>;
@@ -949,7 +974,7 @@ export type ProductCreateMutationVariables = Exact<{
 }>;
 
 
-export type ProductCreateMutation = { __typename?: 'Mutation', productCreate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
+export type ProductCreateMutation = { __typename?: 'Mutation', productCreate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
 
 export type ProductUpdateMutationVariables = Exact<{
   input: ProductInput;
@@ -957,28 +982,34 @@ export type ProductUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
+export type ProductUpdateMutation = { __typename?: 'Mutation', productUpdate?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
 
-export type ProductDeleteMutationVariables = Exact<{
+export type ProductStatusUpdateMutationVariables = Exact<{
   id: Scalars['String'];
+  input: ProductStatusChange;
 }>;
 
 
-export type ProductDeleteMutation = { __typename?: 'Mutation', productDelete?: boolean | null };
+export type ProductStatusUpdateMutation = { __typename?: 'Mutation', productStatusUpdate?: boolean | null };
 
 export type ProductsQueryVariables = Exact<{
   where?: InputMaybe<ProductWhereInput>;
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, images?: string | null, id: string, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null }> | null } | null };
+export type ProductsQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null }> | null } | null };
 
 export type ProductQueryVariables = Exact<{
   input?: InputMaybe<ProductUniqueWhereInput>;
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
+export type ProductQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
+
+export type UserFavoriteListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserFavoriteListQuery = { __typename?: 'Query', userFavoriteList?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, organizationId: string }> | null } | null };
 
 export type AuthWebMutationVariables = Exact<{
   input: ExternalWebAuthInput;
@@ -1055,14 +1086,14 @@ export type ProductsLandingQueryVariables = Exact<{
 }>;
 
 
-export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, images?: string | null, id: string, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null }> | null } | null };
+export type ProductsLandingQuery = { __typename?: 'Query', products?: { __typename?: 'Products', data?: Array<{ __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null }> | null } | null };
 
 export type ProductLandingQueryVariables = Exact<{
   input?: InputMaybe<ProductUniqueWhereInput>;
 }>;
 
 
-export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', address1?: string | null, bannerStatus: BannerStatusEnum, city: string, constStatus: ConstructionStatusEnum, description?: string | null, district: string, floorNumber: number, floors: number, id: string, images?: string | null, name: string, organizationId: string, price?: number | null, priceSqr?: number | null, releaseDate?: any | null, roomNumber?: number | null, sqr: number, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bathRoom?: string | null, bedNumber?: number | null, bedRoom?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null, livingNumber?: number | null, livingRoom?: string | null, viewWindow?: string | null } | null } | null };
+export type ProductLandingQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, images?: string | null, name: string, address1?: string | null, city: string, district: string, floors: number, floorNumber: number, roomNumber?: number | null, sqr: number, priceSqr?: number | null, price?: number | null, description?: string | null, releaseDate?: any | null, constStatus: ConstructionStatusEnum, bannerStatus: BannerStatusEnum, actionType: ActionTypeEnum, organizationId: string, ProductRooms?: { __typename?: 'ProductRoom', bathNumber?: number | null, bedNumber?: number | null, livingNumber?: number | null, bedRoom?: string | null, bathRoom?: string | null, livingRoom?: string | null, viewWindow?: string | null, kitchenNumber?: number | null, kitchenRoom?: string | null } | null } | null };
 
 export type LandingUserQueryVariables = Exact<{
   where?: InputMaybe<UserWhereUniqueInput>;
@@ -1252,17 +1283,6 @@ export type OrganizationUsersQueryResult = Apollo.QueryResult<OrganizationUsersQ
 export const ProductCreateDocument = gql`
     mutation productCreate($input: ProductInput!) {
   productCreate(input: $input) {
-    ProductRooms {
-      bathNumber
-      bedNumber
-      livingNumber
-      bedRoom
-      bathRoom
-      livingRoom
-      viewWindow
-      kitchenNumber
-      kitchenRoom
-    }
     id
     images
     name
@@ -1279,6 +1299,18 @@ export const ProductCreateDocument = gql`
     releaseDate
     constStatus
     bannerStatus
+    actionType
+    ProductRooms {
+      bathNumber
+      bedNumber
+      livingNumber
+      bedRoom
+      bathRoom
+      livingRoom
+      viewWindow
+      kitchenNumber
+      kitchenRoom
+    }
     organizationId
   }
 }
@@ -1312,34 +1344,35 @@ export type ProductCreateMutationOptions = Apollo.BaseMutationOptions<ProductCre
 export const ProductUpdateDocument = gql`
     mutation productUpdate($input: ProductInput!, $id: String!) {
   productUpdate(input: $input, _id: $id) {
-    ProductRooms {
-      bathNumber
-      bathRoom
-      bedNumber
-      bedRoom
-      kitchenNumber
-      kitchenRoom
-      livingNumber
-      livingRoom
-      viewWindow
-    }
-    address1
-    bannerStatus
-    city
-    constStatus
-    description
-    district
-    floorNumber
-    floors
     id
     images
     name
-    organizationId
-    price
-    priceSqr
-    releaseDate
+    address1
+    city
+    district
+    floors
+    floorNumber
     roomNumber
     sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    bannerStatus
+    actionType
+    ProductRooms {
+      bathNumber
+      bedNumber
+      livingNumber
+      bedRoom
+      bathRoom
+      livingRoom
+      viewWindow
+      kitchenNumber
+      kitchenRoom
+    }
+    organizationId
   }
 }
     `;
@@ -1370,69 +1403,71 @@ export function useProductUpdateMutation(baseOptions?: Apollo.MutationHookOption
 export type ProductUpdateMutationHookResult = ReturnType<typeof useProductUpdateMutation>;
 export type ProductUpdateMutationResult = Apollo.MutationResult<ProductUpdateMutation>;
 export type ProductUpdateMutationOptions = Apollo.BaseMutationOptions<ProductUpdateMutation, ProductUpdateMutationVariables>;
-export const ProductDeleteDocument = gql`
-    mutation productDelete($id: String!) {
-  productDelete(_id: $id)
+export const ProductStatusUpdateDocument = gql`
+    mutation productStatusUpdate($id: String!, $input: ProductStatusChange!) {
+  productStatusUpdate(_id: $id, input: $input)
 }
     `;
-export type ProductDeleteMutationFn = Apollo.MutationFunction<ProductDeleteMutation, ProductDeleteMutationVariables>;
+export type ProductStatusUpdateMutationFn = Apollo.MutationFunction<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>;
 
 /**
- * __useProductDeleteMutation__
+ * __useProductStatusUpdateMutation__
  *
- * To run a mutation, you first call `useProductDeleteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useProductDeleteMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useProductStatusUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProductStatusUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [productDeleteMutation, { data, loading, error }] = useProductDeleteMutation({
+ * const [productStatusUpdateMutation, { data, loading, error }] = useProductStatusUpdateMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useProductDeleteMutation(baseOptions?: Apollo.MutationHookOptions<ProductDeleteMutation, ProductDeleteMutationVariables>) {
+export function useProductStatusUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ProductDeleteMutation, ProductDeleteMutationVariables>(ProductDeleteDocument, options);
+        return Apollo.useMutation<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>(ProductStatusUpdateDocument, options);
       }
-export type ProductDeleteMutationHookResult = ReturnType<typeof useProductDeleteMutation>;
-export type ProductDeleteMutationResult = Apollo.MutationResult<ProductDeleteMutation>;
-export type ProductDeleteMutationOptions = Apollo.BaseMutationOptions<ProductDeleteMutation, ProductDeleteMutationVariables>;
+export type ProductStatusUpdateMutationHookResult = ReturnType<typeof useProductStatusUpdateMutation>;
+export type ProductStatusUpdateMutationResult = Apollo.MutationResult<ProductStatusUpdateMutation>;
+export type ProductStatusUpdateMutationOptions = Apollo.BaseMutationOptions<ProductStatusUpdateMutation, ProductStatusUpdateMutationVariables>;
 export const ProductsDocument = gql`
     query products($where: ProductWhereInput) {
   products(where: $where) {
     data {
-      ProductRooms {
-        bathNumber
-        bathRoom
-        bedNumber
-        bedRoom
-        kitchenNumber
-        kitchenRoom
-        livingNumber
-        livingRoom
-        viewWindow
-      }
-      address1
-      bannerStatus
-      city
-      constStatus
-      description
-      district
-      floorNumber
-      floors
-      images
       id
+      images
       name
-      organizationId
-      price
-      priceSqr
-      releaseDate
+      address1
+      city
+      district
+      floors
+      floorNumber
       roomNumber
       sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      bannerStatus
+      actionType
+      ProductRooms {
+        bathNumber
+        bedNumber
+        livingNumber
+        bedRoom
+        bathRoom
+        livingRoom
+        viewWindow
+        kitchenNumber
+        kitchenRoom
+      }
+      organizationId
     }
   }
 }
@@ -1468,34 +1503,35 @@ export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQuer
 export const ProductDocument = gql`
     query product($input: ProductUniqueWhereInput) {
   product(input: $input) {
-    ProductRooms {
-      bathNumber
-      bathRoom
-      bedNumber
-      bedRoom
-      kitchenNumber
-      kitchenRoom
-      livingNumber
-      livingRoom
-      viewWindow
-    }
-    address1
-    bannerStatus
-    city
-    constStatus
-    description
-    district
-    floorNumber
-    floors
     id
     images
     name
-    organizationId
-    price
-    priceSqr
-    releaseDate
+    address1
+    city
+    district
+    floors
+    floorNumber
     roomNumber
     sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    bannerStatus
+    actionType
+    ProductRooms {
+      bathNumber
+      bedNumber
+      livingNumber
+      bedRoom
+      bathRoom
+      livingRoom
+      viewWindow
+      kitchenNumber
+      kitchenRoom
+    }
+    organizationId
   }
 }
     `;
@@ -1527,6 +1563,58 @@ export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
+export const UserFavoriteListDocument = gql`
+    query userFavoriteList {
+  userFavoriteList {
+    data {
+      id
+      images
+      name
+      address1
+      city
+      district
+      floors
+      floorNumber
+      roomNumber
+      sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      bannerStatus
+      organizationId
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserFavoriteListQuery__
+ *
+ * To run a query within a React component, call `useUserFavoriteListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserFavoriteListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserFavoriteListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserFavoriteListQuery(baseOptions?: Apollo.QueryHookOptions<UserFavoriteListQuery, UserFavoriteListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserFavoriteListQuery, UserFavoriteListQueryVariables>(UserFavoriteListDocument, options);
+      }
+export function useUserFavoriteListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserFavoriteListQuery, UserFavoriteListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserFavoriteListQuery, UserFavoriteListQueryVariables>(UserFavoriteListDocument, options);
+        }
+export type UserFavoriteListQueryHookResult = ReturnType<typeof useUserFavoriteListQuery>;
+export type UserFavoriteListLazyQueryHookResult = ReturnType<typeof useUserFavoriteListLazyQuery>;
+export type UserFavoriteListQueryResult = Apollo.QueryResult<UserFavoriteListQuery, UserFavoriteListQueryVariables>;
 export const AuthWebDocument = gql`
     mutation authWeb($input: ExternalWebAuthInput!) {
   authWeb(input: $input) {
@@ -1893,34 +1981,35 @@ export const ProductsLandingDocument = gql`
     query productsLanding($where: ProductWhereInput) {
   products(where: $where) {
     data {
-      ProductRooms {
-        bathNumber
-        bathRoom
-        bedNumber
-        bedRoom
-        kitchenNumber
-        kitchenRoom
-        livingNumber
-        livingRoom
-        viewWindow
-      }
-      address1
-      bannerStatus
-      city
-      constStatus
-      description
-      district
-      floorNumber
-      floors
-      images
       id
+      images
       name
-      organizationId
-      price
-      priceSqr
-      releaseDate
+      address1
+      city
+      district
+      floors
+      floorNumber
       roomNumber
       sqr
+      priceSqr
+      price
+      description
+      releaseDate
+      constStatus
+      bannerStatus
+      actionType
+      ProductRooms {
+        bathNumber
+        bedNumber
+        livingNumber
+        bedRoom
+        bathRoom
+        livingRoom
+        viewWindow
+        kitchenNumber
+        kitchenRoom
+      }
+      organizationId
     }
   }
 }
@@ -1956,34 +2045,35 @@ export type ProductsLandingQueryResult = Apollo.QueryResult<ProductsLandingQuery
 export const ProductLandingDocument = gql`
     query productLanding($input: ProductUniqueWhereInput) {
   product(input: $input) {
-    ProductRooms {
-      bathNumber
-      bathRoom
-      bedNumber
-      bedRoom
-      kitchenNumber
-      kitchenRoom
-      livingNumber
-      livingRoom
-      viewWindow
-    }
-    address1
-    bannerStatus
-    city
-    constStatus
-    description
-    district
-    floorNumber
-    floors
     id
     images
     name
-    organizationId
-    price
-    priceSqr
-    releaseDate
+    address1
+    city
+    district
+    floors
+    floorNumber
     roomNumber
     sqr
+    priceSqr
+    price
+    description
+    releaseDate
+    constStatus
+    bannerStatus
+    actionType
+    ProductRooms {
+      bathNumber
+      bedNumber
+      livingNumber
+      bedRoom
+      bathRoom
+      livingRoom
+      viewWindow
+      kitchenNumber
+      kitchenRoom
+    }
+    organizationId
   }
 }
     `;

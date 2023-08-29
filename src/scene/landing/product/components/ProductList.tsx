@@ -10,14 +10,15 @@ import CardContent from '@mui/material/CardContent'
 import IconButton from '@mui/material/IconButton'
 import { DetailedBox } from './DetailedBox'
 import { useRouter } from 'next/router'
-import { BannerStatusEnum, ConstructionStatusEnum, useProductsLandingQuery } from 'src/generated'
-import { FilterType } from '../../home/components/FilterBuy' 
+import { BannerStatusEnum, useProductsLandingQuery } from 'src/generated'
+import { FilterType } from 'src/@core/utils/types' 
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { Header, SubHeader } from '../../home/components/Header'
+import { Pagination, Stack } from '@mui/material'
 
-const ProductList = () => {
+export const ProductList = () => {
   const initialValues: FilterType = {
         city: 'Улаанбаатар',
         district: null,
@@ -34,18 +35,7 @@ const ProductList = () => {
    const handleFilterFill = (value: FilterType ) =>{
     setFilterValues(value)
   }
-  console.log(filterValues)
   const { data } = useProductsLandingQuery({variables: {where: filterValues}})
-  console.log(data)
-  // function changeNot(): ListDataType[] {
-  //   const getRandomInt = (max: number) =>
-  //     Math.floor(Math.random() * Math.floor(max))
-
-  //   return Array.from(new Array(5)).map(
-  //     () => ListData[getRandomInt(ListData.length)],
-  //   )
-  // }
-  // const data1 = changeNot()
   const router = useRouter()
   const [icon, setIcon] = React.useState<string>( "material-symbols:favorite-outline")
   const [liked, setLiked] = React.useState<boolean>(false)
@@ -53,6 +43,22 @@ const ProductList = () => {
     setLiked(!liked)
     if (liked) setIcon("material-symbols:favorite")
     else setIcon("material-symbols:favorite-outline")
+  }
+  const perPage = 3
+  const totalPages = Math.ceil(data?.products?.data?.length ? data?.products?.data?.length : 0)
+  const [page, setPage] = React.useState(1)
+  const data1 = data?.products?.data?.slice(
+    (page - 1) * perPage,
+    page * perPage
+  )
+  const [products, setProducts] = React.useState(data1)
+  const handleChangePagination = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    const newProducts = data?.products?.data?.slice(
+    (value - 1) * perPage,
+    value * perPage
+  )
+  setProducts(newProducts)
   }
   return (
     <Card
@@ -63,13 +69,13 @@ const ProductList = () => {
         rowGap: '20px',
       }}
     >
-      <Header filterValues={filterValues} handleFilterFill={handleFilterFill}/>
+      <Header filterValues={filterValues} handleFilterFill={handleFilterFill} actionType={''}/>
 
       {data?.products?.data?.length ? <SubHeader count={data?.products?.data?.length} /> : <Typography>Хайлтын үр дүн байхгүй байна</Typography>}
-      {data?.products?.data?.map((item, index: number) => (
+      {products?.map((item, index: number) => (
         <Box
           key={item.id}
-          sx={{ display: 'flex', flexDirection: 'row', maxWidth: 1200 }}
+          sx={{ display: 'flex', flexDirection: 'row', maxWidth: 1200 ,px: '20px'}}
           onClick={() => router.push(`/product/detail?id=${item.id}`)}
         >
           <Box
@@ -125,13 +131,13 @@ const ProductList = () => {
                   <img
                     src={item.images ? item.images : 'https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=800'}
                     alt={'picture of estate'}
-                    height={'320px'}
+                    height='350px'
                     width={'100%'}
                   />
                 </Box>
               </Grid>
               <Grid item xs={12} sm={7}>
-                <CardContent sx={{ width: 800 }}>
+                <CardContent sx={{m: '20px', p: '16px'}}>
                   <Typography variant="h6" sx={{ mb: 2 }}>
                     {item.name}
                   </Typography>
@@ -139,13 +145,16 @@ const ProductList = () => {
                   <Divider
                     sx={{ my: (theme) => `${theme.spacing(3)} !important` }}
                   />
-                  <Grid item xs={12} sm={7}>
                     <Box
                       sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        '& svg': { color: 'primary.main' },
+                        '& svg': { color: 'primary.main', fontSize: '2.2rem' },
                         marginBottom: 4,
+                        columnGap: '10px',
+                        '& .MuiTypography-root':{
+                          width: '100%'
+                        }
                       }}
                     >
                       <Icon icon="ic:outline-pin-drop" />
@@ -153,7 +162,6 @@ const ProductList = () => {
                         {item.city} {item.district} {item.address1}
                       </Typography>
                     </Box>
-                  </Grid>
                   <Grid
                     container
                     spacing={4}
@@ -163,7 +171,7 @@ const ProductList = () => {
                       },
                     }}
                   >
-                    <Grid item xs={12} sm={3}>
+                    <Grid item>
                       <DetailedBox
                         title={`${item?.roomNumber}`}
                         subTitle="өрөө"
@@ -175,7 +183,7 @@ const ProductList = () => {
                         icon="icon-park-solid:sleep-two"
                       />
                     </Grid>
-                    <Grid item xs={12} sm={3}>
+                    <Grid item >
                       <DetailedBox
                         title={`${item.sqr}`}
                         subTitle="метр квадрат"
@@ -187,34 +195,28 @@ const ProductList = () => {
                         icon="fa:bathtub"
                       />
                     </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      //sm={5}
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        '& .Typography-root': { fontWeight: 700 },
-                      }}
+    
+                  </Grid>
+                  <Grid
+                      container
+                      justifyContent='space-between'
+                      alignItems='center'
                     >
-                      <Typography variant="body2">{item.price} ₮</Typography>
+                      <Typography variant="body2" fontWeight="bold">{item.price} ₮</Typography>
                       <IconButton
                         onClick={handleChange}
                         sx={{ border: `1px solid #DEDEDE}`, borderRadius: 100 }}
                       >
-                        {<Icon icon={icon} />}
+                        {<Icon icon={icon} color='red' />}
                       </IconButton>
                     </Grid>
-                  </Grid>
                 </CardContent>
               </Grid>
             </Grid>
           </Card>
         </Box>
       ))}
+      <Pagination count={totalPages} page={page} onChange={handleChangePagination} color='primary' variant='outlined' sx={{mb: '20px'}}/>
     </Card>
   )
 }
-
-export default ProductList
