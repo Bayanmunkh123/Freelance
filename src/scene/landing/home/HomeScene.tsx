@@ -57,23 +57,23 @@ export const HomeScene = () => {
             sx={{ mt: '20px' }}
           >
             {IconSvg('rent')}
-            <Typography>Түрээслэх</Typography>
+            <Typography>Client</Typography>
           </Stack> */}
-          <Button  variant='contained' startIcon={IconSvg('rent')} onClick={() => handleClick("rent")} >Түрээслэх</Button>
+          <Button  variant='contained' startIcon={IconSvg('rent')} onClick={() => handleClick("rent")} >Freelancer</Button>
           <Box>
-            <HomeButton name="shop" title="Дэлгүүр" />
-            <HomeButton name="office" title="Оффис" />
-            <HomeButton name="place" title="Газар" />
+            <HomeButton name="shop" title="Website" />
+            <HomeButton name="office" title="Mobile" />
+            <HomeButton name="place" title="Data entry" />
           </Box>
           <Box>
-            <HomeButton name="parking" title="Зогсоол" />
-            <HomeButton name="warehouse" title="Агуулах" />
-            <HomeButton name="building" title="Барилга" />
+            <HomeButton name="parking" title="AI" />
+            <HomeButton name="warehouse" title="Sales & Marketing" />
+            <HomeButton name="building" title="Education" />
           </Box>
           <Box>
-            <HomeButton name="dept" title="Орон сууц" />
-            <HomeButton name="house" title="Хувийн сууц" />
-            <HomeButton name="public-dept" title="Нийтийн байр" />
+            <HomeButton name="dept" title="Engineering " />
+            <HomeButton name="house" title="Telecommunication" />
+            <HomeButton name="public-dept" title="Media" />
           </Box>
         </Stack>
         <Stack direction="column" rowGap="20px">
@@ -84,18 +84,18 @@ export const HomeScene = () => {
             sx={{ mt: '20px' }}
           >
             {IconSvg('buy')}
-            <Typography>Худалдан авах</Typography>
+            <Typography>Client</Typography>
           </Stack> */}
-          <Button variant='contained' startIcon={IconSvg('buy')} onClick={() => handleClick("buy")} >Худалдан авах</Button>
+          <Button variant='contained' startIcon={IconSvg('buy')} onClick={() => handleClick("buy")} >Client</Button>
           <Box>
-            <HomeButton name="shop" title="Дэлгүүр" />
-            <HomeButton name="office" title="Оффис" />
-            <HomeButton name="place" title="Газар" />
+            <HomeButton name="shop" title="" />
+            <HomeButton name="office" title="" />
+            <HomeButton name="place" title="" />
           </Box>
           <Box>
-            <HomeButton name="dept" title="Орон сууц" />
-            <HomeButton name="house" title="Хувийн сууц" />
-            <HomeButton name="building" title="Барилга" />
+            <HomeButton name="dept" title="" />
+            <HomeButton name="house" title="" />
+            <HomeButton name="building" title="" />
           </Box>
         </Stack>
       </Grid>

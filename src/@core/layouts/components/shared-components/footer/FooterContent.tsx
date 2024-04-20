@@ -32,8 +32,8 @@ const FooterContent = () => {
           ❤️
         </Box>
         {` by `}
-        <LinkStyled target="_blank" href="https://tabsolution.jp">
-          Tab Systems Mongolia LLC
+        <LinkStyled target="_blank" href="https://www.freelancer.com/">
+          baynaa
         </LinkStyled>
       </Typography>
       {hidden ? null : (
@@ -45,16 +45,16 @@ const FooterContent = () => {
             "& :not(:last-child)": { mr: 4 },
           }}
         >
-          <LinkStyled target="_blank" href="https://tabsolution.jp">
+          <LinkStyled target="_blank" href="https://www.freelancer.com/">
             License
           </LinkStyled>
-          <LinkStyled target="_blank" href="https://tabsolution.jp">
+          <LinkStyled target="_blank" href="https://www.freelancer.com/">
             More Themes
           </LinkStyled>
-          <LinkStyled target="_blank" href="https://tabsolution.jp">
+          <LinkStyled target="_blank" href="https://www.freelancer.com/">
             Documentation
           </LinkStyled>
-          <LinkStyled target="_blank" href="https://tabsolution.jp">
+          <LinkStyled target="_blank" href="https://www.freelancer.com/">
             Support
           </LinkStyled>
         </Box>
